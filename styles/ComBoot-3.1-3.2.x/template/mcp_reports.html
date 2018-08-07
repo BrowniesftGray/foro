@@ -1,0 +1,105 @@
+<!-- INCLUDE mcp_header.html -->
+
+<!-- IF not S_PM -->
+	<div class="clearfix">
+		<fieldset class="forum-selector">
+			<label for="fo">{L_FORUM}{L_COLON} <select name="f" id="fo">{S_FORUM_OPTIONS}</select></label>
+			<input type="submit" name="sort" value="{L_GO}" class="btn btn-default" />
+			{S_FORM_TOKEN}
+		</fieldset>
+	</div>
+<!-- ENDIF -->
+
+<form id="mcp" method="post" action="{S_MCP_ACTION}">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{L_TITLE}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-info">{L_EXPLAIN}</div>
+			<!-- IF .postrow -->
+				<div class="row">
+					<div class="text-center col-md-12">
+						<div class="btn-group">
+							<a class="btn btn-default btn-sm disabled">{TOTAL_REPORTS}</a>
+							<!-- IF .pagination -->
+								<!-- INCLUDE pagination.html -->
+							<!-- ELSE -->
+								<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+							<!-- ENDIF -->
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{L_VIEW_DETAILS}</th>
+								<th>{L_REPORTER}<!-- IF not S_PM --> &amp; {L_FORUM}<!-- ENDIF --></th>
+								<th>{L_MARK}</th>
+							</tr>
+						</thead>
+						<tbody class="topiclist cplist">
+							<!-- BEGIN postrow -->
+								<tr>
+									<!-- IF S_PM -->
+										<td>
+											<div class="list-inner">
+												<a href="{postrow.U_VIEW_DETAILS}" class="topictitle">{postrow.PM_SUBJECT}</a> <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i><br />
+												<span>{L_MESSAGE_BY_AUTHOR} {postrow.PM_AUTHOR_FULL} &raquo; {postrow.PM_TIME}</span><br />
+												<span>{L_MESSAGE_TO} {postrow.RECIPIENTS}</span>
+												<div class="visible-xs-block">
+													{L_REPORTER}{L_COLON} {postrow.REPORTER_FULL} &laquo; {postrow.REPORT_TIME}
+												</div>
+											</div>
+										</td>
+										<td class="moderation">
+											<span>{postrow.REPORTER_FULL} &laquo; {postrow.REPORT_TIME}</span>
+										</td>
+									<!-- ELSE -->
+										<td>
+											<div class="list-inner">
+												<a href="{postrow.U_VIEW_DETAILS}" class="topictitle">{postrow.POST_SUBJECT}</a> <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i><br />
+												<span>{L_POSTED} {L_POST_BY_AUTHOR} {postrow.POST_AUTHOR_FULL} &raquo; {postrow.POST_TIME}</span>
+												<div class="visible-xs-block">
+													{L_REPORTER}{L_COLON} {postrow.REPORTER_FULL} &laquo; {postrow.REPORT_TIME}<br />
+													<!-- IF postrow.U_VIEWFORUM -->{L_FORUM}{L_COLON} <a href="{postrow.U_VIEWFORUM}">{postrow.FORUM_NAME}</a><!-- ELSE -->{postrow.FORUM_NAME}<!-- ENDIF -->
+												</div>
+											</div>
+										</td>
+										<td class="moderation">
+											<span>{postrow.REPORTER_FULL} &laquo; {postrow.REPORT_TIME}<br />
+											<!-- IF postrow.U_VIEWFORUM -->{L_FORUM}{L_COLON} <a href="{postrow.U_VIEWFORUM}">{postrow.FORUM_NAME}</a><!-- ELSE -->{postrow.FORUM_NAME}<!-- ENDIF --></span>
+										</td>
+									<!-- ENDIF -->
+									<td class="marking"><input type="checkbox" name="report_id_list[]" value="{postrow.REPORT_ID}" /></td>
+								</tr>
+							<!-- END postrow -->
+						</tbody>
+					</table>
+				</div>
+				<!-- DEFINE DISPLAY_OPTIONS_MCP_TOPICS = 1 -->
+				<!-- INCLUDE display_options.html -->
+				<hr/>
+				<div class="row">
+					<div class="text-center col-md-12">
+						<div class="btn-group">
+							<a class="btn btn-default btn-sm disabled">{TOTAL_REPORTS}</a>
+							<!-- IF .pagination -->
+								<!-- INCLUDE pagination.html -->
+							<!-- ELSE -->
+								<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+							<!-- ENDIF -->
+						</div>
+					</div>
+				</div>
+				<!-- INCLUDE display_options.html -->
+				<!-- IF TOPIC_ID --><label><input type="checkbox" class="radio" name="t" value="{TOPIC_ID}" checked="checked" onClick="document.getElementById('mcp').submit()" /> <strong>{L_ONLY_TOPIC}</strong></label><!-- ENDIF -->
+			<!-- ELSE -->
+				<p><strong>{L_NO_REPORTS}</strong></p>
+			<!-- ENDIF -->
+		</div>
+	</div>
+</form>
+
+<!-- INCLUDE mcp_footer.html -->

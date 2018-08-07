@@ -1,0 +1,538 @@
+<!-- INCLUDE overall_header.html -->
+
+<h2 class="page-title text-center"><!-- EVENT viewtopic_topic_title_prepend --><a href="{U_VIEW_TOPIC}">{TOPIC_TITLE}</a><!-- EVENT viewtopic_topic_title_append --></h2>
+<!-- EVENT viewtopic_topic_title_after -->
+
+<!-- IF FORUM_DESC -->
+	<div class="panel panel-default">
+		<div class="panel-body">
+			{FORUM_DESC}
+		</div>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF S_FORUM_RULES -->
+	<div class="rules">
+		<div class="alert alert-warning">
+			<!-- IF U_FORUM_RULES -->
+				<a href="{U_FORUM_RULES}">{L_FORUM_RULES}</a>
+			<!-- ELSE -->
+				<i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i> <strong>{L_FORUM_RULES}</strong>
+				<hr class="message-inner-separator">
+				<p>{FORUM_RULES}</p>
+			<!-- ENDIF -->
+		</div>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF MODERATORS -->
+<p>
+	<strong><!-- IF S_SINGLE_MODERATOR -->{L_MODERATOR}<!-- ELSE -->{L_MODERATORS}<!-- ENDIF -->{L_COLON}</strong> {MODERATORS}
+</p>
+<!-- ENDIF -->
+
+<div class="row">
+	<div class="col-md-12 text-center">
+		<div class="btn-group total-posts-container">
+			<!-- IF U_VIEW_UNREAD_POST and not S_IS_BOT --><a href="{U_VIEW_UNREAD_POST}" class="btn btn-default btn-sm">{L_VIEW_UNREAD_POST}</a><!-- ENDIF --><a class="btn btn-default btn-sm disabled">{TOTAL_POSTS}</a>
+			<!-- IF BASE_URL and TOTAL_PAGES > 6 -->
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{PAGE_NUMBER} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu jump-to">
+					<li>{L_JUMP_TO_PAGE}{L_COLON}</li>
+					<li class="page-jump-form">
+						<div class="input-group input-group-sm">
+							<input type="number" name="page-number" min="1" maxlength="6" title="{L_JUMP_PAGE}" class="form-control" data-per-page="{PER_PAGE}" data-base-url="{BASE_URL|e('html_attr')}" data-start-name="{START_NAME}" />
+							<span class="input-group-btn">
+								<input class="btn btn-primary btn-sm" value="{L_GO}" type="button" />
+							</span>
+						</div>
+					</li>
+				</ul>
+			<!-- ELSE -->
+				<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+			<!-- ENDIF -->
+		</div>
+	</div>
+</div>
+
+<div class="row mobile-fix clearfix">
+	<!-- EVENT viewtopic_buttons_top_before -->
+		<div class="col-md-4">
+			<!-- IF not S_IS_BOT and S_DISPLAY_REPLY_INFO -->
+				<!-- IF S_IS_LOCKED -->
+					<a class="btn btn-danger btn-labeled" href="{U_POST_REPLY_TOPIC}" title="{L_TOPIC_LOCKED}"><span class="btn-label"><i class="fa fa-lock fa-fw" aria-hidden="true"></i></span> {L_TOPIC_LOCKED_SHORT}</a>
+				<!-- ELSE -->
+					<a class="btn btn-primary btn-labeled" href="{U_POST_REPLY_TOPIC}" title="{L_POST_REPLY}"><span class="btn-label"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></span> {L_POST_REPLY}</a>
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+			<!-- INCLUDE viewtopic_topic_tools.html -->
+			<!-- EVENT viewtopic_dropdown_top_custom -->
+			<!-- IF .quickmod -->
+			<div class="btn-group">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-gavel fa-fw" aria-hidden="true"></i> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<!-- BEGIN quickmod -->
+						<!-- DEFINE $QUICKMOD_AJAX = (quickmod.VALUE in ['lock', 'unlock', 'delete_topic', 'restore_topic', 'make_normal', 'make_sticky', 'make_announce', 'make_global']) -->
+						<li><a href="{quickmod.LINK}"<!-- IF $QUICKMOD_AJAX --> data-ajax="true" data-refresh="true"<!-- ENDIF -->>{quickmod.TITLE}</a></li>
+					<!-- END quickmod -->
+				</ul>
+			</div>
+		<!-- ENDIF -->
+		</div>
+	<!-- EVENT viewtopic_buttons_top_after -->
+
+	<!-- IF .pagination -->
+		<div class="col-md-4 text-center">
+				<!-- INCLUDE pagination.html -->
+		</div>
+	<!-- ENDIF -->
+
+	<!-- EVENT viewtopic_body_pagination_top_after -->
+
+	<!-- IF S_DISPLAY_SEARCHBOX -->
+		<div class="col-md-4 pull-right">
+			<form method="get" action="{S_SEARCHBOX_ACTION}" class="form-search no-margin">
+				<div class="input-group">
+					<input class="input-medium form-control" type="search" name="keywords" size="20" placeholder="{L_SEARCH_TOPIC}"/>
+					<span class="input-group-btn">
+						{S_SEARCH_LOCAL_HIDDEN_FIELDS}
+						<button type="submit" class="btn btn-default" title="{L_SEARCH}">{L_SEARCH}</button>
+						<a href="{U_SEARCH}" class="btn btn-default" title="{L_SEARCH_ADV}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
+					</span>
+				</div>
+			</form>
+		</div>
+	<!-- ENDIF -->
+</div>
+
+<!-- EVENT viewtopic_body_poll_before -->
+
+<!-- IF S_HAS_POLL -->
+	<form method="post" action="{S_POLL_ACTION}" data-ajax="vote_poll" class="topic_poll">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><!-- EVENT viewtopic_body_poll_question_prepend -->{POLL_QUESTION}<!-- EVENT viewtopic_body_poll_question_append --></h3>
+			</div>
+			<div class="panel-body">
+				<p class="author_poll">{L_POLL_LENGTH}<!-- IF S_CAN_VOTE and L_POLL_LENGTH --><br /><!-- ENDIF --><!-- IF S_CAN_VOTE -->{L_MAX_VOTES}<!-- ENDIF --></p>
+				<fieldset class="polls">
+				<!-- BEGIN poll_option -->
+					<!-- EVENT viewtopic_body_poll_option_before -->
+					<div class="row <!-- IF poll_option.POLL_OPTION_VOTED -->voted" title="{L_POLL_VOTED_OPTION}<!-- ENDIF -->" data-alt-text="{L_POLL_VOTED_OPTION}" data-poll-option-id="{poll_option.POLL_OPTION_ID}">
+						<!-- IF poll_option.POLL_OPTION_VOTED or S_DISPLAY_RESULTS --><div class="col-md-3 col-md-offset-1 vote_option"><!-- ELSE --><div class="col-md-12 vote_option"><!-- ENDIF -->
+							<!-- IF S_CAN_VOTE -->
+								<label for="vote_{poll_option.POLL_OPTION_ID}" class="<!-- IF S_IS_MULTI_CHOICE -->checkbox-inline<!-- ELSE -->radio-inline<!-- ENDIF -->">
+									<!-- IF S_IS_MULTI_CHOICE -->
+										<input type="checkbox" name="vote_id[]" id="vote_{poll_option.POLL_OPTION_ID}" value="{poll_option.POLL_OPTION_ID}"<!-- IF poll_option.POLL_OPTION_VOTED --> checked="checked"<!-- ENDIF --> />
+									<!-- ELSE -->
+										<input type="radio" name="vote_id[]" id="vote_{poll_option.POLL_OPTION_ID}" value="{poll_option.POLL_OPTION_ID}"<!-- IF poll_option.POLL_OPTION_VOTED --> checked="checked"<!-- ENDIF --> />
+									<!-- ENDIF -->
+									<div class="vote_caption">{poll_option.POLL_OPTION_CAPTION}</div>
+								</label>
+							<!-- ELSE -->
+								{poll_option.POLL_OPTION_CAPTION}
+							<!-- ENDIF -->
+						</div>
+
+						<div class="col-md-6 vote_progress<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
+							<div class="progress">
+								<div class="progress-bar <!-- IF poll_option.POLL_OPTION_PCT < 33 -->progress-bar-danger<!-- ELSEIF poll_option.POLL_OPTION_PCT < 66 -->progress-bar-warning<!-- ELSE -->progress-bar-success<!-- ENDIF -->"  role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:<!-- IF poll_option.POLL_OPTION_PCT < 10 -->10%<!-- ELSE -->{poll_option.POLL_OPTION_PERCENT}<!-- ENDIF -->;">
+									<!-- IF poll_option.POLL_OPTION_RESULT == 0 -->{L_NO_VOTES}<!-- ELSE -->{poll_option.POLL_OPTION_PERCENT}<!-- ENDIF -->
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2 poll_option_percent<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
+							{poll_option.POLL_OPTION_RESULT}
+						</div>
+
+					</div>
+					<!-- EVENT viewtopic_body_poll_option_after -->
+				<!-- END poll_option -->
+				<div class="clearfix"></div>
+
+					<div class="text-center center-block poll_total_votes<!-- IF not S_DISPLAY_RESULTS --> hidden<!-- ENDIF -->">
+						<a class="btn btn-default disabled">{L_TOTAL_VOTES}{L_COLON} <span class="poll_total_vote_cnt">{TOTAL_VOTES}</span></a>
+					</div>
+
+				<div class="spacer"></div>
+				<!-- IF S_CAN_VOTE -->
+					<div class=" text-center center-block">
+						<div class="btn-group poll_vote">
+							<input type="submit" name="update" value="{L_SUBMIT_VOTE}" class="btn btn-success submit_poll" />
+							<!-- IF not S_DISPLAY_RESULTS --><a class="btn btn-warning poll_view_results" href="{U_VIEW_RESULTS}">{L_VIEW_RESULTS}</a><!-- ENDIF -->
+						</div>
+					</div>
+				<!-- ENDIF -->
+				</fieldset>
+				<div class="spacer"></div>
+				<div class="alert alert-success vote-submitted hidden">{L_VOTE_SUBMITTED}</div>
+			</div>
+			{S_FORM_TOKEN}
+			{S_HIDDEN_FIELDS}
+		</div>
+	</form>
+	<hr />
+<!-- ENDIF -->
+
+<!-- EVENT viewtopic_body_poll_after -->
+
+<div id="posts">
+	<!-- BEGIN postrow -->
+		<!-- EVENT viewtopic_body_postrow_post_before -->
+		<!-- IF postrow.S_FIRST_UNREAD --><a id="unread" class="anchor"<!-- IF S_UNREAD_VIEW --> data-url="{postrow.U_MINI_POST}"<!-- ENDIF -->></a><!-- ENDIF -->
+		<div id="p{postrow.POST_ID}">
+			<div class="panel <!-- IF postrow.S_UNREAD_POST -->panel-info<!-- ELSEIF postrow.S_POST_REPORTED or postrow.S_POST_DELETED -->panel-danger<!-- ELSEIF postrow.POSTER_WARNINGS -->panel-warning<!-- ELSE -->panel-primary<!-- ENDIF --> post-body">
+				<div class="panel-heading clearfix">
+					<!-- EVENT viewtopic_body_post_subject_before -->
+					<h3 class="panel-title<!-- IF postrow.S_FIRST_ROW --> first<!-- ENDIF --> pull-left"><!-- IF postrow.POST_ICON_IMG --><img src="{T_ICONS_PATH}{postrow.POST_ICON_IMG}" width="{postrow.POST_ICON_IMG_WIDTH}" height="{postrow.POST_ICON_IMG_HEIGHT}" alt="{postrow.POST_ICON_IMG_ALT}" title="{postrow.POST_ICON_IMG_ALT}" /> <!-- ENDIF --><a href="#p{postrow.POST_ID}">{postrow.POST_SUBJECT}</a></h3>
+					<div class="pull-right" <!-- IF postrow.S_POST_HIDDEN -->style="display: none;"<!-- ENDIF -->  id="post_mcp_action{postrow.POST_ID}">
+						<!-- IF postrow.S_POST_UNAPPROVED -->
+							<form method="post" class="mcp_approve" action="{postrow.U_APPROVE_ACTION}">
+								<span><i class="fa fa-question fa-fw" aria-hidden="true"></i></span>
+								<strong>{L_POST_UNAPPROVED_ACTION}</strong>
+								<div class="btn-group no-margin-bottom">
+									<button class="btn btn-xs btn-danger" type="submit" title="{L_DISAPPROVE}" name="action[disapprove]"><i class="fa fa-times fa-fw" aria-hidden="true"></i></button>
+									<button class="btn btn-xs btn-success" type="submit" title="{L_APPROVE}" name="action[approve]"><i class="fa fa-check fa-fw" aria-hidden="true"></i></button>
+								</div>
+								<input type="hidden" name="post_id_list[]" value="{postrow.POST_ID}" />
+								{S_FORM_TOKEN}
+							</form>
+						<!-- ELSEIF postrow.S_POST_DELETED -->
+							<form method="post" class="mcp_approve pull-right" action="{postrow.U_APPROVE_ACTION}">
+								<strong>{L_POST_DELETED_ACTION}</strong>
+								<div class="btn-group no-margin-bottom">
+									<!-- IF postrow.S_DELETE_PERMANENT -->
+										<button class="btn btn-xs btn-danger" type="submit" title="{L_DELETE}" name="action[delete]"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></button>
+									<!-- ENDIF -->
+									<button class="btn btn-xs btn-success" type="submit" title="{L_RESTORE}" name="action[restore]"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i></button>
+								</div>
+								<input type="hidden" name="post_id_list[]" value="{postrow.POST_ID}" />
+								{S_FORM_TOKEN}
+							</form>
+						<!-- ENDIF -->
+						<!-- IF postrow.S_POST_REPORTED -->
+							<a href="{postrow.U_MCP_REPORT}"><i class="fa fa-exclamation fa-fw" aria-hidden="true"></i><strong>{L_POST_REPORTED}</strong></a>
+						<!-- ENDIF -->
+					</div>
+					<div class="pull-right">
+						<div class="btn-group btn-toolbar-mobile hidden">
+							<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-cog"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-right">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body no-padding">
+					<!-- IF postrow.S_POST_HIDDEN -->
+						<div class="post-content" id="post_hidden{postrow.POST_ID}">
+							<div class="content">
+								<!-- IF postrow.S_POST_DELETED -->
+									<div class="ignore">
+										{postrow.L_POST_DELETED_MESSAGE}<br />
+										{postrow.L_POST_DISPLAY}
+									</div>
+								<!-- ELSEIF postrow.S_IGNORE_POST -->
+									<div class="ignore">
+										{postrow.L_IGNORE_POST}<br />
+										{postrow.L_POST_DISPLAY}
+									</div>
+								<!-- ENDIF -->
+							</div>
+						</div>
+					<!-- ENDIF -->
+					<div class="row no-margin post-flex">
+					<!-- IF not postrow.S_IGNORE_POST -->
+						<div class="col-md-3 col-xs-12 post-info post-info-left" <!-- IF postrow.S_POST_HIDDEN -->style="display: none;"<!-- ENDIF --> id="profile{postrow.POST_ID}">
+							<div class="row no-margin-xs">
+								<dl class="col-sm-12 col-xs-6 no-margin-xs no-padding-xs">
+									<dt class="avatar text-center rounded">
+										<!-- EVENT viewtopic_body_avatar_before -->
+										<!-- IF postrow.POSTER_AVATAR -->
+											<!-- IF postrow.U_POST_AUTHOR --><a href="{postrow.U_POST_AUTHOR}">{postrow.POSTER_AVATAR}</a><!-- ELSE -->{postrow.POSTER_AVATAR}<!-- ENDIF --><br />
+										<!-- ELSE -->
+											<!-- IF postrow.U_POST_AUTHOR --><a href="{postrow.U_POST_AUTHOR}"><img src="{T_THEME_PATH}/images/default_avatar.jpg" alt="avatar"></a><!-- ELSE --><img src="{T_THEME_PATH}/images/default_avatar.jpg" alt="avatar"><!-- ENDIF -->
+										<!-- ENDIF -->
+										<!-- EVENT viewtopic_body_avatar_after -->
+									</dt>
+									<dd class="text-center author-name">
+										<!-- EVENT viewtopic_body_post_author_before -->
+										<!-- IF not postrow.U_POST_AUTHOR --><strong>{postrow.POST_AUTHOR_FULL}</strong> <!-- ELSE -->{postrow.POST_AUTHOR_FULL}<!-- ENDIF -->
+										<!-- IF postrow.S_ONLINE -->
+											<i class="fa fa-circle fa-fw text-success online" aria-hidden="true" title="{$ONLINE_BADGE}"></i><span class="sr-only">{L_ONLINE}</span>
+										<!-- ELSE -->
+											<i class="fa fa-circle fa-fw text-danger online" aria-hidden="true" title="{$OFFLINE_BADGE}"></i><span class="sr-only">{L_ONLINE}</span>
+										<!-- ENDIF -->
+										<!-- EVENT viewtopic_body_post_author_after -->
+									</dd>
+									<!-- EVENT viewtopic_body_postrow_rank_before -->
+									<!-- IF postrow.RANK_TITLE or postrow.RANK_IMG --><dd class="text-center author-rank"><span class="badge">{postrow.RANK_TITLE}</span><!-- IF postrow.RANK_TITLE and postrow.RANK_IMG --><br /><!-- ENDIF -->{postrow.RANK_IMG}</dd><!-- ENDIF -->
+									<!-- EVENT viewtopic_body_postrow_rank_after -->
+								</dl>
+								<dl class="col-sm-12 hidden-xs">
+									<dt>
+										<hr/>
+									</dt>
+									<!-- IF postrow.POSTER_POSTS != '' --><dd class="profile-posts"><strong>{L_POSTS}{L_COLON}</strong> <!-- IF postrow.U_SEARCH !== '' --><a href="{postrow.U_SEARCH}"><!-- ENDIF -->{postrow.POSTER_POSTS}<!-- IF postrow.U_SEARCH !== '' --></a><!-- ENDIF --></dd><!-- ENDIF -->
+									<!-- IF postrow.POSTER_JOINED --><dd class="profile-joined"><strong>{L_JOINED}{L_COLON}</strong> {postrow.POSTER_JOINED}</dd><!-- ENDIF -->
+									<!-- IF postrow.POSTER_WARNINGS --><dd class="profile-warnings"><strong>{L_WARNINGS}{L_COLON}</strong> {postrow.POSTER_WARNINGS}</dd><!-- ENDIF -->
+									<!-- IF postrow.S_PROFILE_FIELD1 -->
+										<!-- Use a construct like this to include admin defined profile fields. Replace FIELD1 with the name of your field. -->
+										<dd><strong>{postrow.PROFILE_FIELD1_NAME}{L_COLON}</strong> {postrow.PROFILE_FIELD1_VALUE}</dd>
+									<!-- ENDIF -->
+									<!-- EVENT viewtopic_body_postrow_custom_fields_before -->
+									<!-- BEGIN custom_fields -->
+										<!-- IF not postrow.custom_fields.S_PROFILE_CONTACT -->
+											<dd class="profile-{postrow.custom_fields.PROFILE_FIELD_IDENT}"><strong>{postrow.custom_fields.PROFILE_FIELD_NAME}{L_COLON}</strong> {postrow.custom_fields.PROFILE_FIELD_VALUE}</dd>
+										<!-- ENDIF -->
+									<!-- END custom_fields -->
+									<!-- EVENT viewtopic_body_postrow_custom_fields_after -->
+
+									<!-- EVENT viewtopic_body_contact_fields_before -->
+									<!-- IF not S_IS_BOT and .postrow.contact -->
+										<!-- BEGIN contact -->
+											{% set REMAINDER = postrow.contact.S_ROW_COUNT % 4 %}
+											<!-- DEFINE $S_LAST_CELL = ((REMAINDER eq 3) or (postrow.contact.S_LAST_ROW and postrow.contact.S_NUM_ROWS < 4)) -->
+											<!-- IF REMAINDER eq 0 -->
+												<dd><div class="spacer"></div></dd>
+												<dd><div class="btn-group">
+											<!-- ENDIF -->
+											<a href="<!-- IF postrow.contact.U_CONTACT -->{postrow.contact.U_CONTACT}<!-- ELSE -->{postrow.U_POST_AUTHOR}<!-- ENDIF -->" title="{postrow.contact.NAME}" class="btn btn-sm btn-primary" <!-- IF postrow.contact.ID eq 'jabber' --> onclick="popup(this.href, 750, 320); return false;"<!-- ENDIF -->>
+												<span class="contact-icon {postrow.contact.ID}-icon">
+													<!-- IF postrow.contact.ID eq 'email' -->
+														<i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'pm' -->
+														<i class="fa fa-comment fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_website' -->
+														<i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_facebook' -->
+														<i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_twitter' -->
+														<i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_skype' -->
+														<i class="fa fa-skype fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_youtube' -->
+														<i class="fa fa-youtube fa-fw" aria-hidden="true"></i>
+													<!-- ELSEIF postrow.contact.ID eq 'phpbb_googleplus' -->
+														<i class="fa fa-google-plus fa-fw" aria-hidden="true"></i>
+													<!-- ELSE -->
+														{postrow.contact.NAME}
+													<!-- ENDIF -->
+												</span>
+											</a>
+											<!-- IF REMAINDER eq 3 or postrow.contact.S_LAST_ROW -->
+												</div></dd>
+												<dd><div class="clearfix"></div></dd>
+											<!-- ENDIF -->
+										<!-- END contact -->
+									<!-- ENDIF -->
+									<!-- EVENT viewtopic_body_contact_fields_after -->
+								</dl>
+								<div class="col-xs-6 visible-xs-block text-right post-time-mobile">
+									{postrow.POST_DATE}
+								</div>
+							</div>
+						</div>
+					<!-- ENDIF -->
+					<div class="col-md-9 col-xs-12 post-content" <!-- IF postrow.S_POST_HIDDEN -->style="display: none;"<!-- ENDIF --> id="post_content{postrow.POST_ID}">
+						<div class="row post-head hidden-xs no-margin-bottom">
+							<div class="col-md-6 author">
+								<!-- EVENT viewtopic_body_postrow_post_details_before -->
+								{L_POST_BY_AUTHOR} <strong>{postrow.POST_AUTHOR_FULL}</strong> &raquo; {postrow.POST_DATE}
+								<!-- EVENT viewtopic_body_postrow_post_details_after -->
+							</div>
+							<div class="col-md-6 col-xs-12 no-padding">
+								<!-- DEFINE $SHOW_POST_BUTTONS = (postrow.U_EDIT or postrow.U_DELETE or postrow.U_REPORT or postrow.U_WARN or postrow.U_INFO or postrow.U_QUOTE) -->
+								<!-- EVENT viewtopic_body_post_buttons_list_before -->
+								<!-- IF not S_IS_BOT -->
+									<!-- IF $SHOW_POST_BUTTONS -->
+										<!-- EVENT viewtopic_body_post_buttons_before -->
+										<div class="btn-toolbar topic-buttons" role="toolbar">
+											<!-- IF postrow.U_EDIT or postrow.U_DELETE -->
+												<div class="btn-group btn-group-sm">
+													<!-- IF postrow.U_EDIT --><a class="btn btn-warning" href="{postrow.U_EDIT}" title="{L_EDIT_POST}"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+													<!-- IF postrow.U_DELETE --><a class="btn btn-danger" href="{postrow.U_DELETE}" title="{L_DELETE_POST}"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+												</div>
+											<!-- ENDIF -->
+											<div class="btn-group btn-group-sm">
+												<!-- IF postrow.U_REPORT --><a class="btn btn-danger" href="{postrow.U_REPORT}" title="{L_REPORT_POST}"><i class="fa fa-exclamation fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+												<!-- IF postrow.U_WARN --><a class="btn btn-warning" href="{postrow.U_WARN}" title="{L_WARN_USER}"><i class="fa fa-minus fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+												<!-- IF postrow.U_INFO --><a class="btn btn-primary" href="{postrow.U_INFO}" title="{L_INFORMATION}"><i class="fa fa-info fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+												<!-- IF postrow.U_QUOTE --><a class="btn btn-success" href="{postrow.U_QUOTE}" title="{L_REPLY_WITH_QUOTE}"><i class="fa fa-quote-left fa-fw" aria-hidden="true"></i></a><!-- ENDIF -->
+											</div>
+										</div>
+									<!-- ENDIF -->
+									<!-- EVENT viewtopic_body_post_buttons_after -->
+								<!-- ENDIF -->
+								<!-- EVENT viewtopic_body_post_buttons_list_after -->
+							</div>
+						</div>
+						<div class="content">
+							{postrow.MESSAGE}
+						</div>
+						<!-- IF postrow.S_HAS_ATTACHMENTS -->
+							<div class="panel panel-default attachbox panel-collapsible">
+								<div class="panel-heading">
+									<h3 class="panel-title">{L_ATTACHMENTS}</h3>
+									<span class="pull-right panel-right clickable panel-collapsed"><i class="fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+								</div>
+								<div class="panel-body" style="display:none">
+									<!-- BEGIN attachment -->
+										{postrow.attachment.DISPLAY_ATTACHMENT}
+									<!-- END attachment -->
+								</div>
+							</div>
+						<!-- ENDIF -->
+					</div>
+					</div>
+				</div>
+				<!-- IF postrow.SIGNATURE -->
+					<div class="panel-body no-padding text-center hidden-xs">
+						<div id="sig{postrow.POST_ID}" class="signature">{postrow.SIGNATURE}</div>
+					</div>
+				<!-- ENDIF -->
+				<div class="panel-footer post-footer">
+					<!-- EVENT viewtopic_body_postrow_post_notices_before -->
+					<div class="panel-foo">
+						<!-- IF postrow.S_DISPLAY_NOTICE --><div class="rules">{L_DOWNLOAD_NOTICE}</div><!-- ENDIF -->
+						<!-- IF postrow.DELETED_MESSAGE or postrow.DELETE_REASON -->
+							<div class="notice post_deleted_msg" <!-- IF postrow.S_POST_HIDDEN -->style="display: none;"<!-- ENDIF --> id="post_deleted_msg{postrow.POST_ID}">
+								{postrow.DELETED_MESSAGE}
+								<!-- IF postrow.DELETE_REASON --><br /><strong>{L_REASON}{L_COLON}</strong> <em>{postrow.DELETE_REASON}</em><!-- ENDIF -->
+							</div>
+						<!-- ELSEIF postrow.EDITED_MESSAGE or postrow.EDIT_REASON -->
+							<div class="notice">
+								{postrow.EDITED_MESSAGE}
+								<!-- IF postrow.EDIT_REASON --><br /><strong>{L_REASON}{L_COLON}</strong> <em>{postrow.EDIT_REASON}</em><!-- ENDIF -->
+							</div>
+						<!-- ENDIF -->
+						<!-- IF postrow.BUMPED_MESSAGE -->
+							<br /><br />{postrow.BUMPED_MESSAGE}
+						<!-- ENDIF -->
+					</div>
+					<!-- EVENT viewtopic_body_postrow_post_notices_after -->
+					<!-- EVENT viewtopic_body_postrow_back2top_before -->
+					<div class="to-top pull-right"><!-- EVENT viewtopic_body_postrow_back2top_prepend --><a href="#content-wrapper" class="top" title="{L_BACK_TO_TOP}"><i class="fa fa-chevron-up fa-fw" aria-hidden="true"></i></a><!-- EVENT viewtopic_body_postrow_back2top_append --></div><!-- EVENT viewtopic_body_postrow_back2top_after -->
+				</div>
+				<!-- EVENT viewtopic_body_postrow_post_content_footer -->
+			</div>
+		</div>
+		<!-- EVENT viewtopic_body_postrow_post_after -->
+	<!-- END postrow -->
+</div>
+
+<!-- IF S_QUICK_REPLY -->
+	<!-- INCLUDE quickreply_editor.html -->
+<!-- ENDIF -->
+
+<!-- EVENT viewtopic_body_topic_actions_before -->
+<div class="row mobile-fix">
+	<!-- EVENT viewtopic_buttons_bottom_before -->
+	<div class="col-md-4 hidden-xs">
+		<!-- IF not S_IS_BOT and S_DISPLAY_REPLY_INFO -->
+			<!-- IF S_IS_LOCKED -->
+				<a class="btn btn-danger btn-labeled" href="{U_POST_REPLY_TOPIC}" title="{L_TOPIC_LOCKED}"><span class="btn-label"><i class="fa fa-lock fa-fw" aria-hidden="true"></i></span> {L_TOPIC_LOCKED_SHORT}</a>
+			<!-- ELSE -->
+				<a class="btn btn-primary btn-labeled" href="{U_POST_REPLY_TOPIC}" title="{L_POST_REPLY}"><span class="btn-label"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></span> {L_POST_REPLY}</a>
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+		<!-- INCLUDE viewtopic_topic_tools.html -->
+	</div>
+	<!-- EVENT viewtopic_buttons_bottom_after -->
+
+	<!-- EVENT viewtopic_dropdown_bottom_custom -->
+
+	<!-- IF .pagination -->
+		<div class="col-md-4 text-center">
+			<!-- INCLUDE pagination.html -->
+		</div>
+	<!-- ENDIF -->
+
+	<!-- IF S_DISPLAY_SEARCHBOX -->
+		<div class="col-md-4 hidden-xs pull-right">
+			<form method="get" action="{S_SEARCHBOX_ACTION}" class="form-search no-margin">
+				<div class="input-group">
+					<input class="input-medium form-control" type="search" name="keywords" size="20" placeholder="{L_SEARCH_TOPIC}"/>
+					<span class="input-group-btn">
+						{S_SEARCH_LOCAL_HIDDEN_FIELDS}
+						<button type="submit" class="btn btn-default" title="{L_SEARCH}">{L_SEARCH}</button>
+						<a href="{U_SEARCH}" class="btn btn-default" title="{L_SEARCH_ADV}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
+					</span>
+				</div>
+			</form>
+		</div>
+	<!-- ENDIF -->
+</div>
+<div class="clearfix"></div>
+
+<div class="row">
+	<div class="col-md-3 hidden-xs">
+		<a href="{U_VIEW_OLDER_TOPIC}" class="btn btn-primary btn-labeled text-right" title="{L_VIEW_PREVIOUS_TOPIC}"><span class="btn-label"><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i></span> {L_VIEW_PREVIOUS_TOPIC}</a>
+	</div>
+	<div class="col-md-6 col-xs-12 text-center">
+		<div class="btn-group total-posts-container">
+			<!-- IF U_VIEW_UNREAD_POST and not S_IS_BOT --><a href="{U_VIEW_UNREAD_POST}" class="btn btn-default btn-sm">{L_VIEW_UNREAD_POST}</a><!-- ENDIF --><a class="btn btn-default btn-sm disabled">{TOTAL_POSTS}</a>
+			<!-- IF BASE_URL and TOTAL_PAGES > 6 -->
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{PAGE_NUMBER} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu jump-to">
+					<li>{L_JUMP_TO_PAGE}{L_COLON}</li>
+					<li class="page-jump-form">
+						<div class="input-group input-group-sm">
+							<input type="number" name="page-number" min="1" maxlength="6" title="{L_JUMP_PAGE}" class="form-control" data-per-page="{PER_PAGE}" data-base-url="{BASE_URL|e('html_attr')}" data-start-name="{START_NAME}" />
+							<span class="input-group-btn">
+								<input class="btn btn-primary btn-sm" value="{L_GO}" type="button" />
+							</span>
+						</div>
+					</li>
+				</ul>
+			<!-- ELSE -->
+				<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+			<!-- ENDIF -->
+		</div>
+	</div>
+	<div class="col-md-3 hidden-xs">
+		<a href="{U_VIEW_NEWER_TOPIC}" class="btn btn-primary btn-labeled pull-right" title="{L_VIEW_NEXT_TOPIC}"> {L_VIEW_NEXT_TOPIC}<span class="btn-label btn-label-right"><i class="fa fa-chevron-right fa-fw" aria-hidden="true"></i></span></a>
+	</div>
+</div>
+
+<!-- IF (S_NUM_POSTS > 1 or .pagination) and not S_IS_BOT  -->
+	<form id="viewtopic" method="post" action="{S_TOPIC_ACTION}">
+		<!-- INCLUDE display_options.html -->
+	</form>
+<!-- ENDIF -->
+
+<!-- EVENT viewtopic_body_footer_before -->
+<!-- INCLUDE jumpbox.html -->
+
+<!-- IF S_TOPIC_MOD -->
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title">{L_QUICK_MOD}</h3>
+		</div>
+		<div class="panel-body">
+			<form method="post" action="{S_MOD_ACTION}" class="form-inline pull-right">
+				<fieldset class="quickmod">
+					{S_TOPIC_MOD} <input type="submit" value="{L_GO}" class="btn btn-default" />
+					{S_FORM_TOKEN}
+				</fieldset>
+			</form>
+		</div>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT and $SHOW_LOGIN_PANEL == 1 -->
+	<!-- INCLUDE login_panel.html -->
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_ONLINE_LIST and U_VIEWONLINE -->
+	<!-- INCLUDE online_panel.html -->
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

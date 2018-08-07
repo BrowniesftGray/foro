@@ -1,0 +1,139 @@
+<!-- INCLUDE overall_header.html -->
+
+<script type="text/javascript">
+// <![CDATA[
+	/**
+	* Change language
+	*/
+	function change_language(lang_iso)
+	{
+		document.cookie = '{COOKIE_NAME}_lang=' + lang_iso + '; path={COOKIE_PATH}';
+		document.forms['register'].change_lang.value = lang_iso;
+		document.forms['register'].submit.click();
+	}
+// ]]>
+</script>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form id="register" method="post" action="{S_UCP_ACTION}" {S_FORM_ENCTYPE}>
+					<h3>{SITENAME} - {L_REGISTRATION}</h3>
+					<hr class="colorgraph"/>
+					<!-- IF ERROR -->
+						<div class="alert alert-danger">{ERROR}</div>
+					<!-- ENDIF -->
+					<div class="form-horizontal">
+						<!-- IF L_REG_COND -->
+							<div class="form-group clearfix">
+								<div class="col-xs-12">
+									<strong>{L_REG_COND}</strong>
+								</div>
+							</div>
+						<!-- ENDIF -->
+						<!-- EVENT ucp_register_credentials_before -->
+						<div class="form-group">
+							<div class="col-xs-12">
+								<div class="icon-addon addon-lg">
+									<input type="text" placeholder="{L_USERNAME}" name="username" id="username" value="{USERNAME}" size="10" class="form-control" title="{L_USERNAME}" value="{USERNAME}" tabindex="1" autofocus/>
+									<label for="username" class="fa fa-user" rel="tooltip" title="username"></label>
+									<span class="help-block">{L_USERNAME_EXPLAIN}</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-xs-12">
+								<div class="icon-addon addon-lg">
+									<input type="email" placeholder="{L_EMAIL_ADDRESS}" name="email" id="email" value="{EMAIL}" size="10" class="form-control" title="{L_EMAIL_ADDRESS}" tabindex="2" autocomplete="off" />
+									<label for="email" class="fa fa-envelope" rel="tooltip" title="email"></label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-6">
+								<div class="icon-addon addon-lg">
+									<input type="password" placeholder="{L_PASSWORD}" name="new_password" id="new_password" value="{PASSWORD}" size="10" class="form-control" title="{L_PASSWORD}" tabindex="4" autocomplete="off" />
+									<label for="new_password" class="fa fa-lock" rel="tooltip" title="new_password"></label>
+									<span class="help-block">{L_PASSWORD_EXPLAIN}</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<div class="icon-addon addon-lg">
+									<input type="password" placeholder="{L_CONFIRM_PASSWORD}" name="password_confirm" id="password_confirm" value="{PASSWORD_CONFIRM}" size="10" class="form-control" title="{L_CONFIRM_PASSWORD}" tabindex="5" autocomplete="off" />
+									<label for="password_confirm" class="fa fa-lock" rel="tooltip" title="password_confirm"></label>
+								</div>
+							</div>
+						</div>
+						<!-- EVENT ucp_register_credentials_after -->
+						<hr/>
+						<!-- EVENT ucp_register_options_before -->
+						<div class="form-group">
+							<label for="lang" class="control-label col-md-4">{L_LANGUAGE}{L_COLON}</label>
+							<div class="col-md-8">
+								<select name="lang" id="lang" onchange="change_language(this.value); return false;" tabindex="6" title="{L_LANGUAGE}">{S_LANG_OPTIONS}</select>
+							</div>
+						</div>
+
+						<!-- INCLUDE timezone_option.html -->
+
+						<!-- EVENT ucp_register_profile_fields_before -->
+						<!-- IF .profile_fields -->
+							<div class="form-group">
+								<div class="col-md-12">
+									<div class="alert alert-warning text-center">{L_ITEMS_REQUIRED}</div>
+								</div>
+							</div>
+							<!-- BEGIN profile_fields -->
+								<div class="form-group">
+									<!-- IF profile_fields.ERROR --><div class="col-md-12"><div class="alert alert-warning">{profile_fields.ERROR}</div></div><!-- ENDIF -->
+									<label<!-- IF profile_fields.FIELD_ID --> for="{profile_fields.FIELD_ID}"<!-- ENDIF --> class="control-label col-md-4">{profile_fields.LANG_NAME}:<!-- IF profile_fields.S_REQUIRED --> *<!-- ENDIF --></label>
+									<div class="col-md-8">
+										{profile_fields.FIELD}
+										<!-- IF profile_fields.LANG_EXPLAIN --><span class="help-block">{profile_fields.LANG_EXPLAIN}</span><!-- ENDIF -->
+									</div>
+								</div>
+							<!-- END profile_fields -->
+						<!-- ENDIF -->
+						<!-- EVENT ucp_register_profile_fields_after -->
+					</div>
+					<!-- IF CAPTCHA_TEMPLATE -->
+						<hr />
+						<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
+						<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
+					<!-- ENDIF -->
+					<!-- IF S_COPPA -->
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">{L_COPPA_COMPLIANCE}</h3>
+							</div>
+							<div class="panel-body">
+								<p>{L_COPPA_EXPLAIN}</p>
+							</div>
+						</div>
+					<!-- ENDIF -->
+					<!-- EVENT ucp_register_buttons_before -->
+					<hr class="colorgraph"/>
+					<fieldset class="submit-buttons">
+						{S_HIDDEN_FIELDS}
+						<div class="row mobile-fix">
+							<div class="col-xs-12 col-md-6">
+								<div class="form-group">
+									<input type="reset" value="{L_RESET}" name="reset" class="btn btn-danger btn-block btn-lg" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-6">
+								<div class="form-group">
+									<input type="submit" tabindex="9" name="submit" id="submit" value="{L_SUBMIT}" class="btn btn-success default-submit-action btn-block btn-lg" />
+								</div>
+							</div>
+						</div>
+						{S_FORM_TOKEN}
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

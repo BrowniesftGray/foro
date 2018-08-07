@@ -1,0 +1,27 @@
+<fieldset class="display-options well well-sm text-center">
+	<!-- IF DISPLAY_OPTIONS_PREV_NEXT == 1 -->
+		<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
+		<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
+		<label>{L_DISPLAY}{L_COLON} {S_SELECT_SORT_DAYS}</label>
+		<label>{L_SORT_BY} {S_SELECT_SORT_KEY}</label>
+		<label>{S_SELECT_SORT_DIR} <input type="submit" name="sort" value="{L_GO}" class="btn btn-default" /></label>
+	<!-- ELSEIF DISPLAY_OPTIONS_MCP_TOPICS == 1 -->
+		<label>{L_DISPLAY_POSTS}{L_COLON} {S_SELECT_SORT_DAYS}</label>
+		<label>{L_SORT_BY} {S_SELECT_SORT_KEY}</label>
+		<label>{S_SELECT_SORT_DIR}</label>
+		<!-- IF TOPIC_ID --><label class="inline-checkbox"><input type="checkbox" name="t" value="{TOPIC_ID}" checked="checked" /><strong>{L_ONLY_TOPIC}</strong></label><!-- ENDIF -->
+		<input class="btn btn-default" type="submit" name="sort" value="{L_GO}" />
+	<!-- ELSEIF DISPLAY_OPTIONS_S_RESULT == 1 -->
+		<!-- IF S_SELECT_SORT_DAYS or S_SELECT_SORT_KEY -->
+		 	<label><!-- IF S_SHOW_TOPICS -->{L_DISPLAY_POSTS}<!-- ELSE -->{L_SORT_BY}</label>
+		 	<label><!-- ENDIF --> {S_SELECT_SORT_DAYS}<!-- IF S_SELECT_SORT_KEY --></label> <label>{S_SELECT_SORT_KEY}</label>
+			<label>{S_SELECT_SORT_DIR}<!-- ENDIF --></label>
+			<input class="btn btn-default" type="submit" name="sort" value="{L_GO}" />
+		<!-- ENDIF -->
+	<!-- ELSE -->
+		<label>{L_DISPLAY_POSTS}{L_COLON} {S_SELECT_SORT_DAYS}</label>
+		<label>{L_SORT_BY} {S_SELECT_SORT_KEY}</label>
+		<label>{S_SELECT_SORT_DIR}</label>
+		<input class="btn btn-default" type="submit" name="sort" value="{L_GO}" />
+	<!-- ENDIF -->
+</fieldset>

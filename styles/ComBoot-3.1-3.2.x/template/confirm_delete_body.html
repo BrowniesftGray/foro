@@ -1,0 +1,85 @@
+<!-- IF S_AJAX_REQUEST -->
+	<form action="{S_CONFIRM_ACTION}" method="post" class="form-horizontal">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{MESSAGE_TITLE}</h3>
+			</div>
+			<div class="panel-body">
+				<p>{MESSAGE_TEXT}</p>
+
+				<!-- IF not S_SHADOW_TOPICS -->
+					<!-- IF not S_SOFTDELETED and S_ALLOWED_DELETE and S_ALLOWED_SOFTDELETE -->
+						<div class="form-group">
+							<label class="col-md-4 control-label">{L_DELETE_PERMANENTLY}{L_COLON}</label>
+							<div class="col-md-8">
+								<div class="checkbox">
+									<label>
+										<input id="delete_permanent" name="delete_permanent" type="checkbox" value="1" {S_CHECKED_PERMANENT} />
+										<!-- IF S_TOPIC_MODE -->{DELETE_TOPIC_PERMANENTLY_EXPLAIN}<!-- ELSE -->{DELETE_POST_PERMANENTLY_EXPLAIN}<!-- ENDIF -->
+									</label>
+								</div>
+							</div>
+						</div>
+					<!-- ENDIF -->
+
+					<div class="form-group">
+						<label for="delete_reason" class="col-md-4 control-label">{L_DELETE_REASON}{L_COLON}</label>
+						<div class="col-md-8">
+							<input type="text" name="delete_reason" value="" class="form-control" maxlength="120" size="45" />
+							<span class="help-text">{L_DELETE_REASON_EXPLAIN}</span>
+						</div>
+					</div>
+				<!-- ENDIF -->
+			</div>
+			<div class="panel-footer">
+				<fieldset class="submit-buttons">
+					<input type="button" name="cancel" value="{L_NO}" class="btn btn-danger" />
+					<input type="button" name="confirm" value="{L_YES}" class="btn btn-success" />
+				</fieldset>
+			</div>
+		</div>
+	</form>
+<!-- ELSE -->
+
+	<!-- INCLUDE overall_header.html -->
+	<form id="confirm" action="{S_CONFIRM_ACTION}" method="post" class="form-horizontal">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{MESSAGE_TITLE}</h3>
+			</div>
+			<div class="panel-body">
+				<p>{MESSAGE_TEXT}</p>
+				<!-- IF not S_SHADOW_TOPICS -->
+					<!-- IF not S_SOFTDELETED and S_ALLOWED_DELETE and S_ALLOWED_SOFTDELETE -->
+						<div class="form-group">
+							<label class="col-md-4 control-label">{L_DELETE_PERMANENTLY}{L_COLON}</label>
+							<div class="col-md-8">
+								<div class="checkbox">
+									<label>
+										<input id="delete_permanent" name="delete_permanent" type="checkbox" value="1" {S_CHECKED_PERMANENT} />
+										<!-- IF S_TOPIC_MODE -->{DELETE_TOPIC_PERMANENTLY_EXPLAIN}<!-- ELSE -->{DELETE_POST_PERMANENTLY_EXPLAIN}<!-- ENDIF -->
+									</label>
+								</div>
+							</div>
+						</div>
+					<!-- ENDIF -->
+					<div class="form-group">
+						<label for="delete_reason" class="col-md-4 control-label">{L_DELETE_REASON}{L_COLON}</label>
+						<div class="col-md-8">
+							<input type="text" name="delete_reason" value="" class="form-control" maxlength="120" size="45" />
+							<span class="help-text">{L_DELETE_REASON_EXPLAIN}</span>
+						</div>
+					</div>
+				<!-- ENDIF -->
+			</div>
+			<div class="panel-footer">
+				<fieldset class="submit-buttons">
+					{S_HIDDEN_FIELDS}
+					<input type="submit" name="cancel" value="{L_NO}" class="btn btn-danger" />
+					<input type="submit" name="confirm" value="{L_YES}" class="btn btn-success" />
+				</fieldset>
+			</div>
+		</div>
+	</form>
+	<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

@@ -1,0 +1,47 @@
+<!-- IF not S_AVATARS_ENABLED -->
+	<p>{L_AVATAR_FEATURES_DISABLED}</p>
+<!-- ENDIF -->
+
+<fieldset>
+	<div class="form-horizontal">
+		<!-- IF ERROR --><p class="alert alert-danger">{ERROR}</p><!-- ENDIF -->
+		<div class="form-group">
+			<label class="control-label col-md-4">{L_CURRENT_IMAGE}{L_COLON}</label>
+			<div class="col-md-8">
+				<!-- IF AVATAR -->{AVATAR}<!-- ELSE --><img src="{T_THEME_PATH}/images/default_avatar.jpg" class="default-avatar" alt="{L_AVATAR}"><!-- ENDIF -->
+				<div class="checkbox">
+					<label for="avatar_delete">
+						<input type="checkbox" name="avatar_delete" id="avatar_delete" />
+						{L_DELETE_AVATAR}
+					</label>
+				</div>
+				<span class="help-block">{L_AVATAR_EXPLAIN}</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-4">{L_AVATAR_TYPE}{L_COLON}</label>
+			<div class="col-md-8">
+				<select name="avatar_driver" id="avatar_driver" data-togglable-settings="true">
+					<!-- BEGIN avatar_drivers -->
+						<option value="{avatar_drivers.DRIVER}"<!-- IF avatar_drivers.SELECTED --> selected="selected"<!-- ENDIF --> data-toggle-setting="#avatar_option_{avatar_drivers.DRIVER}">{avatar_drivers.L_TITLE}</option>
+					<!-- END avatar_drivers -->
+				</select>
+			</div>
+		</div>
+		<div id="avatar_options">
+		<!-- BEGIN avatar_drivers -->
+			<div id="avatar_option_{avatar_drivers.DRIVER}">
+				<noscript>
+					<h3 class="avatar_section_header">{avatar_drivers.L_TITLE}</h3>
+				</noscript>
+				<div class="row">
+				<p class="col-md-8 col-md-offset-4">{avatar_drivers.L_EXPLAIN}</p>
+			</div>
+				<fieldset>
+					{avatar_drivers.OUTPUT}
+				</fieldset>
+			</div>
+		<!-- END avatar_drivers -->
+		</div>
+	</div>
+</fieldset>

@@ -1,0 +1,173 @@
+<!-- INCLUDE ucp_header.html -->
+
+<form id="ucp" method="post" action="{S_UCP_ACTION}"{S_FORM_ENCTYPE}>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{L_TITLE}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-info">{L_WATCHED_EXPLAIN}</div>
+			<!-- IF .forumrow -->
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{L_WATCHED_FORUMS}</th>
+								<th class="lastpost">{L_LAST_POST}</th>
+								<th class="marking">{L_MARK}</th>
+							</tr>
+						</thead>
+						<tbody class="topiclist cplist">
+							<!-- BEGIN forumrow -->
+								<tr>
+									<td>
+										<!-- IF forumrow.S_UNREAD_FORUM --><a href="{forumrow.U_VIEWFORUM}" class="icon-link"></a><!-- ENDIF -->
+										<div class="list-inner">
+											<a href="{forumrow.U_VIEWFORUM}" class="forumtitle">{forumrow.FORUM_NAME}</a><br />
+											{forumrow.FORUM_DESC}
+											<!-- IF forumrow.LAST_POST_TIME -->
+											<div class="visible-xs-block">
+												{L_LAST_POST} {L_POST_BY_AUTHOR} {forumrow.LAST_POST_AUTHOR_FULL} &laquo; <a href="{forumrow.U_LAST_POST}">{forumrow.LAST_POST_TIME}</a>
+											</div>
+											<!-- ENDIF -->
+										</div>
+									</td>
+									<td class="lastpost hidden-xs">
+										<!-- IF forumrow.LAST_POST_TIME -->
+											<span><dfn>{L_LAST_POST} </dfn>{L_POST_BY_AUTHOR} {forumrow.LAST_POST_AUTHOR_FULL}
+											<a href="{forumrow.U_LAST_POST}"><i class="fa fa-external-link fa-fw" aria-hidden="true"></i></a> <br />{forumrow.LAST_POST_TIME}</span>
+										<!-- ELSE -->
+											{L_NO_POSTS}<br />
+										<!-- ENDIF -->
+									</td>
+									<td class="marking"><input type="checkbox" name="f[{forumrow.FORUM_ID}]" id="f{forumrow.FORUM_ID}" /></td>
+								</tr>
+							<!-- END forumrow -->
+						</tbody>
+					</table>
+				</div>
+			<!-- ELSEIF S_FORUM_NOTIFY -->
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{L_WATCHED_FORUMS}</th>
+							</tr>
+						</thead>
+						<tbody class="topiclist cplist">
+							<tr>
+								<td>{L_NO_WATCHED_FORUMS}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<!-- ENDIF -->
+
+			<!-- IF .topicrow -->
+				<hr class="dashed"/>
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<div class="btn-group">
+							<a class="btn btn-default btn-sm disabled">{TOTAL_TOPICS}</a>
+							<!-- IF .pagination -->
+								<!-- INCLUDE pagination.html -->
+							<!-- ELSE -->
+								<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+							<!-- ENDIF -->
+						</div>
+					</div>
+				</div>
+				<div class="spacer"></div>
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{L_WATCHED_TOPICS}</th>
+								<th class="lastpost hidden-xs">{L_LAST_POST}</th>
+								<th class="marking">{L_MARK}</th>
+							</tr>
+						</thead>
+						<tbody class="topiclist cplist">
+							<!-- BEGIN topicrow -->
+								<tr>
+									<td>
+										<div class="pull-left forum-topic-icon">
+											<!-- INCLUDE post_icons.html -->
+										</div>
+										<div class="pull-right">
+											<div class="btn-group pagination-line">
+												<!-- IF topicrow.S_TOPIC_UNAPPROVED or topicrow.S_POSTS_UNAPPROVED -->
+													<a href="{topicrow.U_MCP_QUEUE}" class="btn btn-warning btn-xs" title="{L_TOPIC_UNAPPROVED}"><i class="fa fa-question fa-fw" aria-hidden="true"></i><span class="sr-only">{L_TOPIC_UNAPPROVED}</span></a>
+												<!-- ENDIF -->
+												<!-- IF topicrow.S_TOPIC_REPORTED -->
+													<a href="{topicrow.U_MCP_REPORT}" class="btn btn-warning btn-xs" title="{L_TOPIC_REPORTED}"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i><span class="sr-only">{L_TOPIC_REPORTED}</span></a>
+												<!-- ENDIF -->
+												<!-- IF .topicrow.pagination -->
+													<div class="pagination">
+														<ul>
+														<!-- BEGIN pagination -->
+															<!-- IF topicrow.pagination.S_IS_PREV -->
+															<!-- ELSEIF topicrow.pagination.S_IS_CURRENT --><li class="active"><span>{topicrow.pagination.PAGE_NUMBER}</span></li>
+															<!-- ELSEIF topicrow.pagination.S_IS_ELLIPSIS --><li class="ellipsis"><span>{L_ELLIPSIS}</span></li>
+															<!-- ELSEIF topicrow.pagination.S_IS_NEXT -->
+															<!-- ELSE --><li><a href="{topicrow.pagination.PAGE_URL}">{topicrow.pagination.PAGE_NUMBER}</a></li>
+															<!-- ENDIF -->
+														<!-- END pagination -->
+														</ul>
+													</div>
+												<!-- ENDIF -->
+											</div>
+										</div>
+										<!-- IF topicrow.TOPIC_ICON_IMG -->
+											<img src="{T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}" title="{topicrow.TOPIC_FOLDER_IMG_ALT}"/>
+										<!-- ENDIF -->
+										<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle"><strong>{topicrow.TOPIC_TITLE}</strong></a><br/>
+										<div class="visible-xs-block">
+											<small><!-- IF topicrow.ATTACH_ICON_IMG --><i class="fa fa-paperclip fa-fw" aria-hidden="true"></i> <!-- ENDIF -->
+											{L_LAST_POST} {L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR_FULL} &laquo; <a href="{topicrow.U_LAST_POST}" title="{L_GOTO_LAST_POST}">{topicrow.LAST_POST_TIME}</a></small>
+										</div>
+										<div class="hidden-xs">
+											<small>{L_POST_BY_AUTHOR} {topicrow.TOPIC_AUTHOR_FULL} &raquo; {topicrow.FIRST_POST_TIME}</small>
+										</div>
+									</td>
+									<td class="lastpost hidden-xs">
+										<span><dfn>{L_LAST_POST} </dfn>{L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR_FULL}
+										<a href="{topicrow.U_LAST_POST}" title="{L_GOTO_LAST_POST}"><i class="fa fa-external-link fa-fw" aria-hidden="true"></i></a> <br />{topicrow.LAST_POST_TIME}</span>
+									</td>
+									<td class="marking"><input type="checkbox" name="t[{topicrow.TOPIC_ID}]" id="t{topicrow.TOPIC_ID}" /></td>
+								</tr>
+							<!-- END topicrow -->
+						</tbody>
+					</table>
+				</div>
+			<!-- ELSEIF S_TOPIC_NOTIFY -->
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{L_WATCHED_TOPICS}</th>
+							</tr>
+						</thead>
+						<tbody class="topiclist cplist">
+							<tr>
+								<td>{L_NO_WATCHED_TOPICS}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<!-- ENDIF -->
+			<!-- IF .topicrow or .forumrow -->
+				<fieldset class="text-right">
+					<div class="btn-group">
+						<a class="btn btn-success btn-sm" href="#" onclick="marklist('ucp', 't', true); marklist('ucp', 'f', true); return false;">{L_MARK_ALL}</a>
+						<a class="btn btn-warning btn-sm" href="#" onclick="marklist('ucp', 't', false); marklist('ucp', 'f', false); return false;">{L_UNMARK_ALL}</a>
+					</div>
+					<input type="submit" name="unwatch" value="{L_UNWATCH_MARKED}" class="btn btn-primary btn-sm" />
+					{S_FORM_TOKEN}
+				</fieldset>
+			<!-- ENDIF -->
+		</div>
+	</div>
+</form>
+
+<!-- INCLUDE ucp_footer.html -->

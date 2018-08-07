@@ -1,0 +1,113 @@
+<!-- INCLUDE overall_header.html -->
+
+<!-- EVENT memberlist_email_before -->
+
+<!-- IF S_CONTACT_ADMIN-->
+	<h2 class="page-tile">{L_CONTACT_ADMIN}</h2>
+<!-- ELSEIF S_SEND_USER -->
+	<h2 class="page-tile">{L_SEND_EMAIL_USER}</h2>
+<!-- ELSE -->
+	<h2 class="page-tile">{L_EMAIL_TOPIC}</h2>
+<!-- ENDIF -->
+
+<form method="post" action="{S_POST_ACTION}" id="post" class="form-horizontal">
+
+	<!-- IF CONTACT_INFO -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{CONTACT_INFO}
+			</div>
+		</div>
+	<!-- ENDIF -->
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<!-- IF ERROR_MESSAGE --><p class="alert alert-danger">{ERROR_MESSAGE}</p><!-- ENDIF -->
+			<fieldset class="form-horizontal">
+			<!-- IF S_SEND_USER -->
+				<div class="form-group">
+					<label class="control-label col-md-4">{L_RECIPIENT}{L_COLON}</label>
+					<div class="col-md-6">
+						{USERNAME_FULL}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="subject" class="control-label col-md-4">{L_SUBJECT}{L_COLON}</label>
+					<div class="col-md-6">
+						<input class="form-control" type="text" name="subject" id="subject" size="50" tabindex="1" value="{SUBJECT}" />
+					</div>
+				</div>
+			<!-- ELSEIF S_CONTACT_ADMIN-->
+				<div class="form-group">
+					<label class="control-label col-md-4">{L_RECIPIENT}{L_COLON}</label>
+					<div class="col-md-6">
+						{L_ADMINISTRATOR}
+					</div>
+				</div>
+				<!-- IF not S_IS_REGISTERED -->
+					<div class="form-group">
+						<label for="email" class="control-label col-md-4">{L_SENDER_EMAIL_ADDRESS}{L_COLON}</label>
+						<div class="col-md-6">
+							<input class="form-control" type="email" name="email" id="email" size="50" maxlength="100" tabindex="1" value="{EMAIL}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="control-label col-md-4">{L_SENDER_NAME}{L_COLON}</label>
+						<div class="col-md-6">
+							<input class="form-control" type="text" name="name" id="name" size="50" tabindex="2" value="{NAME}" />
+						</div>
+					</div>
+				<!-- ENDIF -->
+				<div class="form-group">
+					<label for="subject" class="control-label col-md-4">{L_SUBJECT}{L_COLON}</label>
+					<div class="col-md-6">
+						<input class="form-control" type="text" name="subject" id="subject" size="50" tabindex="3" value="{SUBJECT}" />
+					</div>
+				</div>
+			<!-- ELSE -->
+				<div class="form-group">
+					<label for="email" class="control-label col-md-4">{L_EMAIL_ADDRESS}{L_COLON}</label>
+					<div class="col-md-6">
+						<input class="form-control" type="email" name="email" id="email" size="50" maxlength="100" tabindex="1" value="{EMAIL}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="control-label col-md-4">{L_REAL_NAME}{L_COLON}</label>
+					<div class="col-md-6">
+						<input class="form-control" type="text" name="name" id="name" size="50" tabindex="3" value="{NAME}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="lang" class="control-label col-md-4">{L_DEST_LANG}{L_COLON}</label>
+					<div class="col-md-6">
+						<select name="lang" class="form-control">{S_LANG_OPTIONS}</select>
+						<span class="help-block">{L_DEST_LANG_EXPLAIN}</span>
+					</div>
+				</div>
+			<!-- ENDIF -->
+			<div class="form-group">
+				<label for="message" class="control-label col-md-4">{L_MESSAGE_BODY}{L_COLON}</label>
+				<div class="col-md-6">
+					<textarea class="form-control" name="message" id="message" rows="15" cols="76" tabindex="4">{MESSAGE}</textarea>
+					<span class="help-block">{L_EMAIL_BODY_EXPLAIN}</span>
+				</div>
+			</div>
+			<!-- IF S_REGISTERED_USER -->
+				<div class="checkbox col-md-offset-4">
+					<label for="cc_sender">
+						<input type="checkbox" name="cc_sender" id="cc_sender" value="1" checked="checked" tabindex="5" /> {L_CC_SENDER}
+					</label>
+				</div>
+			<!-- ENDIF -->
+			</fieldset>
+		</div>
+		<div class="panel-footer">
+			<div class="text-center">
+				<input type="submit" tabindex="6" name="submit" class="btn btn-success" value="{L_SEND_EMAIL}" />
+				{S_FORM_TOKEN}
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

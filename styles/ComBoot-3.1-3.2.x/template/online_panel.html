@@ -1,0 +1,14 @@
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-globe"></i> <!-- IF U_VIEWONLINE --><a href="{U_VIEWONLINE}">{L_WHO_IS_ONLINE}</a><!-- ELSE -->{L_WHO_IS_ONLINE}<!-- ENDIF --></h3>
+	</div>
+	<div class="panel-body">
+		<!-- EVENT index_body_block_online_prepend -->
+		{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />{RECORD_USERS}<br />
+			<!-- IF U_VIEWONLINE -->
+				<hr />{LOGGED_IN_USER_LIST}
+				<!-- IF LEGEND --><br /><em>{L_LEGEND}{L_COLON} {LEGEND}</em><!-- ENDIF -->
+			<!-- ENDIF -->
+		<!-- EVENT index_body_block_online_append -->
+	</div>
+</div>

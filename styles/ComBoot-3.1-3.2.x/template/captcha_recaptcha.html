@@ -1,0 +1,34 @@
+<!-- IF S_TYPE == 1 -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{L_CONFIRMATION}</h3>
+		</div>
+		<div class="panel-body">
+			<p>{L_CONFIRM_EXPLAIN}</p>
+			<div class="form-horizontal">
+<!-- ENDIF -->
+				<div class="form-group clearfix">
+					<label for="recaptcha_response_field" class="control-label col-md-4">{L_CONFIRM_CODE}{L_COLON}</label>
+					<div class="col-md-8">
+						<!-- IF S_RECAPTCHA_AVAILABLE -->
+							<noscript>
+								<div>{L_RECAPTCHA_NOSCRIPT}</div>
+								<div>
+									<object data="{RECAPTCHA_SERVER}/noscript?k={RECAPTCHA_PUBKEY}{RECAPTCHA_ERRORGET}" type="text/html" height="300" width="500"></object><br />
+									<textarea class="form-control" name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+									<input type="hidden" name="recaptcha_response_field" value="manual_challenge" />
+								</div>
+							</noscript>
+							<script src="{RECAPTCHA_SERVER}.js?hl={LA_RECAPTCHA_LANG}" async defer></script>
+							<div class="g-recaptcha" data-sitekey="{RECAPTCHA_PUBKEY}" data-tabindex="<!-- IF $CAPTCHA_TAB_INDEX -->{$CAPTCHA_TAB_INDEX}<!-- ELSE -->10<!-- ENDIF -->"></div>
+						<!-- ELSE -->
+							{L_RECAPTCHA_NOT_AVAILABLE}
+						<!-- ENDIF -->
+						<span class="help-block">{L_RECAPTCHA_EXPLAIN}</span>
+					</div>
+				</div>
+<!-- IF S_TYPE == 1 -->
+			</div>
+		</div>
+	</div>
+<!-- ENDIF -->

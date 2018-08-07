@@ -1,0 +1,82 @@
+<!-- INCLUDE overall_header.html -->
+
+<div class="row" id="loginpanel">
+	<div class="col-xs-12 col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form action="{S_LOGIN_ACTION}" method="post" id="login" data-focus="<!-- IF S_ADMIN_AUTH -->{PASSWORD_CREDENTIAL}<!-- ELSE -->{USERNAME_CREDENTIAL}<!-- ENDIF -->">
+					<fieldset>
+						<h3><!-- IF LOGIN_EXPLAIN -->{LOGIN_EXPLAIN}<!-- ELSE -->{L_LOGIN}<!-- ENDIF --></h3>
+						<hr class="colorgraph">
+						<!-- IF LOGIN_ERROR --><div class="alert alert-danger">{LOGIN_ERROR}</div><!-- ENDIF -->
+						<div class="form-group no-padding">
+							<div class="icon-addon addon-lg">
+								<input type="text" tabindex="1" name="{USERNAME_CREDENTIAL}" id="{USERNAME_CREDENTIAL}" size="25" value="{USERNAME}" class="form-control" placeholder="{L_USERNAME}" required="required" autofocus/>
+								<label for="{USERNAME_CREDENTIAL}" class="fa fa-user" title="{USERNAME_CREDENTIAL}"></label>
+							</div>
+						</div>
+						<div class="form-group no-padding">
+							<div class="icon-addon addon-lg">
+								<input type="password" tabindex="2" id="{PASSWORD_CREDENTIAL}" name="{PASSWORD_CREDENTIAL}" size="25" class="form-control" placeholder="{L_PASSWORD}" required="required" autocomplete="off"/>
+								<label for="{PASSWORD_CREDENTIAL}" class="fa fa-lock" title="{PASSWORD_CREDENTIAL}"></label>
+							</div>
+						</div>
+						<!-- IF CAPTCHA_TEMPLATE and S_CONFIRM_CODE -->
+							<!-- DEFINE $CAPTCHA_TAB_INDEX = 3 -->
+							<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
+						<!-- ENDIF -->
+						<!-- IF S_DISPLAY_FULL_LOGIN -->
+							<!-- IF S_AUTOLOGIN_ENABLED -->
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="autologin" id="autologin" tabindex="4" />{L_LOG_ME_IN}
+									</label>
+								</div>
+							<!-- ENDIF -->
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="viewonline" id="viewonline" tabindex="5" />{L_HIDE_ME}
+								</label>
+							</div>
+						<!-- ENDIF -->
+						<!-- IF S_DISPLAY_FULL_LOGIN and (U_SEND_PASSWORD or U_RESEND_ACTIVATION) -->
+							<div class="row">
+								<!-- IF U_SEND_PASSWORD -->
+									<div class="col-md-6">
+										<a href="{U_SEND_PASSWORD}" class="btn btn-danger btn-block">{L_FORGOT_PASS}</a>
+									</div>
+								<!-- ENDIF -->
+								<!-- IF U_RESEND_ACTIVATION -->
+									<div class="col-md-6">
+										<a href="{U_RESEND_ACTIVATION}" class="btn btn-warning btn-block">{L_RESEND_ACTIVATION}</a>
+									</div>
+								<!-- ENDIF -->
+							</div>
+						<!-- ENDIF -->
+						<!-- IF not S_ADMIN_AUTH and S_REGISTER_ENABLED -->
+							{S_LOGIN_REDIRECT}
+							<hr class="colorgraph">
+							<div class="row mobile-fix">
+								<div class="col-md-6">
+									{S_HIDDEN_FIELDS}<input type="submit" name="login" tabindex="6" value="{L_LOGIN}" class="btn btn-success btn-block btn-lg" />
+								</div>
+								<div class="col-md-6">
+									<a href="{U_REGISTER}" class="btn btn-primary btn-block btn-lg">{L_REGISTER}</a>
+								</div>
+							</div>
+						<!-- ELSE -->
+							{S_LOGIN_REDIRECT}
+							<hr class="colorgraph">
+							{S_HIDDEN_FIELDS}<input type="submit" name="login" tabindex="6" value="{L_LOGIN}" class="btn btn-success btn-block btn-lg" />
+						<!-- ENDIF -->
+					</fieldset>
+					{S_FORM_TOKEN}
+				</form>
+			</div>
+		</div>
+		<!-- IF not S_ADMIN_AUTH and PROVIDER_TEMPLATE_FILE -->
+			<!-- INCLUDE {PROVIDER_TEMPLATE_FILE} -->
+		<!-- ENDIF -->
+	</div>
+</div>
+<!-- INCLUDE overall_footer.html -->

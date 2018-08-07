@@ -1,0 +1,347 @@
+## ComBoot - The Professional phpBB Bootstrap Theme
+by Florian Gareis (http://www.florian-gareis.de)
+
+- Main: http://zoker.me/go/comboot
+- Demo: http://zoker.me/go/comboot-demo
+- Support: http://zoker.me/go/comboot-support
+- Download: http://zoker.me/go/comboot-download
+
+
+Known Issues (in Version 1.0)
+============================
+
+	- Wrong table column size
+	- Breadcrumb are not bootstrap color dynamic
+	- Quote on post reply does not work with WYSIWYG editor
+
+
+Version 1.1 (upcoming)
+============================
+
+	From now on, only the version for 3.1 will be updated and new features will be added.
+	The reason for that is simple: It's a lot of work to add new features to multiple versions.
+	So only expect updates for the version compatible with 3.1.
+
+	- New: Finally compatible with phpBB 3.1
+	- New: All the new features included in 3.1 (mods, notifications, etc.)
+	- New: Notification dropdown
+	- New: ComBoot annoucement and updater alert for mods and admins
+	- New: Use less css
+	- Updated: Bootstrap to 3.3.6
+	- Updated: Less CSS to
+	- Fix: Table column size
+	- Fix: Table checkbox align
+
+
+Version 1.1-rc5 (06.08.2017)
+============================
+
+	- Compatible with phpBB 3.2.1
+	- Update: Slider.js to 9.8.1
+	- Update: BS-Select to 1.13.0
+	- Update: Highlightjs to 9.9.0
+	- Update: Autosizejs to 4.0.0
+	- Update: BS-Colorpicker to 2.5.1
+	- Fix: PM message view
+	- Fix: Missing event
+	- Fix: Misplaced event
+	- Fix: Recaptcha placement
+	- Fix: Remove not needed imageset.css file
+	- Fix: Deleted pm text
+	- Fix: Emoji size in post content
+	- Fix: Move click function for pm
+	- Fix: Comboot.js issues
+	- Fix: Memberlist styling issue
+	- Fix: Subscribe to topic text
+	- Fix: Missing logo
+	- Fix: Missing subscribe to forum button
+	- Fix: Changes from phpBB 3.2.1
+	- Remove: Fontawesome (already included in phpBB 3.2)
+
+
+Version 1.1-rc4 (29.09.2016)
+============================
+
+	- Update: Bootstrap to 3.3.7
+	- Update: Pace
+	- Update: Autosizejs to 3.0.17
+	- Update: BS-Select to 1.11.0
+	- Update: BS-Colorpicker to 2.3.5
+	- Update: BS-Slider to 9.2.1
+	- Update: JS-Cookie to 2.1.3
+	- Update: Highlightjs to 9.7.0
+	- Fix: Some less issues
+	- Fix: Copyright on mobile devices
+	- Fix: Fix missing permission requests
+	- Fix: Some little css fixes + lessify
+	- Fix: Only show mobile post toolbar, when not empty
+	- Fix: Some little mobile navbar fixes
+	- Fix: Some post avatar tweaks
+	- Fix: Wrong search options panel
+	- Fix: Apply some phpBB fixes
+	- Fix: Quickreply not removing autosave
+	- Fix: Not working add friend as recipients
+	- Fix: Posthilit function
+	- Fix: Search input form
+	- Fix: Memberlist layout
+	- Fix: Search result layout
+	- Fix: Mod button not visible on mobile devices
+	- Fix: Missing topic moved icon
+
+Version 1.1-rc3 (18.07.2016)
+============================
+
+	- Compatible with phpBB 3.1.9
+	- Update: Fontawesome to 4.6.3
+	- Update: BS-Colorpicker to 2.3.3
+	- Update: Highlightjs to 9.5.0
+	- Update: JS-Cookie to 2.1.2
+	- Update: BS-Slider to 9.1.1
+	- Update: Autosizejs to 3.0.16
+	- New: Ability to disable lightbox
+	- New: BS-Value-Slider (optional)
+	- New: User avatar on mobile devices
+	- Fix: Memberlist sorting
+	- Fix: Avatar size limit
+	- Fix: Missing mobile cog on pn messages
+	- Fix: PN unread indicator
+	- Fix: Missing message status indicator (friends etc.)
+	- Fix: Pagination issue
+	- Fix: Enhance post mobile layout
+	- Fix: Remove trailing whitespaces
+	- Fix: Size of fontsize-picker
+	- Fix: Change some glyphicons icons to fontawesome
+	- Fix: Radio buttons on pref screen
+	- Fix: Header nav truncate
+	- Fix: Bool view on ucp profile edit page
+	- Fix: Missing events and missing custom fields
+	- Fix: Char select on memberlist page
+	- Fix: HTML issues
+	- Fix: BBCodes not working on signature editor
+	- Fix: Close other open menus, when new menu is opened
+	- Fix: Breadcrumb style
+	- Fix: Spelling issue
+	- Fix: Make some text smaller
+	- Fix: Outsource post icons
+	- Fix: Pagination not working in search results
+	- Fix: Many HTML issues
+	- Fix: Some table width
+	- Remove: Not used/unnecessary css/js
+
+Version 1.1-rc2 (19.02.2016)
+============================
+
+	- Compatible with phpBB 3.1.8
+	- Update: BS-Select to 1.10.0
+	- Update: autosize.js to 3.0.15
+	- New: Topic post time to mobile devices
+	- New: Forum name displayed in navbar also on mobile devices (+ truncate)
+	- Fix: Many missing events
+	- Fix: Colorpicker not working properly
+	- Fix: Truncate title is now dynamic
+	- Fix: Traling whitespaces + convert spaces to tabs
+	- Fix: Add quote to post button
+	- Fix: Many new icons
+	- Fix: UCP/MCP layout
+	- Fix: Outsource display_options panel
+	- Fix: Not working "jump to post" element
+	- Fix: Display of deleted post was handled wrong
+	- Fix: Too long strings in tabs in UCP and MCP
+	- Fix: Prevent post editing of getting overwriten by autosave
+	- Fix: Login dropdown on mobile devices
+	- Fix: Sorting options on mobile devices
+	- Fix: Missing empty line in each file
+	- Fix: Event in wrong position
+	- Fix: Tabs not working
+
+Version 1.1-rc1 (15.01.2016)
+============================
+
+	- Compatible with phpBB 3.1.7
+	- New: Pace page loading indicator
+	- New: Pjax ajax page load (deactivated by default)
+	- New: Autosave form data
+	- Update: Bootstrap to 3.3.6
+	- Update: Fontawesome to 4.5.0
+	- Update: Lightbox to 2.8.2
+	- Update: BS-Select to 1.9.3
+	- Update: autosize.js to 3.0.14
+	- Update: highlight.js to 9.1.0
+	- Update: Update bootstrap-select to 1.7.7
+	- Improve: Ability to disable pageload indicator
+	- Improve: Ability to disable update notification
+	- Fix: HTML issues
+	- Fix: phpBB issues
+	- Fix: Favicon
+	- Fix: Add missing link to last post
+	- Fix: Wrong avatar size for guest users
+
+Version 1.1-beta4 (03.11.2015)
+============================
+
+	- New: User avatar in navbar
+	- New: Autosize post message
+	- Update: Colorpicker to 2.3.0
+	- Update: BS-Select to 1.7.5
+	- Update: Autosize to 3.0.13
+	- Improve: notification panel style code
+	- Fix: Remove duplicate profile info
+	- Fix: Fix wrong gravatar field type
+	- Fix: Mobile notification overlap issue
+	- Fix: Registration page field alignments
+	- Fix: Poll vote ajax compatibility
+	- Fix: Notification avatar size on mobile devices
+	- Fix: Many html 5 issues
+	- Fix: Firefox mobile align issue
+	- Fix: Preview image to large
+	- Fix: Ability to translate online/offline badge
+	- Fix: Second poll options box below editor
+	- Fix: Update notification ssl issue
+	- Fix: Wrong error alert class
+	- Fix: Topic tools width
+	- Fix: Topic icon select width
+	- Fix: Broken pm message view
+	- Remove angular.js and replace function with nativ jquery
+
+Version 1.1-beta3 (23.08.2015)
+============================
+
+	- Compatible with phpBB 3.1.6
+	- New: Forum image inside button
+	- New: Change code highlight script
+	- Update: Included lightbox
+	- Update: Fontawesome to 4.4
+	- Update: select.js (transforming selects into bootstrap style)
+	- Fix: phpBB notification message + loading animation
+	- Fix: Compatiblity with advanced bbcode ext
+	- Fix: Old button class
+	- Fix: Long words do not break in posts
+	- Fix: More smilie window
+	- Fix: Attachment upload issue
+	- Fix: Forgot password page style issue
+	- Fix: unstyled popup windows
+	- Fix: Confirm delete window layout issue
+	- Fix: Quickmod/search position
+	- Fix: Cleaned up less file (an css file)
+	- Fix: Timezone settings are now correct displayed
+	- Fix: Lines doesn't apper properly aligned on forum descriptions
+	- Fix: Pagnition for 3.1
+	- Fix: Quick menu icons
+	- Fix: Pre-compiled less (style is not in stylesheet.css)
+	- Fix: Mobile menu items
+	- Fix: Notifications on mobile devices
+	- Remove: Less compiler
+
+
+Version 1.1-beta2 (07.07.2015)
+============================
+
+	- New: ComBoot annoucement and updater alert for mods and admins
+	- New: Beta channel for update alerts
+	- New: More topic icon buttons instead of text buttons
+	- Update: Bootstrap to 3.3.5
+	- Fix: "Synchronous XMLHttpRequest..." error
+	- Fix: topic view e-mail button
+	- Fix: General layout, tables and ucp pm issues
+	- Fix: AngularJS data binding (temporary disabled)
+	- Fix: Wrong table column width
+	- Fix: "mark all messages read" button in private message view
+	- Fix: Wrong 2top link
+	- Fix: Remove profile image from navbar user dropdown
+	- Fix: Post report layout
+	- Fix: Missing events in viewtopic page
+	- Fix: Expand/collapse button
+	- Fix: Topic actions twice (footer + new button)
+	- Fix: Double "Go to advanced search" link
+	- Fix: Some visiable elements, that should be hidden
+
+
+Version 1.1-beta1 (06.07.2014)
+============================
+
+	- First release for 3.1
+
+
+Version 1.0 (21.11.2014)
+============================
+
+** Free and Premium Edition **
+
+	- New Name: We switched from proBoot3 to ComBoot
+	- Ready for Bootstrap 3.3.1
+	- New: Redesigned logo
+	- New: Colorpicker for group color (UCP)
+	- New: Lightbox for post images
+	- New: Default avatar
+	- New: Simple html syntax highlighter for post code
+	- New: Scroll2Top button
+	- New: Topic Title Preview like Xenforo
+	- New: Quickreply collapsible
+	- Updated: Bootstrap-Select
+	- Updated: Syntax Highlighting
+	- Updated: jQuery
+	- Fixed: Post review layout
+	- Fixed: Moved all external js and css file requests outsite the header file
+	- Fixed: A ton of mobile optimization
+	- Fixed: Responsive tables
+	- Fixed: Outsourced some boxes in own files
+	- Fixed: Drafts on pm pages
+	- Fixed: A lot off mobile stuff
+	- Fixed: UCP layout part 3
+	- Fixed: MCP layout
+	- Fixed: Select box length
+	- Fixed: Navbar login form
+	- Fixed: Footer container removed
+	- Fixed: New post/topic tab issue
+	- Fixed: Board disabled warning
+	- Fixed: Post preview layout
+	- Fixed: Navigation buttons (on index, topic, UCP and MCP pages)
+	- Fixed: Some little other bugs
+	- Remove: Not necessary css files
+
+** Premium Edition only **
+
+	- New: WYSIWYG editor on reply and quickreply
+	- New: Config file to customize theme (edit the /template/config.html file)
+		- Mobile responsible (on/off)
+		- Boxed layout (on/off)
+		- Position of header navbar (above/below logo)
+		- Logo in header (on/off)
+		- Additional user navbar (on/off)
+		- Force additional user button (on/off)
+		- Fixed header navbar (on/off)
+		- Inverted header navbar (on/off)
+		- Fixed footer navbar (on/off)
+		- Inverted footer navbar (on/off)
+		- WYSIWYG editor on reply (on/off)
+		- WYSIWYG editor on quickreply (on/off)
+		- Profile information align on posts page (right/left)
+		- Show user online/offline badge (on/off)
+		- Rounded Avatars (on/off)
+		- Show login panel (on/off)
+		- Show jumpbox (on/off)
+		- Inverted footer navbar (on/off)
+		- Turn off phpBB copyright
+	- Fixed: Insert image in WYSIWYG
+
+
+Version 0.9 (01.05.2014)
+============================
+
+	- New: Topic poll layout
+	- New: Responsive logo
+	- New: Scroll2Top button on every page
+	- Update: Font-Awesome 4.1
+	- Fixed: Huge MCP layout fix
+	- Fixed: Search page fix
+	- Fixed: UCP layout part 2
+	- Fixed: New user profile fix
+	- Fixed: Pagination fix
+
+
+Version 0.8 (28.04.2014)
+============================
+
+	- New: New user profile layout
+	- Fixed: Huge UCP layout fix
+	- Fixed: HTML5 fix

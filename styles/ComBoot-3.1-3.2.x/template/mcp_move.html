@@ -1,0 +1,74 @@
+<!-- IF S_AJAX_REQUEST -->
+
+	<h3>{MESSAGE_TITLE}</h3>
+	<p>{MESSAGE_TEXT}</p>
+
+	<!-- IF ADDITIONAL_MSG --><p>{ADDITIONAL_MSG}</p><!-- ENDIF -->
+
+	<label>
+		<strong>{L_SELECT_DESTINATION_FORUM}{L_COLON}</strong>
+		<select name="to_forum_id">{S_FORUM_SELECT}</select>
+	</label>
+
+	<!-- IF S_CAN_LEAVE_SHADOW -->
+		<label for="move_leave_shadow" class="checkbox-inline">
+			<input type="checkbox" name="move_leave_shadow" id="move_leave_shadow" />{L_LEAVE_SHADOW}
+		</label>
+	<!-- ENDIF -->
+
+	<!-- IF S_CAN_LOCK_TOPIC -->
+		<label for="move_lock_topics" class="checkbox-inline">
+			<input type="checkbox" name="move_lock_topics" id="move_lock_topics" />{L_LOCK_TOPIC}
+		</label>
+	<!-- ENDIF -->
+
+	<fieldset class="btn-group text-center">
+		<input type="button" name="confirm" value="{YES_VALUE}" class="btn btn-success" />
+		<input type="button" name="cancel" value="{L_NO}" class="btn btn-danger" />
+	</fieldset>
+
+<!-- ELSE -->
+
+	<!-- INCLUDE overall_header.html -->
+
+	<!-- EVENT mcp_move_before -->
+
+	<form id="confirm" action="{S_CONFIRM_ACTION}" method="post">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{MESSAGE_TITLE}</h3>
+			</div>
+			<div class="panel-body">
+				<!-- IF ADDITIONAL_MSG --><p>{ADDITIONAL_MSG}</p><!-- ENDIF -->
+				<fieldset>
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-md-4">{L_SELECT_DESTINATION_FORUM}{L_COLON}</label>
+							<div class="col-md-8">
+								<select name="to_forum_id">{S_FORUM_SELECT}</select>
+								<!-- IF S_CAN_LEAVE_SHADOW -->
+									<label for="move_leave_shadow" class="checkbox-inline"><input type="checkbox" name="move_leave_shadow" id="move_leave_shadow" />{L_LEAVE_SHADOW}</label>
+								<!-- ENDIF -->
+								<!-- IF S_CAN_LOCK_TOPIC -->
+									<label for="move_lock_topics" class="checkbox-inline"><input type="checkbox" name="move_lock_topics" id="move_lock_topics" />{L_LOCK_TOPIC}</label>
+								<!-- ENDIF -->
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-8 col-md-offset-4">{MESSAGE_TEXT}</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="submit-buttons">
+					{S_HIDDEN_FIELDS}
+					<input type="submit" name="cancel" value="{L_NO}" class="btn btn-danger" />
+					<input type="submit" name="confirm" value="{YES_VALUE}" class="btn btn-success" />
+				</fieldset>
+			</div>
+		</div>
+		{S_FORM_TOKEN}
+	</form>
+
+	<!-- INCLUDE overall_footer.html -->
+
+<!-- ENDIF -->

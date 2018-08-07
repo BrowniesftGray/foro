@@ -1,0 +1,228 @@
+<!-- INCLUDE overall_header.html -->
+
+<div class="row container-fluid justify-content-center">
+<form name="crear_ficha" action="{U_ACTION}" method="POST">
+<span class="corners-top"><span></span></span>
+<p class="error">{ERRORES}</p>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link active" id="perso-tab" data-toggle="tab" href="#perso" >Info</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="home-tab" data-toggle="tab" href="#home">Técnicas</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile">Atributos</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact">Personaje</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="botones-tab" data-toggle="tab" href="#botones">Finalizar</a>
+	</li>
+</ul>
+<div class="tab-content" id="myTabContent">
+	<div class="col-xs-12" style="height:25px;"></div>
+	<div class="tab-pane fade in active" id="perso" >
+		<div class="form-group">
+		 <label class=" control-label" for="nombre">Nombre:</label>
+		 <input type="hidden" id="pj_id" name="pj_id" value="{FICHA_ID}" readonly>
+		 <input type='text' class='form-control' id='nombre' name='nombre' value="{FICHA_NOMBRE}"></input>
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="edad">Edad:</label>
+		 <input type='number' class='form-control' id='edad' name='edad' value="{FICHA_EDAD}"></input>
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="rango">Rango:</label>
+		 <input type='text' class='form-control' id='rango' name='rango' value="{FICHA_RANGO}"></input>
+		</div>
+		<div class="form-group">
+			<label class=" control-label" for="selectAldea">Aldea:</label>
+			<select id="selectAldea" name="selectAldea" class="form-control">
+				<option value="{FICHA_ALDEA}">{FICHA_ALDEA}</option>
+				<option value="Konohagakure no Sato">Konohagakure no Sato</option>
+				<option value="Kirigakure no Sato">Kirigakure no Sato</option>
+				<option value="Getsugakure no Sato">Getsugakure no Sato</option>
+				<option value="Yukigakure no Sato">Yukigakure no Sato</option>
+				<option value="Kusagakure no Sato">Kusagakure no Sato</option>
+			 </select>
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="selectOjos">Ojos:</label>
+		 <input type='text' class='form-control' id='selectOjos' name='selectOjos' value="{FICHA_OJOS}"></input>
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="selectPelo">Pelo:</label>
+		 <input type='text' class='form-control' id='selectPelo' name='selectPelo' value="{FICHA_PELOS}"></input>
+		</div>
+		<div class="form-group">
+		 <label class="control-label" for="complexion">Complexion:</label>
+		 <input type='text' class='form-control' id='complexion' name='complexion' value="{FICHA_COMPLEXION}"></input>
+		</div>
+		<div class="form-group">
+		 <label class="control-label" for="altura">Altura:</label>
+		 <input type='text' class='form-control' id='altura' name='altura' value="{FICHA_ALTURA}"></input>
+		</div>
+		<div class="form-group">
+		 <label class="control-label" for="peso">Peso:</label>
+		 <input type='text' class='form-control' id='peso' name='peso' value="{FICHA_PESO}"></input>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="home">
+		<select size="6" id="clan" name="clan" data-size="10" class="form-control">
+		<option value="{FICHA_CLAN}">{FICHA_CLAN}</option>
+		 <option value="Sin Clan">Sin Clan</option>
+		 <option value="Clan Kamizuru">Clan Kamizuru</option>
+		 <option value="Clan Jyugo">Clan Jyugo</option>
+		 <option value="Clan Nendo">Clan Nendo</option>
+		 <option value="Clan Orochi">Clan Orochi</option>
+		 <option value="Clan Uzumaki">Clan Uzumaki</option>
+		 <option value="Clan Sabaku">Clan Sabaku</option>
+		 <option value="Clan Aburame">Clan Aburame</option>
+		 <option value="Clan Senju">Clan Senju</option>
+		 <option value="Clan Hyuga">Clan Hyuga</option>
+		 <option value="Clan Kaguya">Clan Kaguya</option>
+		 <option value="Clan Inuzuka">Clan Inuzuka</option>
+		 <option value="Clan Yuki">Clan Yuki</option>
+		 <option value="Clan Yotsuki">Clan Yotsuki</option>
+		 <option value="Clan Uchiha">Clan Uchiha</option>
+		 <option value="Clan Yamanaka">Clan Yamanaka</option>
+		 <option value="Clan Akimichi">Clan Akimichi</option>
+		 <option value="Clan Hozuki">Clan Hozuki</option>
+		 <option value="Clan Nara">Clan Nara</option>
+		 <option value="Arte Gotokuji">Arte Gotokuji</option>
+		 <option value="Arte Yūrei">Arte Yūrei</option>
+		 <option value="Arte Tenkasai">Arte Tenkasai</option>
+		 <option value="Arte Inku">Arte Inku</option>
+		 <option value="Arte Tessen">Arte Tessen</option>
+		 <option value="Arte Origami">Arte Origami</option>
+		 <option value="Kekkei Genkai Shakuton">Kekkei Genkai Shakuton</option>
+		 <option value="Kekkei Genkai Yōton">Kekkei Genkai Yōton</option>
+		 <option value="Kekkei Genkai Jiton">Kekkei Genkai Jiton</option>
+		 <option value="Kekkei Genkai Shōton">Kekkei Genkai Shōton</option>
+		 <option value="Kekkei Genkai Futton">Kekkei Genkai Futton</option>
+		 <option value="Kekkei Genkai Ranton">Kekkei Genkai Ranton</option>
+	 </select>
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_CLAN}'; ">[+] {FICHA_CLAN}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsClan" name="tecsClan" rows="5"> {TECNICAS_CLAN}</textarea></dd></dl>
+		<hr>
+		<select id="selectElemento" name="selectElemento" class="form-control" data-size="5">
+			<option value="{FICHA_ELEMENTO1}">{FICHA_ELEMENTO1}</option>
+			 <option value="Katon (火遁 Elemento Fuego)">Katon (火遁 Elemento Fuego)</option>
+			 <option value="Suiton (水遁 Elemento Agua)">Suiton (水遁 Elemento Agua)</option>
+			 <option value="Raiton (雷遁 Elemento Rayo)">Raiton (雷遁 Elemento Rayo)</option>
+			 <option value="Fuuton (風遁 Elemento Viento)">Fuuton (風遁 Elemento Viento)</option>
+			 <option value="Doton (土遁 Elemento Tierra)">Doton (土遁 Elemento Tierra)</option>
+		</select>
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO1}'; ">[+] {FICHA_ELEMENTO1}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsSelectElemento" name="tecsSelectElemento" rows="5">{TECNICAS_ELEMENTO1}</textarea></dd></dl>
+		<hr>
+		<select id="selectEspecialidad" name="selectEspecialidad" class="form-control">
+			<option value="{FICHA_ESPECIALIDAD1}">{FICHA_ESPECIALIDAD1}</option>
+			 <option value="Genjutsu (幻術 Ilusiones)">Genjutsu (幻術 Ilusiones)</option>
+			 <option value="Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)">Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)</option>
+			 <option value="Bukijutsu (武器术 Técnicas de armas)">Bukijutsu (武器术 Técnicas de armas)</option>
+			 <option value="Fūinjutsu (封印術 Sellado)">Fūinjutsu (封印術 Sellado)</option>
+			 <option value="Iryō Ninjutsu (医療忍術 Médico)">Iryō Ninjutsu (医療忍術 Médico)</option>
+			 <option value="Kanchi Taipu (感知タイプ Sensorial)">Kanchi Taipu (感知タイプ Sensorial)</option>
+		</select>
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD1}'; ">[+] {FICHA_ESPECIALIDAD1}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsSelectEspecialidad" name="tecsSelectEspecialidad" rows="5">{TECNICAS_ESPECIALIDAD1}</textarea></dd></dl>
+		<hr>
+		<select id="selectElemento2" name="selectElemento2" class="form-control" data-size="5">
+			<option value="{FICHA_ELEMENTO2}">{FICHA_ELEMENTO2}</option>
+			<option value="Segundo elemento disponible en compra con PN">Segundo elemento disponible en compra con PN</option>
+			<option value="Katon (火遁 Elemento Fuego)">Katon (火遁 Elemento Fuego)</option>
+			 <option value="Suiton (水遁 Elemento Agua)">Suiton (水遁 Elemento Agua)</option>
+			 <option value="Raiton (雷遁 Elemento Rayo)">Raiton (雷遁 Elemento Rayo)</option>
+			 <option value="Fuuton (風遁 Elemento Viento)">Fuuton (風遁 Elemento Viento)</option>
+			 <option value="Doton (土遁 Elemento Tierra)">Doton (土遁 Elemento Tierra)</option>
+		</select>
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO2}'; ">[+] {FICHA_ELEMENTO2}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsSelectElemento2" name="tecsSelectElemento2" rows="5">{TECNICAS_ELEMENTO2}</textarea></dd></dl>
+		<hr>
+		<select id="selectEspecialidad2" name="selectEspecialidad2" class="form-control">
+			<option value="{FICHA_ESPECIALIDAD2}">{FICHA_ESPECIALIDAD2}</option>
+			<option value="Segunda especialidad disponible en compra con PN">Segunda especialidad disponible en compra con PN</option>
+			 <option value="Genjutsu (幻術 Ilusiones)">Genjutsu (幻術 Ilusiones)</option>
+			 <option value="Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)">Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)</option>
+			 <option value="Bukijutsu (武器术 Técnicas de armas)">Bukijutsu (武器术 Técnicas de armas)</option>
+			 <option value="Fūinjutsu (封印術 Sellado)">Fūinjutsu (封印術 Sellado)</option>
+			 <option value="Iryō Ninjutsu (医療忍術 Médico)">Iryō Ninjutsu (医療忍術 Médico)</option>
+			 <option value="Kanchi Taipu (感知タイプ Sensorial)">Kanchi Taipu (感知タイプ Sensorial)</option>
+		</select>
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD2}'; ">[+] {FICHA_ESPECIALIDAD2}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsSelectEspecialidad2" name="tecsSelectEspecialidad2" rows="5">{TECNICAS_ESPECIALIDAD2}</textarea></dd></dl>
+		<input class="form-control" type="text" name="invocacion" value="{FICHA_INVOCACION}">
+		<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_INVOCACION}'; ">[+] {FICHA_INVOCACION}</a></dt><dd style="display: none;"><textarea class="form-control" id="tecsInvocacion" name="tecsInvocacion" rows="5">{TECNICAS_INVOCACION}</textarea></dd></dl>
+</div>
+ <div class="tab-pane fade" id="profile">
+	<dl>
+	<div class="form-group">
+		<label class="col control-label" for="atrFuerza">Fuerza:</label>
+		<input class="col form-control" type="number" name="atrFuerza" id="atrFuerza" value="{FICHA_FUERZA}">
+	</div>
+	<div class="form-group">
+			<label class="col control-label" for="atrRes">Resistencia:</label>
+			<input class="col form-control" type="number" name="atrRes" id="atrRes" value="{FICHA_AGI}">
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="artAg">Agilidad:</label>
+			<input class="col form-control" type="number" name="artAg" id="artAg" value="{FICHA_RES}">
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrEsp">Espíritu:</label>
+			<input class="col form-control" type="number" name="atrEsp" id="atrEsp" value="{FICHA_ESP}">
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrCon">Concentración:</label>
+			<input class="col form-control" type="number" name="atrCon" id="atrCon" value="{FICHA_CON}">
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrVol">Voluntad:</label>
+			<input class="col form-control" type="number" name="atrVol" id="atrVol" value="{FICHA_VOL}">
+		</div>
+	<!-- <div class="form-group">
+			<label class="col control-label" for="chakra">Chakra:</label>
+			<p>{FICHA_PC}</p>
+		</div> -->
+</div>
+<div class="tab-pane fade" id="contact">
+ <div class="form-group">
+	 <div class="">
+		 <label for="descFis">Descripción Física:</label>
+		  <textarea class="form-control" id="descFis" name="descFis" rows="12" onblur="checkText(this, 600);">{FICHA_FISICO}</textarea>
+	 </div>
+ </div>
+ <div class="form-group">
+	 <div class="">
+		 <label for="descPsic">Descripción Psicológica:</label>
+		 <textarea class="form-control" id="descPsic" name="descPsic" rows="12" onblur="checkText(this, 600);">{FICHA_PSICOLOGICO}</textarea>
+	 </div>
+ </div>
+ <div class="form-group">
+	 <div class="">
+		 <label for="descHis">Historia:</label>
+		 <textarea class="form-control" id="descHis" name="descHis" rows="12" onblur="checkText(this, 600);">{FICHA_HISTORIA}</textarea>
+	 </div>
+ </div>
+</div>
+<div class="tab-pane fade" id="botones">
+	<div class="form-group">
+		<div class="">
+ 		 <label for="razon">Razón moderacion:</label>
+ 		 <textarea class="form-control" id="razon" name="razon" rows="3" onblur="checkText(this, 5);"></textarea>
+ 	 </div>
+ </div>
+ <div class="form-group">
+			<button type="submit" class="btn btn-success" name="submit" id="submit">Moderar Personaje</button>
+	</div>
+</div>
+</form>
+</div>
+<script type="text/javascript">
+function checkText(elem, num) {
+	if (elem.length < num) {
+		alert('Este campo debe tener más de ' + num + ' caracteres.');
+		return false;
+	}
+	return true;
+}
+</script>
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,84 @@
+<div role="tabpanel" class="tab-pane" id="attach-tab">
+	<p>{L_ADD_ATTACHMENT_EXPLAIN} <span class="hidden" id="drag-n-drop-message">{L_PLUPLOAD_DRAG_TEXTAREA}</span></p>
+	<fieldset class="form-horizontal" id="attach-panel-basic">
+		<div class="form-group">
+			<label for="fileupload" class="col-md-2 control-label">{L_FILENAME}{L_COLON}</label>
+			<div class="col-md-5">
+				<div class="form-group">
+					<input type="file" name="fileupload" id="fileupload" />
+					<input type="submit" name="add_file" value="{L_ADD_FILE}" class="btn btn-default" onclick="upload = true;" />
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="filecomment" class="col-md-2 control-label">{L_FILE_COMMENT}{L_COLON}</label>
+			<div class="col-md-5">
+				<textarea name="filecomment" id="filecomment" rows="1" cols="40" class="form-control">{FILE_COMMENT}</textarea>
+			</div>
+		</div>
+	</fieldset>
+	<div id="attach-panel-multi">
+		<input type="button" class="btn btn-primary" value="{L_PLUPLOAD_ADD_FILES}" id="add_files" />
+	</div>
+
+	<div class="panel panel-default" id="file-list-container" <!-- IF not .attach_row -->style="display:none"<!-- ENDIF -->>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th class="attach-name">{L_PLUPLOAD_FILENAME}</th>
+						<th class="attach-comment">{L_FILE_COMMENT}</th>
+						<th class="attach-filesize">{L_PLUPLOAD_SIZE}</th>
+						<th class="attach-status">{L_PLUPLOAD_STATUS}</th>
+					</tr>
+				</thead>
+				<tbody class="responsive-skip-empty" id="file-list">
+					<tr class="attach-row" id="attach-row-tpl">
+						<td class="attach-name">
+							<span class="file-name ellipsis-text"></span>
+							<span class="attach-controls btn-group">
+								<input type="button" value="{L_PLACE_INLINE}" class="btn btn-warning btn-sm file-inline-bbcode" />
+								<input type="button" value="{L_DELETE_FILE}" class="btn btn-danger btn-sm file-delete" />
+							</span>
+							<span class="clear"></span>
+						</td>
+						<td class="attach-comment">
+							<textarea rows="1" cols="30" class="form-control"></textarea>
+						</td>
+						<td class="attach-filesize">
+							<span class="file-size"></span>
+						</td>
+						<td class="attach-status">
+							<span class="file-progress">
+								<span class="file-progress-bar"></span>
+							</span>
+							<span class="file-status"></span>
+						</td>
+					</tr>
+					<!-- BEGIN attach_row -->
+						<tr class="attach-row" data-attach-id="{attach_row.ATTACH_ID}">
+							<td class="attach-name">
+								<span class="file-name ellipsis-text"><a href="{attach_row.U_VIEW_ATTACHMENT}">{attach_row.FILENAME}</a></span>
+								<span class="attach-controls btn-group">
+									<!-- IF S_INLINE_ATTACHMENT_OPTIONS --><input type="button" value="{L_PLACE_INLINE}" class="btn btn-warning btn-sm file-inline-bbcode" />&nbsp; <!-- ENDIF -->
+									<input type="submit" name="delete_file[{attach_row.ASSOC_INDEX}]" value="{L_DELETE_FILE}" class="btn btn-danger btn-sm file-delete" />
+								</span>
+								<span class="clear"></span>
+							</td>
+							<td class="attach-comment">
+								<textarea name="comment_list[{attach_row.ASSOC_INDEX}]" rows="1" cols="30" class="from-control">{attach_row.FILE_COMMENT}</textarea>
+								{attach_row.S_HIDDEN}
+							</td>
+							<td class="attach-filesize">
+								<span class="file-size">{attach_row.FILESIZE}</span>
+							</td>
+							<td class="attach-status">
+								<span class="file-status file-uploaded"></span>
+							</td>
+						</tr>
+					<!-- END attach_row -->
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

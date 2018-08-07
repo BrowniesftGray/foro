@@ -1,0 +1,55 @@
+<!-- INCLUDE ucp_header.html -->
+
+<form id="ucp" method="post" action="{S_UCP_ACTION}"{S_FORM_ENCTYPE}>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				{L_TITLE}
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-info">{L_PROFILE_AUTOLOGIN_KEYS}</div>
+			<!-- IF ERROR --><p class="alert alert-danger">{ERROR}</p><!-- ENDIF -->
+
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th class="name">{L_LOGIN_KEY}</th>
+							<th class="text-center">{L_IP}</th>
+							<th class="text-center">{L_LOGIN_TIME}</th>
+							<th class="marking">{L_MARK}</th>
+						</tr>
+					</thead>
+					<tbody>
+					<!-- BEGIN sessions -->
+						<!-- IF sessions.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
+							<td><label for="{sessions.KEY}">{sessions.KEY}</label></td>
+							<td class="text-center">{sessions.IP}</td>
+							<td class="text-center">{sessions.LOGIN_TIME}</td>
+							<td class="marking"><input type="checkbox" name="keys[]" value="{sessions.KEY}" id="{sessions.KEY}" /></td>
+						</tr>
+					<!-- BEGINELSE -->
+						<tr><td colspan="4" class="text-center">{L_PROFILE_NO_AUTOLOGIN_KEYS}</td></tr>
+					<!-- END sessions -->
+					</tbody>
+				</table>
+			</div>
+
+			<!-- IF .sessions -->
+				<fieldset class="display-actions">
+					{S_HIDDEN_FIELDS}<input type="submit" name="submit" value="{L_DELETE_MARKED}" class="btn btn-danger" />
+
+					<div class="pull-right btn-group">
+						<a href="#" class="btn btn-sm btn-success" onclick="$('#ucp input:checkbox').prop('checked', true); return false;">{L_MARK_ALL}</a>
+						<a href="#" class="btn btn-sm btn-warning" onclick="$('#ucp input:checkbox').prop('checked', false); return false;">{L_UNMARK_ALL}</a></div>
+					{S_FORM_TOKEN}
+				</fieldset>
+			<!-- ENDIF -->
+
+
+		</div>
+	</div>
+</form>
+
+<!-- INCLUDE ucp_footer.html -->

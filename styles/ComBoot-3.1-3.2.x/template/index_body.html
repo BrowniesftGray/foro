@@ -1,0 +1,84 @@
+<!-- INCLUDE overall_header.html -->
+
+<!-- EVENT index_body_markforums_before -->
+
+<!-- IF S_DISPLAY_SEARCH or (S_USER_LOGGED_IN and not S_IS_BOT) or U_MARK_FORUMS-->
+	<div class="row">
+		<!-- IF S_DISPLAY_SEARCH -->
+			<div class="col-md-6">
+				<div class="btn-group">
+					<a href="{U_SEARCH_UNANSWERED}" class="btn btn-default btn-sm">{L_SEARCH_UNANSWERED}</a>
+					<!-- IF S_LOAD_UNREADS -->
+						<a href="{U_SEARCH_UNREAD}" class="btn btn-default btn-sm">{L_SEARCH_UNREAD}</a>
+					<!-- ENDIF -->
+					<!-- IF S_USER_LOGGED_IN -->
+						<a href="{U_SEARCH_NEW}" class="btn btn-default btn-sm">{L_SEARCH_NEW}</a>
+					<!-- ENDIF -->
+					<a href="{U_SEARCH_ACTIVE_TOPICS}" class="btn btn-default btn-sm">{L_SEARCH_ACTIVE_TOPICS}</a>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF  U_MARK_FORUMS -->
+			<div class="col-md-6 <!-- IF not S_DISPLAY_SEARCH -->col-md-offset-6<!-- ENDIF -->">
+				<div class="pull-right">
+					<a href="{U_MARK_FORUMS}" accesskey="m" class="btn btn-default btn-sm">{L_MARK_FORUMS_READ}</a>
+				</div>
+			</div>
+		<!-- ENDIF -->
+	</div>
+<!-- ENDIF -->
+
+<!-- EVENT index_body_markforums_after -->
+
+<!-- INCLUDE forumlist_body.html -->
+
+<!-- EVENT index_body_forumlist_body_after -->
+
+<!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+	<!-- INCLUDE login_panel.html -->
+<!-- ENDIF -->
+
+<!-- EVENT index_body_stat_blocks_before -->
+
+<!-- IF S_DISPLAY_ONLINE_LIST -->
+	<!-- INCLUDE online_panel.html -->
+<!-- ENDIF -->
+
+<!-- EVENT index_body_birthday_block_before -->
+
+<!-- IF S_DISPLAY_BIRTHDAY_LIST and BIRTHDAY_LIST -->
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title"><i class="fa fa-gift fa-fw" aria-hidden="true"></i> {L_BIRTHDAYS}</h3>
+		</div>
+		<div class="panel-body">
+			<p>
+				<!-- EVENT index_body_block_birthday_prepend -->
+				<!-- IF .birthdays -->{L_CONGRATULATIONS}{L_COLON} <strong><!-- BEGIN birthdays -->{birthdays.USERNAME}<!-- IF birthdays.AGE !== '' --> ({birthdays.AGE})<!-- ENDIF --><!-- IF not birthdays.S_LAST_ROW -->, <!-- ENDIF --><!-- END birthdays --></strong><!-- ELSE -->{L_NO_BIRTHDAYS}<!-- ENDIF -->
+				<!-- EVENT index_body_block_birthday_append -->
+			</p>
+		</div>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF NEWEST_USER -->
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h3 class="panel-title"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i> {L_STATISTICS}</h3>
+		</div>
+		<div class="panel-body">
+			<p>
+				<!-- EVENT index_body_block_stats_prepend -->
+				{TOTAL_POSTS} &bull; {TOTAL_TOPICS} &bull; {TOTAL_USERS} &bull; {NEWEST_USER}
+				<!-- EVENT index_body_block_stats_append -->
+			</p>
+			<hr/>
+			<p class="{S_CONTENT_FLOW_END} time<!-- IF S_USER_LOGGED_IN --> pull-right<!-- ENDIF -->"><!-- IF S_USER_LOGGED_IN -->{LAST_VISIT_DATE}<!-- ELSE -->{CURRENT_TIME}<!-- ENDIF --></p>
+			<!-- IF S_USER_LOGGED_IN --><p class="pull-left time">{CURRENT_TIME}</p><!-- ENDIF -->
+		</div>
+	</div>
+<!-- ENDIF -->
+
+<!-- EVENT index_body_stat_blocks_after -->
+
+<!-- INCLUDE overall_footer.html -->

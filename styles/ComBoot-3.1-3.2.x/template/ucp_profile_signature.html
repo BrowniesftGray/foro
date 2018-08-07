@@ -1,0 +1,72 @@
+<!-- INCLUDE ucp_header.html -->
+
+<form id="postform" method="post" action="{S_UCP_ACTION}"{S_FORM_ENCTYPE}>
+
+	<!-- IF SIGNATURE_PREVIEW != '' -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				{L_SIGNATURE_PREVIEW}
+			</h3>
+		</div>
+		<div class="panel-body">
+			{SIGNATURE_PREVIEW}
+		</div>
+	</div>
+	<br>
+	<!-- ENDIF -->
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				{L_TITLE}
+			</h3>
+		</div>
+
+		<div class="panel-body">
+			<div class="alert alert-info">{L_SIGNATURE_EXPLAIN}</div>
+
+			<!-- DEFINE $SIG_EDIT = 1 -->
+			<!-- INCLUDE posting_editor.html -->
+			<div class="well">
+				{L_OPTIONS}
+				<fieldset>
+					<!-- IF S_BBCODE_ALLOWED -->
+						<div class="checkbox">
+							<label for="disable_bbcode" class="control-label">
+								<input type="checkbox" name="disable_bbcode" id="disable_bbcode"{S_BBCODE_CHECKED} /> {L_DISABLE_BBCODE}
+							</label>
+						</div>
+					<!-- ENDIF -->
+					<!-- IF S_SMILIES_ALLOWED -->
+						<div class="checkbox">
+							<label for="disable_smilies" class="control-label">
+								<input type="checkbox" name="disable_smilies" id="disable_smilies"{S_SMILIES_CHECKED} /> {L_DISABLE_SMILIES}
+							</label>
+						</div>
+					<!-- ENDIF -->
+					<!-- IF S_LINKS_ALLOWED -->
+						<div class="checkbox">
+							<label for="disable_magic_url" class="control-label">
+								<input type="checkbox" name="disable_magic_url" id="disable_magic_url"{S_MAGIC_URL_CHECKED} /> {L_DISABLE_MAGIC_URL}
+							</label>
+						</div>
+					<!-- ENDIF -->
+
+				</fieldset>
+			</div>
+		</div>
+
+		<div class="panel-footer">
+			<fieldset class="submit-buttons">
+				{S_HIDDEN_FIELDS}
+				<input type="reset" name="reset" value="{L_RESET}" class="btn btn-danger" />&nbsp;
+				<input type="submit" name="preview" value="{L_PREVIEW}" class="btn btn-info" />&nbsp;
+				<input type="submit" name="submit" value="{L_SUBMIT}" class="btn btn-success" />
+				{S_FORM_TOKEN}
+			</fieldset>
+		</div>
+	</div>
+</form>
+
+<!-- INCLUDE ucp_footer.html -->

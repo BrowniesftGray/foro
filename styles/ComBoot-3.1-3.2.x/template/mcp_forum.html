@@ -1,0 +1,160 @@
+<!-- INCLUDE mcp_header.html -->
+
+<!-- DEFINE $CUSTOM_FIELDSET_CLASS = 'forum-selection2' -->
+
+<!-- IF $DISPLAY_JUMPBOX == 1 -->
+	<!-- INCLUDE jumpbox.html -->
+<!-- ENDIF -->
+
+<form method="post" id="mcp" action="{S_MCP_ACTION}" class="form-inline">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"><a href="{U_VIEW_FORUM}">{L_FORUM}{L_COLON} {FORUM_NAME}</a></h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="text-center col-md-12">
+					<div class="btn-group">
+						<a class="btn btn-default btn-sm disabled">{TOTAL_TOPICS}</a>
+						<!-- IF .pagination -->
+							<!-- INCLUDE pagination.html -->
+						<!-- ELSE -->
+							<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+						<!-- ENDIF -->
+					</div>
+				</div>
+			</div>
+			<!-- IF .topicrow -->
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr class="icon">
+								<th class="topic-name">{L_TOPICS}</th>
+								<th class="replies hidden-xs">{L_REPLIES}</th>
+								<th class="lastpost hidden-xs"><span>{L_LAST_POST}</span></th>
+								<!-- IF not S_MERGE_SELECT --><th class="marking">{L_MARK}</th><!-- ENDIF -->
+							</tr>
+						</thead>
+						<tbody class="topiclist <!-- IF S_MERGE_SELECT --> missing-column<!-- ENDIF -->">
+							<!-- BEGIN topicrow -->
+								<tr <!-- IF topicrow.S_TOPIC_REPORTED -->class="danger"<!-- ENDIF -->>
+									<td class="topic-name">
+										<div class="pull-left forum-topic-icon">
+											<span><a href="{topicrow.U_VIEW_TOPIC}" class="btn <!-- IF topicrow.S_UNREAD_TOPIC -->btn-info<!-- ELSE -->btn-default<!-- ENDIF --> btn-lg tooltip-link" title="{topicrow.TOPIC_FOLDER_IMG_ALT}">
+												<i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>
+											</a></span>
+										</div>
+										<!-- EVENT topiclist_row_prepend -->
+										<!-- IF topicrow.S_SELECT_TOPIC --><a href="{topicrow.U_SELECT_TOPIC}" class="topictitle">[ {L_SELECT_MERGE} ]</a>&nbsp;&nbsp; <!-- ENDIF -->
+										<!-- EVENT mcp_forum_topic_title_before -->
+										<i class="pcon" style="background-image: url({T_ICONS_PATH}{topicrow.TOPIC_ICON_IMG}); background-repeat: no-repeat;"></i>
+										<a href="{topicrow.U_VIEW_TOPIC}" class="topictitle">{topicrow.TOPIC_TITLE}</a>
+										<!-- EVENT mcp_forum_topic_title_after -->
+										<!-- IF topicrow.S_TOPIC_UNAPPROVED or topicrow.S_POSTS_UNAPPROVED -->
+											<a href="{topicrow.U_MCP_QUEUE}" title="{L_TOPIC_UNAPPROVED}">
+												<i class="fa fa-question fa-fw" aria-hidden="true"></i><span class="sr-only">{L_TOPIC_UNAPPROVED}</span>
+											</a>
+										<!-- ENDIF -->
+										<!-- IF topicrow.S_TOPIC_DELETED or topicrow.S_POSTS_DELETED -->
+											<a href="{topicrow.U_MCP_QUEUE}" title="{L_TOPIC_DELETED">
+												<i class="fa fa-recycle fa-fw" aria-hidden="true"></i><span class="sr-only">{L_TOPIC_DELETED}</span>
+											</a>
+										<!-- ENDIF -->
+										<!-- IF topicrow.S_TOPIC_REPORTED -->
+											<a href="{topicrow.U_MCP_REPORT}" title="{L_TOPIC_REPORTED}">
+												<i class="fa fa-exclamation fa-fw" aria-hidden="true"></i><span class="sr-only">{L_TOPIC_REPORTED}</span>
+											</a>
+										<!-- ENDIF -->
+										<!-- IF topicrow.S_MOVED_TOPIC and S_CAN_DELETE -->&nbsp;<a href="{topicrow.U_DELETE_TOPIC}" class="topictitle">[ {L_DELETE_SHADOW_TOPIC} ]</a><!-- ENDIF -->
+										<br />
+										<!-- EVENT topiclist_row_topic_title_after -->
+										<div class="visible-xs-block">
+											<!-- IF topicrow.ATTACH_ICON_IMG --><i class="fa fa-paperclip fa-fw" aria-hidden="true"></i> <!-- ENDIF -->
+											{L_LAST_POST} {L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR_FULL} &laquo; {topicrow.LAST_POST_TIME}<br />
+										</div>
+										<span class="visible-xs-block">{L_REPLIES}{L_COLON} <strong>{topicrow.REPLIES}</strong></span>
+
+										<!-- IF .topicrow.pagination -->
+										<div class="pagination">
+											<ul>
+											<!-- BEGIN pagination -->
+												<!-- IF topicrow.pagination.S_IS_PREV -->
+												<!-- ELSEIF topicrow.pagination.S_IS_CURRENT --><li class="active"><span>{topicrow.pagination.PAGE_NUMBER}</span></li>
+												<!-- ELSEIF topicrow.pagination.S_IS_ELLIPSIS --><li class="ellipsis"><span>{L_ELLIPSIS}</span></li>
+												<!-- ELSEIF topicrow.pagination.S_IS_NEXT -->
+												<!-- ELSE --><li><a href="{topicrow.pagination.PAGE_URL}">{topicrow.pagination.PAGE_NUMBER}</a></li>
+												<!-- ENDIF -->
+											<!-- END pagination -->
+											</ul>
+										</div>
+										<!-- ENDIF -->
+
+										<div class="hidden-xs">
+											<!-- IF topicrow.ATTACH_ICON_IMG --><i class="fa fa-paperclip fa-fw" aria-hidden="true"></i> <!-- ENDIF -->
+											{L_POST_BY_AUTHOR} {topicrow.TOPIC_AUTHOR_FULL} &raquo; {topicrow.FIRST_POST_TIME}
+										</div>
+									</td>
+									<td class="replies hidden-xs">{topicrow.REPLIES} <dfn>{L_REPLIES}</dfn></td>
+									<td class="lastpost hidden-xs"><span><dfn>{L_LAST_POST} </dfn>{L_POST_BY_AUTHOR} {topicrow.LAST_POST_AUTHOR_FULL}<br />{topicrow.LAST_POST_TIME}</span>
+									</td>
+									<!-- IF not S_MERGE_SELECT -->
+									<td class="marking">
+										<!-- IF not topicrow.S_MOVED_TOPIC --><input type="checkbox" name="topic_id_list[]" value="{topicrow.TOPIC_ID}"<!-- IF topicrow.S_TOPIC_CHECKED --> checked="checked"<!-- ENDIF --> /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+									</td>
+									<!-- ENDIF -->
+								</tr>
+							<!-- END topicrow -->
+						</tbody>
+					</table>
+				</div>
+			<!-- ELSE -->
+				<div class="alert alert-danger">
+					<strong>{L_NO_TOPICS}</strong>
+				</div>
+			<!-- ENDIF -->
+			<!-- INCLUDE display_options.html -->
+			<div class="row">
+				<div class="text-center col-md-12">
+					<div class="btn-group">
+						<a class="btn btn-default btn-sm disabled">{TOTAL_TOPICS}</a>
+						<!-- IF .pagination -->
+							<!-- INCLUDE pagination.html -->
+						<!-- ELSE -->
+							<a class="btn btn-default btn-sm disabled">{PAGE_NUMBER}</a>
+						<!-- ENDIF -->
+					</div>
+				</div>
+			</div>
+			<hr/>
+			<!-- EVENT mcp_forum_actions_before -->
+			<fieldset class="display-actions pull-right">
+				<!-- IF not S_MERGE_SELECT -->
+					<div class="btn-group">
+						<a href="#" class="btn btn-success btn-sm" onclick="marklist('mcp', 'topic_id_list', true); return false;">{L_MARK_ALL}</a>
+						<a href="#" class="btn btn-danger btn-sm" onclick="marklist('mcp', 'topic_id_list', false); return false;">{L_UNMARK_ALL}</a>
+					</div>
+					<select name="action">
+						<option value="" selected="selected">{L_SELECT_ACTION}</option>
+						<!-- IF S_CAN_DELETE --><option value="delete_topic">{L_DELETE}</option><!-- ENDIF -->
+						<!-- IF S_CAN_RESTORE --><option value="restore_topic">{L_RESTORE}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MERGE --><option value="merge_topics">{L_MERGE}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MOVE --><option value="move">{L_MOVE}</option><!-- ENDIF -->
+						<!-- IF S_CAN_FORK --><option value="fork">{L_FORK}</option><!-- ENDIF -->
+						<!-- IF S_CAN_LOCK --><option value="lock">{L_LOCK}</option><option value="unlock">{L_UNLOCK}</option><!-- ENDIF -->
+						<!-- IF S_CAN_SYNC --><option value="resync">{L_RESYNC}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MAKE_NORMAL --><option value="make_normal">{L_MAKE_NORMAL}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MAKE_STICKY --><option value="make_sticky">{L_MAKE_STICKY}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MAKE_ANNOUNCE --><option value="make_announce">{L_MAKE_ANNOUNCE}</option><!-- ENDIF -->
+						<!-- IF S_CAN_MAKE_ANNOUNCE_GLOBAL --><option value="make_global">{L_MAKE_GLOBAL}</option><!-- ENDIF -->
+						<!-- EVENT mcp_forum_actions_append -->
+					</select>
+					<input class="btn btn-success" type="submit" value="{L_SUBMIT}" />
+				<!-- ENDIF -->
+			</fieldset>
+			<!-- EVENT mcp_forum_actions_after -->
+		</div>
+	</div>
+	{S_FORM_TOKEN}
+</form>
+
+<!-- INCLUDE mcp_footer.html -->

@@ -1,0 +1,43 @@
+<div class="panel panel-default">
+	<div class="panel-heading">{L_NOTIFICATIONS} <span class="pull-right"><a href="{U_NOTIFICATION_SETTINGS}">{L_SETTINGS}</a></span></div>
+	<!-- IF NOTIFICATIONS_COUNT -->
+		<div class="panel-body">
+			<span id="mark_all_notifications"><button class="btn btn-warning btn-block" type="button" onclick="window.location.href='{U_MARK_ALL_NOTIFICATIONS}'" data-ajax="notification.mark_all_read">{L_MARK_ALL_READ}</button></span>
+		</div>
+	<!-- ENDIF -->
+	<ul class="list-group">
+		<!-- IF not .notifications -->
+			<li class="list-group-item no_notifications">
+				{L_NO_NOTIFICATIONS}
+			</li>
+		<!-- ENDIF -->
+		<!-- BEGIN notifications -->
+			<li class="list-group-item <!-- IF notifications.UNREAD --> list-group-item-info<!-- ENDIF --><!-- IF notifications.STYLING --> {notifications.STYLING}<!-- ENDIF --><!-- IF not notifications.URL --> no-url<!-- ENDIF -->">
+				<!-- IF notifications.URL -->
+					<a href="<!-- IF notifications.UNREAD -->{notifications.U_MARK_READ}" data-real-url="{notifications.URL}<!-- ELSE -->{notifications.URL}<!-- ENDIF -->">
+				<!-- ENDIF -->
+				<div class="row notification">
+					<div class="col-xs-2 notification-avatar">
+						<!-- IF notifications.AVATAR -->{notifications.AVATAR}<!-- ELSE --><img class="avatar notification-avatar" src="{T_THEME_PATH}/images/no_avatar.gif" alt="" /><!-- ENDIF -->
+					</div>
+					<div class="col-xs-10">
+						<div class="notification_text">
+							<p class="notification-title">{notifications.FORMATTED_TITLE}</p>
+							<!-- IF notifications.REFERENCE --><p class="notification-reference">{notifications.REFERENCE}</p><!-- ENDIF -->
+							<!-- IF notifications.FORUM --><p class="notification-forum">{notifications.FORUM}</p><!-- ENDIF -->
+							<!-- IF notifications.REASON --><p class="notification-reason">{notifications.REASON}</p><!-- ENDIF -->
+							<p class="notification-time">{notifications.TIME}</p>
+						</div>
+					</div>
+				</div>
+				<!-- IF notifications.URL --></a><!-- ENDIF -->
+				<!-- IF notifications.UNREAD -->
+					<a href="{notifications.U_MARK_READ}" class="mark_read" data-ajax="notification.mark_read" title="{L_MARK_READ}"><i class="fa fa-check-circle-o fa-fw" aria-hidden="true"></i></a>
+				<!-- ENDIF -->
+			</li>
+		<!-- END notifications -->
+	</ul>
+	<div class="panel-footer">
+		<button class="btn btn-primary btn-block" type="button" onclick="window.location.href='{U_VIEW_ALL_NOTIFICATIONS}'">{L_SEE_ALL}</button>
+	</div>
+</div>
