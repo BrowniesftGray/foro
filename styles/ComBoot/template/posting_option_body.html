@@ -1,0 +1,103 @@
+<div role="tabpanel" class="tab-pane active" id="options-tab">
+	<fieldset class="form-horizontal">
+		<!-- IF S_BBCODE_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="disable_bbcode" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="disable_bbcode" id="disable_bbcode" {S_BBCODE_CHECKED} /> {L_DISABLE_BBCODE}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_SMILIES_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="disable_smilies" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="disable_smilies" id="disable_smilies" {S_SMILIES_CHECKED} /> {L_DISABLE_SMILIES}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_LINKS_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="disable_magic_url" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="disable_magic_url" id="disable_magic_url" {S_MAGIC_URL_CHECKED} /> {L_DISABLE_MAGIC_URL}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_SIG_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="attach_sig" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="attach_sig" id="attach_sig" {S_SIGNATURE_CHECKED} /> {L_ATTACH_SIG}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_NOTIFY_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="notify" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="notify" id="notify" {S_NOTIFY_CHECKED} /> {L_NOTIFY_REPLY}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_LOCK_TOPIC_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="lock_topic" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="lock_topic" id="lock_topic" {S_LOCK_TOPIC_CHECKED} /> {L_LOCK_TOPIC}
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_LOCK_POST_ALLOWED -->
+			<div class="form-group">
+				<div class="form-check">
+					<label for="lock_post" class="form-check-label">
+						<input class="form-check-input" type="checkbox" name="lock_post" id="lock_post" {S_LOCK_POST_CHECKED} /> {L_LOCK_POST} [{L_LOCK_POST_EXPLAIN}]
+					</label>
+				</div>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_TYPE_TOGGLE or S_TOPIC_TYPE_ANNOUNCE or S_TOPIC_TYPE_STICKY -->
+			<hr class="dashed" />
+		<!-- ENDIF -->
+		<!-- IF S_TYPE_TOGGLE -->
+			<div class="form-group">
+				<label for="topic_type-0"><!-- IF S_EDIT_POST -->{L_CHANGE_TOPIC_TO}<!-- ELSE -->{L_POST_TOPIC_AS}<!-- ENDIF -->:</label>
+				<!-- BEGIN topic_type -->
+					<div class="form-check">
+						<label for="topic_type-{topic_type.VALUE}" class="form-check-label">
+							<input class="form-check-input" type="radio" name="topic_type" id="topic_type-{topic_type.VALUE}" value="{topic_type.VALUE}"  {topic_type.S_CHECKED} />
+							{topic_type.L_TOPIC_TYPE}
+						</label>
+					</div>
+				<!-- END topic_type -->
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_TOPIC_TYPE_ANNOUNCE or S_TOPIC_TYPE_STICKY -->
+			<div class="form-group row">
+				<label for="topic_time_limit" class="col-2 col-form-label">{L_STICK_TOPIC_FOR}:</label>
+				<div class="input-group col-2">
+					<input class="form-control" type="text" name="topic_time_limit" id="topic_time_limit" value="{TOPIC_TIME_LIMIT}" />
+					<div class="input-group-append">
+						<span class="input-group-text">{L_DAYS}</span>
+					</div>
+				</div>
+				<p class="form-text text-muted col-12">{L_STICK_TOPIC_FOR_EXPLAIN}</p>
+			</div>
+		<!-- ENDIF -->
+		<!-- IF S_EDIT_REASON -->
+			<div class="form-group row">
+				<label for="edit_reason" class="col-auto">{L_EDIT_REASON}:</label>
+				<div class="col-8">
+					<input class="form-control" type="text" name="edit_reason" id="edit_reason" value="{EDIT_REASON}" />
+				</div>
+			</div>
+		<!-- ENDIF -->
+	</fieldset>
+</div>

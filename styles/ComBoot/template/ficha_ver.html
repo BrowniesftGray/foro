@@ -1,0 +1,164 @@
+<!-- INCLUDE overall_header.html -->
+<!-- Latest compiled and minified CSS -->
+
+<div class="row container-fluid justify-content-center">
+<span class="corners-top"><span></span></span>
+<p class="error">{ERRORES}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link active" id="perso-tab" data-toggle="tab" href="#perso" >Info</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="home-tab" data-toggle="tab" href="#accordion">Técnicas</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile">Atributos</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact">Personaje</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="botones-tab" data-toggle="tab" href="#botones">Moderaciones</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id="borrar-tab" data-toggle="tab" href="#borrar">Borrar Personaje</a>
+	</li>
+</ul>
+<div class="tab-content" id="myTabContent">
+	<div class="col-xs-12" style="height:25px;"></div>
+	<div class="tab-pane fade in active" id="perso">
+		<div class="form-group">
+		 <label class=" control-label" for="nombre">Experiencia Faltante:</label>
+		 {EXPERIENCIA_F}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="nombre">Nivel:</label>
+		 {NIVEL}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="nombre">Nombre:</label>
+		 {FICHA_NOMBRE}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="edad">Edad:</label>
+		 {FICHA_EDAD}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="rango">Rango:</label>
+		 {FICHA_RANGO}
+		</div>
+		<div class="form-group">
+			<label class=" control-label" for="selectAldea">Aldea:</label>
+			{FICHA_ALDEA}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="selectOjos">Ojos:</label>
+		 {FICHA_OJOS}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="selectPelo">Pelo:</label>
+		 {FICHA_PELOS}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="complexion">Complexion:</label>
+		 {FICHA_COMPLEXION}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="altura">Altura:</label>
+		 {FICHA_ALTURA}
+		</div>
+		<div class="form-group">
+		 <label class=" control-label" for="peso">Peso:</label>
+		 {FICHA_PESO}
+		</div>
+	</div>
+<div class="tab-pane fade panel-group" id="accordion">
+	    <dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_CLAN}'; ">[+] {FICHA_CLAN}</a></dt><dd style="display: none;">{TECNICAS_CLAN}</dd></dl>
+			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO1}'; ">[+] {FICHA_ELEMENTO1}</a></dt><dd style="display: none;">{TECNICAS_ELEMENTO1}</dd></dl>
+			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD1}'; ">[+] {FICHA_ESPECIALIDAD1}</a></dt><dd style="display: none;">{TECNICAS_ESPECIALIDAD1}</dd></dl>
+			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO2}'; ">[+] {FICHA_ELEMENTO2}</a></dt><dd style="display: none;">{TECNICAS_ELEMENTO2}</dd></dl>
+			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD2}'; ">[+] {FICHA_ESPECIALIDAD2}</a></dt><dd style="display: none;">{TECNICAS_ESPECIALIDAD2}</dd></dl>
+</div>
+ <div class="tab-pane fade" id="profile">
+	<div class="form-group">
+		<label class="col control-label" for="atrFuerza">Fuerza:</label>
+		{FICHA_FUERZA}
+	</div>
+	<div class="form-group">
+			<label class="col control-label" for="atrRes">Resistencia:</label>
+			{FICHA_AGI}
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="artAg">Agilidad:</label>
+			{FICHA_RES}
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrEsp">Espíritu:</label>
+			{FICHA_ESP}
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrCon">Concentración:</label>
+			{FICHA_CON}
+		</div>
+		<div class="form-group">
+			<label class="col control-label" for="atrVol">Voluntad:</label>
+			{FICHA_VOL}
+		</div>
+		<hr>
+		<div class="form-group">
+			<label class="col control-label" for="chakra">Chakra:</label>
+			{FICHA_PC}
+		</div>
+</div>
+<div class="tab-pane fade" id="contact">
+ <div class="form-group">
+	 <div class="">
+		 <label for="descFis">Descripción Física:</label><br>
+		<p>
+		 	{FICHA_FISICO}
+		</p>
+	 </div>
+ </div>
+ <div class="form-group">
+	 <div class="">
+		 <label for="descPsic">Descripción Psicológica:</label><br>
+		<p>
+		 {FICHA_PSICOLOGICO}
+	 	</p>
+	 </div>
+ </div>
+ <div class="form-group">
+	 <div class="">
+		 <label for="descHis">Historia:</label><br>
+		 <p>
+			 {FICHA_HISTORIA}
+		 </p>
+	 </div>
+ </div>
+</div>
+<div class="tab-pane fade" id="botones">
+	<div class="form-group">
+		<!-- IF PUEDE_SUBIR == true --><a href="#" class="btn btn-success">Subir de nivel</a><!-- ENDIF -->
+	</div>
+	<div class="form-group">
+		<!-- IF PUEDE_MODERAR == true --><a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><!-- ENDIF -->
+	</div>
+	<div class="form-group" >
+		<div class="">
+			<label for="razon">Historial moderaciones:</label></br>
+			<p>
+				<!-- BEGIN loopname -->
+				{loopname.RAZON_MODERACION} {loopname.USER_MODERACION} {loopname.FECHA_MODERACION}</br>
+				<!-- END loopname -->
+			</p>
+		</div>
+	</div>
+</div>
+<div class="tab-pane fade" id="borrar">
+	<form class="" action="{U_ACTION}" method="POST">
+		<button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button>
+	</form>
+</div>
+</div>
+</div>
+<!-- INCLUDE overall_footer.html -->
