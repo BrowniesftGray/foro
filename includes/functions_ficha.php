@@ -297,3 +297,45 @@ function comprobarNivel($experiencia, $nivel){
 
 	return $respuesta;
 }
+
+function comprobarSubida($user_id){
+
+	global $user, $db, $template, $phpbb_root_path, $auth;
+
+	$user_id = $user_id;
+	$query = $db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
+	if ($row = $db->sql_fetchrow($query)) {
+		$db->sql_freeresult($query);
+
+		$user->get_profile_fields($user_id);
+		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
+			$experiencia = 0;
+		}
+		else{
+			$experiencia = $user->profile_fields['pf_experiencia'];
+		}
+
+		$subida = comprobarNivel($experiencia, $row['nivel']);
+
+		if ($subida[1] == true) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	else{
+		return false;
+	}
+}
+
+function subidaNivel($user_id, array $fields){
+
+	global $db, $user;
+
+	$sql = "UPDATE personajes SET ";
+	$sql .= "fuerza = '{$fields['FUERZA']}', resistencia = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', espiritu = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
+	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
+
+	$db->sql_query($sql);
+}

@@ -1982,6 +1982,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'POSTER_ID'			=> $poster_id,
 		'MINI_POST'			=> ($post_unread) ? $user->lang['UNREAD_POST'] : $user->lang['POST'],
 		'FICHA_URL'			=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $poster_id),
+		'FICHA_SUBIR'		=> append_sid("{$phpbb_root_path}ficha.php", 'mode=subir&pj=' . $poster_id),
 
 		'S_HAS_ATTACHMENTS'	=> (!empty($attachments[$row['post_id']])) ? true : false,
 		'S_MULTIPLE_ATTACHMENTS'	=> !empty($attachments[$row['post_id']]) && count($attachments[$row['post_id']]) > 1,
