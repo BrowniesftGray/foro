@@ -1,0 +1,33 @@
+<div class="jumpbox row mt-3">
+	<div class="col-6">
+		<!-- IF S_VIEWTOPIC -->
+			<a href="{U_VIEW_FORUM}" class="btn btn-secondary btn-sm" accesskey="r">
+				<i class="fa fa-angle-{S_CONTENT_FLOW_BEGIN} fa-fw" aria-hidden="true"></i><span>{L_RETURN_TO_FORUM}</span>
+			</a>
+		<!-- ELSEIF S_VIEWFORUM -->
+			<a href="{U_INDEX}" class="btn btn-secondary btn-sm" accesskey="r">
+				<i class="fa fa-angle-{S_CONTENT_FLOW_BEGIN} fa-fw" aria-hidden="true"></i><span>{L_RETURN_TO_INDEX}</span>
+			</a>
+		<!-- ELSEIF SEARCH_TOPIC -->
+			<a href="{U_SEARCH_TOPIC}" class="btn btn-secondary btn-sm" accesskey="r">
+				<i class="fa fa-angle-{S_CONTENT_FLOW_BEGIN} fa-fw" aria-hidden="true"></i><span>{L_RETURN_TO_TOPIC}</span>
+			</a>
+		<!-- ENDIF -->
+	</div>
+	<!-- IF S_DISPLAY_JUMPBOX -->
+		<div class="col-6">
+			<div class="btn-group float-right">
+				<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="<!-- IF S_IN_MCP and S_MERGE_SELECT -->{L_SELECT_TOPICS_FROM}<!-- ELSEIF S_IN_MCP -->{L_MODERATE_FORUM}<!-- ELSE -->{L_JUMP_TO}<!-- ENDIF -->" >
+					<!-- IF S_IN_MCP and S_MERGE_SELECT -->{L_SELECT_TOPICS_FROM}<!-- ELSEIF S_IN_MCP -->{L_MODERATE_FORUM}<!-- ELSE -->{L_JUMP_TO}<!-- ENDIF -->
+				</button>
+				<div class="dropdown-menu dropdown-menu-right">
+					<!-- BEGIN jumpbox_forums -->
+						<!-- IF jumpbox_forums.FORUM_ID neq -1 -->
+							<a href="{jumpbox_forums.LINK}" class="dropdown-item"><!-- BEGIN level --><span class="spacer"></span><!-- END level --> <span><!-- IF jumpbox_forums.level --> &#8627; &nbsp;<!-- ENDIF --> {jumpbox_forums.FORUM_NAME}</span></a>
+						<!-- ENDIF -->
+					<!-- END jumpbox_forums -->
+				</div>
+			</div>
+		</div>
+	<!-- ENDIF -->
+</div>

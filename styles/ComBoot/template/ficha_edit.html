@@ -1,0 +1,34 @@
+<!-- INCLUDE ucp_header.html -->
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<h2>Editar personaje</h2>
+	
+	<p class="error">{ERRORES}</p>
+	<form method="POST" action="{U_ACTION}">
+	<fieldset>
+		<dl>
+			<dt><label for="fisico">Descripción física:</label><br /><span>Describe como es físicamente tu personaje.</span></dt>
+			<dd><textarea class="inputbox" name="fisico" id="fisico" placeholder="Descripción física..." required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px';">{FISICO}</textarea></dd>
+		</dl>
+		
+		<dl>
+			<dt><label for="caracter">Descripción psicológica:</label><br /><span>Describe como es el carácter de tu personaje.</span></dt>
+			<dd><textarea class="inputbox" name="caracter" id="caracter" placeholder="Descripción psicológica..." required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'; ">{CARACTER}</textarea></dd>
+		</dl>
+		
+		<dl>
+			<dt><label for="caracter">Historia:</label><br /><span>La historia de tu personaje.</span></dt>
+			<dd><textarea class="inputbox" name="historia" id="historia" placeholder="La historia de tu personaje." required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px';">{HISTORIA}</textarea></dd>
+		</dl>
+	</fieldset>
+	
+	<br /><br />
+	<fieldset class="submit-buttons">
+		{S_HIDDEN_FIELDS}<input type="reset" value="Limpiar" name="reset" class="button2" />&nbsp;
+		<input type="submit" name="submit" value="Moderar personaje" class="button1" />
+	</fieldset>
+</form>
+	
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<!-- INCLUDE ucp_footer.html -->

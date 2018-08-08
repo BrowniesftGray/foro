@@ -1,0 +1,31 @@
+<div class="card">
+	<div class="card-header">
+		<i class="fa fa-user fa-fw" aria-hidden="true"></i> {L_LOGIN_LOGOUT}
+	</div>
+	<div class="card-body">
+		<form method="post" action="{S_LOGIN_ACTION}" class="form-inline" name="loginform">
+
+				<input type="text" placeholder="{L_USERNAME}" tabindex="1" name="username" size="10" class="form-control mr-2" title="{L_USERNAME}"/>
+				<input type="password" placeholder="{L_PASSWORD}" tabindex="2" name="password" size="10" class="form-control mr-2" title="{L_PASSWORD}" autocomplete="off"/>
+				{S_LOGIN_REDIRECT}
+				<input type="submit" tabindex="5" name="login" value="{L_LOGIN}" class="btn btn-primary mr-4" />
+			<!-- IF U_SEND_PASSWORD -->
+				<br/> <a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a>
+			<!-- ENDIF -->
+			<!-- IF S_AUTOLOGIN_ENABLED -->
+				<span class="responsive-hide mr-4">|</span>
+				<div class="form-check mr-2">
+					<label for="autologin" class="form-check-label">
+						<input class="form-check-input" type="checkbox" tabindex="4" name="autologin" id="autologin"/> {L_LOG_ME_IN}
+					</label>
+				</div>
+			<!-- ENDIF -->
+			<!-- IF S_REGISTER_ENABLED -->
+				<a href="{U_REGISTER}" class="btn btn-primary btn-labeled"><span class="btn-label"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>{L_REGISTER}</a>
+			<!-- ELSE -->
+				<a class="btn btn-primary btn-labeled disabled" href="#"><span class="btn-label"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>{L_REGISTER}</a>
+			<!-- ENDIF -->
+			{S_FORM_TOKEN}
+		</form>
+	</div>
+</div>

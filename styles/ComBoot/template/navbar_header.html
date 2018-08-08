@@ -1,0 +1,215 @@
+<nav class="navbar navbar-dark bg-primary fixed-top navbar-expand-lg navbar-fix" id="header-nav">
+	<!-- Mobile dropdown buttons -->
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggler float-left-mobile" id="main-menu-btn" data-toggle="collapse" data-target="#main-menu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<a class="navbar-brand" href="{U_INDEX}">{SITENAME}</a>
+			<button type="button" class="navbar-toggler ml-auto" id="user-menu-btn" data-toggle="collapse" data-target="#user-menu">
+				<!-- IF CURRENT_USER_AVATAR -->
+					<span class="nav-avatar-mobile">{CURRENT_USER_AVATAR}</span>
+				<!-- ELSEIF S_REGISTERED_USER -->
+					<span class="nav-avatar-mobile"><img src="{T_THEME_PATH}/images/default_avatar.jpg" alt="{L_AVATAR}"></span>
+				<!-- ELSE -->
+					<i class="fa fa-user fa-fw" aria-hidden="true"></i>
+				<!-- ENDIF -->
+			</button>
+			<!-- IF S_REGISTERED_USER and S_NOTIFICATIONS_DISPLAY -->
+				<button type="button" class="navbar-toggler" id="notification-menu-btn" data-toggle="collapse" data-target="#notification-menu">
+					<i class="fa fa-bell fa-fw" aria-hidden="true"></i>
+				</button>
+			<!-- ENDIF -->
+			<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+				<button type="button" class="navbar-toggler float-right-mobile" id="search-menu-btn" data-toggle="collapse" data-target="#search-menu">
+					<i class="fa fa-search fa-fw" aria-hidden="true"></i>
+				</button>
+			<!-- ENDIF -->
+		</div>
+		<div class="collapse navbar-collapse" id="main-menu">
+			<ul class="nav navbar-nav">
+				<li id="quick-links" class="nav-item dropdown <!-- IF not S_DISPLAY_QUICK_LINKS and not S_DISPLAY_SEARCH --> hidden<!-- ENDIF -->" data-skip-responsive="true">
+					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars fa-fw" aria-hidden="true"></i> {L_QUICK_LINKS}</a>
+					<div class="dropdown-menu" role="menu">
+						<!-- EVENT navbar_header_quick_links_before -->
+						<!-- EVENT overall_header_searchbox_before -->
+						<!-- IF S_DISPLAY_SEARCH -->
+							<!-- IF S_REGISTERED_USER -->
+								<a class="dropdown-item" href="{U_SEARCH_SELF}" role="menuitem">{L_SEARCH_SELF}</a>
+							<!-- ENDIF -->
+							<!-- IF S_USER_LOGGED_IN -->
+								<a class="dropdown-item" href="{U_SEARCH_NEW}" role="menuitem">{L_SEARCH_NEW}</a>
+							<!-- ENDIF -->
+							<!-- IF S_LOAD_UNREADS -->
+								<a class="dropdown-item" href="{U_SEARCH_UNREAD}" role="menuitem">{L_SEARCH_UNREAD}</a>
+							<!-- ENDIF -->
+							<a class="dropdown-item" href="{U_SEARCH_UNANSWERED}" role="menuitem">{L_SEARCH_UNANSWERED}</a>
+							<a class="dropdown-item" href="{U_SEARCH_ACTIVE_TOPICS}" role="menuitem">{L_SEARCH_ACTIVE_TOPICS}</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{U_SEARCH}" role="menuitem">{L_SEARCH}</a>
+						<!-- ENDIF -->
+                            <div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{FICHA_CREAR}" title="Crear ficha" role="menuitem">Crear personaje</a>
+							<a class="dropdown-item" href="{FICHA_URL}" title="Ver ficha" role="menuitem">Ir a ficha de personaje</a>
+						<!-- IF not S_IS_BOT and (S_DISPLAY_MEMBERLIST or U_TEAM) -->
+							<div class="dropdown-divider"></div>
+							<!-- IF S_DISPLAY_MEMBERLIST --><a class="dropdown-item" href="{U_MEMBERLIST}" role="menuitem"><i class="fa fa-group fa-fw" aria-hidden="true"></i> {L_MEMBERLIST}</a><!-- ENDIF -->
+							<!-- IF U_TEAM --><a class="dropdown-item"href="{U_TEAM}" role="menuitem"><i class="fa fa-shield fa-fw" aria-hidden="true"></i> {L_THE_TEAM}</a><!-- ENDIF -->
+						<!-- ENDIF -->
+
+						<!-- EVENT navbar_header_quick_links_after -->
+					</div>
+				</li>
+				<!-- EVENT overall_header_navigation_prepend -->
+				<li class="nav-item"><a class="nav-link" href="{U_FAQ}" title="{L_FAQ_EXPLAIN}"><i class="fa fa-question fa-fw" aria-hidden="true"></i> {L_FAQ}</a></li>
+				<!-- IF U_ACP -->
+					<li class="nav-item"><a class="nav-link" href="{U_ACP}" title="{L_ACP}"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i> {L_ACP_SHORT}</a></li>
+				<!-- ENDIF -->
+				<!-- IF U_MCP -->
+					<li class="nav-item"><a class="nav-link" href="{U_MCP}" title="{L_MCP}"><i class="fa fa-gavel fa-fw" aria-hidden="true"></i> {L_MCP_SHORT}</a></li>
+				<!-- ENDIF -->
+				<!-- EVENT overall_header_navigation_append -->
+			</ul>
+		</div>
+		<!-- IF S_DISPLAY_SEARCH and not S_IN_SEARCH -->
+			<div class="collapse navbar-collapse" id="search-menu">
+				<form class="navbar-form" method="get" id="search" action="{U_SEARCH}">
+					<div class="input-group">
+						<input class="input-medium search form-control" maxlength="128" type="text" name="keywords" id="search_keywords" size="20" title="{L_SEARCH_KEYWORDS}" value="{SEARCH_WORDS}" placeholder="{L_SEARCH_MINI}" />
+						<div class="input-group-append">
+							{S_SEARCH_LOCAL_HIDDEN_FIELDS}
+							<button type="submit" class="btn btn-secondary" title="{L_SEARCH}" data-placement="bottom"><i class="fa fa-search fa-fw" aria-hidden="true"></i></button>
+							<a href="{U_SEARCH}" class="btn btn-secondary" title="{L_SEARCH_ADV}" data-placement="bottom"><i class="fa fa-cog fa-fw" aria-hidden="true"></i></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		<!-- ENDIF -->
+		<!-- EVENT overall_header_searchbox_after -->
+		<!-- IF S_REGISTERED_USER and S_NOTIFICATIONS_DISPLAY -->
+			<div class="collapse navbar-collapse" id="notification-menu">
+				<ul class="nav navbar-nav navbar-right d-none d-md-block ml-auto">
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle d-none d-md-block" id="notification-button" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bell fa-fw" aria-hidden="true"></i> {L_NOTIFICATIONS} <span class="badge badge-danger">{NOTIFICATIONS_COUNT}</span></a>
+						<div class="dropdown-menu dropdown-menu-right notification-panel" id="notification-panel-desktop" role="menu">
+							<div id="notification_list"><!-- INCLUDE notification_dropdown.html --></div>
+						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right  d-block d-sm-none notification-panel" id="notification-panel-mobile">
+					<li class="nav-item"><div id="notification_list_mobile"><!-- INCLUDE notification_dropdown.html --></div></li>
+				</ul>
+			</div>
+		<!-- ENDIF -->
+		<div class="collapse navbar-collapse" id="user-menu">
+			<!-- Desktop user menu -->
+			<ul class="nav navbar-nav ml-auto d-none d-md-flex">
+				<!-- IF S_DISPLAY_PM -->
+					<li class="nav-item">
+						<a class="nav-link" href="{U_PRIVATEMSGS}">
+							<i class="fa fa-envelope fa-fw" aria-hidden="true"></i> {L_PRIVATE_MESSAGES} <span class="badge <!-- IF PRIVATE_MESSAGE_INFO_UNREAD -->badge-danger<!-- ELSE -->badge-secondary<!-- ENDIF -->">{PRIVATE_MESSAGE_COUNT}</span>
+						</a>
+					</li>
+				<!-- ENDIF -->
+				<li class="nav-item dropdown">
+					<!-- EVENT navbar_header_username_prepend -->
+					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+						<!-- IF CURRENT_USER_AVATAR -->
+							<span class="nav-avatar">{CURRENT_USER_AVATAR}</span>
+						<!-- ELSEIF S_REGISTERED_USER -->
+							<span class="nav-avatar"><img src="{T_THEME_PATH}/images/default_avatar.jpg" alt="{L_AVATAR}"></span>
+						<!-- ELSE -->
+							<i class="fa fa-user fa-fw" aria-hidden="true"></i>
+						<!-- ENDIF -->
+						<!-- IF S_REGISTERED_USER -->{S_USERNAME} <!-- ENDIF -->
+						<span class="caret"></span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right" role="menu">
+						<!-- IF S_REGISTERED_USER -->
+							<!-- EVENT navbar_header_user_profile_prepend -->
+							<!-- IF U_RESTORE_PERMISSIONS -->
+								<a class="dropdown-item" href="{U_RESTORE_PERMISSIONS}"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i> {L_RESTORE_PERMISSIONS}</a>
+							<!-- ENDIF -->
+							<!-- EVENT navbar_header_profile_list_before -->
+							<a class="dropdown-item" href="{U_PROFILE}" title="{L_PROFILE}" accesskey="e"><i class="fa fa-wrench fa-fw" aria-hidden="true"></i> {L_PROFILE}</a>
+							<a class="dropdown-item" href="{U_USER_PROFILE}" title="{L_READ_PROFILE}"><i class="fa fa-sliders fa-fw" aria-hidden="true"></i> {L_READ_PROFILE}</a>
+							<!-- EVENT navbar_header_profile_list_after -->
+							<div class="dropdown-divider"></div>
+							<div class="p-2">
+								<button class="btn btn-danger btn-block" type="button" title="{L_LOGIN_LOGOUT}" onclick="window.location.href='{U_LOGIN_LOGOUT}'" accesskey="x">
+									<i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> {L_LOGIN_LOGOUT}
+								</button>
+							</div>
+							<!-- EVENT navbar_header_user_profile_append -->
+						<!-- ELSE -->
+							<div class="px-4 py-3">
+								<form action="{S_LOGIN_ACTION}" method="post" id="navloginform" name="loginform">
+									<div class="form-group">
+										<input type="text" placeholder="{L_USERNAME}" name="username" size="10" class="form-control" title="{L_USERNAME}"/>
+									</div>
+									<div class="form-group">
+										<input type="password" placeholder="{L_PASSWORD}" name="password" size="10" class="form-control" title="{L_PASSWORD}"/>
+									</div>
+									<!-- IF S_AUTOLOGIN_ENABLED -->
+										<div class="form-group">
+											<div class="form-check">
+												<label for="autologin-navbar" class="form-check-label">
+													<input class="form-check-input" type="checkbox" name="autologin"  id="autologin-navbar" tabindex="4" /> {L_LOG_ME_IN}
+												</label>
+											</div>
+										</div>
+									<!-- ENDIF -->
+									{S_LOGIN_REDIRECT}
+									<button type="submit" name="login" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> {L_LOGIN}</button>
+								</form>
+								<!-- IF S_REGISTER_ENABLED -->
+									<div class="dropdown-divider"></div>
+									<button type="button" class="btn btn-primary btn-block" onclick="window.location.href='{U_REGISTER}'"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {L_REGISTER}</button>
+								<!-- ELSE -->
+									<div class="dropdown-divider"></div>
+									<button type="button" class="btn btn-primary btn-block" disabled="disabled"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {L_REGISTER}</button>
+								<!-- ENDIF -->
+								<!-- EVENT navbar_header_logged_out_content -->
+							</div>
+						<!-- ENDIF -->
+					</div>
+				</li>
+				<!-- EVENT navbar_header_username_append -->
+			</ul>
+			<!-- Mobile user menu -->
+			<ul class="nav navbar-nav navbar-right d-block d-sm-none fix-right-nav">
+				<!-- IF S_REGISTERED_USER -->
+					<!-- EVENT navbar_header_user_profile_prepend -->
+					<!-- IF U_RESTORE_PERMISSIONS -->
+						<li class="nav-item"><a class="nav-link" href="{U_RESTORE_PERMISSIONS}"><i class="fa fa-refresh fa-fw" aria-hidden="true"></i> {L_RESTORE_PERMISSIONS}</a></li>
+					<!-- ENDIF -->
+					<!-- EVENT navbar_header_profile_list_before -->
+					<li class="nav-item"><a class="nav-link" href="{U_PROFILE}" title="{L_PROFILE}" accesskey="e"><i class="fa fa-wrench fa-fw" aria-hidden="true"></i> {L_PROFILE}</a></li>
+					<li class="nav-item"><a class="nav-link" href="{U_USER_PROFILE}" title="{L_READ_PROFILE}"><i class="fa fa-sliders fa-fw" aria-hidden="true"></i> {L_READ_PROFILE}</a></li>
+					<!-- EVENT navbar_header_profile_list_after -->
+					<li class="divider"></li>
+					<li class="nav-item"><a class="nav-link" href="{U_LOGIN_LOGOUT}" title="{L_LOGIN_LOGOUT}" accesskey="x"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> {L_LOGIN_LOGOUT}</a></li>
+					<!-- EVENT navbar_header_logged_out_content -->
+					<!-- EVENT navbar_header_user_profile_append -->
+				<!-- ELSE -->
+					<li class="nav-item">
+						<div class="row mb-0 mt-2">
+							<div class="col-12">
+								<button class="btn btn-danger btn-block" type="button" title="{L_LOGIN_LOGOUT}" onclick="window.location.href='{U_LOGIN_LOGOUT}'" accesskey="x"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> {L_LOGIN_LOGOUT}</button>
+							</div>
+							<br class="col-12"/>
+							<br class="col-12"/>
+							<div class="col-12">
+								<!-- IF S_REGISTER_ENABLED -->
+									<button class="btn btn-secondary btn-block" type="button" onclick="window.location.href='{U_REGISTER}'"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {L_REGISTER}</button>
+								<!-- ELSE -->
+									<button class="btn btn-secondary btn-block" disabled="disabled" type="button"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {L_REGISTER}</button>
+								<!-- ENDIF -->
+							</div>
+						</div>
+					</li>
+				<!-- ENDIF -->
+			</ul>
+		</div>
+	</div>
+</nav>
