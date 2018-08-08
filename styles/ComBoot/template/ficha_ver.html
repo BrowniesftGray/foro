@@ -1,7 +1,8 @@
 <!-- INCLUDE overall_header.html -->
 <!-- Latest compiled and minified CSS -->
+<div class="container">
 
-<div class="row container-fluid justify-content-center">
+<div class="row">
 <span class="corners-top"><span></span></span>
 <p class="error">{ERRORES}
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -24,6 +25,8 @@
 		<a class="nav-link" id="borrar-tab" data-toggle="tab" href="#borrar">Borrar Personaje</a>
 	</li>
 </ul>
+</div>
+<div class="row col-md-">
 <div class="tab-content" id="myTabContent">
 	<div class="col-xs-12" style="height:25px;"></div>
 	<div class="tab-pane fade in active" id="perso">
@@ -112,25 +115,25 @@
 </div>
 <div class="tab-pane fade" id="contact">
  <div class="form-group">
-	 <div class="">
+	 <div class="container">
 		 <label for="descFis">Descripción Física:</label><br>
-		<p>
+		<p class="col-6">
 		 	{FICHA_FISICO}
 		</p>
 	 </div>
  </div>
  <div class="form-group">
-	 <div class="">
+	 <div class="container">
 		 <label for="descPsic">Descripción Psicológica:</label><br>
-		<p>
+		<p class="col-6">
 		 {FICHA_PSICOLOGICO}
 	 	</p>
 	 </div>
  </div>
  <div class="form-group">
-	 <div class="">
+	 <div class="container">
 		 <label for="descHis">Historia:</label><br>
-		 <p>
+		 <p class="col-6">
 			 {FICHA_HISTORIA}
 		 </p>
 	 </div>
@@ -158,6 +161,7 @@
 	<form class="" action="{U_ACTION}" method="POST">
 		<button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button>
 	</form>
+</div>
 </div>
 </div>
 </div>

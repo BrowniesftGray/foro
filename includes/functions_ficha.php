@@ -60,6 +60,7 @@ function get_ficha($user_id)
 			    ));
 			}
 			$grupo = $user->data['group_id'];
+			$borrar = $user->data['user_id'];
 
 			if ($grupo == 5 || $grupo == 4){
 					$moderador = true;
@@ -67,6 +68,13 @@ function get_ficha($user_id)
 				else{
 					$moderador = false;
 				}
+
+			if ($borrar == $user_id) {
+				$borrarPersonaje = true;
+			}
+			else{
+				$borrarPersonaje = false;
+			}
 
 			$user->get_profile_fields($user_id);
 			if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
@@ -81,6 +89,7 @@ function get_ficha($user_id)
 			$template->assign_vars(array(
 				//'FICHA_COMPLETA'		=> $puede_ver,
 				'NIVEL' => $row['nivel'],
+				'PUEDE_BORRAR' => $borrarPersonaje,
 				'EXPERIENCIA' => $experiencia,
 				'PUEDE_SUBIR' => $subida[1],
 				'EXPERIENCIA_F' => $subida[2],

@@ -1,260 +1,138 @@
 <!-- INCLUDE overall_header.html -->
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
-select {
-    size: 6;
-  }
+.menu {
+  padding-left: 5%;
+  margin-bottom: 5%;
+}
 </style>
-<div class="row container-fluid justify-content-center">
+<ul class="nav nav-tabs tab-pane" id="myForm">
+    <li class="nav-item menu active"><a href="#info">Información</a></li>
+    <li class="nav-item menu"><a href="#tecnicas">Ramas</a></li>
+    <li class="nav-item menu"><a href="#atributos">Atributos</a></li>
+    <li class="nav-item menu"><a href="#personaje">Descripciones</a></li>
+    <li class="nav-item menu"><a href="#finalizar">Finalizar</a></li>
+</ul>
+<div class="col-xs-12" style="height:25px;"></div>
 <form name="crear_ficha" action="{U_ACTION}" method="POST" onsubmit="return checkFicha();">
-      <span class="corners-top"><span></span></span>
-    <p class="error">{ERRORES}</p>
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="perso-tab" data-toggle="tab" href="#perso" >Info</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="home-tab" data-toggle="tab" href="#home">Técnicas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile">Atributos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact">Personaje</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="botones-tab" data-toggle="tab" href="#botones">Finalizar</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="col-xs-12" style="height:25px;"></div>
-        <div class="tab-pane fade in active" id="perso" >
-          <div class="form-group">
-           <label class=" control-label" for="nombre">Nombre de Personaje</label>
-           <input type='text' class='form-control' id='nombre' name='nombre' onblur="checkText(this, 5);"> </input>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="edad">Edad</label>
-           <div class="">
-               <input type='number' class='form-control' id='edad' name='edad' max="20" min="10" value="10"> </input>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="rango">Rango</label>
-           <div class="">
-               <input type='text' class='form-control' id='rango' name='rango' value="Genin" readonly></input>
-           </div>
-          </div>
-          <div class="form-group">
-            <div class="">
-              <label class=" control-label" for="selectAldea">Aldea</label>
-              <select id="selectAldea" name="selectAldea" class="form-control">
-                 <option value="Konohagakure no Sato">Konohagakure no Sato</option>
-                 <option value="Kirigakure no Sato">Kirigakure no Sato</option>
-                 <option value="Getsugakure no Sato">Getsugakure no Sato</option>
-                 <option value="Yukigakure no Sato">Yukigakure no Sato</option>
-                 <option value="Kusagakure no Sato">Kusagakure no Sato</option>
-               </select>
-             </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectOjos">Color de ojos</label>
-           <div class="">
-               <select id="selectOjos" name="selectOjos" class="form-control">
-                 <option value="Azules">Azules</option>
-                 <option value="Marrones">Marrones</option>
-                 <option value="Verdes">Verdes</option>
-                 <option value="Ámbar">Ámbar</option>
-                 <option value="Violeta">Violeta</option>
-                 <option value="Rojos">Rojos</option>
-                 <option value="Negros">Negros</option>
-               </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectPelo">Color de pelo</label>
-           <div class="">
-               <select id="selectPelo" name="selectPelo" class="form-control">
-                 <option value="Castaño">Castaño</option>
-                 <option value="Verde">Verde</option>
-                 <option value="Negro">Negro</option>
-                 <option value="Rubio">Rubio</option>
-                 <option value="Rojo">Rojo</option>
-                 <option value="Azul">Azul</option>
-                 <option value="Morado">Morado</option>
-               </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="complexion">Complexion</label>
-           <div class="">
-               <select id="complexion" name="complexion" class="form-control">
-                 <option value="Delgada">Delgada</option>
-                 <option value="Mediana">Mediana</option>
-                 <option value="Grande">Grande</option>
-               </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="pelo">Altura</label>
-           <div class="">
-               <input type='number' class='form-control' id='altura' name='altura' min="120" max="230" value="150"></input>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="pelo">Peso</label>
-           <div class="">
-               <input type='number' class='form-control' id='peso' name='peso' min="40" max="200" value="50"></input>
-           </div>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="home">
-          <div class="form-group">
-           <label class=" control-label" for="clan">Clan / Kekkei Genkai / Arte</label>
-           <div class="">
-             <select size="6" id="clan" name="clan" data-size="10" class="form-control" onchange="checkClan();">
-              <option value="Sin Clan">Sin Clan</option>
-              <option value="Clan Kamizuru">Clan Kamizuru</option>
-              <option value="Clan Jyugo">Clan Jyugo</option>
-              <option value="Clan Nendo">Clan Nendo</option>
-              <option value="Clan Orochi">Clan Orochi</option>
-              <option value="Clan Uzumaki">Clan Uzumaki</option>
-              <option value="Clan Sabaku">Clan Sabaku</option>
-              <option value="Clan Aburame">Clan Aburame</option>
-              <option value="Clan Senju">Clan Senju</option>
-              <option value="Clan Hyuga">Clan Hyuga</option>
-              <option value="Clan Kaguya">Clan Kaguya</option>
-              <option value="Clan Inuzuka">Clan Inuzuka</option>
-              <option value="Clan Yuki">Clan Yuki</option>
-              <option value="Clan Yotsuki">Clan Yotsuki</option>
-              <option value="Clan Uchiha">Clan Uchiha</option>
-              <option value="Clan Yamanaka">Clan Yamanaka</option>
-              <option value="Clan Akimichi">Clan Akimichi</option>
-              <option value="Clan Hozuki">Clan Hozuki</option>
-              <option value="Clan Nara">Clan Nara</option>
-              <option value="Arte Gotokuji">Arte Gotokuji</option>
-              <option value="Arte Yūrei">Arte Yūrei</option>
-              <option value="Arte Tenkasai">Arte Tenkasai</option>
-              <option value="Arte Inku">Arte Inku</option>
-              <option value="Arte Tessen">Arte Tessen</option>
-              <option value="Arte Origami">Arte Origami</option>
-              <option value="Kekkei Genkai Shakuton">Kekkei Genkai Shakuton</option>
-              <option value="Kekkei Genkai Yōton">Kekkei Genkai Yōton</option>
-              <option value="Kekkei Genkai Jiton">Kekkei Genkai Jiton</option>
-              <option value="Kekkei Genkai Shōton">Kekkei Genkai Shōton</option>
-              <option value="Kekkei Genkai Futton">Kekkei Genkai Futton</option>
-              <option value="Kekkei Genkai Ranton">Kekkei Genkai Ranton</option>
-            </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectElemento">Elemento</label>
-           <div class="">
-               <select id="selectElemento" name="selectElemento" class="form-control" data-size="5">
-                  <option value="Katon (火遁 Elemento Fuego)">Katon (火遁 Elemento Fuego)</option>
-                  <option value="Suiton (水遁 Elemento Agua)">Suiton (水遁 Elemento Agua)</option>
-                  <option value="Raiton (雷遁 Elemento Rayo)">Raiton (雷遁 Elemento Rayo)</option>
-                  <option value="Fuuton (風遁 Elemento Viento)">Fuuton (風遁 Elemento Viento)</option>
-                  <option value="Doton (土遁 Elemento Tierra)">Doton (土遁 Elemento Tierra)</option>
-               </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectEspecialidad">Primera especialidad</label>
-           <div class="">
-             <select id="selectEspecialidad" name="selectEspecialidad" class="form-control">
-                <option value="Genjutsu (幻術 Ilusiones)">Genjutsu (幻術 Ilusiones)</option>
-                <option value="Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)">Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)</option>
-                <option value="Bukijutsu (武器术 Técnicas de armas)">Bukijutsu (武器术 Técnicas de armas)</option>
-                <option value="Fūinjutsu (封印術 Sellado)">Fūinjutsu (封印術 Sellado)</option>
-                <option value="Iryō Ninjutsu (医療忍術 Médico)">Iryō Ninjutsu (医療忍術 Médico)</option>
-                <option value="Kanchi Taipu (感知タイプ Sensorial)">Kanchi Taipu (感知タイプ Sensorial)</option>
-             </select>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectbasic">Segundo elemento</label>
-           <div class="">
-             <input type='text' class='form-control' id='selectElemento2' name='selectElemento2' readonly value='Segundo elemento disponible en compra con PN'> </input>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="selectbasic">Segunda especialidad</label>
-           <div class="">
-             <input type='text' class='form-control' id='selectEspecialidad2' name='selectEspecialidad2' readonly value='Segunda especialidad disponible en compra con PN'> </input>
-           </div>
-          </div>
-          <div class="form-group">
-           <label class=" control-label" for="invocacion">Invocacion</label>
-           <div class="">
-             <input type='text' class='form-control' id='invocacion' name='invocacion' readonly value='Invocación por determinar'> </input>
-           </div>
-          </div>
-        </div>
-       <div class="tab-pane fade" id="profile">
-    			<dl>
-    				<dt>Te quedan <b><span id="puntos">{PUNTOS}</span></b> puntos por repartir.<br /></dt>
-    			</dl>
-    		<dl>
-        <div class="form-group">
-          <label class="col control-label" for="atrFuerza">Fuerza</label>
-          <input class="col form-control" type="number" name="atrFuerza" id="atrFuerza" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-        </div>
-        <div class="form-group">
-            <label class="col control-label" for="atrRes">Resistencia</label>
-            <input class="col form-control" type="number" name="atrRes" id="atrRes" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-          </div>
-          <div class="form-group">
-            <label class="col control-label" for="artAg">Agilidad</label>
-            <input class="col form-control" type="number" name="artAg" id="artAg" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-          </div>
-          <div class="form-group">
-            <label class="col control-label" for="atrEsp">Espíritu</label>
-            <input class="col form-control" type="number" name="atrEsp" id="atrEsp" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-          </div>
-          <div class="form-group">
-            <label class="col control-label" for="atrCon">Concentración</label>
-            <input class="col form-control" type="number" name="atrCon" id="atrCon" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-          </div>
-          <div class="form-group">
-            <label class="col control-label" for="atrVol">Voluntad</label>
-            <input class="col form-control" type="number" name="atrVol" id="atrVol" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
-          </div>
+    <div class="tab-content">
+      <div class="tab-pane active" id="info">
+
+        <label class=" control-label" for="nombre">Nombre de Personaje</label>
+        <input type='text' class='form-control' id='nombre' name='nombre' onblur="checkText(this, 5);"> </input>
+
+        <label class=" control-label" for="edad">Edad</label>
+        <input type='number' class='form-control' id='edad' name='edad' max="20" min="10" value="10"> </input>
+
+        <label class=" control-label" for="rango">Rango</label>
+        <input type='text' class='form-control' id='rango' name='rango' value="Genin" readonly></input>
+
+        <label class=" control-label" for="selectAldea">Aldea</label>
+        <select id="selectAldea" name="selectAldea" class="form-control">
+           <option value="Konohagakure no Sato">Konohagakure no Sato</option>
+           <option value="Kirigakure no Sato">Kirigakure no Sato</option>
+           <option value="Getsugakure no Sato">Getsugakure no Sato</option>
+           <option value="Yukigakure no Sato">Yukigakure no Sato</option>
+           <option value="Kusagakure no Sato">Kusagakure no Sato</option>
+         </select>
+
+         <label class=" control-label" for="pelo">Altura</label>
+         <input type='number' class='form-control' id='altura' name='altura' min="120" max="230" value="150"></input>
+
+         <label class=" control-label" for="pelo">Peso</label>
+         <input type='number' class='form-control' id='peso' name='peso' min="40" max="200" value="50"></input>
       </div>
-      <div class="tab-pane fade" id="contact">
-       <div class="form-group">
-         <div class="">
-           <label for="descFis">Descripción Física</label>
-           <textarea class="form-control" id="descFis" name="descFis" rows="5" onblur="checkText(this, 200);"></textarea>
-         </div>
-       </div>
-       <div class="form-group">
-         <div class="">
-           <label for="descPsic">Descripción Psicológica</label>
-           <textarea class="form-control" id="descPsic" name="descPsic" rows="12" onblur="checkText(this, 600);"></textarea>
-         </div>
-       </div>
-       <div class="form-group">
-         <div class="">
-           <label for="descHis">Historia</label>
-           <textarea class="form-control" id="descHis" name="descHis" rows="12" onblur="checkText(this, 800);"></textarea>
-         </div>
-       </div>
-     </div>
-     <div class="tab-pane fade" id="botones">
-       <div class="form-group">
-           <button type="submit" class="btn btn-success" name="submit" id="submit">Guardar Personaje</button>
-       </div>
-   </div>
-</div>
- </form>
+      <div class="tab-pane" id="tecnicas">
+
+        <select size="6" id="clan" name="clan" data-size="10" class="form-control">
+         <option value="Sin Clan">Sin Clan</option>
+         <option value="Clan Kamizuru">Clan Kamizuru</option>
+         <option value="Clan Jyugo">Clan Jyugo</option>
+         <option value="Clan Nendo">Clan Nendo</option>
+         <option value="Clan Orochi">Clan Orochi</option>
+         <option value="Clan Uzumaki">Clan Uzumaki</option>
+         <option value="Clan Sabaku">Clan Sabaku</option>
+         <option value="Clan Aburame">Clan Aburame</option>
+         <option value="Clan Senju">Clan Senju</option>
+         <option value="Clan Hyuga">Clan Hyuga</option>
+         <option value="Clan Kaguya">Clan Kaguya</option>
+         <option value="Clan Inuzuka">Clan Inuzuka</option>
+         <option value="Clan Yuki">Clan Yuki</option>
+         <option value="Clan Yotsuki">Clan Yotsuki</option>
+         <option value="Clan Uchiha">Clan Uchiha</option>
+         <option value="Clan Yamanaka">Clan Yamanaka</option>
+         <option value="Clan Akimichi">Clan Akimichi</option>
+         <option value="Clan Hozuki">Clan Hozuki</option>
+         <option value="Clan Nara">Clan Nara</option>
+         <option value="Arte Gotokuji">Arte Gotokuji</option>
+         <option value="Arte Yūrei">Arte Yūrei</option>
+         <option value="Arte Tenkasai">Arte Tenkasai</option>
+         <option value="Arte Inku">Arte Inku</option>
+         <option value="Arte Tessen">Arte Tessen</option>
+         <option value="Arte Origami">Arte Origami</option>
+         <option value="Kekkei Genkai Shakuton">Kekkei Genkai Shakuton</option>
+         <option value="Kekkei Genkai Yōton">Kekkei Genkai Yōton</option>
+         <option value="Kekkei Genkai Jiton">Kekkei Genkai Jiton</option>
+         <option value="Kekkei Genkai Shōton">Kekkei Genkai Shōton</option>
+         <option value="Kekkei Genkai Futton">Kekkei Genkai Futton</option>
+         <option value="Kekkei Genkai Ranton">Kekkei Genkai Ranton</option>
+       </select>
+
+      <label class=" control-label" for="selectElemento">Primera rama</label>
+        <select id="selectElemento" name="selectElemento" class="form-control" data-size="5">
+          <option value="Coso">Coso</option>
+        </select>
+
+      <label class=" control-label" for="selectEspecialidad">Segunda rama</label>
+        <select id="selectElemento" name="selectEspecialidad" class="form-control" data-size="5">
+          <option value="Coso">Coso</option>
+        </select>
+
+      </div>
+      <div class="tab-pane" id="atributos">
+
+        <label class="col control-label" for="atrFuerza">Fuerza</label>
+        <input class="col form-control" type="number" name="atrFuerza" id="atrFuerza" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+        <label class="col control-label" for="atrRes">Vitalidad</label>
+        <input class="col form-control" type="number" name="atrRes" id="atrRes" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+        <label class="col control-label" for="artAg">Agilidad</label>
+        <input class="col form-control" type="number" name="artAg" id="artAg" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+        <label class="col control-label" for="atrEsp">Control de Chakra</label>
+        <input class="col form-control" type="number" name="atrEsp" id="atrEsp" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+        <label class="col control-label" for="atrCon">Concentración</label>
+        <input class="col form-control" type="number" name="atrCon" id="atrCon" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+        <label class="col control-label" for="atrVol">Voluntad</label>
+        <input class="col form-control" type="number" name="atrVol" id="atrVol" min="1" max="10" value="1" onblur="calcStats(); checkAtributos(this);">
+
+      </div>
+      <div class="tab-pane" id="personaje">
+
+        <label for="descFis">Descripción Física</label>
+        <textarea class="form-control" id="descFis" name="descFis" rows="5" onblur="checkText(this, 200);"></textarea>
+
+        <label for="descPsic">Descripción Psicológica</label>
+        <textarea class="form-control" id="descPsic" name="descPsic" rows="12" onblur="checkText(this, 600);"></textarea>
+
+        <label for="descHis">Historia</label>
+        <textarea class="form-control" id="descHis" name="descHis" rows="12" onblur="checkText(this, 800);"></textarea>
+      </div>
+      <div class="tab-pane" id="finalizar">
+         <button type="submit" class="btn btn-success" name="submit" id="submit">Guardar Personaje</button>
+      </div>
+    </div>
+  </form>
+
+  <script type="text/javascript">
+  $('#myForm a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
 
 <script type="text/javascript">
 function checkText(elem, num) {
