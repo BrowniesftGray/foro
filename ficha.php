@@ -24,7 +24,7 @@ include_once($phpbb_root_path . 'includes/functions_ficha.' . $phpEx);
 $id 	= request_var('i', '');
 $mode	= request_var('mode', '');
 
-if (!in_array($mode, array('nueva', 'moderar', 'ver')))
+if (!in_array($mode, array('nueva', 'moderar', 'ver', 'subir')))
 {
 	trigger_error('La página que buscas no existe.');
 }
@@ -50,7 +50,7 @@ switch ($mode)
  		}
 		$module->p_mode = 'create_char';
 		$module->load('ucp', 'character');
-		$module->display('Nueva ficha :: Nine Beast');
+		$module->display('Nueva ficha :: Shinobi Legacy');
 	break;
 
 	case 'moderar':
@@ -59,7 +59,7 @@ switch ($mode)
 	if ($grupo == 5 || $grupo == 4){
 		$module->p_mode = 'mod_char';
 		$module->load('ucp', 'character');
-		$module->display('Moderar ficha :: Nine Beast');
+		$module->display('Moderar ficha :: Shinobi Legacy');
 	}
 	else{
 		trigger_error('No puedes acceder aquí sin ser moderador o administrador.');
@@ -69,6 +69,12 @@ switch ($mode)
 	case 'ver':
 		$module->p_mode = 'view_char';
 		$module->load('ucp', 'character');
-		$module->display('Ficha de personaje :: Nine Beast');
+		$module->display('Ficha de personaje :: Shinobi Legacy');
+	break;
+
+	case 'subir':
+		$module->p_mode = 'subir_char';
+		$module->load('ucp', 'character');
+		$module->display('Ficha de personaje :: Shinobi Legacy');
 	break;
 }

@@ -158,6 +158,48 @@ class ucp_character
 			    }
 				}
 			break;
+			
+			case 'subir_char':
+			$this->tpl_name = 'ficha_subir';
+
+			@$user_id = (int) $_GET['pj'];
+			$exists = get_ficha($user_id);
+			if (!$exists)					trigger_error('No existe la ficha para este usuario.');
+
+			// Common tpl vars
+			$template->assign_vars(array(
+				'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=subir&amp;pj=' . $user_id),
+			));
+
+			if ($submit) {
+
+				$atrs = array(
+					'FUERZA'			=> (int) request_var('atrFuerza', 1),
+					'VITALIDAD'			=> (int) request_var('atrRes', 1),
+					'AGILIDAD'			=> (int) request_var('artAg', 1),
+					'CCK'		=> (int) request_var('atrEsp', 1),
+					'CONCENTRACION'				=> (int) request_var('atrCon', 1),
+					'VOLUNTAD'			=> (int) request_var('atrVol', 1),
+				);
+
+				$fields = array_merge(array(
+					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true)),
+					'CHAKRA'				=> calcula_pc(utf8_normalize_nfc(request_var('rango', '', true)),$atrs['ESPIRITU'], $atrs['CONCENTRACION'], $atrs['VOLUNTAD']),
+				), $atrs);
+
+				$errores = array();
+
+				if (count($errores) == 0) {
+					$user_id = (int) $user->data['user_id'];
+					subirNivel($user_id, $fields);
+					trigger_error('Subida de nivel correcta.');
+				} else {
+					$fields['ERRORES'] = implode('<br />', $errores);
+				}
+
+				$template->assign_vars($fields);
+			}
+			break;
 
 			case 'mod_char':
 			$this->tpl_name = 'ficha_mod';

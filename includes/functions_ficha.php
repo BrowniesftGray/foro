@@ -34,7 +34,7 @@ function ficha_exists($user_id)
 	}
 }
 
-function get_ficha($user_id)
+function get_ficha($user_id, $return = false)
 {
 	global $user, $db, $template, $phpbb_root_path, $auth;
 
