@@ -127,6 +127,8 @@ function get_ficha($user_id, $return = false)
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
 				'FICHA_PC'				=> calcula_pc($row['rango'], $row['concentracion'], $row['espiritu'], $row['voluntad']),
+				'FICHA_PV'				=> calcula_pv($row['rango'], $row['resistencia']),
+				'FICHA_STA'				=> calcula_sta($row['rango'], $row['fuerza'], $row['agilidad'], $row['resistencia'], $row['voluntad']),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
@@ -143,29 +145,169 @@ function get_ficha($user_id, $return = false)
 	}
 }
 
-function calcula_pc($rango, $cck, $intel, $vol)
+function calcula_pc($arquetipo, $cck, $intel, $vol)
 {
-	switch ($rango) {
-		case 'Genin':
-			return 50 + $cck + $intel + $vol;
+	switch ($arquetipo) {
+		case 'Chakra':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.2;
+			return $pc;
 		break;
 
-		case 'Chunin':
-			return 100 + $cck + $intel + $vol;
+		case 'Zen':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.05;
+			return $pc;
 		break;
 
-		case 'Jonin':
-			return 150 + $cck + $intel + $vol;
+		case 'Hechicero':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.3;
+			return $pc;
 		break;
 
-		case 'Anbu':
-			return 200 + $cck + $intel + $vol;
+		case 'Explorador':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.05;
+			return $pc;
 		break;
 
-		case 'Kage':
-			return 250 + $cck + $intel + $vol;
+		case 'Soporte':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.15;
+			return $pc;
 		break;
 
+		case 'Elemental':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.4;
+			return $pc;
+		break;
+
+		case 'Guerrero':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.05;
+			return $pc;
+		break;
+
+		case 'Asesino':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.1;
+			return $pc;
+		break;
+
+		case 'Especialista':
+			$pc = $cck + $intel + $vol;
+			$pc = $pc * 1.2;
+			return $pc;
+		break;
+	}
+
+}
+
+function calcula_pv($arquetipo, $vit)
+{
+	switch ($arquetipo) {
+		case 'Cuerpo ':
+			$pv = $vit * 3;
+			$pv = $pv * 1.1;
+			return $pv;
+		break;
+
+		case 'Zen':
+			$pv = $vit * 3;
+			$pv = $pv * 1.05;
+			return $pv;
+		break;
+
+		case 'Luchador':
+			$pv = $vit * 3;
+			$pv = $pv * 1.15;
+			return $pv;
+		break;
+
+		case 'Explorador':
+			$pv = $vit * 3;
+			$pv = $pv * 1.1;
+			return $pv;
+		break;
+
+		case 'Soporte':
+			$pv = $vit * 3;
+			$pv = $pv * 1.05;
+			return $pv;
+		break;
+
+		case 'Guardián':
+			$pv = $vit * 3;
+			$pv = $pv * 1.2;
+			return $pv;
+		break;
+
+		case 'Guerrero':
+			$pv = $vit * 3;
+			$pv = $pv * 1.15;
+			return $pv;
+		break;
+
+		case 'Asesino':
+			$pv = $vit * 3;
+			$pv = $pv * 1.1;
+			return $pv;
+		break;
+
+		case 'Especialista':
+			$pv = $vit * 3;
+			$pv = $pv * 1.15;
+			return $pv;
+		break;
+	}
+}
+
+function calcula_sta($arquetipo, $vit, $fue, $agi, $vol)
+{
+	switch ($arquetipo) {
+		case 'Cuerpo ':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.1;
+			return $sta;
+		break;
+
+		case 'Zen':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.05;
+			return $sta;
+		break;
+
+		case 'Luchador':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.15;
+			return $sta;
+		break;
+
+		case 'Explorador':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.05;
+			return $sta;
+		break;
+
+		case 'Guardián':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.2;
+			return $sta;
+		break;
+
+		case 'Guerrero':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.15;
+			return $sta;
+		break;
+
+		case 'Asesino':
+			$sta = $vit + $fue + $agi + $vol;
+			$sta = $sta * 1.1;
+			return $sta;
+		break;
 	}
 }
 
