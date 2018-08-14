@@ -55,7 +55,7 @@ class ucp_character
 						'CONCENTRACION'				=> (int) request_var('atrCon', 1),
 						'VOLUNTAD'			=> (int) request_var('atrVol', 1),
 					);
-
+//profile_fields_data -> Tabla donde se encuentra la experiencia
 					$fields = array_merge(array(
 						'NOMBRE'				=> utf8_normalize_nfc(request_var('nombre', '', true)),
 						'EDAD'					=> utf8_normalize_nfc(request_var('edad', '', true)),
