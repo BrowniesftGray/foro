@@ -49,8 +49,16 @@ sta {
 Colours and backgrounds for links.css
 -------------------------------------------------------------- */
 
-a { color: #105289; }
-a:hover { color: #D31141; }
+a { color: #146b44; }
+a:hover { color: #d31111; }
+
+.page-body{
+	background-color: #e6e6e6;
+}
+
+.nav-footer a, .nav-footer a:hover{
+	color: #fff;
+}
 
 /* Links on gradient backgrounds */
 .forumbg .header a, .forabg .header a, th a {
@@ -67,6 +75,10 @@ a:hover { color: #D31141; }
 }
 
 /* Post body links */
+a.mark-read{
+	background: #fff;
+}
+
 .postlink {
 	border-bottom-color: #368AD2;
 	color: #368AD2;
@@ -93,7 +105,16 @@ a:hover { color: #D31141; }
 
 /* Arrow links  */
 .arrow-left:hover, .arrow-right:hover {
-	color: #368AD2;
+	color: #d31111;
+}
+
+p.jumpbox-return{
+	border-color: #146b44;
+	background-color: #fff;
+}
+
+p.jumpbox-return:hover{
+	border-color: #d31111;
 }
 
 /* Round cornered boxes and backgrounds
@@ -135,7 +156,7 @@ a:hover { color: #D31141; }
 }
 
 .bg1 {
-	background-color: #ECF3F7;
+	background-color: #e0e0e0;
 }
 
 table.zebra-list tr:nth-child(odd) td, ul.zebra-list li:nth-child(odd) {
@@ -143,7 +164,7 @@ table.zebra-list tr:nth-child(odd) td, ul.zebra-list li:nth-child(odd) {
 }
 
 .bg2 {
-	background-color: #E1EBF2;
+	background-color: #e8e8e8;
 }
 
 table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
@@ -1109,7 +1130,7 @@ input.disabled {
 }
 
 .dropdown-extended ul li:hover {
-	background-color: #CFE1F6;
+	background-color: #d5e8dc;
 	color: #000000;
 }
 
@@ -1119,15 +1140,14 @@ input.disabled {
 }
 
 .dropdown-extended .footer {
+	background-color: #81aca2;
 	border-top-style: solid;
 	border-top-width: 1px;
 }
 
 .dropdown-extended .header {
-	background-color: #F1F8FF; /* Old browsers */ /* FF3.6+ */
-	background-image: -webkit-linear-gradient(top, #F1F8FF 0%, #CADCEB 100%);
-	background-image: linear-gradient(to bottom, #F1F8FF 0%,#CADCEB 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F1F8FF', endColorstr='#CADCEB',GradientType=0 ); /* IE6-9 */
+	background-color: #81aca2;
+	color: #eee;
 }
 
 .dropdown .pointer {
@@ -1135,7 +1155,7 @@ input.disabled {
 }
 
 .dropdown .pointer-inner {
-	border-color: #FFF transparent;
+	border-color: #e6e6e6 transparent;
 }
 
 .dropdown-extended .pointer-inner {
@@ -1143,7 +1163,7 @@ input.disabled {
 }
 
 .dropdown .dropdown-contents {
-	background: #fff;
+	background: #e6e6e6;
 	border-color: #B9B9B9;
 	box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
 }

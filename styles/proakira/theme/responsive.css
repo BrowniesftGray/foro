@@ -145,7 +145,7 @@
 		border-radius: 0;
 		margin: 0;
 		min-width: 290px;
-		padding: 0 5px;
+		padding: 40px 5px;
 	}
 
 	/* Common block wrappers
@@ -163,16 +163,15 @@
 	/* Logo block
 	----------------------------------------*/
 	.site-description {
-		float: none;
 		width: auto;
 		text-align: center;
 	}
 
 	.logo {
 		/* change display value to inline-block to show logo */
-		display: none;
+		display: inline-block;
 		float: none;
-		padding: 10px;
+		padding: 10px 10px 0 10px;
 	}
 
 	.site-description h1, .site-description p {
@@ -192,6 +191,20 @@
 	----------------------------------------*/
 	.headerbar + .navbar {
 		margin-top: -5px;
+		padding: 0;
+	}
+	
+	ul.linklist > li.rightside{
+		margin-top: 10px;
+	}
+	
+	#username_logged_in{
+		margin-top: 3px;
+		margin-right: 3px;
+	}
+	
+	a.header-avatar img{
+		max-height: 35px;
 	}
 
 	/* Search
