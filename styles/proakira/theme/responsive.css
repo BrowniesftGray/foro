@@ -7,6 +7,12 @@
 	}
 }
 
+@media (max-width: 700px) { 
+	.linklist .rightside > a > span {
+		display: none;
+	}
+}
+
 /* Notifications list
 ----------------------------------------*/
 @media (max-width: 350px) {

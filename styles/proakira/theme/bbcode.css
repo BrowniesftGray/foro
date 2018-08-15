@@ -1,0 +1,87 @@
+/* TEMPLATE DE JUTSUS
+---------------------------------------- */
+jutsu {
+	display: block; 
+	text-align: left;
+	border-radius: 5px;
+	border: solid 1px #e5ddd5;
+	background: #fdf8f4;
+	color: #6b6b6b;
+	margin: 0 auto;
+	padding: 10px;
+	width: 500px;
+	font-family: Roboto, Verdana, sans-serif;
+	font-size: 12px;
+	box-shadow: 1px 1px 1px #333;
+}
+
+jutsu nombre{
+	display: block;
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+jutsu tipo{
+	display: inline-block;
+	color: #fff;
+	background: #2d986d;
+	font-weight: bold;
+	border-radius: 2px;
+	border: solid 1px #395d4e;
+	font-size: 11px;
+	margin-right: 5px;
+	padding: 2px;
+	line-height: 11px;
+}
+
+jutsu tipo[tai]{
+	background: #bf8000;
+	border-color: #715c31;
+}
+
+jutsu tipo[fuin]{
+	background: #6d84bf;
+	border-color: #374c82;
+}
+
+jutsu tipo[gen] {
+	background: #a58dc1;
+	border-color: #604382;
+}
+
+jutsu datos{
+	clear: both;
+	display: block;
+	background: #fff;
+	border: solid 1px #e3e3e3;
+	padding: 5px;
+	margin: 5px 0;
+}
+
+jutsu datos ul{
+	margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+jutsu desc{
+	font-style: italic;
+}
+
+jutsu hr{
+	border: none;
+	border-top: solid 1px #ccbdae;
+}
+
+jutsu c{
+	display: block;
+	font-size: 10px;
+}
+
+jutsu c b{
+	cursor: pointer;
+}
+
+jutsu code{
+	margin-left: 5px;
+}

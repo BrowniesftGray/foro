@@ -26,6 +26,24 @@ hr {
 	border-top-color: #CCCCCC;
 }
 
+/* Stats
+---------------------------------------- */
+
+pv {
+	font-weight: bold;
+	color: #5cb85c;
+}
+
+pc {
+	font-weight: bold;
+	color: #337ab7;
+}
+
+sta {
+	font-weight: bold;
+	color: #f0ad4e;
+}
+
 /*
 --------------------------------------------------------------
 Colours and backgrounds for links.css
@@ -99,7 +117,8 @@ a:hover { color: #D31141; }
 }
 
 .navbar {
-	background-color: #CADCEB;
+	background-color: #243f38;
+	color: #fff;
 }
 
 .panel {
@@ -144,7 +163,7 @@ table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
 }
 
 .site_logo {
-	background-image: url("./images/site_logo.gif");
+	background-image: url("./images/site_logo.png");
 }
 
 /* Horizontal lists

@@ -165,26 +165,21 @@ a:hover	{ text-decoration: underline; }
 	margin-top: 20px;
 }
 
-.logo {
-	float: left;
-	width: auto;
-	padding: 10px 13px 0 10px;
-}
-
 .logo:hover {
 	text-decoration: none;
 }
 
 .site_logo {
+	background-size: contain;
+    background-repeat: no-repeat;
 	display: inline-block;
-	width: 149px;
-	height: 52px;
+	width: 140px;
+	height: 30px;
 }
 
 /* Site description and logo */
 .site-description {
 	float: left;
-	width: 65%;
 }
 
 .site-description h1 {
@@ -200,8 +195,7 @@ a:hover	{ text-decoration: underline; }
 }
 
 .navbar {
-	padding: 3px 10px;
-	border-radius: 7px;
+	padding: 5px;
 }
 
 .forabg {
@@ -1243,10 +1237,6 @@ ul.linklist:after,
 
 .linklist .quick-links {
 	margin: 0 7px 0 0;
-}
-
-.linklist.compact .rightside > a > span {
-	display: none;
 }
 
 .dropdown-page-jump .dropdown {
