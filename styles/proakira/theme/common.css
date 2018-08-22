@@ -997,7 +997,6 @@ a.mark-read, a.mark{
 /* Miscellaneous styles
 ---------------------------------------- */
 .copyright {
-	display: none;
 	padding: 5px;
 	text-align: center;
 }

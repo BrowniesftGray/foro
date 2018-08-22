@@ -22,6 +22,11 @@
 	color: #fff;
 }
 
+.navbar .inner{
+	margin: 0 auto;
+	max-width: 1056px;
+}
+
 /* Content Styles
 ---------------------------------------- */
 
@@ -133,14 +138,8 @@ li.header dt, li.header dd {
 	text-transform: uppercase;
 }
 
-.forabg li.header dd.topics,
-.forabg li.header dd.posts,
-.forabg li.header dd.lastpost {
-	display: none;
-}
-
 li.header dt {
-	width: 100%;
+	width: 1040px;
 	margin-right: -440px;
 }
 
