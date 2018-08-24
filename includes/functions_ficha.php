@@ -126,9 +126,9 @@ function get_ficha($user_id, $return = false)
 				'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
-				'FICHA_PC'				=> calcula_pc($row['rango'], $row['concentracion'], $row['espiritu'], $row['voluntad']),
-				'FICHA_PV'				=> calcula_pv($row['rango'], $row['resistencia']),
-				'FICHA_STA'				=> calcula_sta($row['rango'], $row['fuerza'], $row['agilidad'], $row['resistencia'], $row['voluntad']),
+				'FICHA_PC'				=> calcula_pc($row['arquetipo'], $row['concentracion'], $row['espiritu'], $row['voluntad']),
+				'FICHA_PV'				=> calcula_pv($row['arquetipo'], $row['resistencia']),
+				'FICHA_STA'				=> calcula_sta($row['arquetipo'], $row['fuerza'], $row['agilidad'], $row['resistencia'], $row['voluntad']),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
