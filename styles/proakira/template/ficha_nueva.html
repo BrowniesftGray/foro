@@ -181,7 +181,7 @@ function checkAtributos(atr) {
 }
 
 function vaciarOpciones(){
-  $("#rama5").val("Invocación por determinar");
+  $("#invocacion").val("Invocación por determinar");
   $("#selectElemento2").val("Segundo elemento disponible en compra con PN");
   $("#selectEspecialidad2").val("Segunda especialidad disponible en compra con PN");
 
@@ -233,7 +233,7 @@ function checkClan(){
 
     case 'Clan Kamizuru':
       vaciarOpciones();
-      $("#rama5").val("Abejas");
+      $("#invocacion").val("Abejas");
     break;
 
     case 'Clan Jyugo':
@@ -256,7 +256,7 @@ function checkClan(){
 
     case 'Clan Orochi':
       vaciarOpciones();
-      $("#rama5").val("Serpientes");
+      $("#invocacion").val("Serpientes");
     break;
 
     case 'Clan Uzumaki':
@@ -280,7 +280,7 @@ function checkClan(){
 
     case 'Clan Aburame':
       vaciarOpciones();
-      $("#rama5").val("Insectos");
+      $("#invocacion").val("Insectos");
     break;
 
     case 'Clan Senju':
@@ -324,7 +324,7 @@ function checkClan(){
     case 'Clan Inuzuka':
       vaciarOpciones();
 
-      $("#rama5").val("Perros");
+      $("#invocacion").val("Perros");
 
       var option = $('<option></option>').attr("value", "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)").text("Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)");
       $("#selectEspecialidad").empty().append(option);
@@ -418,7 +418,7 @@ function checkClan(){
 
       $("#selectEspecialidad2").val("Ninjutsu General (忍術, Técnicas Ninja)");
 
-      $("#rama5").val("Dokis");
+      $("#invocacion").val("Dokis");
     break;
 
     case 'Arte Tenkasai':
@@ -449,7 +449,7 @@ function checkClan(){
       $('select[name="selectElemento"]').val(1);
       $('.selectpicker').selectpicker('refresh');
 
-      $("#rama5").val("Comadrejas");
+      $("#invocacion").val("Comadrejas");
     break;
 
     case 'Arte Origami':
@@ -544,7 +544,7 @@ function checkFicha() {
   var selectEspecialidad = document.getElementById("selectEspecialidad").value;
   var selectElemento2 = document.getElementById("selectElemento2").value;
   var selectEspecialidad2 = document.getElementById("selectEspecialidad2").value;
-  var rama5 = document.getElementById("rama5").value;
+  var invocacion = document.getElementById("invocacion").value;
   var descFis = document.getElementById("descFis").value;
   var descPsic = document.getElementById("descPsic").value;
   var descHis = document.getElementById("descHis").value;

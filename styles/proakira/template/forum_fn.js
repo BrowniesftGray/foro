@@ -298,6 +298,18 @@ function parseDocument($container) {
 	var test = document.createElement('div'),
 		oldBrowser = (typeof test.style.borderRadius === 'undefined'),
 		$body = $('body');
+		
+	/**
+	* Mostrar info jutsu onclick
+	*/
+	$container.find('jutsu datos').on('click', function() {
+		var height = 15;
+		
+		if($(this).height() == height) 
+			height = $(this)[0].scrollHeight - 10;
+		
+		$(this).animate({height: height}, 100 );
+	});
 
 	/**
 	* Reset avatar dimensions when changing URL or EMAIL
