@@ -26,11 +26,6 @@ hr {
 	border-top-color: #CCCCCC;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #888; }
-::-webkit-scrollbar-thumb:hover { background: #555; }
-
 /* Stats
 ---------------------------------------- */
 
@@ -80,7 +75,7 @@ a:hover { color: #d31111; }
 }
 
 /* Post body links */
-a.mark-read, a.mark{
+a.mark-read{
 	background: #fff;
 }
 
@@ -139,10 +134,6 @@ p.jumpbox-return:hover{
 }
 
 .forabg {
-	background-color: #e6e6e6;
-}
-
-.forabg .topiclist .header{
 	background-color: #243f38;
 }
 
@@ -361,6 +352,13 @@ p.post-notice {
 --------------------------------------------------------------
 Colours and backgrounds for content.css
 -------------------------------------------------------------- */
+
+ul.forums {
+	background-color: #EEF5F9; /* Old browsers */ /* FF3.6+ */
+	background-image: -webkit-linear-gradient(top, #D2E0EB 0%, #EEF5F9 100%);
+	background-image: linear-gradient(to bottom, #D2E0EB 0%,#EEF5F9 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D2E0EB', endColorstr='#EEF5F9',GradientType=0 ); /* IE6-9 */
+}
 
 ul.topiclist li {
 	color: #4C5D77;
@@ -1165,7 +1163,7 @@ input.disabled {
 }
 
 .dropdown .dropdown-contents {
-	background: #fff;
+	background: #e6e6e6;
 	border-color: #B9B9B9;
 	box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
 }

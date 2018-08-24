@@ -15,14 +15,14 @@ jutsu {
 	box-shadow: 1px 1px 1px #333;
 }
 
-jutsu nombre {
+jutsu nombre{
 	display: block;
 	font-size: 20px;
 	font-weight: bold;
 	margin-bottom: 5px;
 }
 
-jutsu tipo, jutsu rango {
+jutsu tipo{
 	display: inline-block;
 	color: #fff;
 	background: #2d986d;
@@ -35,17 +35,12 @@ jutsu tipo, jutsu rango {
 	line-height: 11px;
 }
 
-jutsu rango {
-	background: #9e9e9e;
-	border-color: #4e4e4e;
-}
-
-jutsu tipo[tai] {
+jutsu tipo[tai]{
 	background: #bf8000;
 	border-color: #715c31;
 }
 
-jutsu tipo[fuin] {
+jutsu tipo[fuin]{
 	background: #6d84bf;
 	border-color: #374c82;
 }
@@ -55,7 +50,7 @@ jutsu tipo[gen] {
 	border-color: #604382;
 }
 
-jutsu datos {
+jutsu datos{
 	clear: both;
 	display: block;
 	background: #fff;
@@ -64,29 +59,29 @@ jutsu datos {
 	margin: 5px 0;
 }
 
-jutsu datos ul {
+jutsu datos ul{
 	margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
 
-jutsu desc {
+jutsu desc{
 	font-style: italic;
 }
 
-jutsu hr {
+jutsu hr{
 	border: none;
 	border-top: solid 1px #ccbdae;
 }
 
-jutsu c {
+jutsu c{
 	display: block;
 	font-size: 10px;
 }
 
-jutsu c b {
+jutsu c b{
 	cursor: pointer;
 }
 
-jutsu code {
+jutsu code{
 	margin-left: 5px;
 }
