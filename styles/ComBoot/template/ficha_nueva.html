@@ -190,9 +190,9 @@ select {
            </div>
           </div>
           <div class="form-group">
-           <label class=" control-label" for="invocacion">Invocacion</label>
+           <label class=" control-label" for="rama5">Invocacion</label>
            <div class="">
-             <input type='text' class='form-control' id='invocacion' name='invocacion' readonly value='Invocación por determinar'> </input>
+             <input type='text' class='form-control' id='rama5' name='rama5' readonly value='Invocación por determinar'> </input>
            </div>
           </div>
         </div>
@@ -301,7 +301,7 @@ function checkAtributos(atr) {
 }
 
 function vaciarOpciones(){
-  $("#invocacion").val("Invocación por determinar");
+  $("#rama5").val("Invocación por determinar");
   $("#selectElemento2").val("Segundo elemento disponible en compra con PN");
   $("#selectEspecialidad2").val("Segunda especialidad disponible en compra con PN");
 
@@ -353,7 +353,7 @@ function checkClan(){
 
     case 'Clan Kamizuru':
       vaciarOpciones();
-      $("#invocacion").val("Abejas");
+      $("#rama5").val("Abejas");
     break;
 
     case 'Clan Jyugo':
@@ -376,7 +376,7 @@ function checkClan(){
 
     case 'Clan Orochi':
       vaciarOpciones();
-      $("#invocacion").val("Serpientes");
+      $("#rama5").val("Serpientes");
     break;
 
     case 'Clan Uzumaki':
@@ -400,7 +400,7 @@ function checkClan(){
 
     case 'Clan Aburame':
       vaciarOpciones();
-      $("#invocacion").val("Insectos");
+      $("#rama5").val("Insectos");
     break;
 
     case 'Clan Senju':
@@ -444,7 +444,7 @@ function checkClan(){
     case 'Clan Inuzuka':
       vaciarOpciones();
 
-      $("#invocacion").val("Perros");
+      $("#rama5").val("Perros");
 
       var option = $('<option></option>').attr("value", "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)").text("Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)");
       $("#selectEspecialidad").empty().append(option);
@@ -538,7 +538,7 @@ function checkClan(){
 
       $("#selectEspecialidad2").val("Ninjutsu General (忍術, Técnicas Ninja)");
 
-      $("#invocacion").val("Dokis");
+      $("#rama5").val("Dokis");
     break;
 
     case 'Arte Tenkasai':
@@ -569,7 +569,7 @@ function checkClan(){
       $('select[name="selectElemento"]').val(1);
       $('.selectpicker').selectpicker('refresh');
 
-      $("#invocacion").val("Comadrejas");
+      $("#rama5").val("Comadrejas");
     break;
 
     case 'Arte Origami':
@@ -664,7 +664,7 @@ function checkFicha() {
   var selectEspecialidad = document.getElementById("selectEspecialidad").value;
   var selectElemento2 = document.getElementById("selectElemento2").value;
   var selectEspecialidad2 = document.getElementById("selectEspecialidad2").value;
-  var invocacion = document.getElementById("invocacion").value;
+  var rama5 = document.getElementById("rama5").value;
   var descFis = document.getElementById("descFis").value;
   var descPsic = document.getElementById("descPsic").value;
   var descHis = document.getElementById("descHis").value;

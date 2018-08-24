@@ -134,35 +134,35 @@ class __TwigTemplate_81e889b4b8a15249a22884af0b6c842fcb67b4a82804b845a40138b6233
         echo "</dd></dl>
 \t\t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 69
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "</a></dt><dd style=\"display: none;\">";
-        echo (isset($context["TECNICAS_ELEMENTO1"]) ? $context["TECNICAS_ELEMENTO1"] : null);
+        echo (isset($context["TECNICAS_RAMA1"]) ? $context["TECNICAS_RAMA1"] : null);
         echo "</dd></dl>
 \t\t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 70
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "</a></dt><dd style=\"display: none;\">";
-        echo (isset($context["TECNICAS_ESPECIALIDAD1"]) ? $context["TECNICAS_ESPECIALIDAD1"] : null);
+        echo (isset($context["TECNICAS_RAMA3"]) ? $context["TECNICAS_RAMA3"] : null);
         echo "</dd></dl>
 \t\t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 71
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "</a></dt><dd style=\"display: none;\">";
-        echo (isset($context["TECNICAS_ELEMENTO2"]) ? $context["TECNICAS_ELEMENTO2"] : null);
+        echo (isset($context["TECNICAS_RAMA2"]) ? $context["TECNICAS_RAMA2"] : null);
         echo "</dd></dl>
 \t\t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 72
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "</a></dt><dd style=\"display: none;\">";
-        echo (isset($context["TECNICAS_ESPECIALIDAD2"]) ? $context["TECNICAS_ESPECIALIDAD2"] : null);
+        echo (isset($context["TECNICAS_RAMA4"]) ? $context["TECNICAS_RAMA4"] : null);
         echo "</dd></dl>
 </div>
  <div class=\"tab-pane fade\" id=\"profile\">

@@ -188,9 +188,9 @@ class __TwigTemplate_3e7f6b122611f26cab3a5279e22b6317d295a488519923aebf3d3a77380
 \t\t<select id=\"selectElemento\" name=\"selectElemento\" class=\"form-control\" data-size=\"5\">
 \t\t\t<option value=\"";
         // line 110
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "\">";
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "</option>
 \t\t\t <option value=\"Katon (火遁 Elemento Fuego)\">Katon (火遁 Elemento Fuego)</option>
 \t\t\t <option value=\"Suiton (水遁 Elemento Agua)\">Suiton (水遁 Elemento Agua)</option>
@@ -200,19 +200,19 @@ class __TwigTemplate_3e7f6b122611f26cab3a5279e22b6317d295a488519923aebf3d3a77380
 \t\t</select>
 \t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 117
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ELEMENTO1"]) ? $context["FICHA_ELEMENTO1"] : null);
+        echo (isset($context["FICHA_RAMA1"]) ? $context["FICHA_RAMA1"] : null);
         echo "</a></dt><dd style=\"display: none;\"><textarea class=\"form-control\" id=\"tecsSelectElemento\" name=\"tecsSelectElemento\" rows=\"5\">";
-        echo (isset($context["TECNICAS_ELEMENTO1"]) ? $context["TECNICAS_ELEMENTO1"] : null);
+        echo (isset($context["TECNICAS_RAMA1"]) ? $context["TECNICAS_RAMA1"] : null);
         echo "</textarea></dd></dl>
 \t\t<hr>
 \t\t<select id=\"selectEspecialidad\" name=\"selectEspecialidad\" class=\"form-control\">
 \t\t\t<option value=\"";
         // line 120
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "\">";
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "</option>
 \t\t\t <option value=\"Genjutsu (幻術 Ilusiones)\">Genjutsu (幻術 Ilusiones)</option>
 \t\t\t <option value=\"Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)\">Taijutsu (体術 Técnicas de Cuerpo a Cuerpo)</option>
@@ -223,19 +223,19 @@ class __TwigTemplate_3e7f6b122611f26cab3a5279e22b6317d295a488519923aebf3d3a77380
 \t\t</select>
 \t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 128
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ESPECIALIDAD1"]) ? $context["FICHA_ESPECIALIDAD1"] : null);
+        echo (isset($context["FICHA_RAMA3"]) ? $context["FICHA_RAMA3"] : null);
         echo "</a></dt><dd style=\"display: none;\"><textarea class=\"form-control\" id=\"tecsSelectEspecialidad\" name=\"tecsSelectEspecialidad\" rows=\"5\">";
-        echo (isset($context["TECNICAS_ESPECIALIDAD1"]) ? $context["TECNICAS_ESPECIALIDAD1"] : null);
+        echo (isset($context["TECNICAS_RAMA3"]) ? $context["TECNICAS_RAMA3"] : null);
         echo "</textarea></dd></dl>
 \t\t<hr>
 \t\t<select id=\"selectElemento2\" name=\"selectElemento2\" class=\"form-control\" data-size=\"5\">
 \t\t\t<option value=\"";
         // line 131
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "\">";
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "</option>
 \t\t\t<option value=\"Segundo elemento disponible en compra con PN\">Segundo elemento disponible en compra con PN</option>
 \t\t\t<option value=\"Katon (火遁 Elemento Fuego)\">Katon (火遁 Elemento Fuego)</option>
@@ -246,19 +246,19 @@ class __TwigTemplate_3e7f6b122611f26cab3a5279e22b6317d295a488519923aebf3d3a77380
 \t\t</select>
 \t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 139
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ELEMENTO2"]) ? $context["FICHA_ELEMENTO2"] : null);
+        echo (isset($context["FICHA_RAMA2"]) ? $context["FICHA_RAMA2"] : null);
         echo "</a></dt><dd style=\"display: none;\"><textarea class=\"form-control\" id=\"tecsSelectElemento2\" name=\"tecsSelectElemento2\" rows=\"5\">";
-        echo (isset($context["TECNICAS_ELEMENTO2"]) ? $context["TECNICAS_ELEMENTO2"] : null);
+        echo (isset($context["TECNICAS_RAMA2"]) ? $context["TECNICAS_RAMA2"] : null);
         echo "</textarea></dd></dl>
 \t\t<hr>
 \t\t<select id=\"selectEspecialidad2\" name=\"selectEspecialidad2\" class=\"form-control\">
 \t\t\t<option value=\"";
         // line 142
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "\">";
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "</option>
 \t\t\t<option value=\"Segunda especialidad disponible en compra con PN\">Segunda especialidad disponible en compra con PN</option>
 \t\t\t <option value=\"Genjutsu (幻術 Ilusiones)\">Genjutsu (幻術 Ilusiones)</option>
@@ -270,23 +270,23 @@ class __TwigTemplate_3e7f6b122611f26cab3a5279e22b6317d295a488519923aebf3d3a77380
 \t\t</select>
 \t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 151
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_ESPECIALIDAD2"]) ? $context["FICHA_ESPECIALIDAD2"] : null);
+        echo (isset($context["FICHA_RAMA4"]) ? $context["FICHA_RAMA4"] : null);
         echo "</a></dt><dd style=\"display: none;\"><textarea class=\"form-control\" id=\"tecsSelectEspecialidad2\" name=\"tecsSelectEspecialidad2\" rows=\"5\">";
-        echo (isset($context["TECNICAS_ESPECIALIDAD2"]) ? $context["TECNICAS_ESPECIALIDAD2"] : null);
+        echo (isset($context["TECNICAS_RAMA4"]) ? $context["TECNICAS_RAMA4"] : null);
         echo "</textarea></dd></dl>
-\t\t<input class=\"form-control\" type=\"text\" name=\"invocacion\" value=\"";
+\t\t<input class=\"form-control\" type=\"text\" name=\"rama5\" value=\"";
         // line 152
-        echo (isset($context["FICHA_INVOCACION"]) ? $context["FICHA_INVOCACION"] : null);
+        echo (isset($context["FICHA_RAMA5"]) ? $context["FICHA_RAMA5"] : null);
         echo "\">
 \t\t<dl class=\"codebox\"><dt><a href=\"javascript:void(0);\" onclick=\"var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' ";
         // line 153
-        echo (isset($context["FICHA_INVOCACION"]) ? $context["FICHA_INVOCACION"] : null);
+        echo (isset($context["FICHA_RAMA5"]) ? $context["FICHA_RAMA5"] : null);
         echo "'; \">[+] ";
-        echo (isset($context["FICHA_INVOCACION"]) ? $context["FICHA_INVOCACION"] : null);
+        echo (isset($context["FICHA_RAMA5"]) ? $context["FICHA_RAMA5"] : null);
         echo "</a></dt><dd style=\"display: none;\"><textarea class=\"form-control\" id=\"tecsInvocacion\" name=\"tecsInvocacion\" rows=\"5\">";
-        echo (isset($context["TECNICAS_INVOCACION"]) ? $context["TECNICAS_INVOCACION"] : null);
+        echo (isset($context["TECNICAS_RAMA5"]) ? $context["TECNICAS_RAMA5"] : null);
         echo "</textarea></dd></dl>
 </div>
  <div class=\"tab-pane fade\" id=\"profile\">

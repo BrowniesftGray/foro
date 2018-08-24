@@ -69,7 +69,7 @@ function validacionFicha(){
   var selectEspecialidad = document.getElementById("selectEspecialidad").value;
   var selectElemento2 = document.getElementById("selectElemento2").value;
   var selectEspecialidad2 = document.getElementById("selectEspecialidad2").value;
-  var invocacion = document.getElementById("invocacion").value;
+  var rama5 = document.getElementById("rama5").value;
   var atrFuerza = document.getElementById("atrFuerza").value;
   var atrRes = document.getElementById("atrRes").value;
   var artAg = document.getElementById("artAg").value;
@@ -149,7 +149,7 @@ function tratarRespuestaFicha(){
   var selectEspecialidad = document.getElementById("selectEspecialidad").value;
   var selectElemento2 = document.getElementById("selectElemento2").value;
   var selectEspecialidad2 = document.getElementById("selectEspecialidad2").value;
-  var invocacion = document.getElementById("invocacion").value;
+  var rama5 = document.getElementById("rama5").value;
   var atrFuerza = document.getElementById("atrFuerza").value;
   var atrRes = document.getElementById("atrRes").value;
   var artAg = document.getElementById("artAg").value;
@@ -177,7 +177,7 @@ function tratarRespuestaFicha(){
     selectEspecialidad: selectEspecialidad,
     selectElemento2: selectElemento2,
     selectEspecialidad2: selectEspecialidad2,
-    invocacion: invocacion,
+    rama5: rama5,
     atrFuerza: atrFuerza,
     atrRes: atrRes,
     artAg: artAg,
@@ -353,260 +353,260 @@ else{
  switch ($_POST['selectClan']) {
 
    case 'Sin Clan':
-   $invocacion = "";
-   $especialidad1 = "";
-   $elemento1 = "";
-   $especialidad2 = "";
-   $elemento2 = "";
+   $rama5 = "";
+   $rama3 = "";
+   $rama1 = "";
+   $rama4 = "";
+   $rama2 = "";
    break;
 
    case 'Clan — Kamizuru':
-    $invocacion = "Abejas";
-    $especialidad1 = "";
-    $elemento1 = "";
-    $especialidad2 = "";
-    $elemento2 = "";
+    $rama5 = "Abejas";
+    $rama3 = "";
+    $rama1 = "";
+    $rama4 = "";
+    $rama2 = "";
    break;
 
    case 'Clan — Jyugo':
-     $invocacion = "";
-     $especialidad1 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Nendo':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Doton (土遁, Elemento Tierra)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Doton (土遁, Elemento Tierra)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Orochi':
-     $invocacion = "Serpientes";
-     $especialidad1 = "";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "Serpientes";
+     $rama3 = "";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Uzumaki':
-     $invocacion = "";
-     $especialidad1 = "Fūinjutsu (封印術, Sellado)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Fūinjutsu (封印術, Sellado)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Sabaku':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Doton (土遁, Elemento Tierra)";
-     $especialidad2 = "";
-     $elemento2 = "Fuuton (風遁, Elemento Viento)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Doton (土遁, Elemento Tierra)";
+     $rama4 = "";
+     $rama2 = "Fuuton (風遁, Elemento Viento)";
    break;
 
    case 'Clan — Aburame':
-     $invocacion = "Insectos";
-     $especialidad1 = "";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "Insectos";
+     $rama3 = "";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Senju':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Doton (土遁, Elemento Tierra)";
-     $especialidad2 = "";
-     $elemento2 = "Suiton (水遁, Elemento Agua)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Doton (土遁, Elemento Tierra)";
+     $rama4 = "";
+     $rama2 = "Suiton (水遁, Elemento Agua)";
    break;
 
    case 'Clan — Hyuga':
-     $invocacion = "";
-     $especialidad1 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Kaguya':
-     $invocacion = "";
-     $especialidad1 = "kaguya";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "kaguya";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Inuzuka':
-     $invocacion = "Perros";
-     $especialidad1 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "Perros";
+     $rama3 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Yuki':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Suiton (水遁, Elemento Agua)";
-     $especialidad2 = "";
-     $elemento2 = "Fuuton (風遁, Elemento Viento)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Suiton (水遁, Elemento Agua)";
+     $rama4 = "";
+     $rama2 = "Fuuton (風遁, Elemento Viento)";
    break;
 
    case 'Clan — Yotsuki':
-     $invocacion = "";
-     $especialidad1 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
-     $elemento1 = "Raiton (雷遁, Elemento Rayo)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
+     $rama1 = "Raiton (雷遁, Elemento Rayo)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Uchiha':
-     $invocacion = "";
-     $especialidad1 = "Genjutsu";
-     $elemento1 = "Katon (火遁, Elemento Fuego)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Genjutsu";
+     $rama1 = "Katon (火遁, Elemento Fuego)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Yamanaka':
-     $invocacion = "";
-     $especialidad1 = "Kanchi Taipu";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Kanchi Taipu";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Akimichi':
-     $invocacion = "";
-     $especialidad1 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Taijutsu (体術, Técnicas de Cuerpo a Cuerpo)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Hozuki':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Suiton (水遁, Elemento Agua)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Suiton (水遁, Elemento Agua)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Clan — Nara':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "";
-     $especialidad2 = "Ninjutsu";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "";
+     $rama4 = "Ninjutsu";
+     $rama2 = "";
    break;
 
    case 'Arte —  Gotokuji':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Suiton (水遁, Elemento Agua)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Suiton (水遁, Elemento Agua)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Arte — Yūrei':
-     $invocacion = "Dokis";
-     $especialidad1 = "Genjutsus";
-     $elemento1 = "";
-     $especialidad2 = "Ninjutsus";
-     $elemento2 = "";
+     $rama5 = "Dokis";
+     $rama3 = "Genjutsus";
+     $rama1 = "";
+     $rama4 = "Ninjutsus";
+     $rama2 = "";
    break;
 
    case 'Arte — Tenkasai':
-     $invocacion = "";
-     $especialidad1 = "Bukijutsu (武器术, Técnicas de armas)";
-     $elemento1 = "";
-     $especialidad2 = "Fūinjutsu (封印術, Sellado)";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Bukijutsu (武器术, Técnicas de armas)";
+     $rama1 = "";
+     $rama4 = "Fūinjutsu (封印術, Sellado)";
+     $rama2 = "";
    break;
 
    case 'Arte — Inku':
-     $invocacion = "";
-     $especialidad1 = "Fūinjutsu (封印術, Sellado)";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "Fūinjutsu (封印術, Sellado)";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Arte — Tessen':
-     $invocacion = "Comadrejas";
-     $especialidad1 = "";
-     $elemento1 = "Fuuton (風遁, Elemento Viento)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "Comadrejas";
+     $rama3 = "";
+     $rama1 = "Fuuton (風遁, Elemento Viento)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Arte — Origami':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Kekkei Genkai — Shakuton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Fuuton (風遁, Elemento Viento)";
-     $especialidad2 = "";
-     $elemento2 = "Katon (火遁, Elemento Fuego)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Fuuton (風遁, Elemento Viento)";
+     $rama4 = "";
+     $rama2 = "Katon (火遁, Elemento Fuego)";
    break;
 
    case 'Kekkei Genkai — Yōton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Doton (土遁, Elemento Tierra)";
-     $especialidad2 = "";
-     $elemento2 = "Yoton";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Doton (土遁, Elemento Tierra)";
+     $rama4 = "";
+     $rama2 = "Yoton";
    break;
 
    case 'Kekkei Genkai — Jiton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Raiton (雷遁, Elemento Rayo)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Raiton (雷遁, Elemento Rayo)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Kekkei Genkai — Shōton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Doton (土遁, Elemento Tierra)";
-     $especialidad2 = "";
-     $elemento2 = "";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Doton (土遁, Elemento Tierra)";
+     $rama4 = "";
+     $rama2 = "";
    break;
 
    case 'Kekkei Genkai — Futton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Suiton (水遁, Elemento Agua)";
-     $especialidad2 = "";
-     $elemento2 = "Katon (火遁, Elemento Fuego)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Suiton (水遁, Elemento Agua)";
+     $rama4 = "";
+     $rama2 = "Katon (火遁, Elemento Fuego)";
    break;
 
    case 'Kekkei Genkai — Ranton':
-     $invocacion = "";
-     $especialidad1 = "";
-     $elemento1 = "Raiton (雷遁, Elemento Rayo)";
-     $especialidad2 = "";
-     $elemento2 = "Suiton (水遁, Elemento Agua)";
+     $rama5 = "";
+     $rama3 = "";
+     $rama1 = "Raiton (雷遁, Elemento Rayo)";
+     $rama4 = "";
+     $rama2 = "Suiton (水遁, Elemento Agua)";
    break;
  }
 
 /*echo $_POST['selectClan'];
- echo $invocacion;
- echo $especialidad1;
- echo $elemento1;
- echo $especialidad2;
- echo $elemento2 ;*/
+ echo $rama5;
+ echo $rama3;
+ echo $rama1;
+ echo $rama4;
+ echo $rama2 ;*/
 
  ?>
  <div class="row container-fluid justify-content-center">
@@ -734,11 +734,11 @@ else{
           <div class="">
             <select id="selectElemento" name="selectElemento" class="form-control">
               <?php
-              if ($elemento1 == "") {
+              if ($rama1 == "") {
                 rellenarSelectElemento();
               }
               else{
-                echo "<option>".$elemento1."</option>";
+                echo "<option>".$rama1."</option>";
               }
               ?>
             </select>
@@ -749,16 +749,16 @@ else{
           <div class="">
             <select id="selectEspecialidad" name="selectEspecialidad" class="form-control">
               <?php
-              if ($especialidad1 == "") {
+              if ($rama3 == "") {
                 rellenarSelectEspecialidad();
               }
               else{
-                if ($especialidad1 == "kaguya") {
+                if ($rama3 == "kaguya") {
                   echo "<option>Taijutsu</option>";
                   echo "<option>Bukijutsu</option>";
                 }
                 else{
-                  echo "<option>".$especialidad1."</option>";
+                  echo "<option>".$rama3."</option>";
                 }
               }
               ?>
@@ -769,11 +769,11 @@ else{
           <label class=" control-label" for="selectbasic">Segundo elemento</label>
           <div class="">
               <?php
-              if ($elemento2 == "") {
+              if ($rama2 == "") {
                 echo "<input type='text' class='form-control' id='selectElemento2' name='selectElemento2' readonly value='Segundo elemento disponible con PN'> </input>";
               }
               else{
-                if ($elemento2 == "Yoton") {
+                if ($rama2 == "Yoton") {
                   echo '<select id="selectElemento2" name="selectElemento2" class="form-control">';
                   echo "<option>Katon</option>";
                   echo "<option>Suiton</option>";
@@ -781,7 +781,7 @@ else{
                 }
                 else{
 
-                  echo "<input type='text' class='form-control' id='clan' name='clan' readonly value='".$elemento2."'> </input>";
+                  echo "<input type='text' class='form-control' id='clan' name='clan' readonly value='".$rama2."'> </input>";
                 }
               }
               ?>
@@ -791,24 +791,24 @@ else{
           <label class=" control-label" for="selectbasic">Segunda especialidad</label>
           <div class="">
               <?php
-              if ($especialidad2 == "") {
+              if ($rama4 == "") {
                 echo "<input type='text' class='form-control' id='selectEspecialidad2' name='selectEspecialidad2' readonly value='Segunda especialidad disponible con PN'> </input>";
               }
               else{
-                echo "<input type='text' class='form-control' id='clan' name='clan' readonly value='".$especialidad2."'> </input>";
+                echo "<input type='text' class='form-control' id='clan' name='clan' readonly value='".$rama4."'> </input>";
               }
               ?>
           </div>
          </div>
          <div class="form-group">
-          <label class=" control-label" for="invocacion">Invocacion</label>
+          <label class=" control-label" for="rama5">Invocacion</label>
           <div class="">
               <?php
-              if ($invocacion == "") {
-                echo "<input type='text' class='form-control' id='invocacion' name='invocacion' readonly value='Invocación por determinar'> </input>";
+              if ($rama5 == "") {
+                echo "<input type='text' class='form-control' id='rama5' name='rama5' readonly value='Invocación por determinar'> </input>";
               }
               else{
-                echo "<input type='text' class='form-control' id='invocacion' name='invocacion' readonly value='".$invocacion."'> </input>";
+                echo "<input type='text' class='form-control' id='rama5' name='rama5' readonly value='".$rama5."'> </input>";
               }
               ?>
           </div>
