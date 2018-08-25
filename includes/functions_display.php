@@ -598,7 +598,8 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 		}
 		
 		$foros_generales = array(4, 5, 11, 12, 13, 14);
-		$foros_paises = array(16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
+		$foros_paises_principales = array(16, 17, 18, 19);
+		$foros_paises_neutrales = array(22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
 
 		$forum_row = array(
 			'S_IS_CAT'			=> false,
@@ -612,7 +613,8 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 			'S_DISPLAY_SUBJECT'	=>	($last_post_subject !== '' && $config['display_last_subject']) ? true : false,
 			'S_FEED_ENABLED'	=> ($config['feed_forum'] && !phpbb_optionget(FORUM_OPTION_FEED_EXCLUDE, $row['forum_options']) && $row['forum_type'] == FORUM_POST) ? true : false,
 			'S_IS_GENERAL'		=> in_array($row['forum_id'], $foros_generales),
-			'S_IS_PAIS'			=> in_array($row['forum_id'], $foros_paises),
+			'S_IS_PAIS_P'		=> in_array($row['forum_id'], $foros_paises_principales),
+			'S_IS_PAIS_N'		=> in_array($row['forum_id'], $foros_paises_neutrales),
 
 			'FORUM_ID'				=> $row['forum_id'],
 			'FORUM_NAME'			=> $row['forum_name'],

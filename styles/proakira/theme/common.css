@@ -176,7 +176,7 @@ a:hover	{ text-decoration: underline; }
 	background-size: contain;
     background-repeat: no-repeat;
 	display: inline-block;
-	width: 140px;
+	width: 150px;
 	height: 30px;
 }
 
@@ -203,6 +203,7 @@ a:hover	{ text-decoration: underline; }
 
 .navbar {
 	padding: 10px 10px 3px 10px;
+	font-size: 11px;
 }
 
 .forabg {
@@ -805,9 +806,8 @@ fieldset.fields1 dl.pmlist dd.recipients {
 ---------------------------------------- */
 .action-bar {
 	font-size: 11px;
-	margin: 4px 0;
 	clear: both;
-	margin: 0 10px;
+	margin: 10px;
 }
 
 a.mark-read, a.mark{
@@ -1010,7 +1010,11 @@ a.mark-read, a.mark{
 }
 
 .headerspace {
-	margin-top: 20px;
+	margin: 10px;
+}
+
+.time {
+	margin: 10px;
 }
 
 .error {

@@ -31,6 +31,8 @@
 		<!-- EVENT forumlist_body_forum_row_before -->
 		<!-- IF forumrow.S_IS_GENERAL -->
 			<!-- INCLUDE forumlist_generales.html -->
+		<!-- ELSEIF forumrow.S_IS_PAIS_P -->
+			<!-- INCLUDE forumlist_paises_principales.html -->
 		<!-- ELSE -->
 			<li class="row" id="forum{forumrow.FORUM_ID}">
 				<!-- EVENT forumlist_body_forum_row_prepend -->
