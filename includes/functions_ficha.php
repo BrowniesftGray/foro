@@ -98,37 +98,31 @@ function get_ficha($user_id, $return = false)
 				'FICHA_NOMBRE' => stripslashes($row['nombre']),
 				'FICHA_ID' => $pj_id,
 				'FICHA_EDAD' => $row['edad'],
-				'FICHA_ALDEA' => stripslashes($row['aldea']),
-				'FICHA_OJOS' => $row['ojos'],
-				'FICHA_PELOS' => $row['pelo'],
-				'FICHA_ALTURA' => $row['altura'],
-				'FICHA_PESO' => $row['peso'],
-				'FICHA_COMPLEXION' => $row['complexion'],
 				'FICHA_CLAN' => $row['clan'],
 				'TECNICAS_CLAN' => $row2['clan'],
-				'FICHA_ELEMENTO1' => stripslashes($row['elemento1']),
-				'TECNICAS_ELEMENTO1' => $row2['elemento1'],
-				'FICHA_ELEMENTO2' => stripslashes($row['elemento2']),
-				'TECNICAS_ELEMENTO2' => $row2['elemento2'],
-				'FICHA_ESPECIALIDAD1' => stripslashes($row['especialidad1']),
-				'TECNICAS_ESPECIALIDAD1' => $row2['especialidad1'],
-				'FICHA_ESPECIALIDAD2' => stripslashes($row['especialidad2']),
-				'TECNICAS_ESPECIALIDAD2' => $row2['especialidad2'],
+				'FICHA_RAMA1' => stripslashes($row['rama1']),
+				'TECNICAS_RAMA1' => $row2['rama1'],
+				'FICHA_RAMA2' => stripslashes($row['rama3']),
+				'TECNICAS_RAMA2' => $row2['rama3'],
+				'FICHA_RAMA3' => stripslashes($row['rama2']),
+				'TECNICAS_RAMA3' => $row2['rama2'],
+				'FICHA_RAMA4' => stripslashes($row['rama4']),
+				'TECNICAS_RAMA4' => $row2['rama4'],
 				//'GRUPO' => $user->data['group_id'],
-				'FICHA_INVOCACION' => stripslashes($row['invocacion']),
-				'TECNICAS_INVOCACION' => $row2['invocacion'],
+				'FICHA_RAMA5' => stripslashes($row['rama5']),
+				'TECNICAS_RAMA5' => $row2['rama5'],
 				'FICHA_FUERZA' => $row['fuerza'],
 				'FICHA_AGI' => $row['agilidad'],
-				'FICHA_RES' => $row['resistencia'],
-				'FICHA_ESP' => $row['espiritu'],
+				'FICHA_VIT' => $row['vitalidad'],
+				'FICHA_CCK' => $row['cck'],
 				'FICHA_CON' => $row['concentracion'],
 				'FICHA_VOL' => $row['voluntad'],
 				'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
-				'FICHA_PC'				=> calcula_pc($row['rango'], $row['concentracion'], $row['espiritu'], $row['voluntad']),
-				'FICHA_PV'				=> calcula_pv($row['rango'], $row['resistencia']),
-				'FICHA_STA'				=> calcula_sta($row['rango'], $row['fuerza'], $row['agilidad'], $row['resistencia'], $row['voluntad']),
+				//'FICHA_PC'				=> calcula_pc($row['rango'], $row['concentracion'], $row['cck'], $row['voluntad']),
+				//'FICHA_PV'				=> calcula_pv($row['rango'], $row['vitalidad']),
+				//'FICHA_STA'				=> calcula_sta($row['rango'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
@@ -320,9 +314,9 @@ function guardar_ficha(array $fields)
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 	$idUsuario = $user->data['user_id'];
 //		$sql = 'INSERT INTO ' . FICHAS_TABLE . " (user_id, nivel, rango, nombre, clan, kekkei_genkai, elementos, fisico, caracter, historia, fuerza, destreza, constitucion, cck, inteligencia, agilidad, velocidad, presencia, voluntad, bbcode_uid, bbcode_bitfield, bbcode_options, tecnicas) VALUES ('{$user->data['user_id']}', '1', '0', '{$fields['NOMBRE']}', '{$fields['CLAN']}', '{$fields['KEKKEI']}', '{$fields['ELEMENTOS']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}', '{$fields['FUERZA']}', '{$fields['DESTREZA']}', '{$fields['CONSTITUCION']}', '{$fields['CCK']}', '{$fields['INTELIGENCIA']}', '{$fields['AGILIDAD']}', '{$fields['VELOCIDAD']}', '0', '{$fields['VOLUNTAD']}', '', '', '0', '')";
-$sql = "INSERT INTO personajes (user_id, nivel, nombre, edad, rango, aldea, ojos, pelo, altura, peso, complexion, clan, elemento1, especialidad1, elemento2, especialidad2, invocacion, fuerza, resistencia, agilidad, espiritu, concentracion, voluntad, fisico, psicologico, historia)";
-$sql .= "values (	$idUsuario, '1', '{$fields['NOMBRE']}', '{$fields['EDAD']}', '{$fields['RANGO']}', '{$fields['ALDEA']}', '{$fields['OJOS']}', '{$fields['PELO']}', '{$fields['ALTURA']}', '{$fields['PESO']}',";
-$sql .="'{$fields['COMPLEXION']}', '{$fields['CLAN']}', '{$fields['ELEMENTO']}', '{$fields['ESPECIALIDAD']}', '{$fields['ELEMENTO2']}', '{$fields['ESPECIALIDAD2']}', '{$fields['INVOCACION']}', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
+$sql = "INSERT INTO personajes (user_id, nivel, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
+$sql .= "values (	$idUsuario, '1', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
+$sql .="'{$fields['CLAN']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
 $db->sql_query($sql);
 
 }
@@ -337,7 +331,7 @@ function guardarTecnicasBase($user_id){
 
 	$pj_id = $row['pj_id'];
 
-	$sql = "INSERT INTO tecnicas (pj_id, clan, elemento1, elemento2, especialidad1, especialidad2, invocacion)";
+	$sql = "INSERT INTO tecnicas (pj_id, clan, rama1, rama3, rama2, rama4, rama5)";
 	$sql .= "values (".$pj_id.", 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin invocación')";
 	$db->sql_query($sql);
 }
@@ -352,8 +346,8 @@ function actualizar_Ficha(array $fields){
 
 	$sql = "UPDATE personajes SET ";
 	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}', aldea = '{$fields['ALDEA']}', ojos = '{$fields['OJOS']}', pelo = '{$fields['PELO']}', altura = '{$fields['ALTURA']}', peso = '{$fields['PESO']}', complexion = '{$fields['COMPLEXION']}',";
-	$sql .= "clan = '{$fields['CLAN']}', elemento1 = '{$fields['ELEMENTO']}', especialidad1 = '{$fields['ESPECIALIDAD']}', elemento2 = '{$fields['ELEMENTO2']}', especialidad2 = '{$fields['ESPECIALIDAD2']}', invocacion = '{$fields['INVOCACION']}',";
-	$sql .= "fuerza = '{$fields['FUERZA']}', resistencia = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', espiritu = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
+	$sql .= "clan = '{$fields['CLAN']}', rama1 = '{$fields['ELEMENTO']}', rama2 = '{$fields['ESPECIALIDAD']}', rama3 = '{$fields['RAMA2']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
+	$sql .= "fuerza = '{$fields['FUERZA']}', vitalidad = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', cck = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
 	$sql .= "fisico = '{$fields['FISICO']}', psicologico = '{$fields['CARACTER']}', historia = '{$fields['HISTORIA']}'";
 	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
 
@@ -367,12 +361,12 @@ function actualizar_Tecnicas(array $fields){
 	$fields['TEC_CLAN'] = addslashes($fields['TEC_CLAN']);
 	$fields['TEC_ELEMENTO'] = addslashes($fields['TEC_ELEMENTO']);
 	$fields['TEC_ESPECIALIDAD'] = addslashes($fields['TEC_ESPECIALIDAD']);
-	$fields['TEC_ELEMENTO2'] = addslashes($fields['TEC_ELEMENTO2']);
-	$fields['TEC_ESPECIALIDAD2'] = addslashes($fields['TEC_ESPECIALIDAD2']);
-	$fields['TEC_INVOCACION'] = addslashes($fields['TEC_INVOCACION']);
+	$fields['TEC_RAMA2'] = addslashes($fields['TEC_RAMA2']);
+	$fields['TEC_RAMA4'] = addslashes($fields['TEC_RAMA4']);
+	$fields['TEC_RAMA5'] = addslashes($fields['TEC_RAMA5']);
 
 	$sql = "UPDATE tecnicas SET ";
-	$sql .= "clan = '{$fields['TEC_CLAN']}', elemento1 = '{$fields['TEC_ELEMENTO']}', elemento2 = '{$fields['TEC_ELEMENTO2']}', especialidad1 = '{$fields['TEC_ESPECIALIDAD']}', especialidad2 = '{$fields['TEC_ESPECIALIDAD2']}', invocacion =  '{$fields['TEC_INVOCACION']}'";
+	$sql .= "clan = '{$fields['TEC_CLAN']}', rama1 = '{$fields['TEC_ELEMENTO']}', rama3 = '{$fields['TEC_RAMA2']}', rama2 = '{$fields['TEC_ESPECIALIDAD']}', rama4 = '{$fields['TEC_RAMA4']}', rama5 =  '{$fields['TEC_RAMA5']}'";
 	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
 
 		$db->sql_query($sql);

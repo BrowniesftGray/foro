@@ -49,9 +49,9 @@ class ucp_character
 
 					$atrs = array(
 						'FUERZA'			=> (int) request_var('atrFuerza', 1),
-						'RESISTENCIA'			=> (int) request_var('atrRes', 1),
+						'RESISTENCIA'			=> (int) request_var('atrVit', 1),
 						'AGILIDAD'			=> (int) request_var('artAg', 1),
-						'ESPIRITU'		=> (int) request_var('atrEsp', 1),
+						'ESPIRITU'		=> (int) request_var('atrCCK', 1),
 						'CONCENTRACION'				=> (int) request_var('atrCon', 1),
 						'VOLUNTAD'			=> (int) request_var('atrVol', 1),
 					);
@@ -59,30 +59,21 @@ class ucp_character
 					$fields = array_merge(array(
 						'NOMBRE'				=> utf8_normalize_nfc(request_var('nombre', '', true)),
 						'EDAD'					=> utf8_normalize_nfc(request_var('edad', '', true)),
-						'RANGO'					=> utf8_normalize_nfc(request_var('rango', '', true)),
-						'ALDEA' 				=> utf8_normalize_nfc(request_var('selectAldea', '', true)),
-						'OJOS'					=> utf8_normalize_nfc(request_var('selectOjos', '', true)),
-						'PELO'					=> utf8_normalize_nfc(request_var('selectPelo', '', true)),
-						'COMPLEXION'		=> utf8_normalize_nfc(request_var('complexion', '', true)),
-						'ALTURA'				=> utf8_normalize_nfc(request_var('altura', '', true)),
-						'PESO'					=> utf8_normalize_nfc(request_var('peso', '', true)),
-						'CLAN'					=> utf8_normalize_nfc(request_var('clan', '', true)),
+						'PRINCIPAL'					=> utf8_normalize_nfc(request_var('principal', '', true)),
+						'RAMA1'					=> utf8_normalize_nfc(request_var('rama1', '', true)),
+						'RAMA2'					=> utf8_normalize_nfc(request_var('rama2', '', true)),
 						'FISICO'				=> utf8_normalize_nfc(request_var('descFis', '', true)),
 						'CARACTER'			=> utf8_normalize_nfc(request_var('descPsic', '', true)),
 						'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),
-						'ELEMENTO'			=> utf8_normalize_nfc(request_var('selectElemento', '', true)),
-						'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('selectEspecialidad', '', true)),
-						'ELEMENTO2'			=> utf8_normalize_nfc(request_var('selectElemento2', '', true)),
-						'ESPECIALIDAD2'	=> utf8_normalize_nfc(request_var('selectEspecialidad2', '', true)),
-						'INVOCACION'		=> utf8_normalize_nfc(request_var('invocacion', '', true)),
-						'CHAKRA'				=> calcula_pc('Genin',$atrs['ESPIRITU'], $atrs['CONCENTRACION'], $atrs['VOLUNTAD']),
-						'PUNTOS'				=> 30 - array_sum(array_values($atrs)),
+						'ELEMENTO'			=> utf8_normalize_nfc(request_var('rama1', '', true)),
+						'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('rama2', '', true)),
+						'PUNTOS'				=> 20 - array_sum(array_values($atrs)),
 					), $atrs);
 
 					$errores = array();
 
 					if ($fields['PUNTOS'] < 0)
-						$errores[] = 'Tan solo tienes 30 puntos para repartir.';
+						$errores[] = 'Tan solo tienes 20 puntos para repartir.';
 					else if ($fields['PUNTOS'] != 0)
 						$errores[] = 'Aún te quedan puntos por repartir.';
 
@@ -99,15 +90,6 @@ class ucp_character
 					if (strlen($fields['NOMBRE']) < 5)
 						$errores[] = 'El nombre debe tener al menos 5 caracteres.';
 
-					if (strlen($fields['FISICO']) < 5)
-						$errores[] = 'La descripción física debe tener al menos 200 carácteres.';
-
-					if (strlen($fields['CARACTER']) < 15)
-						$errores[] = 'La descripción psicológica debe tener al menos 600 carácteres.';
-
-					if (strlen($fields['HISTORIA']) < 20)
-						$errores[] = 'La historia debe contener al menos 800 carácteres.';
-
 					if (count($errores) == 0) {
 						$user_id = (int) $user->data['user_id'];
 						guardar_ficha($fields);
@@ -121,13 +103,12 @@ class ucp_character
 				} else {
 					$template->assign_vars(array(
 						'FUERZA'				=> 1,
-						'RESISTENCIA'		=> 1,
+						'VITALIDAD'		=> 1,
 						'AGILIDAD'			=> 1,
-						'ESPIRITU'			=> 1,
+						'CCK'			=> 1,
 						'CONCENTRACION'	=> 1,
 						'VOLUNTAD'			=> 1,
-						'CHAKRA'			=> calcula_pc('Genin', 1, 1, 1),
-						'PUNTOS'			=> 24
+						'PUNTOS'			=> 14
 					));
 				}
 			break;
@@ -175,9 +156,9 @@ class ucp_character
 
 				$atrs = array(
 					'FUERZA'			=> (int) request_var('atrFuerza', 1),
-					'VITALIDAD'			=> (int) request_var('atrRes', 1),
+					'VITALIDAD'			=> (int) request_var('atrVit', 1),
 					'AGILIDAD'			=> (int) request_var('artAg', 1),
-					'CCK'		=> (int) request_var('atrEsp', 1),
+					'CCK'		=> (int) request_var('atrCCK', 1),
 					'CONCENTRACION'				=> (int) request_var('atrCon', 1),
 					'VOLUNTAD'			=> (int) request_var('atrVol', 1),
 				);
@@ -217,9 +198,9 @@ class ucp_character
 
 				$atrs = array(
 					'FUERZA'			=> (int) request_var('atrFuerza', 1),
-					'RESISTENCIA'			=> (int) request_var('atrRes', 1),
+					'RESISTENCIA'			=> (int) request_var('atrVit', 1),
 					'AGILIDAD'			=> (int) request_var('artAg', 1),
-					'ESPIRITU'		=> (int) request_var('atrEsp', 1),
+					'ESPIRITU'		=> (int) request_var('atrCCK', 1),
 					'CONCENTRACION'				=> (int) request_var('atrCon', 1),
 					'VOLUNTAD'			=> (int) request_var('atrVol', 1),
 				);
