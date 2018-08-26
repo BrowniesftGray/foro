@@ -299,13 +299,6 @@ li.row.pais .info .links {
 	overflow-y: hidden;
 }
 
-li.row.pais:hover .info .links,
-li.row.pais:focus .info .links,
-li.row.pais.expandir .info .links {
-	opacity: 1;
-	overflow-y: auto;
-}
-
 li.row.pais .info .links a:hover,
 li.row.pais .info .links a:focus{
 	color: #fff !important;
@@ -326,6 +319,7 @@ li.row.pais .info .links .subforos {
 	float: left;
     width: 40%;
 	height: calc(100% - 30px);
+	overflow-y: auto;
 }
 
 li.row.pais .info .links .subforos .subforum {
@@ -428,7 +422,7 @@ li.row.pais.neutral .nombre {
 }
 
 li.row.pais.neutral .info .links .descripcion {
-	font-size: 1.5em;
+	font-size: 1.1em;
 }
 
 li.row.pais.neutral .info .estadisticas .lastpost {
