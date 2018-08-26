@@ -84,7 +84,8 @@ li.row.general .info {
 }
 
 li.row.general:hover .info,
-li.row.general:focus .info {
+li.row.general:focus .info,
+li.row.general.expandir .info {
 	margin-top: 0;
 }
 
@@ -214,11 +215,224 @@ li.row.general .info .estadisticas li.lastpost {
 	display: none;
 }
 
+li.row.pais {
+    font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, Verdana, sans-serif;
+    border: none;
+    height: 150px;
+    position: relative;
+	color: #fff;
+	overflow: hidden;
+	box-shadow: 0px -2px 1px 0px rgba(0, 0, 0, .5);
+	transition: .2s;
+}
+
+li.row.pais:first-child{
+	box-shadow: none;
+}
+
+li.row.pais:hover,
+li.row.pais:focus,
+li.row.pais.expandir{
+	height: 190px;
+}
+
+li.row.pais a:hover {
+	text-decoration: none !important;
+}
+
+li.row.pais .fondo {
+	display: block;
+    width: 100%;
+    height: 100%;	
+	color: #fff;
+}
+
+li.row.pais .fondo .imagen {
+	background-color: #d8e8e5;
+	background-repeat: no-repeat;
+	background-position: top center;
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+li.row.pais .fondo .nombre {
+	text-transform: uppercase;
+	position: absolute;
+	bottom: 0;
+	right: 5px;
+	font-family: Anton;
+	font-size: 3em;
+	text-shadow: 2px 1px 1px #111;
+	transition-duration: .2s;
+}
+
+li.row.pais:hover .fondo .nombre,
+li.row.pais:focus .fondo .nombre,
+li.row.pais.expandir .fondo .nombre{
+	opacity: 0;
+}
+
+li.row.pais .info {
+	position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 2;
+    padding: 5px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    background: rgba(100, 100, 100, .6);
+	opacity: 0;
+	transition-duration: .2s;
+}
+
+li.row.pais:hover .info,
+li.row.pais:focus .info,
+li.row.pais.expandir .info {
+	opacity: 1;
+}
+
+li.row.pais .info .links {
+    float: left;
+    width: 80%;
+    height: 100%;
+	overflow-y: hidden;
+}
+
+li.row.pais:hover .info .links,
+li.row.pais:focus .info .links,
+li.row.pais.expandir .info .links {
+	opacity: 1;
+	overflow-y: auto;
+}
+
+li.row.pais .info .links a:hover,
+li.row.pais .info .links a:focus{
+	color: #fff !important;
+	text-decoration: none !important;
+}
+
+li.row.pais .info .links .nombre {
+	text-transform: uppercase;
+	color: #fff;
+	font-family: Anton;
+	font-size: 2em;
+	text-shadow: 2px 1px 1px #111;
+	display: block;
+	height: 30px;
+}
+
+li.row.pais .info .links .subforos {
+	float: left;
+    width: 40%;
+	height: calc(100% - 30px);
+}
+
+li.row.pais .info .links .subforos .subforum {
+	float: left;
+    display: block;
+    padding: 5px;
+    background: #81aca2;
+    color: #fff;
+    margin: 2px;
+    width: 40%;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+li.row.pais .info .links .subforos .subforum.unread {
+	background: #4d7d72;
+	box-shadow: 1px 1px 1px #222;
+}
+
+li.row.pais .info .links .descripcion {
+	display: inline;
+    font-family: "Roboto Condensed";
+    color: #fff;
+    font-size: 1.8em;
+}
+
+li.row.pais .info .divisor {
+	float: left;
+    background: #fff;
+    width: 1px;
+    height: calc(100% - 10px);
+    margin: 5px 10px;
+}
+
+li.row.pais .info .estadisticas {
+	float: right;
+    width: calc(20% - 21px);
+    height: 100%;
+}
+
+li.row.pais .info .estadisticas .topics,
+li.row.pais .info .estadisticas .posts {
+	text-align: center;
+	margin-top: 5px;
+	width: 50%;
+	float: left;
+}
+
+li.row.pais .info .estadisticas .topics::before,
+li.row.pais .info .estadisticas .posts::before {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+	margin-top: 3px;
+}
+
+li.row.pais .info .estadisticas .topics::before {
+    content: "Temas";
+}
+
+li.row.pais .info .estadisticas .posts::before { 
+	content: "Posts";
+}
+
+li.row.pais .info .estadisticas .lastpost {
+	clear: left;
+	padding-top: 25px;
+    font-size: 1.2em;	
+}
+
+li.row.pais .info .estadisticas .lastpost .lastsubject {
+	text-transform: uppercase;
+	color: #fff;
+}
+
+li.row.pais .info .estadisticas .lastpost .lastsubject:hover {
+	color: #fff !important;
+}
+
 /* Subforo Países Neutrales */
 #forum20.forabg li.header dd.topics,
 #forum20.forabg li.header dd.posts,
 #forum20.forabg li.header dd.lastpost {
 	display: none;
+}
+
+li.row.pais.neutral {
+	height: 100px;
+}
+
+li.row.pais.neutral:hover,
+li.row.pais.neutral:focus,
+li.row.pais.neutral.expandir {
+	height: 150px;
+}
+
+li.row.pais.neutral .nombre {
+	font-size: 2.5em;
+}
+
+li.row.pais.neutral .info .links .descripcion {
+	font-size: 1.5em;
+}
+
+li.row.pais.neutral .info .estadisticas .lastpost {
+	padding-top: 15px;
 }
 
 /* Marca No Leído */

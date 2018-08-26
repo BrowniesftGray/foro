@@ -14,8 +14,8 @@
 	display: none;
 }
 
-#nav-breadcrumbs{
-	display: none;
+#nav-breadcrumbs, .forum-title{
+	padding: 0 10px;
 }
 
 #nav-main > li > a{
