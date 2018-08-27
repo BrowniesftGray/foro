@@ -1,108 +1,45 @@
 <!-- INCLUDE overall_header.html -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<style>
-.menu {
-  padding-left: 5%;
-  margin-bottom: 5%;
-}
-</style>
-<ul class="nav nav-tabs tab-pane" id="myForm">
-    <li class="nav-item menu active"><a href="#info">Información</a></li>
-    <li class="nav-item menu"><a href="#tecnicas">Ramas</a></li>
-    <li class="nav-item menu"><a href="#atributos">Atributos</a></li>
-    <li class="nav-item menu"><a href="#personaje">Descripciones</a></li>
-    <li class="nav-item menu"><a href="#finalizar">Moderaciones</a></li>
-    <!-- IF PUEDE_BORRAR == true --><li class="nav-item menu"><a href="#borrar">Borrar Personaje</a></li><!-- ENDIF -->
-</ul>
-<div class="col-xs-12" style="height:25px;"></div>
-<form name="crear_ficha" action="{U_ACTION}" method="POST" onsubmit="return checkFicha();">
-    <div class="tab-content">
-      <div class="tab-pane active" id="info">
+<div class="panel">
+  <div class="content">
+    <h2>Datos personales</h2>
+    <dd><strong>Nombre:</strong> {FICHA_NOMBRE}</dd>
+    <dd><strong>Rama Principal:</strong> {FICHA_CLAN}</dd>
+    <dd><strong>Rama Secundaria:</strong> {FICHA_RAMA1}</dd>
+    <dd><strong>Rama Secundaria:</strong> {FICHA_RAMA2}</dd>
+    <dd><strong>Rama Secundaria:</strong> {FICHA_RAMA3}</dd>
+    <dd><strong>Rama Secundaria:</strong> {FICHA_RAMA4}</dd>
+    <dd><strong>Rama Secundaria:</strong> {FICHA_RAMA5}</dd>
+    <dd><strong>Nivel:</strong> {NIVEL}</dd>
+    <dd><strong>Rango:</strong> {FICHA_RANGO}</dd>
+    <dd style="text-align:justify"><strong>Descripción física:</strong> {FICHA_FISICO}</dd>
+    <dd style="text-align:justify"><strong>Descripción psicológica:</strong> {FICHA_PSICOLOGICO}</dd>
+    <dd style="text-align:justify"><strong>Historia:</strong><br />{FICHA_HISTORIA}</dd>
 
-        <label class=" control-label" for="nombre">Nombre de Personaje:</label> {FICHA_NOMBRE}<br>
+    <h2>Atributos</h2>
+    <dd><strong>Fuerza:</strong> {FICHA_FUERZA}</dd>
+    <dd><strong>Agilidad:</strong> {FICHA_AGI}</dd>
+    <dd><strong>Vitalidad:</strong> {FICHA_VIT}</dd>
+    <dd><strong>Concentración:</strong> {FICHA_CON}</dd>
+    <dd><strong>Control del chakra:</strong> {FICHA_CCK}</dd>
+    <dd><strong>Voluntad:</strong> {FICHA_VOL}</dd>
+    <h2>Estadísticas</h2>
+    <dd><strong>Puntos de vida:</strong> <pv>{FICHA_PV}</pv></dd>
+    <dd><strong>Puntos de chakra:</strong> <pc>{FICHA_PC}</pc></dd>
+    <dd><strong>Puntos de stamina:</strong> <sta>{FICHA_STA}</sta></dd>
+    <h2>Técnicas ninja</h2>
+    {FICHA_JUTSUS}
 
-        <label class=" control-label" for="edad">Edad</label> {FICHA_EDAD}<br>
+    <h2>Moderaciones</h2>
+    <!-- IF PUEDE_MODERAR == true --><a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><!-- ENDIF -->
+      <!-- BEGIN loopname -->
+      {loopname.RAZON_MODERACION} {loopname.USER_MODERACION} {loopname.FECHA_MODERACION}</br>
+      <!-- END loopname -->
 
-        <label class=" control-label" for="rango">Rango</label> {FICHA_RANGO}<br>
+    <h2>Borrar Personaje</h2>
+    <form class="" action="{U_ACTION}" method="POST">
+      <!-- IF PUEDE_BORRAR == true --><button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button><!-- ENDIF -->
+    </form>
+  </div>
+</div>
 
-        <label class=" control-label" for="selectAldea">Aldea</label> {FICHA_ALDEA}<br>
-
-         <label class=" control-label" for="pelo">Altura</label> {FICHA_ALTURA}<br>
-
-         <label class=" control-label" for="pelo">Peso</label> {FICHA_PESO}<br>
-
-      </div>
-      <div class="tab-pane" id="tecnicas">
-
-        <dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_CLAN}'; ">[+] {FICHA_CLAN}</a></dt><dd style="display: none;">{TECNICAS_CLAN}</dd></dl>
-  			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO1}'; ">[+] {FICHA_ELEMENTO1}</a></dt><dd style="display: none;">{TECNICAS_ELEMENTO1}</dd></dl>
-  			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD1}'; ">[+] {FICHA_ESPECIALIDAD1}</a></dt><dd style="display: none;">{TECNICAS_ESPECIALIDAD1}</dd></dl>
-  			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ELEMENTO2}'; ">[+] {FICHA_ELEMENTO2}</a></dt><dd style="display: none;">{TECNICAS_ELEMENTO2}</dd></dl>
-  			<dl class="codebox"><dt><a href="javascript:void(0);" onclick="var el = this.parentNode.parentNode.getElementsByTagName('dd')[0]; var v = el.style.display != 'none'; el.style.display = v ? 'none' : 'block'; this.innerHTML = (v ? '[+]' : '[−]') + ' {FICHA_ESPECIALIDAD2}'; ">[+] {FICHA_ESPECIALIDAD2}</a></dt><dd style="display: none;">{TECNICAS_ESPECIALIDAD2}</dd></dl>
-
-      </div>
-      <div class="tab-pane" id="atributos">
-
-        <label class="col control-label" for="atrFuerza">Fuerza</label> {FICHA_FUERZA}<br>
-
-        <label class="col control-label" for="atrRes">Vitalidad</label> {FICHA_RES}<br>
-
-        <label class="col control-label" for="artAg">Agilidad</label> {FICHA_AGI}<br>
-
-        <label class="col control-label" for="atrEsp">Control de Chakra</label> {FICHA_ESP}<br>
-
-        <label class="col control-label" for="atrCon">Concentración</label> {FICHA_CON}<br>
-
-        <label class="col control-label" for="atrVol">Voluntad</label> {FICHA_VOL}<br>
-
-      </div>
-      <div class="tab-pane" id="personaje">
-
-        <label for="descFis">Descripción Física</label>
-        <p>
-    		 	{FICHA_FISICO}
-    		</p>
-
-        <label for="descPsic">Descripción Psicológica</label>
-        <p>
-    		 {FICHA_PSICOLOGICO}
-    	 	</p>
-
-        <label for="descHis">Historia</label>
-        <p>
-   			 {FICHA_HISTORIA}
-   		 </p>
-      </div>
-      <div class="tab-pane" id="finalizar">
-        <div class="form-group">
-      		<!-- IF PUEDE_SUBIR == true --><a href="#" class="btn btn-success">Subir de nivel</a><!-- ENDIF -->
-      	</div>
-      	<div class="form-group">
-      		<!-- IF PUEDE_MODERAR == true --><a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><!-- ENDIF -->
-      	</div>
-      	<div class="form-group" >
-      		<div class="">
-      			<label for="razon">Historial moderaciones:</label></br>
-      			<p>
-      				<!-- BEGIN loopname -->
-      				{loopname.RAZON_MODERACION} {loopname.USER_MODERACION} {loopname.FECHA_MODERACION}</br>
-      				<!-- END loopname -->
-      			</p>
-      		</div>
-      	</div>
-      </div>
-      <div class="tab-pane" id="borrar">
-        <form class="" action="{U_ACTION}" method="POST">
-      		<!-- IF PUEDE_BORRAR == true --><button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button><!-- ENDIF -->
-      	</form>
-      </div>
-    </div>
-  </form>
-
-  <script type="text/javascript">
-  $('#myForm a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-  })
-</script>
 <!-- INCLUDE overall_footer.html -->

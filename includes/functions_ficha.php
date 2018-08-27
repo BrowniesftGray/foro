@@ -85,6 +85,10 @@ function get_ficha($user_id, $return = false)
 			}
 			$subida = comprobarNivel($experiencia, $row['nivel']);
 
+			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
+			$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+			$allow_bbcode = $allow_urls = $allow_smilies = true;
+			generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
 			$template->assign_vars(array(
 				//'FICHA_COMPLETA'		=> $puede_ver,
@@ -95,6 +99,7 @@ function get_ficha($user_id, $return = false)
 				'EXPERIENCIA_F' => $subida[2],
 				'PUEDE_MODERAR'	=> $moderador,
 				'FICHA_RANGO' => $row['rango'],
+				'FICHA_ARQUETIPO' => $row['arquetipo'],
 				'FICHA_NOMBRE' => stripslashes($row['nombre']),
 				'FICHA_ID' => $pj_id,
 				'FICHA_EDAD' => $row['edad'],
@@ -120,9 +125,10 @@ function get_ficha($user_id, $return = false)
 				'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
-				//'FICHA_PC'				=> calcula_pc($row['rango'], $row['concentracion'], $row['cck'], $row['voluntad']),
-				//'FICHA_PV'				=> calcula_pv($row['rango'], $row['vitalidad']),
-				//'FICHA_STA'				=> calcula_sta($row['rango'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
+				'FICHA_JUTSUS'			=> generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options),
+				'FICHA_PC'				=> calcula_pc($row['arquetipo'], $row['concentracion'], $row['cck'], $row['voluntad']),
+				'FICHA_PV'				=> calcula_pv($row['arquetipo'], $row['vitalidad']),
+				'FICHA_STA'				=> calcula_sta($row['arquetipo'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
@@ -195,6 +201,11 @@ function calcula_pc($arquetipo, $cck, $intel, $vol)
 			$pc = $pc * 1.2;
 			return $pc;
 		break;
+
+		default:
+			$pc = $cck + $intel + $vol;
+			return $pc;
+		break;
 	}
 
 }
@@ -255,6 +266,11 @@ function calcula_pv($arquetipo, $vit)
 			$pv = $pv * 1.15;
 			return $pv;
 		break;
+
+		default:
+			$pv = $vit * 3;
+			return $pv;
+		break;
 	}
 }
 
@@ -302,6 +318,11 @@ function calcula_sta($arquetipo, $vit, $fue, $agi, $vol)
 			$sta = $sta * 1.1;
 			return $sta;
 		break;
+
+		default:
+			$sta = $vit + $fue + $agi + $vol;
+			return $sta;
+		break;
 	}
 }
 
@@ -314,8 +335,8 @@ function guardar_ficha(array $fields)
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 	$idUsuario = $user->data['user_id'];
 //		$sql = 'INSERT INTO ' . FICHAS_TABLE . " (user_id, nivel, rango, nombre, clan, kekkei_genkai, elementos, fisico, caracter, historia, fuerza, destreza, constitucion, cck, inteligencia, agilidad, velocidad, presencia, voluntad, bbcode_uid, bbcode_bitfield, bbcode_options, tecnicas) VALUES ('{$user->data['user_id']}', '1', '0', '{$fields['NOMBRE']}', '{$fields['CLAN']}', '{$fields['KEKKEI']}', '{$fields['ELEMENTOS']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}', '{$fields['FUERZA']}', '{$fields['DESTREZA']}', '{$fields['CONSTITUCION']}', '{$fields['CCK']}', '{$fields['INTELIGENCIA']}', '{$fields['AGILIDAD']}', '{$fields['VELOCIDAD']}', '0', '{$fields['VOLUNTAD']}', '', '', '0', '')";
-$sql = "INSERT INTO personajes (user_id, nivel, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
-$sql .= "values (	$idUsuario, '1', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
+$sql = "INSERT INTO personajes (user_id, nivel, rango, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
+$sql .= "values (	$idUsuario, '1', 'Genin', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
 $sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
 $db->sql_query($sql);
 
