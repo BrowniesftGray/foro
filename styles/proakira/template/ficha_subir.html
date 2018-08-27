@@ -1,8 +1,8 @@
-<!-- INCLUDE ucp_header.html -->
+<!-- INCLUDE overall_header.html -->
 
 <form name="subir_ficha" action="{U_ACTION}" method="POST">
 <div class="panel">
-  <h2>Subir de nivel al personaje</h2>
+  <h2>Subir nivel de personaje</h2>
 	<div class="inner">
 		<span class="corners-top"><span></span></span>
 		<p class="error">{ERRORES}</p>
@@ -37,7 +37,6 @@
         <dt><label for="voluntad">Voluntad:</label></dt>
         <dd><input type="number" class="inputbox numberfield" min="{FICHA_VOL}" name="atrVol" id="atrVol" size="10" value="{FICHA_VOL}" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
       </dl>
-    </fieldset>
 
     <h2>Estadísticas</h2>
     <fieldset>
@@ -57,13 +56,13 @@
 
 		<br /><br />
 		<fieldset class="submit-buttons">
-			{S_HIDDEN_FIELDS}<input type="reset" value="Limpiar" name="reset" class="button2" />&nbsp;
-			<input type="submit" name="submit" value="Crear personaje" id="submit" class="button1" />
+			{S_HIDDEN_FIELDS}
+			<input type="submit" name="submit" value="Subir de nivel" id="submit" class="button1" />
 		</fieldset>
 		<span class="corners-bottom"><span></span></span></div>
 	</div>
-</div>
 </form>
+
 <script type="text/javascript">
 function calcStats() {
 	var fue = document.getElementById('atrFuerza').value;
@@ -120,4 +119,4 @@ function checkFicha() {
 }
 </script>
 
-<!-- INCLUDE ucp_footer.html -->
+<!-- INCLUDE overall_footer.html -->
