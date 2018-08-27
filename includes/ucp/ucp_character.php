@@ -165,8 +165,8 @@ class ucp_character
 				);
 
 				$fields = array_merge(array(
-					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true)),
-					'CHAKRA'				=> calcula_pc(utf8_normalize_nfc(request_var('rango', '', true)),$atrs['ESPIRITU'], $atrs['CONCENTRACION'], $atrs['VOLUNTAD'])
+					'PUNTOS'				=> array_sum(array_values($atrs)),
+					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true))
 				), $atrs);
 
 				$errores = array();
