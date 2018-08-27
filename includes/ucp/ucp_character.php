@@ -93,7 +93,6 @@ class ucp_character
 					if (count($errores) == 0) {
 						$user_id = (int) $user->data['user_id'];
 						guardar_ficha($fields);
-						guardarTecnicasBase($user_id);
 						trigger_error('Ficha de personaje creada correctamente.');
 					} else {
 						$fields['ERRORES'] = implode('<br />', $errores);
@@ -116,7 +115,9 @@ class ucp_character
 			case 'view_char':
 			$this->tpl_name = 'ficha_ver';
 				@$user_id = (int) $_GET['pj'];
-				$exists = get_ficha($user_id);
+				$return = false;
+				$ver = true;
+				$exists = get_ficha($user_id, $return, $ver);
 				if (!$exists)					trigger_error('No existe la ficha para este usuario.');
 
 				$template->assign_vars(array(
@@ -210,29 +211,22 @@ class ucp_character
 					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true)),
 					'EDAD'					=> utf8_normalize_nfc(request_var('edad', '', true)),
 					'RANGO'					=> utf8_normalize_nfc(request_var('rango', '', true)),
-					'ALDEA' 				=> utf8_normalize_nfc(request_var('selectAldea', '', true)),
-					'OJOS'					=> utf8_normalize_nfc(request_var('selectOjos', '', true)),
-					'PELO'					=> utf8_normalize_nfc(request_var('selectPelo', '', true)),
-					'COMPLEXION'		=> utf8_normalize_nfc(request_var('complexion', '', true)),
-					'ALTURA'				=> utf8_normalize_nfc(request_var('altura', '', true)),
-					'PESO'					=> utf8_normalize_nfc(request_var('peso', '', true)),
-					'CLAN'					=> utf8_normalize_nfc(request_var('clan', '', true)),
+					'PRINCIPAL'			=> utf8_normalize_nfc(request_var('principal', '', true)),
+					'RAMA1'					=> utf8_normalize_nfc(request_var('rama1', '', true)),
+					'RAMA2'					=> utf8_normalize_nfc(request_var('rama2', '', true)),
+					'RAMA3'					=> utf8_normalize_nfc(request_var('rama3', '', true)),
+					'RAMA4'					=> utf8_normalize_nfc(request_var('rama4', '', true)),
+					'RAMA5'					=> utf8_normalize_nfc(request_var('rama5', '', true)),
 					'FISICO'				=> utf8_normalize_nfc(request_var('descFis', '', true)),
 					'CARACTER'			=> utf8_normalize_nfc(request_var('descPsic', '', true)),
 					'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),
-					'ELEMENTO'			=> utf8_normalize_nfc(request_var('selectElemento', '', true)),
-					'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('selectEspecialidad', '', true)),
-					'ELEMENTO2'			=> utf8_normalize_nfc(request_var('selectElemento2', '', true)),
-					'ESPECIALIDAD2'	=> utf8_normalize_nfc(request_var('selectEspecialidad2', '', true)),
-					'TEC_CLAN'					=> utf8_normalize_nfc(request_var('tecsClan', '', true)),
-					'TEC_ELEMENTO'			=> utf8_normalize_nfc(request_var('tecsSelectElemento', '', true)),
-					'TEC_ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('tecsSelectEspecialidad', '', true)),
-					'TEC_ELEMENTO2'			=> utf8_normalize_nfc(request_var('tecsSelectElemento2', '', true)),
-					'TEC_ESPECIALIDAD2'	=> utf8_normalize_nfc(request_var('tecsSelectEspecialidad2', '', true)),
-					'INVOCACION'		=> utf8_normalize_nfc(request_var('invocacion', '', true)),
-					'TEC_INVOCACION'	=> utf8_normalize_nfc(request_var('tecsInvocacion', '', true)),
-					'RAZON'		=> utf8_normalize_nfc(request_var('razon', '', true)),
-					'CHAKRA'				=> calcula_pc(utf8_normalize_nfc(request_var('rango', '', true)),$atrs['ESPIRITU'], $atrs['CONCENTRACION'], $atrs['VOLUNTAD']),
+					'ELEMENTO'			=> utf8_normalize_nfc(request_var('rama1', '', true)),
+					'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('rama2', '', true)),
+					'FISICO'				=> utf8_normalize_nfc(request_var('descFis', '', true)),
+					'CARACTER'			=> utf8_normalize_nfc(request_var('descPsic', '', true)),
+					'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),
+					'TEC_JUTSUS'		=> utf8_normalize_nfc(request_var('tecnicas', '', true)),
+					'RAZON'					=> utf8_normalize_nfc(request_var('razon', '', true)),
 				), $atrs);
 
 				$errores = array();
@@ -255,7 +249,6 @@ class ucp_character
 				if (count($errores) == 0) {
 					$user_id = (int) $user->data['user_id'];
 					actualizar_Ficha($fields);
-					actualizar_Tecnicas($fields);
 					registrar_moderacion($fields);
 					trigger_error('Ficha de personaje actualizada correctamente.');
 				} else {

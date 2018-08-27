@@ -34,7 +34,7 @@ function ficha_exists($user_id)
 	}
 }
 
-function get_ficha($user_id, $return = false)
+function get_ficha($user_id, $return = false, $ver = false)
 {
 	global $user, $db, $template, $phpbb_root_path, $auth;
 
@@ -85,10 +85,17 @@ function get_ficha($user_id, $return = false)
 			}
 			$subida = comprobarNivel($experiencia, $row['nivel']);
 
-			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
-			$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-			$allow_bbcode = $allow_urls = $allow_smilies = true;
-			generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+			if ($ver == true) {
+				//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
+				$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+				$allow_bbcode = $allow_urls = $allow_smilies = true;
+				generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+				$jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
+			}
+			else{
+				$uid = $bitfield = $options = '';
+				$jutsus = $row['tecnicas'];
+			}
 
 			$template->assign_vars(array(
 				//'FICHA_COMPLETA'		=> $puede_ver,
@@ -125,7 +132,7 @@ function get_ficha($user_id, $return = false)
 				'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
-				'FICHA_JUTSUS'			=> generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options),
+				'FICHA_JUTSUS'			=> $jutsus,
 				'FICHA_PC'				=> calcula_pc($row['arquetipo'], $row['concentracion'], $row['cck'], $row['voluntad']),
 				'FICHA_PV'				=> calcula_pv($row['arquetipo'], $row['vitalidad']),
 				'FICHA_STA'				=> calcula_sta($row['arquetipo'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
@@ -335,26 +342,11 @@ function guardar_ficha(array $fields)
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 	$idUsuario = $user->data['user_id'];
 //		$sql = 'INSERT INTO ' . FICHAS_TABLE . " (user_id, nivel, rango, nombre, clan, kekkei_genkai, elementos, fisico, caracter, historia, fuerza, destreza, constitucion, cck, inteligencia, agilidad, velocidad, presencia, voluntad, bbcode_uid, bbcode_bitfield, bbcode_options, tecnicas) VALUES ('{$user->data['user_id']}', '1', '0', '{$fields['NOMBRE']}', '{$fields['CLAN']}', '{$fields['KEKKEI']}', '{$fields['ELEMENTOS']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}', '{$fields['FUERZA']}', '{$fields['DESTREZA']}', '{$fields['CONSTITUCION']}', '{$fields['CCK']}', '{$fields['INTELIGENCIA']}', '{$fields['AGILIDAD']}', '{$fields['VELOCIDAD']}', '0', '{$fields['VOLUNTAD']}', '', '', '0', '')";
-$sql = "INSERT INTO personajes (user_id, nivel, rango, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
+$sql = "INSERT INTO personajes (user_id, nivel, rango, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, tecnicas, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
 $sql .= "values (	$idUsuario, '1', 'Genin', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
-$sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
+$sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
 $db->sql_query($sql);
 
-}
-
-function guardarTecnicasBase($user_id){
-
-	global $db, $user;
-
-	$query = $db->sql_query('SELECT pj_id FROM personajes WHERE user_id='.$user_id.'');
-	$row = $db->sql_fetchrow($query);
-	$db->sql_freeresult($query);
-
-	$pj_id = $row['pj_id'];
-
-	$sql = "INSERT INTO tecnicas (pj_id, clan, rama1, rama3, rama2, rama4, rama5)";
-	$sql .= "values (".$pj_id.", 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin técnicas', 'Sin invocación')";
-	$db->sql_query($sql);
 }
 
 function actualizar_Ficha(array $fields){
@@ -366,8 +358,9 @@ function actualizar_Ficha(array $fields){
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 
 	$sql = "UPDATE personajes SET ";
-	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}', aldea = '{$fields['ALDEA']}', ojos = '{$fields['OJOS']}', pelo = '{$fields['PELO']}', altura = '{$fields['ALTURA']}', peso = '{$fields['PESO']}', complexion = '{$fields['COMPLEXION']}',";
-	$sql .= "clan = '{$fields['CLAN']}', rama1 = '{$fields['ELEMENTO']}', rama2 = '{$fields['ESPECIALIDAD']}', rama3 = '{$fields['RAMA2']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
+	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}',";
+	$sql .= "clan = '{$fields['PRINCIPAL']}', rama1 = '{$fields['RAMA1']}', rama2 = '{$fields['RAMA2']}', rama3 = '{$fields['RAMA3']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
+	$sql .= 'tecnicas = "'.$fields['TEC_JUTSUS'].'",';
 	$sql .= "fuerza = '{$fields['FUERZA']}', vitalidad = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', cck = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
 	$sql .= "fisico = '{$fields['FISICO']}', psicologico = '{$fields['CARACTER']}', historia = '{$fields['HISTORIA']}'";
 	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
@@ -375,23 +368,6 @@ function actualizar_Ficha(array $fields){
 	$db->sql_query($sql);
 }
 
-function actualizar_Tecnicas(array $fields){
-
-	global $db, $user;
-
-	$fields['TEC_CLAN'] = addslashes($fields['TEC_CLAN']);
-	$fields['TEC_ELEMENTO'] = addslashes($fields['TEC_ELEMENTO']);
-	$fields['TEC_ESPECIALIDAD'] = addslashes($fields['TEC_ESPECIALIDAD']);
-	$fields['TEC_RAMA2'] = addslashes($fields['TEC_RAMA2']);
-	$fields['TEC_RAMA4'] = addslashes($fields['TEC_RAMA4']);
-	$fields['TEC_RAMA5'] = addslashes($fields['TEC_RAMA5']);
-
-	$sql = "UPDATE tecnicas SET ";
-	$sql .= "clan = '{$fields['TEC_CLAN']}', rama1 = '{$fields['TEC_ELEMENTO']}', rama3 = '{$fields['TEC_RAMA2']}', rama2 = '{$fields['TEC_ESPECIALIDAD']}', rama4 = '{$fields['TEC_RAMA4']}', rama5 =  '{$fields['TEC_RAMA5']}'";
-	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
-
-		$db->sql_query($sql);
-}
 
 function registrar_moderacion(array $fields){
 
