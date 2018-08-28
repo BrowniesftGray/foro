@@ -15,7 +15,7 @@
 		</dl>
     <dl>
       <dt><label for="edad">Edad:</label><br /><span>Coloca aquí tu edad.</span></dt>
-      <dd><input type="number" class="inputbox numberfield" name="edad" id="edad" size="10" max="20" placeholder="La edad de tu personaje"  /></dd>
+      <dd><input type="number" class="inputbox numberfield" name="edad" id="edad" size="10" min="10" max="18" placeholder="La edad de tu personaje"  /></dd>
     </dl>
 		<dl>
 			<dt><label for="principal">Rama Principal:</label><br /><span>Coloca aquí tu rama principal.</span></dt>
@@ -32,7 +32,7 @@
     <h2>Atributos</h2>
     <fieldset>
       <dl>
-        <dt>Te quedan <b><span id="puntos"></span></b> puntos por repartir.<br /></dt>
+        <dt>Te quedan <b><span id="puntos">{PUNTOS}</span></b> puntos por repartir.<br /></dt>
       </dl>
       <dl>
         <dt><label for="fuerza">Fuerza:</label></dt>
@@ -140,6 +140,37 @@ function calcStats() {
 }
 
 function checkAtributos(atr) {
+  var fue = document.getElementById('atrFuerza').value;
+  var con = document.getElementById('atrVit').value;
+  var intel = document.getElementById('atrCon').value;
+  var cck = document.getElementById('atrCCK').value;
+  var agi = document.getElementById('artAg').value;
+  var vol = document.getElementById('atrVol').value;
+
+  var points = [fue, con, intel, cck, agi, vol];
+
+  points.sort(function(a, b){return a-b});
+
+  var attr_min = parseFloat(points[5]*0.25);
+  var dif = points[5] - attr_min;
+
+  if (dif < 8) {
+  	attr_min = points[5] - 8;
+  }
+
+  if (attr_min < 1) {
+  	attr_min = 1;
+  }
+
+  if (points[0] < attr_min) {
+  	alert('La puntuación maxima no debe superar al atributo menor en mas de un 75%.');
+    if (attr_min < 8 ) {
+      attr_min = parseInt(points[0]) + 8;
+    }
+  	atr.value = attr_min;
+  	return false;
+  }
+
 	if (parseInt(atr.value) < 1) {
 		alert('La puntuación mínima en atributos es 1.');
 		return false;
