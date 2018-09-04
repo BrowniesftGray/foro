@@ -7,14 +7,23 @@
 	font-family: Roboto, Verdana, sans-serif;
 }
 
+.forabg i.expandir-cat {
+    color: #fff;
+    position: absolute;
+    right: 35px;
+    top: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 /* Subforo General */
-#forum3.forabg li.header dd.topics,
-#forum3.forabg li.header dd.posts,
-#forum3.forabg li.header dd.lastpost {
+.forabg li.header dd.topics,
+.forabg li.header dd.posts,
+.forabg li.header dd.lastpost {
 	display: none;
 }
 
-#forum3.forabg ul.topiclist{
+.forabg ul.topiclist{
 	position: relative;
 }
 
@@ -457,6 +466,140 @@ li.row.pais.unread::after {
 		width: 20px;
 		height: 20px;
 	}
+}
+
+/* Breadcrumbs Plagiados */
+
+.button {
+    padding: 3px 6px 3px 16px;
+    position: relative;
+    float: left;
+	color: #fff;
+    background-color: #4c8475;
+	display: inline-block;
+	margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+	touch-action: manipulation;
+    cursor: pointer;
+	user-select: none;
+    background-image: none;
+    border: 1px solid #243f38;
+    border-radius: 4px;
+	position: relative;
+}
+
+.button:hover {
+    color: #fff;
+    background-color: #355d52;
+    border-color: #162723;
+	text-decoration: none;
+	outline: 0;
+}
+
+.breadcrumbs > .crumb {
+    padding: 3px 6px 3px 16px;
+    position: relative;
+    float: left;
+	color: #fff;
+    background-color: #4c8475;
+	display: inline-block;
+	margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+	touch-action: manipulation;
+    cursor: pointer;
+	user-select: none;
+    background-image: none;
+    border: 1px solid #243f38;
+    border-radius: 4px;
+	position: relative;
+}
+
+.breadcrumbs > .crumb:hover {
+    color: #fff;
+    background-color: #355d52;
+    border-color: #162723;
+	text-decoration: none;
+	outline: 0;
+}
+
+.breadcrumbs > .crumb + .crumb {
+    margin-left: -1px;
+}
+
+.breadcrumbs > .crumb:not(:last-child):before {
+    content: " ";	
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 10px solid #243f38;
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    margin-left: 1px;
+    left: 100%;
+    z-index: 3;
+}
+
+.breadcrumbs > .crumb:hover:not(:last-child):before {
+    border-left: 10px solid #162723;
+}
+
+.breadcrumbs > .crumb:not(:last-child):after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+	border-left: 10px solid #4c8475;
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    left: 100%;
+    z-index: 3;
+}
+
+.breadcrumbs > .crumb:hover:not(:last-child):after {
+    border-left: 10px solid #355d52;
+}
+
+.breadcrumbs > .crumb:last-child {
+    padding: 3px 9px 3px 16px;
+}
+
+.breadcrumbs > .crumb:first-child {
+    margin-left: 0;
+    padding: 3px 0px 3px 5px;
+}
+
+.breadcrumbs > .crumb:first-child:last-child {
+    padding: 3px 3px 3px 5px;
+}
+
+.breadcrumbs > .crumb:first-child:not(:last-child) {
+	border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.breadcrumbs > .crumb:last-child:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.breadcrumbs > .crumb:not(:first-child):not(:last-child) {
+    border-radius: 0;
 }
 
 /* MOD Collapsible Categories */

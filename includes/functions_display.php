@@ -600,6 +600,7 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 		$foros_generales = array(4, 5, 11, 12, 13, 14);
 		$foros_paises_principales = array(16, 17, 18, 19);
 		$foros_paises_neutrales = array(21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
+		$foros_estilo_tabla = array();
 
 		$forum_row = array(
 			'S_IS_CAT'			=> false,
@@ -615,6 +616,7 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 			'S_IS_GENERAL'		=> in_array($row['forum_id'], $foros_generales),
 			'S_IS_PAIS_P'		=> in_array($row['forum_id'], $foros_paises_principales),
 			'S_IS_PAIS_N'		=> in_array($row['forum_id'], $foros_paises_neutrales),
+			'S_IS_TABLE'		=> in_array($row['forum_id'], $foros_estilo_tabla),
 
 			'FORUM_ID'				=> $row['forum_id'],
 			'FORUM_NAME'			=> $row['forum_name'],

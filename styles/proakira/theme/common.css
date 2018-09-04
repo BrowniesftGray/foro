@@ -598,7 +598,7 @@ a.header-avatar span:after {
 }
 
 /* Responsive breadcrumbs
-----------------------------------------*/
+----------------------------------------
 .breadcrumbs .crumb {
 	float: left;
 	font-weight: bold;
@@ -631,6 +631,7 @@ a.header-avatar span:after {
 .breadcrumbs .crumb.wrapped-medium a { max-width: 80px; }
 .breadcrumbs .crumb.wrapped-small a { max-width: 60px; }
 .breadcrumbs .crumb.wrapped-tiny a { max-width: 40px; }
+*/
 
 /* Table styles
 ----------------------------------------*/
@@ -824,10 +825,6 @@ a.mark-read, a.mark{
 .action-bar .button {
 	margin-right: 5px;
 	float: left;
-}
-
-.action-bar .button-search {
-	margin-right: 0;
 }
 
 /* Pagination

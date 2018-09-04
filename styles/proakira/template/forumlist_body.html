@@ -20,6 +20,7 @@
 						<dd class="posts">{L_POSTS}</dd>
 						<dd class="lastpost"><span>{L_LAST_POST}</span></dd>
 					</dl>
+					<i class="icon fa-bookmark expandir-cat" title="Mostrar siempre detalle de subforos para esta categoría" onclick="toggleCookieExpandir($(this).closest('.forabg')[0])"></i>
 					<!-- EVENT forumlist_body_category_header_row_append -->
 				</li>
 			</ul>
@@ -29,37 +30,7 @@
 
 	<!-- IF not forumrow.S_IS_CAT -->
 		<!-- EVENT forumlist_body_forum_row_before -->
-		<!-- IF forumrow.S_IS_GENERAL -->
-			<li class="row general <!-- IF forumrow.S_UNREAD_FORUM -->unread<!-- ELSE -->read<!-- ENDIF -->" id="forum{forumrow.FORUM_ID}">
-				<a href="{forumrow.U_VIEWFORUM}" class="fondo">
-					<div class="imagen" style="background-image: url({forumrow.FORUM_IMAGE_SRC})"></div>
-					<div class="nombre">{forumrow.FORUM_NAME}</div>
-				</a>
-				<div class="info">
-					<a href="{forumrow.U_VIEWFORUM}" class="descripcion">{forumrow.FORUM_DESC}</a>
-					<ul class="estadisticas">
-						<li class="topics">{forumrow.TOPICS}</li>
-						<li class="posts">{forumrow.POSTS}</li>
-						<li class="lastpost">
-							<!-- IF forumrow.LAST_POST_TIME -->
-								<!-- IF forumrow.S_DISPLAY_SUBJECT -->
-									<!-- EVENT forumlist_body_last_post_title_prepend -->
-									<a href="{forumrow.U_LAST_POST}" title="{forumrow.LAST_POST_SUBJECT} - {forumrow.LAST_POST_TIME}" class="lastsubject">{forumrow.LAST_POST_SUBJECT_TRUNCATED}</a>
-								<!-- ENDIF -->
-									<span>{L_POST_BY_AUTHOR} {forumrow.LAST_POSTER_FULL}</span>
-								<!-- IF not S_IS_BOT -->
-									<a href="{forumrow.U_LAST_POST}" title="{L_VIEW_LATEST_POST}">
-										<i class="icon fa-external-link-square fa-fw icon-black icon-md" aria-hidden="true"></i>
-									</a>
-								<!-- ENDIF -->
-							<!-- ELSE -->
-								{L_NO_POSTS}
-							<!-- ENDIF -->
-						</li>
-					</ul>
-				</div>
-			</li>
-		<!-- ELSEIF forumrow.S_IS_PAIS_P or forumrow.S_IS_PAIS_N -->
+		<!-- IF forumrow.S_IS_PAIS_P or forumrow.S_IS_PAIS_N -->
 			<li class="row pais <!-- IF forumrow.S_IS_PAIS_P -->principal<!-- ELSE -->neutral<!-- ENDIF --> <!-- IF forumrow.S_UNREAD_FORUM -->unread<!-- ELSE -->read<!-- ENDIF -->">
 				<a href="{forumrow.U_VIEWFORUM}" class="fondo">
 					<div class="imagen" style="background-image: url({forumrow.FORUM_IMAGE_SRC})">
@@ -105,7 +76,7 @@
 					</div>
 				</div>
 			</li>
-		<!-- ELSE -->
+		<!-- ELSEIF forumrow.S_IS_TABLE -->
 			<li class="row" id="forum{forumrow.FORUM_ID}">
 				<!-- EVENT forumlist_body_forum_row_prepend -->
 				<dl class="row-item {forumrow.FORUM_IMG_STYLE}">
@@ -189,6 +160,36 @@
 					<!-- ENDIF -->
 				</dl>
 				<!-- EVENT forumlist_body_forum_row_append -->
+			</li>
+		<!-- ELSE -->
+			<li class="row general <!-- IF forumrow.S_UNREAD_FORUM -->unread<!-- ELSE -->read<!-- ENDIF -->" id="forum{forumrow.FORUM_ID}">
+				<a href="{forumrow.U_VIEWFORUM}" class="fondo">
+					<div class="imagen" style="background-image: url({forumrow.FORUM_IMAGE_SRC})"></div>
+					<div class="nombre">{forumrow.FORUM_NAME}</div>
+				</a>
+				<div class="info">
+					<a href="{forumrow.U_VIEWFORUM}" class="descripcion">{forumrow.FORUM_DESC}</a>
+					<ul class="estadisticas">
+						<li class="topics">{forumrow.TOPICS}</li>
+						<li class="posts">{forumrow.POSTS}</li>
+						<li class="lastpost">
+							<!-- IF forumrow.LAST_POST_TIME -->
+								<!-- IF forumrow.S_DISPLAY_SUBJECT -->
+									<!-- EVENT forumlist_body_last_post_title_prepend -->
+									<a href="{forumrow.U_LAST_POST}" title="{forumrow.LAST_POST_SUBJECT} - {forumrow.LAST_POST_TIME}" class="lastsubject">{forumrow.LAST_POST_SUBJECT_TRUNCATED}</a>
+								<!-- ENDIF -->
+									<span>{L_POST_BY_AUTHOR} {forumrow.LAST_POSTER_FULL}</span>
+								<!-- IF not S_IS_BOT -->
+									<a href="{forumrow.U_LAST_POST}" title="{L_VIEW_LATEST_POST}">
+										<i class="icon fa-external-link-square fa-fw icon-black icon-md" aria-hidden="true"></i>
+									</a>
+								<!-- ENDIF -->
+							<!-- ELSE -->
+								{L_NO_POSTS}
+							<!-- ENDIF -->
+						</li>
+					</ul>
+				</div>
 			</li>
 		<!-- ENDIF -->
 		<!-- EVENT forumlist_body_forum_row_after -->
