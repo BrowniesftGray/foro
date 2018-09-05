@@ -87,7 +87,6 @@ li.row.general .info {
     margin-top: 140px;
 	position: absolute;
     background-color: rgba(0, 0, 0, .6);
-	transition-delay: .5s;
 	transition-duration: .2s;
 	z-index: 2;
 }
@@ -306,6 +305,7 @@ li.row.pais .info .links {
     width: 80%;
     height: 100%;
 	overflow-y: hidden;
+	position: relative;
 }
 
 li.row.pais .info .links a:hover,
@@ -326,21 +326,31 @@ li.row.pais .info .links .nombre {
 
 li.row.pais .info .links .subforos {
 	float: left;
-    width: 40%;
+	width: calc(40% - 30px);
 	height: calc(100% - 30px);
 	overflow-y: auto;
+	margin-right: 30px;
 }
 
 li.row.pais .info .links .subforos .subforum {
-	float: left;
     display: block;
-    padding: 5px;
+    padding: 5px 0;
     background: #81aca2;
     color: #fff;
     margin: 2px;
-    width: 40%;
+    width: calc(50% - 4px);
     text-align: center;
     font-size: 1.3em;
+}
+
+li.row.pais .info .links .subforos .subforum:nth-child(odd) {
+	float: left;
+	clear: left;
+}
+
+li.row.pais .info .links .subforos .subforum:nth-child(even) {
+	float: right;
+	clear: right;
 }
 
 li.row.pais .info .links .subforos .subforum.unread {
@@ -349,10 +359,18 @@ li.row.pais .info .links .subforos .subforum.unread {
 }
 
 li.row.pais .info .links .descripcion {
-	display: inline;
+	display: inline-block;
     font-family: "Roboto Condensed";
+    font-size: 1.4em;
+	height: 100%;
     color: #fff;
-    font-size: 1.8em;
+	text-align: justify;
+}
+
+li.row.pais .info .links .subforos + .descripcion {
+	position: absolute;
+    margin-top: -25px;
+    width: 60%;
 }
 
 li.row.pais .info .divisor {
@@ -407,6 +425,31 @@ li.row.pais .info .estadisticas .lastpost .lastsubject {
 
 li.row.pais .info .estadisticas .lastpost .lastsubject:hover {
 	color: #fff !important;
+}
+
+@media (max-width: 700px) {
+	li.row.pais .info .links .subforos + .descripcion {
+		margin-top: 0;
+	}
+}
+
+@media (max-width: 500px) {
+	li.row.pais .info .links .subforos {
+		width: 40%;
+		margin-right: 0;
+	}
+	
+	li.row.pais .info .links .subforos .subforum {
+		font-size: 1em;
+	}
+	
+	li.row.pais .info .links .descripcion {
+		font-size: 1.3em;
+	}
+	
+	li.row.pais .info .estadisticas {
+		font-size: .8em;
+	}
 }
 
 /* Subforo Países Neutrales */

@@ -283,6 +283,7 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 			$subforums[$parent_id][$forum_id]['orig_forum_last_post_time'] = $row['forum_last_post_time'];
 			$subforums[$parent_id][$forum_id]['children'] = array();
 			$subforums[$parent_id][$forum_id]['type'] = $row['forum_type'];
+			$subforums[$parent_id][$forum_id]['parent'] = $row['parent_id'];
 
 			if (isset($subforums[$parent_id][$row['parent_id']]) && !$row['display_on_index'])
 			{
@@ -485,7 +486,8 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 					}
 				}
 
-				if ($subforum_row['display'] && $subforum_row['name'])
+				// Martín 20180904 - Agregué la última condición para que no muestre nietos en lista de subforos
+				if ($subforum_row['display'] && $subforum_row['name'] && $subforum_row['parent'] ==  $forum_id)
 				{
 					$subforums_list[] = array(
 						'link'		=> append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $subforum_id),
@@ -597,9 +599,19 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 			}
 		}
 		
+		/* Foros Generales */
 		$foros_generales = array(4, 5, 11, 12, 13, 14);
+		
+		/* Países Principales - Contenedores de aldea - Estilo largo y ancho */
 		$foros_paises_principales = array(16, 17, 18, 19);
+		
+		/* Aldeas - Se añaden a los países para compartir estilo */
+		array_push($foros_paises_principales, 41, 42, 43, 76);
+		
+		/* Resto de los Países - Estilo largo y angosto - Por defecto en todos los subforos*/
 		$foros_paises_neutrales = array(21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
+		
+		/* Foros que deben mostrarse con el estilo estándar de tabla */
 		$foros_estilo_tabla = array();
 
 		$forum_row = array(
