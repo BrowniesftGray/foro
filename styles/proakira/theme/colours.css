@@ -676,6 +676,7 @@ Colours and backgrounds for buttons.css
 	box-shadow: none;
 	-webkit-box-shadow: none;
 	color: #5C758C;
+	height: 18px;
 }
 
 .pagination li.ellipsis span {
@@ -684,14 +685,14 @@ Colours and backgrounds for buttons.css
 }
 
 .pagination li.active span {
-	background: #4692BF;
-	border-color: #4692BF;
+	background: #4c8475;
+	border-color: #243f38;
 	color: #FFFFFF;
 }
 
 .pagination li a:hover, .pagination li a:hover .icon, .pagination .dropdown-visible a.dropdown-trigger, .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
-	background: #368AD2;
-	border-color: #368AD2;
+	background: #4c8475;
+	border-color: #4c8475;
 	filter: none;
 	color: #FFFFFF;
 	text-shadow: none;

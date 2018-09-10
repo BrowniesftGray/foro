@@ -16,6 +16,10 @@
     font-size: 16px;
 }
 
+.responsive-center.time {
+	display: none;
+}
+
 /* Subforo General */
 .forabg li.header dd.topics,
 .forabg li.header dd.posts,
@@ -289,7 +293,7 @@ li.row.pais .info {
     padding: 5px;
     width: calc(100% - 20px);
     height: calc(100% - 20px);
-    background: rgba(100, 100, 100, .6);
+    background: rgba(0, 0, 0, .4);
 	opacity: 0;
 	transition-duration: .2s;
 }
@@ -363,6 +367,7 @@ li.row.pais .info .links .descripcion {
     font-family: "Roboto Condensed";
     font-size: 1.4em;
 	height: 100%;
+	width: 100%;
     color: #fff;
 	text-align: justify;
 }
@@ -427,9 +432,18 @@ li.row.pais .info .estadisticas .lastpost .lastsubject:hover {
 	color: #fff !important;
 }
 
+@media (max-width: 1000px) {
+	li.row.pais .info .links .subforos + .descripcion {
+		font-size: 1.2em;
+	}
+}
+
 @media (max-width: 700px) {
 	li.row.pais .info .links .subforos + .descripcion {
 		margin-top: 0;
+		font-size: 1em;
+		line-height: 1em;
+		overflow-y: auto;
 	}
 }
 
@@ -449,6 +463,20 @@ li.row.pais .info .estadisticas .lastpost .lastsubject:hover {
 	
 	li.row.pais .info .estadisticas {
 		font-size: .8em;
+	}
+}
+
+@media (max-width: 360px) {
+	li.row.pais .info .links .descripcion {
+		font-size: 1em;
+	}
+	
+	li.row.pais .info .estadisticas {
+		font-size: .7em;
+	}
+	
+	.forabg i.expandir-cat {
+		top: 1px;
 	}
 }
 
@@ -509,6 +537,17 @@ li.row.pais.unread::after {
 		width: 20px;
 		height: 20px;
 	}
+}
+
+/* Contenido del Tema */
+h2.topic-title {
+	font-family: Anton;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+
+#recent-topics {
+	display: none;
 }
 
 /* Breadcrumbs Plagiados */
