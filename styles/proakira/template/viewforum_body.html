@@ -1,4 +1,11 @@
 <!-- INCLUDE overall_header.html -->
+
+<!-- IF S_HAS_SUBFORUM -->
+	<!-- IF not S_IS_BOT and U_MARK_FORUMS -->
+		<a href="{U_MARK_FORUMS}" class="mark-read rightside" data-ajax="mark_forums_read">{L_MARK_SUBFORUMS_READ}</a>
+	<!-- ENDIF -->
+<!-- ENDIF -->
+
 <!-- EVENT viewforum_forum_title_before -->
 <h2 class="forum-title"><!-- EVENT viewforum_forum_name_prepend --><a href="{U_VIEW_FORUM}">{FORUM_NAME}</a><!-- EVENT viewforum_forum_name_append --></h2>
 <!-- EVENT viewforum_forum_title_after -->
@@ -26,11 +33,6 @@
 <!-- ENDIF -->
 
 <!-- IF S_HAS_SUBFORUM -->
-<!-- IF not S_IS_BOT and U_MARK_FORUMS -->
-	<div class="action-bar compact">
-		<a href="{U_MARK_FORUMS}" class="mark-read rightside" data-ajax="mark_forums_read">{L_MARK_SUBFORUMS_READ}</a>
-	</div>
-<!-- ENDIF -->
 	<!-- INCLUDE forumlist_body.html -->
 <!-- ENDIF -->
 

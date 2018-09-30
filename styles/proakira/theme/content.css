@@ -263,6 +263,8 @@ dd.option {
 	width: 76%;
 	float: left;
 	position: relative;
+	border-radius: 5px;
+	margin-top: 10px;
 }
 
 .postbody .ignore {
@@ -726,8 +728,9 @@ fieldset.polls dd div {
 
 /* Poster profile block
 ----------------------------------------*/
+
 .postprofile {
-	margin: 5px 0 10px 0;
+	margin: 5px;
 	min-height: 80px;
 	border: 1px solid transparent;
 	border-width: 0 0 0 1px;

@@ -261,8 +261,6 @@ fieldset.submit-buttons input {
 	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	width: 450px;
 	height: 270px;
-	min-width: 100%;
-	max-width: 100%;
 	font-size: 1.2em;
 	resize: vertical;
 	outline: 3px dashed transparent;
@@ -302,7 +300,7 @@ input.narrow	{ width: 25%; }
 input.tiny	{ width: 150px; }
 
 textarea.inputbox {
-	width: 85%;
+	width: 98%;
 }
 
 .autowidth {

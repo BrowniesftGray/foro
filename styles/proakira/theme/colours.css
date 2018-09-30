@@ -329,7 +329,7 @@ dl.details dd {
 ---------------------------------------- */
 
 .copyright {
-	color: #555555;
+	color: #fff;
 }
 
 .error {
@@ -404,7 +404,8 @@ li.header dt, li.header dd {
 /* Post body styles
 ----------------------------------------*/
 .postbody {
-	color: #333333;
+	color: #333;
+	background: #fff;
 }
 
 /* Content container styles
@@ -681,12 +682,12 @@ Colours and backgrounds for buttons.css
 
 .pagination li.ellipsis span {
 	background: transparent;
-	color:	#000000;
+	color: #000000;
 }
 
 .pagination li.active span {
 	background: #4c8475;
-	border-color: #243f38;
+	border-color: #4c8475;
 	color: #FFFFFF;
 }
 
@@ -1030,6 +1031,10 @@ fieldset.quick-login input.inputbox {
 
 .message-box textarea.drag-n-drop-highlight {
 	outline-color: rgba(17, 163, 234, 0.5);
+}
+
+.post {
+	border-color: #192b26;
 }
 
 /* Input field styles

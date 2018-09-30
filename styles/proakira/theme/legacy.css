@@ -540,17 +540,86 @@ li.row.pais.unread::after {
 }
 
 /* Contenido del Tema */
-h2.topic-title {
-	font-family: Anton;
-    margin-left: 10px;
-    text-transform: uppercase;
-}
-
 #recent-topics {
 	display: none;
 }
 
+h2.topic-title, h2.forum-title {
+	font-family: Anton;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 3em;
+    background-color: #efefef;
+    margin: 0;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
+	clear: both;
+}
+
+.action-bar.bar-top {
+    margin-bottom: 0;
+    background: #192b26;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: #fff;
+}
+
+.action-bar.bar-top .pagination li a {
+	background-color: #192b26;
+	border-color: #4c8475;
+	color: #4c8475;
+	height: 15px;
+}
+
+.action-bar.bar-top .pagination li a:hover .icon {
+	background: none;
+}
+
+.postbody > div {
+    padding: 10px;
+}
+
+.post-buttons li {
+	margin-right: 0;
+}
+
+.post-buttons li a {
+	border-radius: 0;
+}
+
+.post-buttons li:not(:first-child) a {
+	border-left-width: 0;
+}
+
+.post-buttons li:first-child a {
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+.post-buttons li:last-child a {
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+.post-buttons .post-reputation:not(.positive):not(.negative) {
+	height: 21px !important;
+}
+
+.post-buttons .post-reputation.neutral span {
+	color: #fff !important;
+}
+
 /* Breadcrumbs Plagiados */
+
+#nav-breadcrumbs {
+	float: left;
+    margin: 5px 0;
+	border-top: none;
+}
+
+.mark-read {
+	margin: 6px !important;
+}
 
 .button {
     padding: 3px 6px 3px 16px;

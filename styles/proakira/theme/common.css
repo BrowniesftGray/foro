@@ -212,6 +212,8 @@ a:hover	{ text-decoration: underline; }
 
 .forumbg {
 	clear: both;
+	margin: 0 10px;
+    box-shadow: 0px 1px 1px 1px rgba(0,0,0,.3);
 }
 
 .panel {
@@ -221,12 +223,12 @@ a:hover	{ text-decoration: underline; }
 }
 
 .post {
-	padding: 5px 10px;
-	margin-bottom: 4px;
-	background-repeat: no-repeat;
-	background-position: 100% 0;
-	border-radius: 7px;
-	position: relative;
+	margin: 0 10px;
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+    position: relative;
+    border: solid 2px;
+    border-top: none;
 }
 
 .rowbg {
