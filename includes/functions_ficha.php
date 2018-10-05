@@ -106,7 +106,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'EXPERIENCIA_F' => $subida[2],
 				'PUEDE_MODERAR'	=> $moderador,
 				'FICHA_RANGO' => $row['rango'],
-				'FICHA_ARQUETIPO' => $row['arquetipo'],
+				'FICHA_ARQUETIPO' => $row['arquetipo_id'],
 				'FICHA_NOMBRE' => stripslashes($row['nombre']),
 				'FICHA_ID' => $pj_id,
 				'FICHA_EDAD' => $row['edad'],
