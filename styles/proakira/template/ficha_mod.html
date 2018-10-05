@@ -120,6 +120,49 @@
 	</div>
 </form>
 <script type="text/javascript">
+
+function checkAtributos(atr) {
+
+  var fue = document.getElementById('atrFuerza').value;
+  var con = document.getElementById('atrVit').value;
+  var intel = document.getElementById('atrCon').value;
+  var cck = document.getElementById('atrCCK').value;
+  var agi = document.getElementById('artAg').value;
+  var vol = document.getElementById('atrVol').value;
+
+  var points = [fue, con, intel, cck, agi, vol];
+
+  points.sort(function(a, b){return a-b});
+
+  var attr_min = parseFloat(points[5]*0.25);
+  var dif = points[5] - attr_min;
+
+  if (dif < 8) {
+    attr_min = points[5] - 8;
+  }
+
+  if (attr_min < 1) {
+    attr_min = 1;
+  }
+
+  if (points[0] < attr_min) {
+    alert('La puntuación maxima no debe superar al atributo menor en mas de un 75%.');
+    if (attr_min < 8 ) {
+      attr_min = parseInt(points[0]) + 8;
+    }
+    atr.value = attr_min;
+    return false;
+  }
+
+  var minimo = atr.getAttribute("min");
+	if (parseInt(atr.value) < parseInt(minimo)) {
+		alert('La puntuación mínima en atributos es '+minimo+'.');
+    atr.value = minimo;
+		return false;
+	}
+	return true;
+}
+
 function checkText(elem, num) {
 	if (elem.length < num) {
 		alert('Este campo debe tener más de ' + num + ' caracteres.');
