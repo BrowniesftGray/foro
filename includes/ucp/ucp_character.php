@@ -40,7 +40,7 @@ class ucp_character
 			case 'create_char':
 				$this->tpl_name = 'ficha_nueva';
 
-				// Common tpl vars
+				// Crea la Url personalizada.
 				$template->assign_vars(array(
 					'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=nueva'),
 				));
@@ -67,25 +67,21 @@ class ucp_character
 						'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),
 						'ELEMENTO'			=> utf8_normalize_nfc(request_var('rama1', '', true)),
 						'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('rama2', '', true)),
-						'PUNTOS'				=> 20 - array_sum(array_values($atrs)),
+						'PUNTOS'				=> 50 - array_sum(array_values($atrs)),
 					), $atrs);
 
 					$errores = array();
 
 					if ($fields['PUNTOS'] < 0)
-						$errores[] = 'Tan solo tienes 20 puntos para repartir.';
+						$errores[] = 'Tan solo tienes 50 puntos para repartir.';
 					else if ($fields['PUNTOS'] != 0)
 						$errores[] = 'Aún te quedan puntos por repartir.';
 
 					$atraux = array();
 
-					foreach ($atrs as $atr) {
-						$atraux[] = ($atr < 1);
-					}
+					foreach ($atrs as $atr) {	$atraux[] = ($atr < 1);	}
 
-					if (in_array(true, $atraux)) {
-						$errores[] = 'La mínima puntuación posible en los atributos es 1.';
-					}
+					if (in_array(true, $atraux)) {	$errores[] = 'La mínima puntuación posible en los atributos es 1.';	}
 
 					if (strlen($fields['NOMBRE']) < 5)
 						$errores[] = 'El nombre debe tener al menos 5 caracteres.';
@@ -94,12 +90,14 @@ class ucp_character
 						$user_id = (int) $user->data['user_id'];
 						guardar_ficha($fields);
 						trigger_error('Ficha de personaje creada correctamente.');
-					} else {
+					}
+					else {
 						$fields['ERRORES'] = implode('<br />', $errores);
 					}
 
 					$template->assign_vars($fields);
-				} else {
+				}
+				else {
 					$template->assign_vars(array(
 						'FUERZA'				=> 1,
 						'VITALIDAD'		=> 1,
@@ -107,7 +105,7 @@ class ucp_character
 						'CCK'			=> 1,
 						'CONCENTRACION'	=> 1,
 						'VOLUNTAD'			=> 1,
-						'PUNTOS'			=> 14
+						'PUNTOS'			=> 44
 					));
 				}
 			break;
@@ -125,63 +123,60 @@ class ucp_character
 				));
 
 				if ($submit) {
-					if (confirm_box(true))
-			    {
-					borrar_personaje($user->data['user_id']);
-					trigger_error('Personaje borrado correctamente.');
+					if (confirm_box(true)){
+						borrar_personaje($user->data['user_id']);
+						trigger_error('Personaje borrado correctamente.');
 			    }
-			    else
-			    {
-			        $s_hidden_fields = build_hidden_fields(array(
-			            'submit'    => true,
-			            )
-			        );
-			        confirm_box(false, '¿Estás seguro de que quieres borrar el personaje?', $s_hidden_fields);
+			    else{
+			    	$s_hidden_fields = build_hidden_fields(array(
+			      'submit'    => true,));
+			      confirm_box(false, '¿Estás seguro de que quieres borrar el personaje?', $s_hidden_fields);
 			    }
 				}
 			break;
 
-			case 'subir_char':
-			$this->tpl_name = 'ficha_subir';
-
-			@$user_id = (int) $_GET['pj'];
-			$exists = get_ficha($user_id);
-			if (!$exists)					trigger_error('No existe la ficha para este usuario.');
-
-			// Common tpl vars
-			$template->assign_vars(array(
-				'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=subir&amp;pj=' . $user_id),
-			));
-
-			if ($submit) {
-
-				$atrs = array(
-					'FUERZA'			=> (int) request_var('atrFuerza', 1),
-					'VITALIDAD'			=> (int) request_var('atrVit', 1),
-					'AGILIDAD'			=> (int) request_var('artAg', 1),
-					'CCK'		=> (int) request_var('atrCCK', 1),
-					'CONCENTRACION'				=> (int) request_var('atrCon', 1),
-					'VOLUNTAD'			=> (int) request_var('atrVol', 1),
-				);
-
-				$fields = array_merge(array(
-					'PUNTOS'				=> array_sum(array_values($atrs)),
-					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true))
-				), $atrs);
-
-				$errores = array();
-
-				if (count($errores) == 0) {
-					$user_id = (int) $user->data['user_id'];
-					subirNivel($user_id, $fields);
-					trigger_error('Subida de nivel correcta.');
-				} else {
-					$fields['ERRORES'] = implode('<br />', $errores);
-				}
-
-				$template->assign_vars($fields);
-			}
-			break;
+			// case 'subir_char':
+			// $this->tpl_name = 'ficha_subir';
+			//
+			// @$user_id = (int) $_GET['pj'];
+			// $exists = get_ficha($user_id);
+			// if (!$exists)					trigger_error('No existe la ficha para este usuario.');
+			//
+			// // Common tpl vars
+			// $template->assign_vars(array(
+			// 	'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=subir&amp;pj=' . $user_id),
+			// ));
+			//
+			// if ($submit) {
+			//
+			// 	$atrs = array(
+			// 		'FUERZA'			=> (int) request_var('atrFuerza', 1),
+			// 		'VITALIDAD'			=> (int) request_var('atrVit', 1),
+			// 		'AGILIDAD'			=> (int) request_var('artAg', 1),
+			// 		'CCK'		=> (int) request_var('atrCCK', 1),
+			// 		'CONCENTRACION'				=> (int) request_var('atrCon', 1),
+			// 		'VOLUNTAD'			=> (int) request_var('atrVol', 1),
+			// 	);
+			//
+			// 	$fields = array_merge(array(
+			// 		'PUNTOS'				=> array_sum(array_values($atrs)),
+			// 		'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true))
+			// 	), $atrs);
+			//
+			// 	$errores = array();
+			//
+			// 	if (count($errores) == 0) {
+			// 		$user_id = (int) $user->data['user_id'];
+			// 		subirNivel($user_id, $fields);
+			// 		trigger_error('Subida de nivel correcta.');
+			// 	}
+			// 	else {
+			// 		$fields['ERRORES'] = implode('<br />', $errores);
+			// 	}
+			//
+			// 	$template->assign_vars($fields);
+			// }
+			// break;
 
 			case 'mod_char':
 			$this->tpl_name = 'ficha_mod';
