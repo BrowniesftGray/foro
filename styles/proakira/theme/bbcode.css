@@ -103,3 +103,70 @@ jutsu c b {
 jutsu code {
 	margin-left: 5px;
 }
+
+/* BBCODE GENÉRICOS
+---------------------------------------- */
+.bbcode-recuadro {
+    border: solid 1px;
+    margin: 5px;
+    padding: 10px;
+}
+
+.button[class*="bbcode-"] {
+	height: 25px;
+	font-size: 0;
+    letter-spacing: -1px;
+	color: transparent;
+}
+
+.button[class*="bbcode-"]::before {
+	color: #fff !important;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.3;
+    font-family: FontAwesome;
+    text-rendering: normal;
+    letter-spacing: normal;
+    padding: 0 2px;
+}
+
+.bbcode-left::before {
+	content: "\f036";
+}
+
+.bbcode-center::before {
+	content: "\f037";
+}
+
+.bbcode-right::before {
+	content: "\f038";
+}
+
+.bbcode-justify::before {
+	content: "\f039";
+}
+
+.bbcode-s::before {
+	content: "\f0cc";
+}
+
+.bbcode-hr::before {
+	content: "\f141";
+}
+
+.bbcode-pv::before {
+	content: "PV";
+	font-family: "Roboto" !important;
+}
+
+.bbcode-sta::before {
+	content: "STA";
+	font-family: "Roboto" !important;
+}
+
+.bbcode-pc::before {
+	content: "PC";
+	font-family: "Roboto" !important;
+}
