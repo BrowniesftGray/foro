@@ -176,11 +176,16 @@ function obtener_arquetipo($usuario, $arquetipo){
 
 function vista_arquetipo ($arquetipo){
 	global $db;
+	if ($arquetipo != 0) {
+		// code...
 	$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
 	$row = $db->sql_fetchrow($query);
 	$db->sql_freeresult($query);
 	$nombre = $row['nombre_es'];
-	$variableA = "<option value=$arquetipo>$nombre</option>";
+}
+else{
+	$nombre = "Sin arquetipo";
+}
 	return $nombre;
 }
 function calcula_pc($arquetipo, $cck, $intel, $vol)
