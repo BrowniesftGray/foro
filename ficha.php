@@ -24,7 +24,7 @@ include_once($phpbb_root_path . 'includes/functions_ficha.' . $phpEx);
 $id 	= request_var('i', '');
 $mode	= request_var('mode', '');
 
-if (!in_array($mode, array('nueva', 'moderar', 'ver', 'subir')))
+if (!in_array($mode, array('nueva', 'moderar', 'ver')))
 {
 	trigger_error('La página que buscas no existe.');
 }
@@ -72,9 +72,9 @@ switch ($mode)
 		$module->display('Ficha de personaje :: Shinobi Legacy');
 	break;
 
-	case 'subir':
-		$module->p_mode = 'subir_char';
-		$module->load('ucp', 'character');
-		$module->display('Ficha de personaje :: Shinobi Legacy');
-	break;
+	// case 'subir':
+	// 	$module->p_mode = 'subir_char';
+	// 	$module->load('ucp', 'character');
+	// 	$module->display('Ficha de personaje :: Shinobi Legacy');
+	// break;
 }

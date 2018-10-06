@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <form name="moderar_ficha" action="{U_ACTION}" method="POST">
 <div class="panel">
-  <h2>Crear ficha de personaje</h2>
+  <h2>Moderar ficha de personaje</h2>
 	<div class="inner">
 		<span class="corners-top"><span></span></span>
 		<p class="error">{ERRORES}</p>
@@ -22,7 +22,7 @@
     </dl>
     <dl>
       <dt><label for="rango">Arquetipo:</label><br /></dt>
-      <dd><input type="text" class="inputbox" name="rango" id="rango" size="10" max="20" value="{FICHA_ARQUETIPO}" /></dd>
+      <dd><select><option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select></dd>
     </dl>
 		<dl>
 			<dt><label for="principal">Rama Principal:</label><br /></dt>

@@ -1,5 +1,7 @@
 <?php
 
+include($phpbb_root_path . 'config.' . $phpEx);
+
 $rangos = array('Estudiante', 'Genin', 'Chunin', 'Jounin', 'Especial', 'ANBU', 'Kage', 'Lider', 'T. Jounin', 'Ninja libre', 'Retirado');
 
 function get_rango($rankid)
@@ -106,7 +108,9 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'EXPERIENCIA_F' => $subida[2],
 				'PUEDE_MODERAR'	=> $moderador,
 				'FICHA_RANGO' => $row['rango'],
-				'FICHA_ARQUETIPO' => $row['arquetipo_id'],
+				'FICHA_ARQUETIPO' => obtener_arquetipo ($pj_id, $row['arquetipo_id']),
+				'VISTA_ARQUETIPO' => vista_arquetipo ($row['arquetipo_id']),
+				'ID_ARQUETIPO' => $row['arquetipo_id'];
 				'FICHA_NOMBRE' => stripslashes($row['nombre']),
 				'FICHA_ID' => $pj_id,
 				'FICHA_EDAD' => $row['edad'],
@@ -116,7 +120,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'FICHA_RAMA2' => stripslashes($row['rama3']),
 				'FICHA_RAMA3' => stripslashes($row['rama2']),
 				'FICHA_RAMA4' => stripslashes($row['rama4']),
-				'PUNTOS'				=> $row['puntos'],
+				//'PUNTOS'				=> $row['puntos'],
 				//'GRUPO' => $user->data['group_id'],
 				'FICHA_RAMA5' => stripslashes($row['rama5']),
 				'FICHA_FUERZA' => $row['fuerza'],
@@ -129,9 +133,9 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
 				'FICHA_JUTSUS'			=> $jutsus,
-				'FICHA_PC'				=> calcula_pc($row['arquetipo'], $row['concentracion'], $row['cck'], $row['voluntad']),
-				'FICHA_PV'				=> calcula_pv($row['arquetipo'], $row['vitalidad']),
-				'FICHA_STA'				=> calcula_sta($row['arquetipo'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
+				'FICHA_PC'				=> calcula_pc($row['arquetipo_id'], $row['concentracion'], $row['cck'], $row['voluntad']),
+				'FICHA_PV'				=> calcula_pv($row['arquetipo_id'], $row['vitalidad']),
+				'FICHA_STA'				=> calcula_sta($row['arquetipo_id'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
@@ -148,6 +152,37 @@ function get_ficha($user_id, $return = false, $ver = false)
 	}
 }
 
+function obtener_arquetipo($usuario, $arquetipo){
+	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	$variableA = 0;
+
+		// code...
+	//connect to database
+  $connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+
+  //run the store proc
+  $result = mysqli_query($connection,
+     "CALL ObtenerArquetiposDisponibles ('".$usuario."')") or die("Query fail: " . mysqli_error());
+
+  //loop the result set
+  while ($row = mysqli_fetch_array($result)){
+		$variableA .= "<option value='".$row['arquetipo_id']."'>";
+		$variableA .= $row['nombre_es'];
+		$variableA .= "</option>";
+  }
+
+	return $variableA;
+}
+
+function vista_arquetipo ($arquetipo){
+	global $db;
+	$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
+	$row = $db->sql_fetchrow($query);
+	$db->sql_freeresult($query);
+	$nombre = $row['nombre_es'];
+	$variableA = "<option value=$arquetipo>$nombre</option>";
+	return $nombre;
+}
 function calcula_pc($arquetipo, $cck, $intel, $vol)
 {
 	switch ($arquetipo) {
