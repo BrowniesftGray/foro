@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
-
+require_once('functions_ficha.php');
 // Common global functions
 /**
 * Load the autoloaders added by the extensions.
@@ -4348,6 +4348,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		'SITENAME'						=> $config['sitename'],
 		'SITE_DESCRIPTION'				=> $config['site_desc'],
 		'FICHA_URL'			=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
+		'FICHA_EXISTE'		=> ficha_exists($user->data['user_id']),
 		'FICHA_BORRAR'			=> append_sid("{$phpbb_root_path}ficha.php", 'mode=borrar'),
 		'FICHA_CREAR'			=> append_sid("{$phpbb_root_path}ficha.php", 'mode=nueva'),
 		'PAGE_TITLE'					=> $page_title,

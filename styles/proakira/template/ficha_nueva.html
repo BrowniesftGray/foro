@@ -44,11 +44,11 @@
       </dl>
       <dl>
         <dt><label for="vitalidad">Vitalidad:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrVit" id="atrVit" size="10" value="1" required="required" onblur="¡checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrVit" id="atrVit" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
       </dl>
       <dl>
         <dt><label for="concentracion">Concentracion:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrCon" id="atrCon" size="10" value="1" required="required" onblur="calcStats(); checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrCon" id="atrCon" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
       </dl>
       <dl>
         <dt><label for="cck">Control del chakra:</label></dt>
@@ -125,8 +125,8 @@ function calcStats() {
 	var success = true;
 
 	usados = parseInt(fue) + parseInt(con) + parseInt(intel) + parseInt(cck) + parseInt(agi)  + parseInt(vol);
-	if (usados > 20) {
-		alert('¡No puedes repartir más de 20 puntos!');
+	if (usados > 50) {
+		alert('¡No puedes repartir más de 50 puntos!');
 		success = false;
 	} else {
 		pv.value = 10 + (3*parseInt(con));
@@ -134,7 +134,7 @@ function calcStats() {
 		sta.value = parseInt(con) + parseInt(agi) + parseInt(fue) + parseInt(vol);
 	}
 
-	puntos.innerHTML = 20 - usados;
+	puntos.innerHTML = 50 - usados;
 
 	return success;
 }
@@ -154,8 +154,8 @@ function checkAtributos(atr) {
   var attr_min = parseFloat(points[5]*0.25);
   var dif = points[5] - attr_min;
 
-  if (dif < 8) {
-  	attr_min = points[5] - 8;
+  if (dif < 9) {
+  	attr_min = points[5] - 9;
   }
 
   if (attr_min < 1) {
@@ -164,8 +164,8 @@ function checkAtributos(atr) {
 
   if (points[0] < attr_min) {
   	alert('La puntuación maxima no debe superar al atributo menor en mas de un 75%.');
-    if (attr_min < 8 ) {
-      attr_min = parseInt(points[0]) + 8;
+    if (attr_min < 9 ) {
+      attr_min = parseInt(points[0]) + 9;
     }
   	atr.value = attr_min;
   	return false;

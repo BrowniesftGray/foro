@@ -82,6 +82,20 @@
 						</a>
 					</li>
 				<!-- ENDIF -->
+				<!-- IF not FICHA_EXISTE -->
+				<li class="rightside" data-last-responsive="true">
+						<a href="{FICHA_CREAR}" title="{FICHA_CREAR}" role="menuitem">
+							<i class="fa fa-address-card"></i><span> Crear Ficha</span>
+						</a>
+				</li>
+				<!-- ENDIF -->
+				<!-- IF FICHA_EXISTE -->
+				<li class="rightside" data-last-responsive="true">
+						<a href="{FICHA_URL}" title="{FICHA_URL}" role="menuitem">
+							<i class="fa fa-address-card"></i><span> Ver Ficha</span>
+						</a>
+				</li>
+				<!-- ENDIF -->
 					<!-- IF S_DISPLAY_SEARCH -->
 						<li class="separator"></li>
 						<!-- IF S_REGISTERED_USER -->
