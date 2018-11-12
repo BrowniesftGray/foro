@@ -600,7 +600,7 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 		}
 		
 		/* Foros Generales */
-		$foros_generales = array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37);
+		$foros_generales = array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92);
 		
 		/* Países Principales - Contenedores de aldea - Estilo largo y ancho */
 		$foros_paises_principales = array(16, 17, 18, 19);
