@@ -23,11 +23,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 #
 # Obtener querystring de Foro, Tema, Post o Página de la URL
 #
-RewriteRule ^.*\-f(\d*)$ viewforum.php?f=$1
-RewriteRule ^.*\-f(\d*)\/.*\-*t(\d*)$ viewtopic.php?f=$1&t=$2
-RewriteRule ^.*\-f(\d*)\/.*\-*p(\d*)$ viewtopic.php?f=$1&p=$2
-RewriteRule ^.*\-f(\d*)\/.*\-*t(\d*)\/(\d*)$ viewtopic.php?f=$1&t=$2&start=$3
-RewriteRule ^.*\-f(\d*)\/.*\-*p(\d*)\/(\d*)$ viewtopic.php?f=$1&p=$2&start=$3
+RewriteRule ^[\w\-]*\-f(\d*)\/[\w\-]*\-t(\d*)\/(\d*)\??(.*)$ viewtopic.php?f=$1&t=$2&start=$3&$4
+RewriteRule ^[\w\-]*\-f(\d*)\/[\w\-]*\-p(\d*)\/(\d*)\??(.*)$ viewtopic.php?f=$1&p=$2&start=$3&$4
+RewriteRule ^[\w\-]*\-f(\d*)\/[\w\-]*\-t(\d*)\??(.*)$ viewtopic.php?f=$1&t=$2&$3
+RewriteRule ^[\w\-]*\-f(\d*)\/[\w\-]*\-p(\d*)\??(.*)$ viewtopic.php?f=$1&p=$2&$3
+RewriteRule ^[\w\-]*\-f(\d*)\??(.*)$ viewforum.php?f=$1&$2
 
 #
 # The following 3 lines will rewrite URLs passed through the front controller

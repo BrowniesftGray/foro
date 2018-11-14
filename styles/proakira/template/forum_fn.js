@@ -83,7 +83,8 @@ function pageJump(item) {
 
 	if (page !== null && !isNaN(page) && page === Math.floor(page) && page > 0) {
 		if (baseUrl.indexOf('?') === -1) {
-			document.location.href = baseUrl + '?' + startName + '=' + ((page - 1) * perPage);
+			//document.location.href = baseUrl + '?' + startName + '=' + ((page - 1) * perPage);
+			document.location.href = baseUrl + '/' + ((page - 1) * perPage); // mgomez // 2018-11-14
 		} else {
 			document.location.href = baseUrl.replace(/&amp;/g, '&') + '&' + startName + '=' + ((page - 1) * perPage);
 		}
