@@ -315,6 +315,14 @@ dd.option {
 	width: 68%
 }
 
+.postbody div.content ul ul,
+.postbody div.content ol ol,
+.postbody div.content ul ol,
+.postbody div.content ol ul {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
 /* Topic review panel
 ----------------------------------------*/
 .panel .review {

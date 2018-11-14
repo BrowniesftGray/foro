@@ -1,6 +1,8 @@
 <IfModule mod_rewrite.c>
-RewriteEngine on
 
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 #
 # Uncomment the statement below if URL rewriting doesn't
 # work properly. If you installed phpBB in a subdirectory
@@ -19,6 +21,15 @@ RewriteEngine on
 #RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
 #
+# Obtener querystring de Foro, Tema, Post o Página de la URL
+#
+RewriteRule ^.*\-f(\d*)$ viewforum.php?f=$1
+RewriteRule ^.*\-f(\d*)\/.*\-*t(\d*)$ viewtopic.php?f=$1&t=$2
+RewriteRule ^.*\-f(\d*)\/.*\-*p(\d*)$ viewtopic.php?f=$1&p=$2
+RewriteRule ^.*\-f(\d*)\/.*\-*t(\d*)\/(\d*)$ viewtopic.php?f=$1&t=$2&start=$3
+RewriteRule ^.*\-f(\d*)\/.*\-*p(\d*)\/(\d*)$ viewtopic.php?f=$1&p=$2&start=$3
+
+#
 # The following 3 lines will rewrite URLs passed through the front controller
 # to not require app.php in the actual URL. In other words, a controller is
 # by default accessed at /app.php/my/controller, but can also be accessed at
@@ -26,6 +37,8 @@ RewriteEngine on
 #
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^(.*)$ app.php [QSA,L]
 
 #

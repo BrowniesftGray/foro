@@ -8,6 +8,10 @@ html, body {
 	background-color: #64777c;
 }
 
+body {
+	background-image: url(./images/background_pattern.png);
+}
+
 h1 {
 	color: #FFFFFF;
 }
@@ -329,7 +333,8 @@ dl.details dd {
 ---------------------------------------- */
 
 .copyright {
-	color: #fff;
+    color: #222;
+    background-color: rgba(255, 255, 255, .5);
 }
 
 .error {
