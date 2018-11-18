@@ -112,7 +112,15 @@ class pagination
 		else
 		{
 			$url_delim = (strpos($base_url, '?') === false) ? '?' : ((strpos($base_url, '?') === strlen($base_url) - 1) ? '' : '&amp;');
-			return ($on_page > 1) ? $base_url . $url_delim . $start_name . '=' . (($on_page - 1) * $per_page) : $base_url;
+			// mgomez // 2018-11-14
+			if ($url_delim == '&amp;')
+			{
+				return ($on_page > 1) ? $base_url . $url_delim . $start_name . '=' . (($on_page - 1) * $per_page) : $base_url;
+			}
+			else
+			{
+				return ($on_page > 1) ? $base_url . '/' . (($on_page - 1) * $per_page) : $base_url;
+			}
 		}
 	}
 

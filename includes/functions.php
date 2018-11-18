@@ -1568,10 +1568,10 @@ function append_sid($url, $params = false, $is_amp = true, $session_id = false, 
 		$anchor = '#' . $anchor;
 	}
 	
-	// Modify URL if viewing forum or topic // mgomez // 2018-11-13
-	if (strpos($url, 'viewforum') !== false || strpos($url, 'viewtopic') !== false) {
+	// Modify URL if viewing forum or topic, unless it's a mark as read action // mgomez // 2018-11-13
+	if ((strpos($url, 'viewforum') !== false || strpos($url, 'viewtopic') !== false) && strpos($params, 'mark=') === false) {
 		$url = rewrite_url_with_title($url, $params);
-		$params = false;
+		if ($params == '' || $params == '&amp;') $params = false;
 	}
 
 	// Handle really simple cases quickly
@@ -1642,7 +1642,7 @@ function append_sid($url, $params = false, $is_amp = true, $session_id = false, 
 }
 
 // mgomez // 2018-11-13
-function rewrite_url_with_title($url, $params)
+function rewrite_url_with_title($url, &$params)
 {
 	global $db;
 	global $phpEx;
@@ -1659,6 +1659,8 @@ function rewrite_url_with_title($url, $params)
 		$fin = strpos($params, '&', $ini);
 		$len = ($fin !== false) ? ($fin - $ini) : (strlen($params) - $ini);
 		$f_id = substr($params, $ini, $len);
+		$params = str_replace("f=$f_id", '', $params);
+		$params = str_replace('&amp;&amp;', '&amp;', $params);
 	}
 	else
 	{
@@ -1673,6 +1675,8 @@ function rewrite_url_with_title($url, $params)
 		$fin = strpos($params, '&', $ini);
 		$len = ($fin !== false) ? ($fin - $ini) : (strlen($params) - $ini);
 		$t_id = substr($params, $ini, $len);
+		$params = str_replace("t=$t_id", '', $params);
+		$params = str_replace('&amp;&amp;', '&amp;', $params);
 	}
 	else
 	{
@@ -1687,6 +1691,8 @@ function rewrite_url_with_title($url, $params)
 		$fin = strpos($params, '&', $ini);
 		$len = ($fin !== false) ? ($fin - $ini) : (strlen($params) - $ini);
 		$p_id = substr($params, $ini, $len);
+		$params = str_replace("p=$p_id", '', $params);
+		$params = str_replace('&amp;&amp;', '&amp;', $params);
 	}
 	else
 	{
@@ -1701,6 +1707,8 @@ function rewrite_url_with_title($url, $params)
 		$fin = strpos($params, '&', $ini);
 		$len = ($fin !== false) ? ($fin - $ini) : (strlen($params) - $ini);
 		$s = substr($params, $ini, $len);
+		$params = str_replace("start=$s", '', $params);
+		$params = str_replace('&amp;&amp;', '&amp;', $params);
 	}
 	else
 	{
@@ -1774,12 +1782,14 @@ function title_to_url($title)
 	// Let's replace
 	$url_search = array(
 	' ', 'í', 'ý', 'ß', 'ö', 'ô', 'ó', 'ò', 'ä', 'â', 'à', 'á', 'é', 'è', 'ü', 'ú', 'ù', 'ñ', 'ß', '²', '³', '@', '€', '$',
+	'ā', 'ī', 'ū', 'ē', 'ō', // japanese romaji letters
 	'ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ż', 'ź', // polish letters
 	'ç', 'ê', 'ë', 'ê', 'î', 'ï', 'œ', 'û', // french letters
 	'ř', 'š', 'ž', 'ť', 'č', 'ý', 'ů', 'ě', 'ď', 'ň' //czech letters 
 	);
 	$url_replace = array(
 	'-', 'i', 'y', 's', 'oe', 'o', 'o', 'o', 'ae', 'a', 'a', 'a', 'e', 'e', 'ue', 'u', 'u', 'n', 'ss', '2', '3', 'at', 'eur', 'usd',
+	'a', 'i', 'u', 'e', 'o', // japanese romaji letters
 	'a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z', // polish letters
 	'c', 'e', 'e', 'e', 'i', 'i', 'oe', 'u', // french letters
 	'r', 's', 'z', 't', 'c', 'y', 'u', 'e', 'd', 'n' //czech letters
