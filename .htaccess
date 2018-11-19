@@ -20,13 +20,18 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 #
 #RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
-#
-# Obtener querystring de Foro, Tema, Post o Página de la URL
-#
+
+# Tienda
+RewriteRule ^tienda\/[\w\-]+\-c(\d+)(.*)$ shop.php?mode=ver&shop_id=$1&$2
+# Tema paginado
 RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-t(\d+)\/(\d+)\??(.*)$ viewtopic.php?f=$1&t=$2&start=$3&$4
+# Post específico paginado
 RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-p(\d+)\/(\d+)\??(.*)$ viewtopic.php?f=$1&p=$2&start=$3&$4
+# Tema
 RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-t(\d+)\??(.*)$ viewtopic.php?f=$1&t=$2&$3
+# Post
 RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-p(\d+)\??(.*)$ viewtopic.php?f=$1&p=$2&$3
+# Foro
 RewriteRule ^[\w\-]+\-f(\d+)\??(.*)$ viewforum.php?f=$1&$2
 
 #

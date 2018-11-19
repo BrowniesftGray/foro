@@ -488,12 +488,10 @@ a.header-avatar span:after {
 .dropdown .dropdown-contents {
 	z-index: 2;
 	overflow: hidden;
-	overflow-y: auto;
 	border: 1px solid transparent;
 	border-radius: 5px;
 	padding: 5px;
 	position: relative;
-	max-height: 300px;
 }
 
 .dropdown-contents a {

@@ -768,3 +768,20 @@ h2.topic-title, h2.forum-title {
 .collapse-btn:hover, .collapse-btn:hover:after, .collapse-btn:hover:before {
 	background-color: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* Tienda */
+.item-tipo {
+	display: inline-block;
+	color: #fff;
+	background: #2d986d;
+	font-weight: bold;
+	border-radius: 2px;
+	border: solid 1px #395d4e;
+	font-size: 11px;
+	margin-right: 5px;
+	padding: 2px;
+	line-height: 11px;
+	background: #9e9e9e;
+	border-color: #4e4e4e;
+	margin-bottom: 2px;
+}

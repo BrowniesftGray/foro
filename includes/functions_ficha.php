@@ -36,6 +36,18 @@ function ficha_exists($user_id)
 	}
 }
 
+function get_pj_id($user_id) 
+{
+	global $db;
+	$query = $db->sql_query("SELECT pj_id FROM personajes WHERE user_id=$user_id");
+	if ($row = $db->sql_fetchrow($query)) {
+		$pj_id = $row['pj_id'];
+	} else {
+		$pj_id = false;
+	}
+	return $pj_id;
+}
+
 function get_ficha($user_id, $return = false, $ver = false)
 {
 	global $user, $db, $template, $phpbb_root_path, $auth;
@@ -110,7 +122,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'FICHA_RANGO' => $row['rango'],
 				'FICHA_ARQUETIPO' => obtener_arquetipo ($pj_id, $row['arquetipo_id']),
 				'VISTA_ARQUETIPO' => vista_arquetipo ($row['arquetipo_id']),
-				'ID_ARQUETIPO' => $row['arquetipo_id'];
+				'ID_ARQUETIPO' => $row['arquetipo_id'],
 				'FICHA_NOMBRE' => stripslashes($row['nombre']),
 				'FICHA_ID' => $pj_id,
 				'FICHA_EDAD' => $row['edad'],
