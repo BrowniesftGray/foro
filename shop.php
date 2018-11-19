@@ -2,7 +2,7 @@
 /**
 *
 * @package phpBB3 Shop Mod
-* @version 0.9
+* @version 1.0.1
 * @copyright (c) 2012 mvader <rd4091@gmail.com>
 * @copyright (c) 2018 mgomez <crashmars@gmail.com>
 
@@ -161,7 +161,7 @@ class phpbb_shop {
 				'EFECTOS'				=> $row['efectos'],
 				'PRECIO'				=> $row['precio'],
 				'MAX'					=> $str_max,
-				'ACP_BOUGHT'			=> $row['comprable'],
+				'COMPRABLE'				=> ($row['comprable'] == 1 ? true : false),
 				'U_BUY'					=> append_sid("/shop.php", 'mode=buy&amp;item_id=' . $row['item_id'] . '&amp;shop_id=' . $shop_id),
 			));
 			

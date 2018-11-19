@@ -13,7 +13,7 @@
 				<th class="name">Descripci&oacute;n</th>
 				<th class="name">Requisitos</th>
 				<th class="name">Precio</th>
-				<th class="name">Max.</th>
+				<th class="name">M&aacute;ximo</th>
 				<th class="name">Comprar</th>
 			</tr>
 		</thead>
@@ -29,11 +29,11 @@
 		<td>{items.REQS}</td>
 		<td>{items.PRECIO}</td>
 		<td>{items.MAX}</td>
-		<td><form name="buyitem" action="{items.U_BUY}" method="POST">
+		<td><!-- IF items.COMPRABLE --><form name="buyitem" action="{items.U_BUY}" method="POST">
 			<center><input type="number" min="1" class="inputbox" maxlength="4" style="width: 70px" name="quantity" value="1" />
 				<br />
 			<input style="margin-top: 5px" type="submit" name="submit" value="Comprar" class="button1" /></center>
-		</form></td>
+		</form><!-- ENDIF --></td>
 	</tr>
 	<!-- BEGINELSE -->
 	<td>No hay items.</td>
