@@ -1,0 +1,56 @@
+/* TIENDA */
+.label-ryos{
+	font-size: 15px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.item-table{
+	width: 95% !important;
+}
+
+.item-header{
+	background: #243f38;
+}
+
+.item-tags{
+	width: 20%;
+}
+
+.item-tipo {
+	display: inline-block;
+	color: #fff;
+	background: #2d986d;
+	font-weight: bold;
+	border-radius: 2px;
+	border: solid 1px #395d4e;
+	font-size: 11px;
+	margin-right: 5px;
+	padding: 2px;
+	line-height: 11px;
+	background: #9e9e9e;
+	border-color: #4e4e4e;
+	margin-bottom: 2px;
+}
+
+.item-buy input[type="number"] {
+	width: 70px;
+}
+
+.item-buy input[type="submit"] {
+	margin-top: 5px;
+}
+
+@media (max-width: 700px) {
+	.item-table{
+		width: 100%;
+	}
+	
+	.item-buy br{
+		display: none;
+	}
+
+	.item-buy input[type="submit"] {
+		margin-top: 0;
+	}
+}

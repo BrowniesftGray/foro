@@ -123,6 +123,8 @@ class phpbb_shop {
 		$user_id = $user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
 		
+		if ($pj_id === false) $pj_id = 0;
+		
 		if (!array_key_exists($shop, $shops)) {
 			reset($shops);
 			$shop_id = (int) key($shops);

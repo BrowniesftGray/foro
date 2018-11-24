@@ -1,12 +1,12 @@
 <!-- INCLUDE overall_header.html -->
 
 <h2 class="topic-title">Tienda de {SHOP_NAME}</h2>
-<p>Tienes <b>{RYOS}</b> Ryōs.</p>
+<div class="label-ryos">Tienes <b>{RYOS}</b> Ryōs.</div>
 
 <div class="forabg">
-	<table class="table1" border="0" cellpadding="0" cellspacing="0" style="width:90%" align="center">
+	<table class="item-table table1" border="0" cellpadding="0" cellspacing="0" align="center">
 		<thead>
-			<tr style="background: #243f38;">
+			<tr class="item-header">
 				<th class="name">Nombre</th>
 				<th class="name">Imagen</th>
 				<th class="name">Tipos</th>
@@ -21,22 +21,22 @@
 	<!-- BEGIN items -->
 	<tr id="item{items.ID}">
 		<td class="item-name">{items.ITEM_NAME}</td>
-		<td>{items.IMAGEN}</td>
-		<td style="width:20%">
+		<td class="item-img">{items.IMAGEN}</td>
+		<td class="item-tags">
 		<!-- BEGIN items.tipos --><span class="item-tipo">{items.tipos.TAG}</span><!-- END items.tipos -->
 		</td>
 		<td class="item-desc">{items.DESC}<br /><b>Efectos: </b>{items.EFECTOS}</td>
-		<td>{items.REQS}</td>
-		<td>{items.PRECIO}</td>
-		<td>{items.MAX}</td>
-		<td><!-- IF items.COMPRABLE --><form name="buyitem" action="{items.U_BUY}" method="POST">
-			<center><input type="number" min="1" class="inputbox" maxlength="4" style="width: 70px" name="quantity" value="1" />
+		<td class="item-reqs">{items.REQS}</td>
+		<td class="item-precio">{items.PRECIO} ryōs</td>
+		<td class="item-max">{items.MAX}</td>
+		<td class="item-buy"><!-- IF items.COMPRABLE --><form name="buyitem" action="{items.U_BUY}" method="POST">
+			<center><input type="number" min="1" class="inputbox" maxlength="4" name="quantity" value="1" />
 				<br />
-			<input style="margin-top: 5px" type="submit" name="submit" value="Comprar" class="button1" /></center>
+			<input type="submit" name="submit" value="Comprar" class="button1" /></center>
 		</form><!-- ENDIF --></td>
 	</tr>
 	<!-- BEGINELSE -->
-	<td>No hay items.</td>
+	<td colspan="8">No hay items.</td>
 	<!-- END items -->
 	</tbody>
 	</table>

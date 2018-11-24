@@ -14,7 +14,11 @@
 		<li id="username_logged_in" class="rightside <!-- IF CURRENT_USER_AVATAR --> no-bulletin<!-- ENDIF -->" data-skip-responsive="true">
 			<!-- EVENT navbar_header_username_prepend -->
 			<div class="header-profile dropdown-container">
-				<a href="{U_PROFILE}" class="header-avatar dropdown-trigger"><!-- IF CURRENT_USER_AVATAR -->{CURRENT_USER_AVATAR} <!-- ENDIF --> {CURRENT_USERNAME_SIMPLE}</a>
+				<a href="{U_PROFILE}" class="header-avatar dropdown-trigger">
+					<!-- IF CURRENT_USER_AVATAR -->{CURRENT_USER_AVATAR}
+					<!-- ELSE --><i class="icon fa-user-circle fa-fw"  aria-hidden="true" style="font-size: 20px; color: #fff; margin-top: 8px;"></i><!-- ENDIF -->
+					{CURRENT_USERNAME_SIMPLE}
+				</a>
 				<div class="dropdown">
 					<div class="pointer"><div class="pointer-inner"></div></div>
 					<ul class="dropdown-contents" role="menu">
@@ -27,6 +31,21 @@
 						<!-- ENDIF -->
 
 					<!-- EVENT navbar_header_profile_list_before -->
+					
+						<!-- IF not FICHA_EXISTE -->
+						<li>
+							<a href="{FICHA_CREAR}" title="{FICHA_CREAR}" role="menuitem">
+								<i class="icon fa-address-card fa-fw"></i><span>Crear Ficha de Personaje</span>
+							</a>
+						</li>
+						<!-- ENDIF -->
+						<!-- IF FICHA_EXISTE -->
+						<li>
+							<a href="{FICHA_URL}" title="{FICHA_URL}" role="menuitem">
+								<i class="icon fa-address-card fa-fw"></i><span>Ver  mi Ficha</span>
+							</a>
+						</li>
+						<!-- ENDIF -->
 
 						<li>
 							<a href="{U_PROFILE}" title="{L_PROFILE}" role="menuitem">
@@ -75,20 +94,6 @@
 							<i class="icon fa-gavel fa-fw" aria-hidden="true"></i><span>{L_MCP_SHORT}</span>
 						</a>
 					</li>
-				<!-- ENDIF -->
-				<!-- IF not FICHA_EXISTE -->
-				<li class="rightside" data-last-responsive="true">
-					<a href="{FICHA_CREAR}" title="{FICHA_CREAR}" role="menuitem">
-						<i class="fa fa-address-card"></i><span> Crear Ficha</span>
-					</a>
-				</li>
-				<!-- ENDIF -->
-				<!-- IF FICHA_EXISTE -->
-				<li class="rightside" data-last-responsive="true">
-					<a href="{FICHA_URL}" title="{FICHA_URL}" role="menuitem">
-						<i class="fa fa-address-card"></i><span> Ver Ficha</span>
-					</a>
-				</li>
 				<!-- ENDIF -->
 				<!-- IF S_DISPLAY_SEARCH -->
 					<li class="separator"></li>

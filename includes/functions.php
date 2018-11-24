@@ -1647,6 +1647,7 @@ function rewrite_url_with_title($url, &$params)
 	global $db;
 	global $phpEx;
 	$f_id = $t_id = $p_id = $s = 0;
+	$view = '';
 	
 	$new_url = str_replace("viewforum.$phpEx", '', $url);
 	$new_url = str_replace("viewtopic.$phpEx", '', $new_url);
@@ -1699,6 +1700,22 @@ function rewrite_url_with_title($url, &$params)
 		$p_id  = 0;
 	}
 	
+	// Get view from querystring
+	$ini = strpos($params, 'view=');
+	if ($ini !== false)
+	{
+		$ini += 5;
+		$fin = strpos($params, '&', $ini);
+		$len = ($fin !== false) ? ($fin - $ini) : (strlen($params) - $ini);
+		$view = substr($params, $ini, $len);
+		$params = str_replace("view=$view", '', $params);
+		$params = str_replace('&amp;&amp;', '&amp;', $params);
+	}
+	else
+	{
+		$view = '';
+	}
+	
 	// Get page from querystring
 	$ini = strpos($params, 'start=');
 	if ($ini !== false)
@@ -1723,6 +1740,17 @@ function rewrite_url_with_title($url, &$params)
 				WHERE post_id = ' . $p_id;
 		$result = $db->sql_query($sql);
 		$t_id = (int) $db->sql_fetchfield('topic_id');
+		$db->sql_freeresult($result);
+	}
+	
+	// Get forum_id from topic
+	if ($t_id > 0 && $f_id == 0)
+	{
+		$sql = 'SELECT forum_id
+				FROM ' . TOPICS_TABLE . '
+				WHERE topic_id = ' . $t_id;
+		$result = $db->sql_query($sql);
+		$f_id = (int) $db->sql_fetchfield('forum_id');
 		$db->sql_freeresult($result);
 	}
 	
@@ -1759,6 +1787,11 @@ function rewrite_url_with_title($url, &$params)
 		{
 			$new_url .= title_to_url($title) . '-p' . $p_id;
 		}
+	}
+	
+	if ($view !== '')
+	{
+		$new_url .= '/view-' . $view;
 	}
 	
 	if ($s > 0)
