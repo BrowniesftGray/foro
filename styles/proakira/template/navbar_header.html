@@ -159,6 +159,25 @@
 				</ul>
 			</div>
 		</li>
+		
+		<li id="shop-list" class="shop-list rightside dropdown-container responsive-menu" data-skip-responsive="true">
+			<a href="#" class="dropdown-trigger">
+				<i class="icon fa-shopping-cart fa-fw" aria-hidden="true"></i><span>{L_SHOP_LIST}</span>
+			</a>
+			<div class="dropdown">
+				<div class="pointer"><div class="pointer-inner"></div></div>
+				<ul class="dropdown-contents" role="menu">
+					<!-- BEGIN shops -->
+					<li>
+						<a href="{shops.URL}" title="{shops.DESCRIPCION}" role="menuitem">
+							<i class="icon {shops.FA_ICON} fa-fw" aria-hidden="true"></i><span>{shops.NOMBRE}</span>
+						</a>
+					</li>
+					<!-- END shops -->
+				</ul>
+			</div>
+		</li>
+		
 		<!-- IF S_DISPLAY_PM -->
 			<li class="rightside" data-skip-responsive="true">
 				<a href="{U_PRIVATEMSGS}" role="menuitem">

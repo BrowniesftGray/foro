@@ -19,6 +19,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 require_once('functions_ficha.php');
+require_once('functions_shop.php');
 // Common global functions
 /**
 * Load the autoloaders added by the extensions.
@@ -4588,6 +4589,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		'L_INDEX'			=> ($config['board_index_text'] !== '') ? $config['board_index_text'] : $user->lang['FORUM_INDEX'],
 		'L_SITE_HOME'		=> ($config['site_home_text'] !== '') ? $config['site_home_text'] : $user->lang['HOME'],
 		'L_ONLINE_EXPLAIN'	=> $l_online_time,
+		'L_SHOP_LIST'		=> 'Tienda',
 
 		'U_PRIVATEMSGS'			=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
 		'U_RETURN_INBOX'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;folder=inbox'),
@@ -4702,6 +4704,9 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 			$http_headers['X-PHPBB-IS-BOT'] = 'yes';
 		}
 	}
+	
+	// Load visible shops // mgomez // 2018-11-23
+	$template->assign_block_vars_array('shops', get_full_shops());
 
 	/**
 	* Execute code and/or overwrite _common_ template variables after they have been assigned.
