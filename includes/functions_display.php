@@ -603,13 +603,13 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 		$foros_generales = array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92);
 		
 		/* Países Principales - Contenedores de aldea - Estilo largo y ancho */
-		$foros_paises_principales = array(16, 17, 18, 19);
+		$foros_paises_principales = array(16, 17);	// 18, 19 - Ame e Iwa
 		
 		/* Aldeas - Se añaden a los países para compartir estilo */
 		array_push($foros_paises_principales, 41, 42, 43, 76);
 		
 		/* Resto de los Países - Estilo largo y angosto - Por defecto en todos los subforos*/
-		$foros_paises_neutrales = array(21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
+		$foros_paises_neutrales = array(18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
 		
 		/* Foros que deben mostrarse con el estilo estándar de tabla */
 		$foros_estilo_tabla = array();

@@ -9,7 +9,8 @@ html, body {
 }
 
 body {
-	background-image: url(./images/background_pattern.png);
+	background-image: url(./images/background_pattern.jpg);
+	background-size: 100px;
 }
 
 h1 {
