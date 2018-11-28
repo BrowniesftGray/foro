@@ -206,7 +206,7 @@ class ucp_character
 					'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true)),
 					'EDAD'					=> utf8_normalize_nfc(request_var('edad', '', true)),
 					'RANGO'					=> utf8_normalize_nfc(request_var('rango', '', true)),
-					'ARQUETIPO'			=> utf8_normalize_nfc(request_var('arquetipo_id', '', true)),
+					'ARQUETIPO'			=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
 					'PRINCIPAL'			=> utf8_normalize_nfc(request_var('principal', '', true)),
 					'RAMA1'					=> utf8_normalize_nfc(request_var('rama1', '', true)),
 					'RAMA2'					=> utf8_normalize_nfc(request_var('rama2', '', true)),

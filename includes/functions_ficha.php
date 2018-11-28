@@ -145,9 +145,9 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
 				'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
 				'FICHA_JUTSUS'			=> $jutsus,
-				'FICHA_PC'				=> calcula_pc($row['arquetipo_id'], $row['concentracion'], $row['cck'], $row['voluntad']),
-				'FICHA_PV'				=> calcula_pv($row['arquetipo_id'], $row['vitalidad']),
-				'FICHA_STA'				=> calcula_sta($row['arquetipo_id'], $row['fuerza'], $row['agilidad'], $row['vitalidad'], $row['voluntad']),
+				'FICHA_PC'				=> calcula_pc($row),
+				'FICHA_PV'				=> calcula_pv($row),
+				'FICHA_STA'				=> calcula_sta($row),
 				'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
 				'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
 			));
@@ -189,196 +189,87 @@ function obtener_arquetipo($usuario, $arquetipo){
 function vista_arquetipo ($arquetipo){
 	global $db;
 	if ($arquetipo != 0) {
-		// code...
-	$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
-	$row = $db->sql_fetchrow($query);
-	$db->sql_freeresult($query);
-	$nombre = $row['nombre_es'];
-}
-else{
-	$nombre = "Sin arquetipo";
-}
+		$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
+		$row = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+		$nombre = $row['nombre_es'];
+	} else{
+		$nombre = "Sin arquetipo";
+	}
+	
 	return $nombre;
 }
-function calcula_pc($arquetipo, $cck, $intel, $vol)
+
+function calcula_pc($datos_pj)
 {
-	switch ($arquetipo) {
-		case 'Chakra':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.2;
-			return $pc;
-		break;
-
-		case 'Zen':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.05;
-			return $pc;
-		break;
-
-		case 'Hechicero':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.3;
-			return $pc;
-		break;
-
-		case 'Explorador':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.05;
-			return $pc;
-		break;
-
-		case 'Soporte':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.15;
-			return $pc;
-		break;
-
-		case 'Elemental':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.4;
-			return $pc;
-		break;
-
-		case 'Guerrero':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.05;
-			return $pc;
-		break;
-
-		case 'Asesino':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.1;
-			return $pc;
-		break;
-
-		case 'Especialista':
-			$pc = $cck + $intel + $vol;
-			$pc = $pc * 1.2;
-			return $pc;
-		break;
-
-		default:
-			$pc = $cck + $intel + $vol;
-			return $pc;
-		break;
+	global $db;	
+	$pc = $bono = 0;
+	
+	$pc = (int)$datos_pj['cck'] + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
+	
+	if((int)$datos_pj['arquetipo_id'] > 0) {
+		$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
+		$row = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+		
+		if((bool)$row['bono_es_porcentaje']) {
+			$bono = round((int)$row['bono_pc'] * $pc / 100);
+		} else {
+			$bono = (int)$row['bono_pc'];
+		}
 	}
-
+	
+	$pc = $pc + $bono;
+	
+	return $pc;
 }
 
-function calcula_pv($arquetipo, $vit)
+function calcula_pv($datos_pj)
 {
-	switch ($arquetipo) {
-		case 'Cuerpo ':
-			$pv = $vit * 3;
-			$pv = $pv * 1.1;
-			return $pv;
-		break;
-
-		case 'Zen':
-			$pv = $vit * 3;
-			$pv = $pv * 1.05;
-			return $pv;
-		break;
-
-		case 'Luchador':
-			$pv = $vit * 3;
-			$pv = $pv * 1.15;
-			return $pv;
-		break;
-
-		case 'Explorador':
-			$pv = $vit * 3;
-			$pv = $pv * 1.1;
-			return $pv;
-		break;
-
-		case 'Soporte':
-			$pv = $vit * 3;
-			$pv = $pv * 1.05;
-			return $pv;
-		break;
-
-		case 'Guardián':
-			$pv = $vit * 3;
-			$pv = $pv * 1.2;
-			return $pv;
-		break;
-
-		case 'Guerrero':
-			$pv = $vit * 3;
-			$pv = $pv * 1.15;
-			return $pv;
-		break;
-
-		case 'Asesino':
-			$pv = $vit * 3;
-			$pv = $pv * 1.1;
-			return $pv;
-		break;
-
-		case 'Especialista':
-			$pv = $vit * 3;
-			$pv = $pv * 1.15;
-			return $pv;
-		break;
-
-		default:
-			$pv = $vit * 3;
-			return $pv;
-		break;
+	global $db;	
+	$pv = $bono = 0;
+	
+	$pv = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'];
+	
+	if((int)$datos_pj['arquetipo_id'] > 0) {
+		$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
+		$row = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+		
+		if((bool)$row['bono_es_porcentaje']) {
+			$bono = round((int)$row['bono_pv'] * $pv / 100);
+		} else {
+			$bono = (int)$row['bono_pv'];
+		}
 	}
+	
+	$pv = $pv + $bono;
+	
+	return $pv;
 }
 
-function calcula_sta($arquetipo, $vit, $fue, $agi, $vol)
+function calcula_sta($datos_pj)
 {
-	switch ($arquetipo) {
-		case 'Cuerpo ':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.1;
-			return $sta;
-		break;
-
-		case 'Zen':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.05;
-			return $sta;
-		break;
-
-		case 'Luchador':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.15;
-			return $sta;
-		break;
-
-		case 'Explorador':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.05;
-			return $sta;
-		break;
-
-		case 'Guardián':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.2;
-			return $sta;
-		break;
-
-		case 'Guerrero':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.15;
-			return $sta;
-		break;
-
-		case 'Asesino':
-			$sta = $vit + $fue + $agi + $vol;
-			$sta = $sta * 1.1;
-			return $sta;
-		break;
-
-		default:
-			$sta = $vit + $fue + $agi + $vol;
-			return $sta;
-		break;
+	global $db;	
+	$sta = $bono = 0;
+	
+	$sta = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
+	
+	if((int)$datos_pj['arquetipo_id'] > 0) {
+		$query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".(int)$datos_pj['arquetipo_id']."");
+		$row = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+		
+		if((bool)$row['bono_es_porcentaje']) {
+			$bono = round((int)$row['bono_sta'] * $sta / 100);
+		} else {
+			$bono = (int)$row['bono_sta'];
+		}
 	}
+	
+	$sta = $sta + $bono;
+	
+	return $sta;
 }
 
 function guardar_ficha(array $fields)
@@ -390,8 +281,8 @@ function guardar_ficha(array $fields)
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 	$idUsuario = $user->data['user_id'];
 //		$sql = 'INSERT INTO ' . FICHAS_TABLE . " (user_id, nivel, rango, nombre, clan, kekkei_genkai, elementos, fisico, caracter, historia, fuerza, destreza, constitucion, cck, inteligencia, agilidad, velocidad, presencia, voluntad, bbcode_uid, bbcode_bitfield, bbcode_options, tecnicas) VALUES ('{$user->data['user_id']}', '1', '0', '{$fields['NOMBRE']}', '{$fields['CLAN']}', '{$fields['KEKKEI']}', '{$fields['ELEMENTOS']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}', '{$fields['FUERZA']}', '{$fields['DESTREZA']}', '{$fields['CONSTITUCION']}', '{$fields['CCK']}', '{$fields['INTELIGENCIA']}', '{$fields['AGILIDAD']}', '{$fields['VELOCIDAD']}', '0', '{$fields['VOLUNTAD']}', '', '', '0', '')";
-	$sql = "INSERT INTO personajes (user_id, nivel, rango, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, tecnicas, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
-	$sql .= "values (	$idUsuario, '1', 'Genin', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
+	$sql = "INSERT INTO personajes (user_id, nivel, rango, arquetipo_id, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, tecnicas, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
+	$sql .= "values (	$idUsuario, '1', 'Estudiante', '0', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
 	$sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
 	$db->sql_query($sql);
 
@@ -406,7 +297,7 @@ function actualizar_Ficha(array $fields){
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 
 	$sql = "UPDATE personajes SET ";
-	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}',";
+	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}', arquetipo_id = '{$fields['ARQUETIPO']}',";
 	$sql .= "clan = '{$fields['PRINCIPAL']}', rama1 = '{$fields['RAMA1']}', rama2 = '{$fields['RAMA2']}', rama3 = '{$fields['RAMA3']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
 	$sql .= 'tecnicas = "'.$fields['TEC_JUTSUS'].'",';
 	$sql .= "fuerza = '{$fields['FUERZA']}', vitalidad = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', cck = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
