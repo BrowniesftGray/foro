@@ -44,6 +44,7 @@ class ucp_prefs
 					'dateformat'	=> $request->variable('dateformat', $user->data['user_dateformat'], true),
 					'lang'			=> basename($request->variable('lang', $user->data['user_lang'])),
 					'user_style'		=> $request->variable('user_style', (int) $user->data['user_style']),
+					'user_forum_align'	=> $request->variable('user_forum_align', $user->data['user_forum_align']),
 					'tz'			=> $request->variable('tz', $user->data['user_timezone']),
 
 					'viewemail'		=> $request->variable('viewemail', (bool) $user->data['user_allow_viewemail']),
@@ -110,6 +111,7 @@ class ucp_prefs
 							'user_lang'				=> $data['lang'],
 							'user_timezone'			=> $data['tz'],
 							'user_style'			=> $data['user_style'],
+							'user_forum_align'		=> $data['user_forum_align'],
 						);
 
 						/**
@@ -210,6 +212,7 @@ class ucp_prefs
 
 					'S_LANG_OPTIONS'		=> language_select($data['lang']),
 					'S_STYLE_OPTIONS'		=> ($config['override_user_style']) ? '' : style_select($data['user_style']),
+					'S_FORUM_ALIGN_OPTIONS'	=> forum_align_select($data['user_forum_align']),
 					'S_CAN_HIDE_ONLINE'		=> ($auth->acl_get('u_hideonline')) ? true : false,
 					'S_SELECT_NOTIFY'		=> ($config['jab_enable'] && $user->data['user_jabber'] && @extension_loaded('xml')) ? true : false)
 				);
@@ -440,6 +443,7 @@ class ucp_prefs
 					'smilies'	=> $request->variable('smilies', $user->optionget('smilies')),
 					'sig'		=> $request->variable('sig', $user->optionget('attachsig')),
 					'notify'	=> $request->variable('notify', (bool) $user->data['user_notify']),
+					'user_post_align'	=> $request->variable('user_post_align', $user->data['user_post_align'])
 				);
 				add_form_key('ucp_prefs_post');
 
@@ -468,6 +472,7 @@ class ucp_prefs
 						$sql_ary = array(
 							'user_options'	=> $user->data['user_options'],
 							'user_notify'	=> $data['notify'],
+							'user_post_align'	=> $data['user_post_align'],
 						);
 
 						/**
@@ -501,7 +506,9 @@ class ucp_prefs
 					'S_BBCODE'	=> $data['bbcode'],
 					'S_SMILIES'	=> $data['smilies'],
 					'S_SIG'		=> $data['sig'],
-					'S_NOTIFY'	=> $data['notify'])
+					'S_NOTIFY'	=> $data['notify'],
+					'S_POST_ALIGN_OPTIONS'	=> post_align_select($data['user_post_align'])
+					)
 				);
 			break;
 		}

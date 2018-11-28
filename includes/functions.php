@@ -347,6 +347,44 @@ function style_select($default = '', $all = false)
 	return $style_options;
 }
 
+function forum_align_select($default = '')
+{
+	$options = Array(
+		'default'	=> 'Por defecto',
+		'left' 		=> 'Izquierda',
+		'right' 	=> 'Derecha',
+	);
+	
+	$forum_align_options = '';
+	foreach ($options as $value)
+	{
+		$selected = (array_search($value, $options) == $default) ? ' selected="selected"' : '';
+		$forum_align_options .= '<option value="' . array_search($value, $options) . '"' . $selected . '>' . $value . '</option>';
+	}
+
+	return $forum_align_options;
+}
+
+function post_align_select($default = '')
+{
+	$options = array(
+		'default'	=> 'Por defecto',
+		'left' 		=> 'Izquierda',
+		'right' 	=> 'Derecha',
+		'center'	=> 'Centrado',
+		'justify' 	=> 'Justificado'
+	);
+	
+	$post_align_options = '';
+	foreach ($options as $value)
+	{
+		$selected = (array_search($value, $options) == $default) ? ' selected="selected"' : '';
+		$post_align_options .= '<option value="' . array_search($value, $options) . '"' . $selected . '>' . $value . '</option>';
+	}
+
+	return $post_align_options;
+}
+
 /**
 * Format the timezone offset with hours and minutes
 *

@@ -713,6 +713,7 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 		'LAST_POST_IMG'		=> $user->img('icon_topic_latest', 'VIEW_LATEST_POST'),
 		'UNAPPROVED_IMG'	=> $user->img('icon_topic_unapproved', 'TOPICS_UNAPPROVED'),
 		'UNAPPROVED_POST_IMG'	=> $user->img('icon_topic_unapproved', 'POSTS_UNAPPROVED_FORUM'),
+		'U_FORUM_ALIGN'		=> ($user->data['user_forum_align'] !== 'default') ? $user->data['user_forum_align'] : '',
 	));
 
 	/**

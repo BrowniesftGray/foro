@@ -1588,6 +1588,7 @@ class acp_users
 					'lang'				=> basename($request->variable('lang', $user_row['user_lang'])),
 					'tz'				=> $request->variable('tz', $user_row['user_timezone']),
 					'style'				=> $request->variable('style', $user_row['user_style']),
+					'user_forum_align'	=> $request->variable('user_forum_align', $user_row['user_forum_align']),
 					'viewemail'			=> $request->variable('viewemail', $user_row['user_allow_viewemail']),
 					'massemail'			=> $request->variable('massemail', $user_row['user_allow_massemail']),
 					'hideonline'		=> $request->variable('hideonline', !$user_row['user_allow_viewonline']),
@@ -1614,6 +1615,7 @@ class acp_users
 					'smilies'	=> $request->variable('smilies', $this->optionget($user_row, 'smilies')),
 					'sig'		=> $request->variable('sig', $this->optionget($user_row, 'attachsig')),
 					'notify'	=> $request->variable('notify', $user_row['user_notify']),
+					'user_post_align'	=> $request->variable('user_post_align', $user_row['user_post_align']),
 				);
 
 				/**
@@ -1671,6 +1673,7 @@ class acp_users
 							'user_lang'				=> $data['lang'],
 							'user_timezone'			=> $data['tz'],
 							'user_style'			=> $data['style'],
+							'user_forum_align'		=> $data['user_forum_align'],
 
 							'user_topic_sortby_type'	=> $data['topic_sk'],
 							'user_post_sortby_type'		=> $data['post_sk'],
@@ -1681,6 +1684,7 @@ class acp_users
 							'user_post_show_days'	=> $data['post_st'],
 
 							'user_notify'	=> $data['notify'],
+							'user_post_align'	=> $data['user_post_align'],
 						);
 
 						/**
@@ -1831,6 +1835,7 @@ class acp_users
 
 					'S_LANG_OPTIONS'	=> language_select($data['lang']),
 					'S_STYLE_OPTIONS'	=> style_select($data['style']),
+					'S_FORUM_ALIGN_OPTIONS'	=> forum_align_select($data['user_forum_align']),
 				);
 
 				/**

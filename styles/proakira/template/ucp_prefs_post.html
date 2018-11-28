@@ -37,6 +37,12 @@
 			<label for="notify0"><input type="radio" name="notify" id="notify0" value="0"<!-- IF not S_NOTIFY --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 		</dd>
 	</dl>
+	<!-- IF S_POST_ALIGN_OPTIONS -->
+	<dl>
+		<dt><label for="user_post_align">{L_POST_ALIGN}{L_COLON}</label></dt>
+		<dd><select name="user_post_align" id="post_align">{S_POST_ALIGN_OPTIONS}</select></dd>
+	</dl>
+	<!-- ENDIF -->
 	<!-- EVENT ucp_prefs_post_append -->
 	</fieldset>
 

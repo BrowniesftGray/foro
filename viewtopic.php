@@ -1336,6 +1336,8 @@ while ($row = $db->sql_fetchrow($result))
 
 				'warnings'			=> 0,
 				'allow_pm'			=> 0,
+				
+				'post_align'		=> '',
 			);
 
 			/**
@@ -1403,6 +1405,8 @@ while ($row = $db->sql_fetchrow($result))
 				'author_colour'		=> get_username_string('colour', $poster_id, $row['username'], $row['user_colour']),
 				'author_username'	=> get_username_string('username', $poster_id, $row['username'], $row['user_colour']),
 				'author_profile'	=> get_username_string('profile', $poster_id, $row['username'], $row['user_colour']),
+				
+				'post_align'		=> ($row['user_post_align'] !== 'default') ? $row['user_post_align'] : '',
 			);
 
 			/**
@@ -1937,6 +1941,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'POSTER_WARNINGS'	=> $auth->acl_get('m_warn') ? $user_cache[$poster_id]['warnings'] : '',
 		'POSTER_AGE'		=> $user_cache[$poster_id]['age'],
 		'CONTACT_USER'		=> $user_cache[$poster_id]['contact_user'],
+		'POST_ALIGN'		=> $user_cache[$poster_id]['post_align'],
 
 		'POST_DATE'			=> $user->format_date($row['post_time'], false, ($view == 'print') ? true : false),
 		'POST_SUBJECT'		=> $row['post_subject'],
