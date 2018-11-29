@@ -24,7 +24,9 @@
 
 <div id="post-{MESSAGE_ID}" class="post pm has-profile<!-- IF S_POST_UNAPPROVED or S_POST_REPORTED --> reported<!-- ENDIF --><!-- IF S_ONLINE --> online<!-- ENDIF -->">
 <div class="inner">
-
+<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="cell-profile">
 	<dl class="postprofile" id="profile{MESSAGE_ID}">
 		<dt class="<!-- IF RANK_TITLE or RANK_IMG -->has-profile-rank<!-- ELSE -->no-profile-rank<!-- ENDIF --> <!-- IF AUTHOR_AVATAR -->has-avatar<!-- ELSE -->no-avatar<!-- ENDIF -->">
 			<div class="avatar-container">
@@ -36,16 +38,16 @@
 		</dt>
 
 		<!-- EVENT ucp_pm_viewmessage_rank_before -->
-		<!-- IF RANK_TITLE or RANK_IMG --><dd class="profile-rank">{RANK_TITLE}<!-- IF RANK_TITLE and RANK_IMG --><br /><!-- ENDIF -->{RANK_IMG}</dd><!-- ENDIF -->
+		<!-- IF postrow.RANK_TITLE or postrow.RANK_IMG --><dd class="profile-rank"><!-- IF postrow.RANK_IMG -->{postrow.RANK_IMG}<!-- ELSE -->{postrow.RANK_TITLE}<!-- ENDIF --></dd><!-- ENDIF -->
 		<!-- EVENT ucp_pm_viewmessage_rank_after -->
 
-		<dd class="profile-posts"><strong>{L_POSTS}{L_COLON}</strong> <!-- IF U_AUTHOR_POSTS != '' --><a href="{U_AUTHOR_POSTS}">{AUTHOR_POSTS}</a><!-- ELSE -->{AUTHOR_POSTS}<!-- ENDIF --></dd>
-		<!-- IF AUTHOR_JOINED --><dd class="profile-joined"><strong>{L_JOINED}{L_COLON}</strong> {AUTHOR_JOINED}</dd><!-- ENDIF -->
+		<dd class="profile-posts"><span class="field-name">{L_POSTS}{L_COLON}</span> <!-- IF U_AUTHOR_POSTS != '' --><a class="field-value" href="{U_AUTHOR_POSTS}">{AUTHOR_POSTS}</a><!-- ELSE --><span class="field-value">{AUTHOR_POSTS}</span><!-- ENDIF --></dd>
+		<!-- IF AUTHOR_JOINED --><dd class="profile-joined"><span class="field-name">{L_JOINED}{L_COLON}</span> <span class="field-value">{AUTHOR_JOINED}</span></dd><!-- ENDIF -->
 
 		<!-- EVENT ucp_pm_viewmessage_custom_fields_before -->
 		<!-- BEGIN custom_fields -->
 			<!-- IF not custom_fields.S_PROFILE_CONTACT -->
-				<dd class="profile-custom-field profile-{custom_fields.PROFILE_FIELD_IDENT}"><strong>{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</strong> {custom_fields.PROFILE_FIELD_VALUE}</dd>
+				<dd class="profile-custom-field profile-{custom_fields.PROFILE_FIELD_IDENT}"><span class="field-name">{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</span> <span class="field-value">{custom_fields.PROFILE_FIELD_VALUE}</span></dd>
 			<!-- ENDIF -->
 		<!-- END custom_fields -->
 		<!-- EVENT ucp_pm_viewmessage_custom_fields_after -->
@@ -53,8 +55,8 @@
 		<!-- EVENT ucp_pm_viewmessage_contact_fields_before -->
 		<!-- IF .contact -->
 			<dd class="profile-contact">
-				<strong>{L_CONTACT}{L_COLON}</strong>
-				<div class="dropdown-container dropdown-left">
+				<span class="field-name">{L_CONTACT}{L_COLON}</span>
+				<div class="field-value dropdown-container dropdown-left">
 					<a href="#" class="dropdown-trigger"  title="{CONTACT_USER}"><i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">{CONTACT_USER}</span></a>
 					<div class="dropdown">
 						<div class="pointer"><div class="pointer-inner"></div></div>
@@ -76,13 +78,53 @@
 					</div>
 				</div>
 			</dd>
+			<br class="clear" />
 		<!-- ENDIF -->
 		<!-- EVENT ucp_pm_viewmessage_contact_fields_after -->
 	</dl>
-
+</td>
+					<td class="cell-post">
+					
+		<p class="author" style="margin-top: 10px; margin-bottom: 0; margin-left: 15px;">
+			<strong>{L_SENT_AT}{L_COLON}</strong> {SENT_DATE}
+			<br /><strong>{L_PM_FROM}{L_COLON}</strong> {MESSAGE_AUTHOR_FULL}
+			<!-- IF S_TO_RECIPIENT --><br /><strong>{L_TO}{L_COLON}</strong> <!-- BEGIN to_recipient --><!-- IF to_recipient.NAME_FULL -->{to_recipient.NAME_FULL}<!-- ELSE --><a href="{to_recipient.U_VIEW}" style="color:<!-- IF to_recipient.COLOUR -->{to_recipient.COLOUR}<!-- ELSEIF to_recipient.IS_GROUP -->#0000FF<!-- ENDIF -->;">{to_recipient.NAME}</a><!-- ENDIF -->&nbsp;<!-- END to_recipient --><!-- ENDIF -->
+			<!-- IF S_BCC_RECIPIENT --><br /><strong>{L_BCC}{L_COLON}</strong> <!-- BEGIN bcc_recipient --><!-- IF bcc_recipient.NAME_FULL -->{bcc_recipient.NAME_FULL}<!-- ELSE --><a href="{bcc_recipient.U_VIEW}" style="color:<!-- IF bcc_recipient.COLOUR -->{bcc_recipient.COLOUR}<!-- ELSEIF bcc_recipient.IS_GROUP -->#0000FF<!-- ENDIF -->;">{bcc_recipient.NAME}</a><!-- ENDIF -->&nbsp;<!-- END bcc_recipient --><!-- ENDIF -->
+		</p>
+		
+					
 	<div class="postbody">
 		<h3 class="first">{SUBJECT}</h3>
 
+		<div class="content">{MESSAGE}</div>
+
+		<!-- IF S_HAS_ATTACHMENTS -->
+			<dl class="attachbox">
+				<dt>
+					{L_ATTACHMENTS}
+				</dt>
+				<!-- BEGIN attachment -->
+					<dd>{attachment.DISPLAY_ATTACHMENT}</dd>
+				<!-- END attachment -->
+			</dl>
+		<!-- ENDIF -->
+
+		<!-- IF S_DISPLAY_NOTICE -->
+			<div class="post-notice error">{L_DOWNLOAD_NOTICE}</div>
+		<!-- ENDIF -->
+
+		<!-- IF EDITED_MESSAGE or EDIT_REASON -->
+		<div class="notice">{EDITED_MESSAGE}
+			<!-- IF EDIT_REASON --><br /><strong>{L_REASON}{L_COLON}</strong> <em>{EDIT_REASON}</em><!-- ENDIF -->
+		</div>
+		<!-- ENDIF -->
+
+		<!-- IF SIGNATURE -->
+			<div id="sig{MESSAGE_ID}" class="signature">{SIGNATURE}</div>
+		<!-- ENDIF -->
+	</div>
+	
+	
 		<!-- DEFINE $SHOW_PM_POST_BUTTONS = (U_EDIT or U_DELETE or U_REPORT or U_QUOTE) -->
 		<!-- EVENT ucp_pm_viewmessage_post_buttons_list_before -->
 		<!-- IF $SHOW_PM_POST_BUTTONS -->
@@ -121,41 +163,6 @@
 		<!-- ENDIF -->
 		<!-- EVENT ucp_pm_viewmessage_post_buttons_list_after -->
 
-		<p class="author">
-			<strong>{L_SENT_AT}{L_COLON}</strong> {SENT_DATE}
-			<br /><strong>{L_PM_FROM}{L_COLON}</strong> {MESSAGE_AUTHOR_FULL}
-			<!-- IF S_TO_RECIPIENT --><br /><strong>{L_TO}{L_COLON}</strong> <!-- BEGIN to_recipient --><!-- IF to_recipient.NAME_FULL -->{to_recipient.NAME_FULL}<!-- ELSE --><a href="{to_recipient.U_VIEW}" style="color:<!-- IF to_recipient.COLOUR -->{to_recipient.COLOUR}<!-- ELSEIF to_recipient.IS_GROUP -->#0000FF<!-- ENDIF -->;">{to_recipient.NAME}</a><!-- ENDIF -->&nbsp;<!-- END to_recipient --><!-- ENDIF -->
-			<!-- IF S_BCC_RECIPIENT --><br /><strong>{L_BCC}{L_COLON}</strong> <!-- BEGIN bcc_recipient --><!-- IF bcc_recipient.NAME_FULL -->{bcc_recipient.NAME_FULL}<!-- ELSE --><a href="{bcc_recipient.U_VIEW}" style="color:<!-- IF bcc_recipient.COLOUR -->{bcc_recipient.COLOUR}<!-- ELSEIF bcc_recipient.IS_GROUP -->#0000FF<!-- ENDIF -->;">{bcc_recipient.NAME}</a><!-- ENDIF -->&nbsp;<!-- END bcc_recipient --><!-- ENDIF -->
-		</p>
-
-
-		<div class="content">{MESSAGE}</div>
-
-		<!-- IF S_HAS_ATTACHMENTS -->
-			<dl class="attachbox">
-				<dt>
-					{L_ATTACHMENTS}
-				</dt>
-				<!-- BEGIN attachment -->
-					<dd>{attachment.DISPLAY_ATTACHMENT}</dd>
-				<!-- END attachment -->
-			</dl>
-		<!-- ENDIF -->
-
-		<!-- IF S_DISPLAY_NOTICE -->
-			<div class="post-notice error">{L_DOWNLOAD_NOTICE}</div>
-		<!-- ENDIF -->
-
-		<!-- IF EDITED_MESSAGE or EDIT_REASON -->
-		<div class="notice">{EDITED_MESSAGE}
-			<!-- IF EDIT_REASON --><br /><strong>{L_REASON}{L_COLON}</strong> <em>{EDIT_REASON}</em><!-- ENDIF -->
-		</div>
-		<!-- ENDIF -->
-
-		<!-- IF SIGNATURE -->
-			<div id="sig{MESSAGE_ID}" class="signature">{SIGNATURE}</div>
-		<!-- ENDIF -->
-	</div>
 
 	<div class="back2top">
 		<a href="#top" class="top" title="{L_BACK_TO_TOP}">
@@ -163,6 +170,9 @@
 			<span class="sr-only">{L_BACK_TO_TOP}</span>
 		</a>
 	</div>
+	</td>
+				</tr>
+			</table>
 
 	</div>
 </div>

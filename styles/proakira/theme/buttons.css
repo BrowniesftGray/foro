@@ -112,11 +112,8 @@
 }
 
 .has-profile .post-buttons {
-	float: none;
-	position: absolute;
-	margin: 0;
-	right: 0;
-	top: 5px;
+	float: right;
+    margin: 10px;
 }
 
 .post-buttons > li {

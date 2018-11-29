@@ -260,11 +260,11 @@ dd.option {
 .postbody {
 	padding: 0;
 	line-height: 1.48em;
-	width: 76%;
+	width: calc(100% - 25px);
 	float: left;
 	position: relative;
 	border-radius: 5px;
-	margin-top: 10px;
+	margin: 10px 10px 0 15px;
 }
 
 .postbody .ignore {
@@ -740,16 +740,23 @@ fieldset.polls dd div {
 .postprofile {
 	margin: 5px;
 	min-height: 80px;
-	border: 1px solid transparent;
-	border-width: 0 0 0 1px;
-	width: 22%;
-	float: left;
-	display: inline;
+	width: 100%;
+	display: block;
+	background: rgb(60, 80, 60);
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+	border: 1px solid rgb(25, 25, 25);
+	padding-top: 8px;
+	padding-bottom: 8px;
 }
 
 .postprofile dd, .postprofile dt {
 	line-height: 1.2em;
 	margin-right: 8px;
+	margin-left: 8px;
 }
 
 .postprofile dd {
@@ -767,14 +774,11 @@ fieldset.polls dd div {
 
 /* Post-profile avatars */
 .postprofile .has-avatar .avatar-container {
-	margin-bottom: 3px;
 	overflow: hidden;
 }
 
 .postprofile .avatar {
 	display: block;
-	float: left;
-	max-width: 100%;
 }
 
 .postprofile .avatar img {

@@ -229,8 +229,11 @@ a:hover	{ text-decoration: underline; }
     background-repeat: no-repeat;
     background-position: 100% 0;
     position: relative;
-    border: solid 2px;
-    border-top: none;
+    border: solid 4px;
+}
+
+.divider + .post {
+	border-top: none;
 }
 
 .rowbg {

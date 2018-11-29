@@ -494,7 +494,10 @@
 
 	.postprofile .has-avatar .avatar-container {
 		margin: 0;
-		overflow: inherit;
+		overflow: hidden;
+		height: 40px;
+		margin-left: 5px;
+		float: left;
 	}
 
 	.postprofile .avatar-container:after {
@@ -508,7 +511,13 @@
 	.postprofile .avatar img {
 		width: auto !important;
 		height: auto !important;
-		max-height: 32px;
+		max-height: 80px;
+		margin-top: -10px;
+	}
+	
+	.postprofile .profile-rank {
+		float: right;
+		padding-right: 10px;
 	}
 
 	.has-profile .postbody h3 {
@@ -568,20 +577,6 @@
 	.attach-comment dfn {
 		width: 100%;
 	}
-}
-
-@media (min-width: 700px) {
-	.postbody { width: 70%; }
-}
-
-@media (min-width: 850px) {
-	.postbody { width: 76%; }
-}
-
-@media (max-width: 850px) {
-	.postprofile { width: 28%; }
-
-
 }
 
 @media (min-width: 701px) and (max-width: 950px) {
