@@ -412,6 +412,7 @@ li.header dt, li.header dd {
 .postbody {
 	color: #333;
 	background: #fff;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
 }
 
 /* Content container styles
@@ -604,7 +605,8 @@ fieldset.polls dd div {
 ----------------------------------------*/
 .postprofile {
 	color: #666666;
-	border-color: #FFFFFF;
+	border-color: rgb(25, 25, 25);
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
 }
 
 .pm .postprofile {
@@ -664,7 +666,7 @@ Colours and backgrounds for buttons.css
 
 .button-search:hover,
 .button-search-end:hover {
-	border-color: #C7C3BF;
+	/*border-color: #C7C3BF;*/
 }
 
 .caret	{ border-color: #DADADA; }

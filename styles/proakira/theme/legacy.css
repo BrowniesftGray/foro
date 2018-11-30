@@ -614,6 +614,7 @@ h2.topic-title, h2.forum-title {
 	float: left;
     display: block;
     clear: none;
+	margin-top: 5px;
 }
 
 .post .inner table {
