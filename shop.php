@@ -72,7 +72,7 @@ class phpbb_shop {
 					'ON'	=> 'pi.item_id = i.item_id AND pi.pj_id = p.pj_id',
 				)
 			),
-			'WHERE'		=> "p.pj_id = '$pj_id' AND i.item_id = '$item_id'",
+			'WHERE'		=> "p.pj_id = '$pj_id' AND i.item_id = '$item_id'"
 		));
 		
 		if ($row = $db->sql_fetchrow($db->sql_query($sql))) {	
@@ -147,7 +147,8 @@ class phpbb_shop {
 										LEFT JOIN ' . PERSONAJE_ITEMS_TABLE . " pi
 											ON pi.item_id = i.item_id
 											AND pi.pj_id = $pj_id
-									WHERE shop_id = '$shop_id'");
+									WHERE shop_id = '$shop_id'
+									ORDER BY i.nombre");
 									
 		while ($row = $db->sql_fetchrow($result)) {
 			
