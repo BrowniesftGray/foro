@@ -376,10 +376,11 @@ li.row.pais .info .links .descripcion {
 	display: inline-block;
     font-family: "Roboto Condensed";
     font-size: 1.4em;
-	height: 100%;
+	height: calc(100% - 30px);
 	width: 100%;
     color: #fff;
 	text-align: justify;
+	overflow-y: auto;
 }
 
 li.row.pais .info .links .subforos + .descripcion {
@@ -586,7 +587,7 @@ h2.topic-title, h2.forum-title {
 }
 
 .postbody > div {
-    padding: 10px;
+    padding: 10px 30px;
 }
 
 .post-buttons li {
@@ -639,11 +640,45 @@ h2.topic-title, h2.forum-title {
 	vertical-align: top;
 }
 
+.postprofile dt.no-profile-rank, .postprofile dt.has-profile-rank  {
+	position: relative;
+	margin-bottom: 30px;
+}
+
+.postprofile .user-banner {
+    position: absolute;
+    width: 100%;
+    padding: 0 14px;
+    left: -14px;
+    background-color: #7f907f;
+    margin-top: 4px;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.postprofile .user-banner span.before {
+	border-top-left-radius: 3px;
+	background-color: inherit;
+	position: absolute;
+	width: 5px;
+    height: 4px;
+    top: -3px;
+    left: 0px;
+}
+
+.postprofile .user-banner span.after {
+    border-top-right-radius: 3px;
+	background-color: inherit;
+	position: absolute;
+	width: 5px;
+    height: 4px;
+    top: -3px;
+    right: 0px;
+}
+
 .postprofile a.username-coloured {
 	display: block !important;
     font-size: 16px;
     text-align: center;
-    background-color: #576d57;
     padding: 5px 0 !important;
 }
 
@@ -675,6 +710,7 @@ h2.topic-title, h2.forum-title {
 @media (max-width: 900px) {
 	.post .inner table .cell-profile { width: 180px !important }
 	.profile-rank img { max-width: 160px !important }
+	.postbody > div { padding: 10px 15px; }
 }
 
 @media (max-width: 700px) {
@@ -682,13 +718,32 @@ h2.topic-title, h2.forum-title {
 		display: block;
 		width: 100% !important;
 	}
-	.post .inner table .cell-post { display: block }
+	
+	.post .inner table .cell-post { 
+		display: block 
+	}
+	
+	.postprofile dt.no-profile-rank, 
+	.postprofile dt.has-profile-rank {
+		margin-bottom: 0;
+	}
 	
 	.postprofile a.username-coloured {
 		background-color: #576d57;
 		padding: 5px !important;
 		float: left;
 		border-radius: 5px;
+	}
+	
+	.postprofile .user-banner {
+		position: static;
+		background-color: transparent;
+		box-shadow: none;
+	}
+	
+	.action-bar.bar-top {
+		margin: 0;
+		border-radius: 0;
 	}
 }
 
