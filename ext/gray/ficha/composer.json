@@ -1,0 +1,31 @@
+{
+    "name": "gray/ficha",
+    "type": "phpbb-extension",
+    "description": "Extensión de ficha Naruto",
+    "homepage": "",
+    "version": "0.1.0",
+    "time": "2018-12-01",
+    "keywords": ["phpbb", "extension", "gray", "ficha"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "gray",
+            "email": "gray@localhost",
+            "homepage": "",
+            "role": "Lead Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpbb/epv": "dev-master"
+    },
+    "extra": {
+        "display-name": "Ficha",
+        "soft-require": {
+            "phpbb/phpbb": "~3.2"
+        }
+    }
+}

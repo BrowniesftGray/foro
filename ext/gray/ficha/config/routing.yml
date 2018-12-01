@@ -1,0 +1,7 @@
+gray_ficha_home:
+    path: /ficha/new
+    defaults: { _controller: gray.ficha.controller:handle }
+    
+gray_ficha_store:    
+    path: /ficha/store
+    defaults: { _controller: gray.ficha.controller:store }

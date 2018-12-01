@@ -1,0 +1,72 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="./../styles/proakira/theme/theme/estiloficha.css" type="text/css">
+	
+	<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <form method="POST" action="/ficha/save">
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist" style="">
+                          <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Datos Personales</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Ramas</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false">Atributos</a>
+                          </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="form-group row">
+                                <label for="name" class="col-md-6 col-form-label text-md-left">Nombre</label>
+
+                                <div class="col-md-6">
+                                    <input id="name" type="text" class="form-control" name="name" value="" required autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="edad" class="col-md-6 col-form-label text-md-left">Edad</label>
+
+                                <div class="col-md-6">
+                                    <input id="edad" type="number" class="form-control" name="edad" value="" required autofocus min="10" max="20">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-6 col-form-label text-md-left">Aldea</label>
+
+                                <div class="col-md-6">
+                                    <select class="form-control" name="aldea" value="" required autofocus>
+                                        <option value="1">Konohagakure no Sato</option>
+                                        <option value="2">Sunagakure no Sato</option>
+                                    </select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                          <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">4</div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                       <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-3">
+                                <button type="submit" class="btn btn-primary">
+                                    Crear Ficha
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- INCLUDE overall_footer.html -->
