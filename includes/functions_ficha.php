@@ -45,14 +45,26 @@ function get_pj_id($user_id)
 	} else {
 		$pj_id = false;
 	}
+	$db->sql_freeresult($query);
 	return $pj_id;
+}
+
+function get_pj_name($user_id) {
+	global $db;
+	$query = $db->sql_query("SELECT nombre FROM personajes WHERE user_id=".$user_id);
+	if ($row = $db->sql_fetchrow($query)) {
+		$pj_name = $row['nombre'];
+	} else {
+		$pj_name = false;
+	}
+	$db->sql_freeresult($query);
+	return $pj_name;
 }
 
 function get_ficha($user_id, $return = false, $ver = false)
 {
 	global $user, $db, $template, $phpbb_root_path, $auth;
 
-	$user_id = $user_id;
 	$query = $db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);

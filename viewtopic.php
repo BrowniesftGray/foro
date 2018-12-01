@@ -1405,6 +1405,7 @@ while ($row = $db->sql_fetchrow($result))
 				'author_colour'		=> get_username_string('colour', $poster_id, $row['username'], $row['user_colour']),
 				'author_username'	=> get_username_string('username', $poster_id, $row['username'], $row['user_colour']),
 				'author_profile'	=> get_username_string('profile', $poster_id, $row['username'], $row['user_colour']),
+				'author_alias'		=> get_username_string('full', $poster_id, get_pj_name($poster_id), $row['user_colour']),
 				
 				'post_align'		=> ($row['user_post_align'] !== 'default') ? $row['user_post_align'] : '',
 			);
@@ -1931,6 +1932,8 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'POST_AUTHOR_COLOUR'	=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_colour'] : get_username_string('colour', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
 		'POST_AUTHOR'			=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_username'] : get_username_string('username', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
 		'U_POST_AUTHOR'			=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_profile'] : get_username_string('profile', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
+		'POST_AUTHOR_ALIAS'		=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_alias'] : get_username_string('full', $poster_id, get_pj_name($poster_id), $row['user_colour'], $row['post_username']),
+		'U_POST_AUTHOR_ALIAS'	=> get_pj_name($poster_id),
 
 		'RANK_TITLE'		=> $user_cache[$poster_id]['rank_title'],
 		'RANK_IMG'			=> $user_cache[$poster_id]['rank_image'],
@@ -2000,6 +2003,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'S_FIRST_UNREAD'	=> $s_first_unread,
 		'S_CUSTOM_FIELDS'	=> (isset($cp_row['row']) && count($cp_row['row'])) ? true : false,
 		'S_TOPIC_POSTER'	=> ($topic_data['topic_poster'] == $poster_id) ? true : false,
+		'S_ROLEPLAY_FORUM'	=> (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla())),
 
 		'S_IGNORE_POST'		=> ($row['foe']) ? true : false,
 		'L_IGNORE_POST'		=> ($row['foe']) ? sprintf($user->lang['POST_BY_FOE'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
@@ -2007,8 +2011,6 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'L_POST_DISPLAY'	=> ($row['hide_post']) ? $user->lang('POST_DISPLAY', '<a class="display_post" data-post-id="' . $row['post_id'] . '" href="' . $viewtopic_url . "&amp;p={$row['post_id']}&amp;view=show#p{$row['post_id']}" . '">', '</a>') : '',
 		'S_DELETE_PERMANENT'	=> $permanent_delete_allowed,
 	);
-	
-	get_ficha($user->data['user_id']);
 
 	$user_poster_data = $user_cache[$poster_id];
 

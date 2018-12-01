@@ -185,4 +185,26 @@ class Cookie
     {
         return $this->expire < time();
     }
+
+    /**
+     * Checks if the cookie value should be sent with no url encoding.
+     *
+     * @return bool
+     */
+    public function isRaw()
+    {
+        //return $this->raw;
+		return false;
+    }
+
+    /**
+     * Gets the SameSite attribute.
+     *
+     * @return string|null
+     */
+    public function getSameSite()
+    {
+        //return $this->sameSite;
+		return null;
+    }
 }

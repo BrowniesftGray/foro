@@ -153,7 +153,13 @@
 								<!-- EVENT viewtopic_body_post_author_before -->
 								<div class="user-banner">
 								<span class="before"></span>
-								<!-- IF not postrow.U_POST_AUTHOR --><strong>{postrow.POST_AUTHOR_FULL}</strong><!-- ELSE -->{postrow.POST_AUTHOR_FULL}<!-- ENDIF -->
+								<!-- IF not postrow.U_POST_AUTHOR -->
+									<strong>{postrow.POST_AUTHOR_FULL}</strong>
+								<!-- ELSEIF postrow.U_POST_AUTHOR_ALIAS and postrow.S_ROLEPLAY_FORUM  -->
+									{postrow.POST_AUTHOR_ALIAS}
+								<!-- ELSE -->
+									{postrow.POST_AUTHOR_FULL}
+								<!-- ENDIF -->
 								<span class="after"></span>
 								</div>
 								<!-- EVENT viewtopic_body_post_author_after -->
