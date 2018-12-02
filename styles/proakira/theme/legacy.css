@@ -637,10 +637,6 @@ h2.topic-title, h2.forum-title {
 	max-width: 200px;
 }
 
-.post .inner {
-	background-color: rgb(240, 240, 240);
-}
-
 .post .inner table .cell-profile {
 	width: 230px;
 	vertical-align: top;

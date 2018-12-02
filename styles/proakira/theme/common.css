@@ -517,6 +517,8 @@ a.header-avatar span:after {
 .jumpbox .dropdown-contents {
 	padding: 0;
 	text-decoration: none;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .jumpbox .dropdown-contents li {
@@ -745,7 +747,7 @@ table.info tbody th {
 }
 
 .left-box.profile-details {
-	width: 80%;
+	/*width: 80%;*/
 }
 
 .right-box {

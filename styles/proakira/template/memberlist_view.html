@@ -7,6 +7,12 @@
 <form method="post" action="{S_PROFILE_ACTION}" id="viewprofile">
 <div class="panel bg1<!-- IF S_ONLINE --> online<!-- ENDIF -->">
 	<div class="inner">
+	
+	<!-- IF U_FICHA_EXISTE -->
+		<a href="{U_FICHA_USER}" class="button ver-ficha" title="Ver ficha del personaje">
+			<i class="icon fa-address-card fa-fw" aria-hidden="true"></i> <span>Ficha del Personaje</span>
+		</a>
+	<!-- ENDIF -->
 
 	<!-- IF AVATAR_IMG -->
 		<dl class="left-box">

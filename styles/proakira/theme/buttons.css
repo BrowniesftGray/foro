@@ -28,6 +28,11 @@
  	outline: none;
 }
 */
+
+.button.ver-ficha {
+	float: right;
+}
+
 .caret {
 	border-left: 1px solid;
 	position: relative;

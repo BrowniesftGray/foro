@@ -409,9 +409,13 @@ li.header dt, li.header dd {
 
 /* Post body styles
 ----------------------------------------*/
+.post .inner {
+    background-color: rgb(200, 200, 200);
+}
+
 .postbody {
 	color: #333;
-	background: #fff;
+	background: #efefef;
 	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
 }
 

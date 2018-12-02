@@ -269,6 +269,10 @@ dd.option {
     margin-left: 15px;
 }
 
+.postbody pre {
+	white-space: pre-line !important;
+}
+
 .postbody .ignore {
 	font-size: 1.1em;
 }

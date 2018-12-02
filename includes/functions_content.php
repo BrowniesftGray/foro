@@ -229,7 +229,7 @@ function make_jumpbox($action, $forum_id = false, $select_all = false, $acl_list
 				'FORUM_ID'		=> ($select_all) ? 0 : -1,
 				'FORUM_NAME'	=> ($select_all) ? $user->lang['ALL_FORUMS'] : $user->lang['SELECT_FORUM'],
 				'S_FORUM_COUNT'	=> $iteration,
-				'LINK'			=> $phpbb_path_helper->append_url_params($action, array('f' => $forum_id)),
+				'LINK'			=> append_sid("{$phpbb_root_path}viewforum.php", 'f=' . $row['forum_id']),
 			);
 
 			$iteration++;
@@ -244,7 +244,7 @@ function make_jumpbox($action, $forum_id = false, $select_all = false, $acl_list
 			'S_IS_CAT'		=> ($row['forum_type'] == FORUM_CAT) ? true : false,
 			'S_IS_LINK'		=> ($row['forum_type'] == FORUM_LINK) ? true : false,
 			'S_IS_POST'		=> ($row['forum_type'] == FORUM_POST) ? true : false,
-			'LINK'			=> $phpbb_path_helper->append_url_params($action, array('f' => $row['forum_id'])),
+			'LINK'			=> append_sid("{$phpbb_root_path}viewforum.php", 'f=' . $row['forum_id']),
 		);
 
 		/**
