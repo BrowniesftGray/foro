@@ -165,7 +165,7 @@ li.header dl.row-item dt .list-inner {
 }
 
 /* Forum list column styles */
-.row .list-inner { padding: 4px 0; margin-top: 2px}
+.row .list-inner { padding: 4px 0; }
 
 dl.row-item {
 	background-position: 10px 50%;		/* Position of folder icon */
@@ -265,17 +265,12 @@ dd.option {
 	position: relative;
 	border-radius: 5px;
 	margin: 10px 10px 0 15px;
-<<<<<<< HEAD
-	min-height: 460px;
-    margin-left: 20px;
-=======
     min-height: 370px;
     margin-left: 15px;
 }
 
 .postbody pre {
 	white-space: pre-line !important;
->>>>>>> cece74a1be71ba730011036228a03a259019741a
 }
 
 .postbody .ignore {

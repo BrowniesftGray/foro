@@ -16,9 +16,6 @@ class main
     /* @var \phpbb\user */
     protected $user;
 
-    protected $db;
-    protected $auth;
-
     /**
      * Constructor
      *
@@ -27,14 +24,12 @@ class main
      * @param \phpbb\template\template  $template
      * @param \phpbb\user               $user
      */
-    public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth)
+    public function __construct(\phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user)
     {
         $this->config   = $config;
         $this->helper   = $helper;
         $this->template = $template;
         $this->user     = $user;
-        $this->db       = $db;
-        $this->auth     = $auth;
     }
 
     /**
@@ -52,7 +47,6 @@ class main
 	
 	public function store()
     {
-        $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         return $this->helper->render('ficha_message.html');
     }
 }
