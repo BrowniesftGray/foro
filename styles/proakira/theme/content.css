@@ -448,7 +448,7 @@ p.author {
 /* Post signature */
 .signature {
 	margin-top: 1.5em;
-	padding-top: 0.2em;
+	padding: 0.2em 0 0 0 !important;
 	font-size: 1.1em;
 	border-top: 1px solid transparent;
 	clear: left;

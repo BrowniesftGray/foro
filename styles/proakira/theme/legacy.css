@@ -596,7 +596,7 @@ h2.topic-title, h2.forum-title {
 	background: none;
 }
 
-.postbody > div {
+.postbody > div:first-of-type {
     padding: 10px 30px;
 }
 
@@ -659,6 +659,11 @@ h2.topic-title, h2.forum-title {
     background-color: #7f907f;
     margin-top: 4px;
 	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+	filter: grayscale(40%);
+}
+
+.postprofile .user-banner a.username-coloured {
+	color: #efefef !important;
 }
 
 .postprofile .user-banner span.before {
@@ -718,7 +723,7 @@ h2.topic-title, h2.forum-title {
 @media (max-width: 900px) {
 	.post .inner table .cell-profile { width: 180px !important }
 	.profile-rank img { max-width: 160px !important }
-	.postbody > div { padding: 10px 15px; }
+	.postbody > div:first-of-type { padding: 10px 15px }
 }
 
 @media (max-width: 700px) {
@@ -737,10 +742,14 @@ h2.topic-title, h2.forum-title {
 	}
 	
 	.postprofile a.username-coloured {
-		background-color: #576d57;
+		background-color: inherit;
 		padding: 5px !important;
 		float: left;
 		border-radius: 5px;
+	}
+	
+	.user-banner .before, .user-banner .after {
+		display: none;
 	}
 	
 	.postprofile .user-banner {

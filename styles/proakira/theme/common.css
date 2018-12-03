@@ -1167,7 +1167,8 @@ ul.linklist:after,
 
 .dropdown-extended .header .header_settings a {
 	display: inline-block;
-	padding: 0 5px;
+	padding: 0 2px;
+	font-size: 10px;
 }
 
 .dropdown-extended .header:after {
