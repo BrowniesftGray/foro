@@ -530,6 +530,7 @@
 	.has-profile .post-buttons {
 		right: 30px;
 		top: 15px;
+		opacity: 1 !important;
 	}
 
 	.online {

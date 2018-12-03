@@ -265,8 +265,17 @@ dd.option {
 	position: relative;
 	border-radius: 5px;
 	margin: 10px 10px 0 15px;
+<<<<<<< HEAD
 	min-height: 460px;
     margin-left: 20px;
+=======
+    min-height: 370px;
+    margin-left: 15px;
+}
+
+.postbody pre {
+	white-space: pre-line !important;
+>>>>>>> cece74a1be71ba730011036228a03a259019741a
 }
 
 .postbody .ignore {
@@ -444,7 +453,7 @@ p.author {
 /* Post signature */
 .signature {
 	margin-top: 1.5em;
-	padding-top: 0.2em;
+	padding: 0.2em 0 0 0 !important;
 	font-size: 1.1em;
 	border-top: 1px solid transparent;
 	clear: left;
@@ -740,9 +749,9 @@ fieldset.polls dd div {
 ----------------------------------------*/
 
 .postprofile {
-	margin: 10px 0 10px 7px;
+	margin: 10px 0 10px 10px;
 	min-height: 80px;
-	width: 100%;
+	width: calc(100% - 14px);
 	display: block;
 	background: rgb(60, 80, 60);
 	-webkit-border-radius: 5px;

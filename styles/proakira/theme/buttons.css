@@ -28,6 +28,11 @@
  	outline: none;
 }
 */
+
+.button.ver-ficha {
+	float: right;
+}
+
 .caret {
 	border-left: 1px solid;
 	position: relative;
@@ -109,6 +114,12 @@
 	float: right;
 	list-style: none;
 	margin-top: 2px;
+	opacity: 0;
+	transition: .1s;
+}
+
+td.cell-post:hover .post-buttons {
+	opacity: 1;
 }
 
 .has-profile .post-buttons {

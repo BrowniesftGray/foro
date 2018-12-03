@@ -151,7 +151,7 @@
 									<!-- EVENT viewtopic_body_avatar_after -->
 								</div>
 								<!-- EVENT viewtopic_body_post_author_before -->
-								<div class="user-banner">
+								<div class="user-banner" style="background-color:{postrow.POST_AUTHOR_COLOUR}">
 								<span class="before"></span>
 								<!-- IF not postrow.U_POST_AUTHOR -->
 									<strong>{postrow.POST_AUTHOR_FULL}</strong>
@@ -220,7 +220,61 @@
 						</dl>
 					</td>
 					<td class="cell-post">
+					
+						<!-- DEFINE $SHOW_POST_BUTTONS = (postrow.U_EDIT or postrow.U_DELETE or postrow.U_REPORT or postrow.U_WARN or postrow.U_INFO or postrow.U_QUOTE) -->
+						<!-- EVENT viewtopic_body_post_buttons_list_before -->
+						
+						
 						<div class="postbody"<!-- IF postrow.POST_ALIGN --> style="text-align:{postrow.POST_ALIGN}"<!-- ENDIF -->>
+							<!-- IF not S_IS_BOT and $SHOW_POST_BUTTONS -->
+							<ul class="post-buttons">
+								<!-- EVENT viewtopic_body_post_buttons_before -->
+								<!-- IF postrow.U_EDIT -->
+									<li>
+										<a href="{postrow.U_EDIT}" title="{L_EDIT_POST}" class="button button-icon-only">
+											<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_BUTTON_EDIT}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- IF postrow.U_DELETE -->
+									<li>
+										<a href="{postrow.U_DELETE}" title="{L_DELETE_POST}" class="button button-icon-only">
+											<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DELETE_POST}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- IF postrow.U_REPORT -->
+									<li>
+										<a href="{postrow.U_REPORT}" title="{L_REPORT_POST}" class="button button-icon-only">
+											<i class="icon fa-exclamation fa-fw" aria-hidden="true"></i><span class="sr-only">{L_REPORT_POST}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- IF postrow.U_WARN -->
+									<li>
+										<a href="{postrow.U_WARN}" title="{L_WARN_USER}" class="button button-icon-only">
+											<i class="icon fa-exclamation-triangle fa-fw" aria-hidden="true"></i><span class="sr-only">{L_WARN_USER}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- IF postrow.U_INFO -->
+									<li>
+										<a href="{postrow.U_INFO}" title="{L_INFORMATION}" class="button button-icon-only">
+											<i class="icon fa-info fa-fw" aria-hidden="true"></i><span class="sr-only">{L_INFORMATION}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- IF postrow.U_QUOTE -->
+									<li>
+										<a href="{postrow.U_QUOTE}" title="{L_REPLY_WITH_QUOTE}" class="button button-icon-only">
+											<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">{L_QUOTE}</span>
+										</a>
+									</li>
+								<!-- ENDIF -->
+								<!-- EVENT viewtopic_body_post_buttons_after -->
+							</ul>
+							<!-- ENDIF -->
+						
 							<!-- IF postrow.S_POST_HIDDEN -->
 								<!-- IF postrow.S_POST_DELETED -->
 									<div class="ignore" id="post_hidden{postrow.POST_ID}">
@@ -322,10 +376,8 @@
 						</p>
 						<!-- EVENT viewtopic_body_postrow_post_details_after -->
 						
-						<!-- DEFINE $SHOW_POST_BUTTONS = (postrow.U_EDIT or postrow.U_DELETE or postrow.U_REPORT or postrow.U_WARN or postrow.U_INFO or postrow.U_QUOTE) -->
 						<!-- EVENT viewtopic_body_post_buttons_list_before -->
-						<!-- IF not S_IS_BOT -->
-						<!-- IF $SHOW_POST_BUTTONS -->
+						<!-- IF not S_IS_BOT and $SHOW_POST_BUTTONS -->
 						<ul class="post-buttons">
 							<!-- EVENT viewtopic_body_post_buttons_before -->
 							<!-- IF postrow.U_EDIT -->
@@ -372,8 +424,7 @@
 							<!-- ENDIF -->
 							<!-- EVENT viewtopic_body_post_buttons_after -->
 						</ul>
-					<!-- ENDIF -->
-				<!-- ENDIF -->
+						<!-- ENDIF -->
 
 						<!-- EVENT viewtopic_body_postrow_back2top_before -->
 						<div class="back2top">

@@ -409,9 +409,13 @@ li.header dt, li.header dd {
 
 /* Post body styles
 ----------------------------------------*/
+.post .inner {
+    background-color: rgb(200, 200, 200);
+}
+
 .postbody {
 	color: #333;
-	background: #fff;
+	background: #efefef;
 	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
 }
 
@@ -1150,13 +1154,17 @@ input.disabled {
 }
 
 .dropdown-extended .footer {
-	background-color: #81aca2;
+	background-color: #192b26;
 	border-top-style: solid;
 	border-top-width: 1px;
 }
 
 .dropdown-extended .header {
-	background-color: #81aca2;
+	background-color: #192b26;
+	color: #eee;
+}
+
+.dropdown-extended .header a {
 	color: #eee;
 }
 
