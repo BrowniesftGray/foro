@@ -15,7 +15,7 @@
 		</dl>
     <dl>
       <dt><label for="edad">Edad:</label><br /><span>Coloca aquí tu edad.</span></dt>
-      <dd><input type="number" class="inputbox numberfield" name="edad" id="edad" size="10" min="10" max="18" placeholder="La edad de tu personaje"  /></dd>
+      <dd><input type="number" class="inputbox numberfield" name="edad" id="edad" size="10" min="10" max="20" placeholder="La edad de tu personaje"  /></dd>
     </dl>
 		<dl>
 			<dt><label for="principal">Rama Principal:</label><br /><span>Coloca aquí tu rama principal.</span></dt>
@@ -36,27 +36,27 @@
       </dl>
       <dl>
         <dt><label for="fuerza">Fuerza:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrFuerza" id="atrFuerza" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrFuerza" id="atrFuerza" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
       <dl>
         <dt><label for="agilidad">Agilidad:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="artAg" id="artAg" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="artAg" id="artAg" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
       <dl>
         <dt><label for="vitalidad">Vitalidad:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrVit" id="atrVit" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrVit" id="atrVit" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
       <dl>
         <dt><label for="concentracion">Concentracion:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrCon" id="atrCon" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrCon" id="atrCon" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
       <dl>
         <dt><label for="cck">Control del chakra:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrCCK" id="atrCCK" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrCCK" id="atrCCK" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
       <dl>
         <dt><label for="voluntad">Voluntad:</label></dt>
-        <dd><input type="number" class="inputbox numberfield" name="atrVol" id="atrVol" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(); " /></dd>
+        <dd><input type="number" class="inputbox numberfield" name="atrVol" id="atrVol" size="10" value="1" required="required" onblur="checkAtributos(this); calcStats(false); " /></dd>
       </dl>
     </fieldset>
 
@@ -79,17 +79,17 @@
     <h2>Descripciones</h2>
     <dl>
 			<dt><label for="descFis">Descripción física:</label><br /><span>Describe como es físicamente tu personaje.</span></dt>
-			<dd><textarea class="inputbox" name="descFis" id="descFis" placeholder="Descripción física" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'; checkText(this, 200);"></textarea></dd>
+			<dd><textarea class="inputbox" name="descFis" id="descFis" placeholder="Descripción física" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'"></textarea></dd>
 		</dl>
 
 		<dl>
 			<dt><label for="descPsic">Descripción psicológica:</label><br /><span>Describe como es el carácter de tu personaje.</span></dt>
-			<dd><textarea class="inputbox" name="descPsic" id="descPsic" placeholder="Descripción psicológica" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'; checkText(this, 200);"></textarea></dd>
+			<dd><textarea class="inputbox" name="descPsic" id="descPsic" placeholder="Descripción psicológica" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'"></textarea></dd>
 		</dl>
 
 		<dl>
 			<dt><label for="descHis">Historia:</label><br /><span>La historia de tu personaje.</span></dt>
-			<dd><textarea class="inputbox" name="descHis" id="descHis" placeholder="La historia de tu personaje" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px'; checkText(this, 200);"></textarea></dd>
+			<dd><textarea class="inputbox" name="descHis" id="descHis" placeholder="La historia de tu personaje" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px'"></textarea></dd>
 		</dl>
 
 		<br /><br />
@@ -111,10 +111,10 @@ function checkText(elem, num) {
 	return true;
 }
 
-function calcStats() {
+function calcStats(finalCheck) {
 	var fue = document.getElementById('atrFuerza').value;
-	var con = document.getElementById('atrVit').value;
-	var intel = document.getElementById('atrCon').value;
+	var vit = document.getElementById('atrVit').value;
+	var con = document.getElementById('atrCon').value;
 	var cck = document.getElementById('atrCCK').value;
 	var agi = document.getElementById('artAg').value;
 	var vol = document.getElementById('atrVol').value;
@@ -124,30 +124,35 @@ function calcStats() {
 	var puntos = document.getElementById('puntos');
 	var success = true;
 
-	usados = parseInt(fue) + parseInt(con) + parseInt(intel) + parseInt(cck) + parseInt(agi)  + parseInt(vol);
+	usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
 	if (usados > 50) {
 		alert('¡No puedes repartir más de 50 puntos!');
 		success = false;
 	} else {
-		pv.value = 10 + (3*parseInt(con));
-		pc.value = parseInt(cck) + parseInt(intel) + parseInt(vol);
-		sta.value = parseInt(con) + parseInt(agi) + parseInt(fue) + parseInt(vol);
+		pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
+		pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
+		sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
 	}
 
 	puntos.innerHTML = 50 - usados;
+	
+	if (usados < 50 && finalCheck) {
+		alert('Aún te faltan puntos de atributo por repartir');
+		success = false;
+	}
 
 	return success;
 }
 
 function checkAtributos(atr) {
   var fue = document.getElementById('atrFuerza').value;
-  var con = document.getElementById('atrVit').value;
-  var intel = document.getElementById('atrCon').value;
+  var vit = document.getElementById('atrVit').value;
+  var con = document.getElementById('atrCon').value;
   var cck = document.getElementById('atrCCK').value;
   var agi = document.getElementById('artAg').value;
   var vol = document.getElementById('atrVol').value;
 
-  var points = [fue, con, intel, cck, agi, vol];
+  var points = [fue, vit, con, cck, agi, vol];
 
   points.sort(function(a, b){return a-b});
 
@@ -182,14 +187,14 @@ function checkFicha() {
 	var nombre = document.getElementById('nombre');
 	var descFis = document.getElementById('descFis');
 	var descPsic = document.getElementById('descPsic');
-	var fue = document.getElementById('atrFuerza');
-	var con = document.getElementById('atrVit');
-	var intel = document.getElementById('atrCon');
-	var cck = document.getElementById('atrCCK');
-	var agi = document.getElementById('artAg');
-	var vol = document.getElementById('atrVol');
+	var fue = document.getElementById('atrFuerza').value;
+	var vit = document.getElementById('atrVit').value;
+	var con = document.getElementById('atrCon').value;
+	var cck = document.getElementById('atrCCK').value;
+	var agi = document.getElementById('artAg').value;
+	var vol = document.getElementById('atrVol').value;
 
-	return checkAtributos(fue) && checkAtributos(con) && checkAtributos(intel) && checkAtributos(cck) && checkAtributos(agi) && checkAtributos(vol) && calcStats() && checkText(nombre, 5) && checkText(descFis, 200) && checkText(descPsic, 200);
+	return checkAtributos(fue) && checkAtributos(vit) && checkAtributos(con) && checkAtributos(cck) && checkAtributos(agi) && checkAtributos(vol) && calcStats(true) && checkText(nombre, 5) && checkText(descFis, 200) && checkText(descPsic, 200);
 }
 </script>
 

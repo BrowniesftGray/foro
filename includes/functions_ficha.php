@@ -144,6 +144,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'FICHA_RAMA2' => stripslashes($row['rama2']),
 				'FICHA_RAMA3' => stripslashes($row['rama3']),
 				'FICHA_RAMA4' => stripslashes($row['rama4']),
+				'FICHA_RAMA5' => stripslashes($row['rama5']),
 				//'PUNTOS'				=> $row['puntos'],
 				//'GRUPO' => $user->data['group_id'],
 				'FICHA_RAMA5' => stripslashes($row['rama5']),
