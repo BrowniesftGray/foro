@@ -47,6 +47,7 @@ class main
 	
 	public function store()
     {
+        $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         return $this->helper->render('ficha_message.html');
     }
 }
