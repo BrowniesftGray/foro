@@ -125,22 +125,24 @@ function calcStats(finalCheck) {
 	var success = true;
 
 	usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
-	if (usados > 50) {
-		alert('¡No puedes repartir más de 50 puntos!');
-		success = false;
-	} else {
-		pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
-		pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
-		sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
-	}
+	pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
+	pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
+	sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
 
 	puntos.innerHTML = 50 - usados;
 	
-	if (usados < 50 && finalCheck) {
-		alert('Aún te faltan puntos de atributo por repartir');
-		success = false;
+	if (finalCheck) {
+		if (usados > 50) {
+			alert('¡No puedes repartir más de 50 puntos!');
+			success = false;
+		}
+		
+		if (usados < 50) {
+			alert('Aún te faltan puntos de atributo por repartir');
+			success = false;
+		}
 	}
-
+	
 	return success;
 }
 
@@ -168,11 +170,11 @@ function checkAtributos(atr) {
   }
 
   if (points[0] < attr_min) {
-  	alert('La puntuación maxima no debe superar al atributo menor en mas de un 75%.');
+  	//alert('La puntuación maxima no debe superar al atributo menor en mas de un 75%.');
     if (attr_min < 9 ) {
       attr_min = parseInt(points[0]) + 9;
     }
-  	atr.value = attr_min;
+  	atr.value = Math.floor(attr_min);
   	return false;
   }
 
