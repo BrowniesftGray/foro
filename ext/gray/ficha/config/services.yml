@@ -6,3 +6,5 @@ services:
             - '@controller.helper'
             - '@template'
             - '@user'
+            - '@dbal.conn'
+            - '@auth'
