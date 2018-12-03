@@ -33,6 +33,8 @@ class main
         $this->helper   = $helper;
         $this->template = $template;
         $this->user     = $user;
+        $this->db       = $db;
+        $this->auth     = $auth;
     }
 
     /**
