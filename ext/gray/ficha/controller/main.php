@@ -46,13 +46,16 @@ class main
      */
     public function handle()
     {   
-        if ($this->user->data['user_id'] == ANONYMOUS) {
-            trigger_error('No puedes acceder aquí sin conectarte.');
+        $user_id = $this->user->data['user_id'];
+        if (ficha_exists($user_id) == true) {
+            trigger_error('Ya tienes ficha creada.');
         }
-        else{
-            $this->template->assign_var('DEMO_MESSAGE', $this->user->data['group_id']);
-            return $this->helper->render('ficha_body.html', 'Creación de Ficha');
+        if ($this->user->data['user_id'] == ANONYMOUS ) {
+            trigger_error('No puedes acceder aquí sin conectarte');
         }
+
+        $this->template->assign_var('DEMO_MESSAGE', $this->user->data['group_id']);
+        return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 	
 	public function store()
@@ -67,7 +70,7 @@ class main
         );
 //profile_fields_data -> Tabla donde se encuentra la experiencia
         $fields = array_merge(array(
-            'NOMBRE'            => utf8_normalize_nfc(request_var('nombre', '', true)),
+            'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'EDAD'              => utf8_normalize_nfc(request_var('edad', '', true)),
             'PRINCIPAL'         => utf8_normalize_nfc(request_var('ramaPrincipal', '', true)),
             'RAMA1'             => utf8_normalize_nfc(request_var('ramaSec1', '', true)),
@@ -89,5 +92,16 @@ class main
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         return $this->helper->render('ficha_message.html');
+    }
+
+    function ficha_exists($user_id)
+    {
+        $query = $this->db->sql_query('SELECT pj_id FROM personajes WHERE user_id='.$user_id.'');
+        if ($row = $db->sql_fetchrow($query)) {
+            $db->sql_freeresult($query);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
