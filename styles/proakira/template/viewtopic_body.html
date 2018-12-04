@@ -169,25 +169,25 @@
 							<!-- IF postrow.RANK_TITLE or postrow.RANK_IMG --><dd class="profile-rank"><!-- IF postrow.RANK_IMG -->{postrow.RANK_IMG}<!-- ELSE -->{postrow.RANK_TITLE}<!-- ENDIF --></dd><!-- ENDIF -->
 							<!-- EVENT viewtopic_body_postrow_rank_after -->
 
-						<!-- IF postrow.POSTER_POSTS != '' --><dd class="profile-posts"><span class="field-name">{L_POSTS}{L_COLON}</span> <!-- IF postrow.U_SEARCH !== '' --><a class="field-value" href="{postrow.U_SEARCH}"><!-- ELSE --><span  class="field-value"><!-- ENDIF -->{postrow.POSTER_POSTS}<!-- IF postrow.U_SEARCH !== '' --></a><!-- ELSE --></span><!-- ENDIF --></dd><!-- ENDIF -->
-						<!-- IF postrow.POSTER_JOINED --><dd class="profile-joined"><span class="field-name">{L_JOINED}{L_COLON}</span> <span  class="field-value">{postrow.POSTER_JOINED}</span></dd><!-- ENDIF -->
-						<!-- IF postrow.POSTER_WARNINGS --><dd class="profile-warnings"><span class="field-name">{L_WARNINGS}{L_COLON}</span> <span class="field-value">{postrow.POSTER_WARNINGS}</span></dd><!-- ENDIF -->
+							<!-- IF postrow.POSTER_POSTS != '' --><dd class="profile-posts"><span class="field-name">{L_POSTS}{L_COLON}</span> <!-- IF postrow.U_SEARCH !== '' --><a class="field-value" href="{postrow.U_SEARCH}"><!-- ELSE --><span  class="field-value"><!-- ENDIF -->{postrow.POSTER_POSTS}<!-- IF postrow.U_SEARCH !== '' --></a><!-- ELSE --></span><!-- ENDIF --></dd><!-- ENDIF -->
+							<!-- IF postrow.POSTER_JOINED --><dd class="profile-joined"><span class="field-name">{L_JOINED}{L_COLON}</span> <span  class="field-value">{postrow.POSTER_JOINED}</span></dd><!-- ENDIF -->
+							<!-- IF postrow.POSTER_WARNINGS --><dd class="profile-warnings"><span class="field-name">{L_WARNINGS}{L_COLON}</span> <span class="field-value">{postrow.POSTER_WARNINGS}</span></dd><!-- ENDIF -->
 
-						<!-- IF postrow.S_PROFILE_FIELD1 -->
+							<!-- IF postrow.S_PROFILE_FIELD1 -->
 							<!-- Use a construct like this to include admin defined profile fields. Replace FIELD1 with the name of your field. -->
 							<dd><span class="field-name">{postrow.PROFILE_FIELD1_NAME}{L_COLON}</span> <span class="field-value">{postrow.PROFILE_FIELD1_VALUE}</span></dd>
-						<!-- ENDIF -->
+							<!-- ENDIF -->
 
-						<!-- EVENT viewtopic_body_postrow_custom_fields_before -->
-						<!-- BEGIN custom_fields -->
+							<!-- EVENT viewtopic_body_postrow_custom_fields_before -->
+							<!-- BEGIN custom_fields -->
 							<!-- IF not postrow.custom_fields.S_PROFILE_CONTACT -->
 								<dd class="profile-custom-field profile-{postrow.custom_fields.PROFILE_FIELD_IDENT}"><span class="field-name">{postrow.custom_fields.PROFILE_FIELD_NAME}{L_COLON}</span> <span class="field-value">{postrow.custom_fields.PROFILE_FIELD_VALUE}</span></dd>
 							<!-- ENDIF -->
-						<!-- END custom_fields -->
-						<!-- EVENT viewtopic_body_postrow_custom_fields_after -->
+							<!-- END custom_fields -->
+							<!-- EVENT viewtopic_body_postrow_custom_fields_after -->
 
-						<!-- EVENT viewtopic_body_contact_fields_before -->
-						<!-- IF not S_IS_BOT and .postrow.contact -->
+							<!-- EVENT viewtopic_body_contact_fields_before -->
+							<!-- IF not S_IS_BOT and .postrow.contact -->
 							<dd class="profile-contact">
 								<span class="field-name">{L_CONTACT}{L_COLON}</span>
 								<div class="field-value dropdown-container dropdown-left">
@@ -214,10 +214,34 @@
 									</div>
 								</div>
 							</dd>
-						<!-- ENDIF -->
-						<!-- EVENT viewtopic_body_contact_fields_after -->
+							<!-- ENDIF -->
+							<!-- EVENT viewtopic_body_contact_fields_after -->
 							<br class="clear" />
 						</dl>
+						<!-- IF postrow.S_ROLEPLAY_FORUM and postrow.items -->
+						<dl class="postinventory">
+							<ul class="inventory">
+								<!-- BEGIN postrow.items -->
+								<li class="item" data-tooltip="item-{postrow.POST_ID}-{postrow.items.ITEM_ID}">
+									<span class="qty">{postrow.items.CANTIDAD}</span>
+									{postrow.items.IMAGEN}
+									<div style="display:none">
+										<div class="tooltip" id="item-{postrow.POST_ID}-{postrow.items.ITEM_ID}">
+											<div class="nombre">{postrow.items.NOMBRE}</div>
+											<!-- IF postrow.items.REQS --><div class="reqs"><b>Requisitos:</b>&nbsp;{postrow.items.REQS}</div><!-- ENDIF -->
+											<!-- IF postrow.items.EFECTOS --><div class="efectos"><b>Efectos:</b>&nbsp;{postrow.items.EFECTOS}</div><!-- ENDIF -->
+											<div class="desc">{postrow.items.DESCRIPCION}</div>
+											<!-- BEGIN postrow.items.tipos -->
+											<span class="item-tipo">{postrow.items.tipos.TAG}</span>
+											<!-- END postrow.items.tipos -->
+										</div>
+									</div>
+								</li>
+								<!-- END postrow.items -->
+								<br class="clear" />
+							</ul>
+						</dl>
+						<!-- ENDIF -->
 					</td>
 					<td class="cell-post">
 					

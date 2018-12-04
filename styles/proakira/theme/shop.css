@@ -54,3 +54,62 @@
 		margin-top: 0;
 	}
 }
+
+/* INVENTARIO */
+
+.postinventory {
+    border: 1px solid rgb(25, 25, 25);
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+    margin: 10px 0 10px 10px;
+    width: calc(100% - 14px);
+    display: block;
+    background: rgb(180, 180, 140);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.postinventory .item {
+	list-style-type: none;
+	float: left;
+	position: relative;
+	margin-left: 3px;
+}
+
+.postinventory .item .qty {
+	position: absolute;
+    color: #fff;
+    border: solid 1px #393939;
+    background: #3c503c;
+    bottom: 0;
+    padding: 0px 4px;
+    border-top-right-radius: 4px;
+}
+
+.tooltip {
+	text-align: left;
+	max-width: 250px;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.tooltip .nombre {
+	font-size: 1.3em;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 4px;
+}
+
+.tooltip .efectos, .tooltip .reqs {
+	border-bottom: solid 1px #636363;
+}
+
+.tooltip .desc {
+	font-style: italic;
+    margin-bottom: 4px;
+	text-align: justify;
+}

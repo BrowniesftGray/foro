@@ -343,7 +343,7 @@ function parseDocument($container) {
 		$body = $('body');
 		
 	/**
-	* Mostrar info jutsu onclick
+	* Mostrar info jutsu onclick // mgomez
 	*/
 	$container.find('jutsu datos').on('click', function() {
 		var height = 15;
@@ -352,6 +352,22 @@ function parseDocument($container) {
 			height = $(this)[0].scrollHeight - 10;
 		
 		$(this).animate({height: height}, 100 );
+	});
+	
+	/**
+	* Inventory tooltips onmouseover // mgomez
+	*/
+	tippy('.inventory .item', {
+		content(reference) {
+			return document.getElementById(reference.getAttribute('data-tooltip'))
+		},
+		animation: 'shift-away',
+		arrow: true,
+		arrowType: 'round',
+		interactive: true,
+		inertia: true,
+		performance: true,
+		size: 'small'
 	});
 
 	/**

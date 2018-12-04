@@ -22,6 +22,7 @@ include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_ficha.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_shop.' . $phpEx);
 
 // Start session management
 $user->session_begin();
@@ -1925,6 +1926,8 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	{
 		$u_pm = append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;mode=compose&amp;action=quotepost&amp;p=' . $row['post_id']);
 	}
+	
+	$is_rpg_forum = (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla()));
 
 	//
 	$post_row = array(
@@ -2003,7 +2006,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'S_FIRST_UNREAD'	=> $s_first_unread,
 		'S_CUSTOM_FIELDS'	=> (isset($cp_row['row']) && count($cp_row['row'])) ? true : false,
 		'S_TOPIC_POSTER'	=> ($topic_data['topic_poster'] == $poster_id) ? true : false,
-		'S_ROLEPLAY_FORUM'	=> (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla())),
+		'S_ROLEPLAY_FORUM'	=> $is_rpg_forum,
 
 		'S_IGNORE_POST'		=> ($row['foe']) ? true : false,
 		'L_IGNORE_POST'		=> ($row['foe']) ? sprintf($user->lang['POST_BY_FOE'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
@@ -2090,6 +2093,19 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		{
 			$template->assign_block_vars('postrow.contact', $field);
 		}
+	}
+	
+	if ($is_rpg_forum) 
+	{
+		$pj_id = get_pj_id($poster_id);
+		$items = get_pj_inventory($pj_id, $row['post_id']);
+		
+		if ($items !== false)
+			foreach ($items as $item) 
+			{
+				$template->assign_block_vars('postrow.items', $item);
+				$template->assign_block_vars_array('postrow.items.tipos', $item['tags']);
+			}
 	}
 
 	if (!empty($cp_row['blockrow']))

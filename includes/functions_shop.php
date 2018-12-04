@@ -38,3 +38,52 @@ function get_shop_url($shop_name, $shop_id) {
 	global $phpbb_root_path;
 	return append_sid("{$phpbb_root_path}tienda/" . title_to_url($shop_name) . '-c' . $shop_id);
 }
+
+// TO DO: Inventario relativo al post
+function get_pj_inventory($pj_id, $post_id = 0) {
+	global $db;
+	$items = false;
+	
+	if ($pj_id === false) return false;
+	
+	$query = $db->sql_query(
+		'SELECT i.item_id, 
+				i.nombre, 
+				i.tipos, 
+				i.descripcion, 
+				i.url_imagen, 
+				i.requisitos, 
+				i.efectos,
+				pi.cantidad
+			FROM ' . ITEMS_TABLE . ' i
+				INNER JOIN ' . PERSONAJE_ITEMS_TABLE . " pi
+					ON pi.item_id = i.item_id
+			WHERE pi.pj_id = '$pj_id'
+			ORDER BY i.nombre");
+			
+	while ($row = $db->sql_fetchrow($query)) {
+		
+		$items_tipos = array();
+		$tipos = explode(';', $row['tipos']);
+		
+		for ($i = 0; $i < count($tipos); $i++) {
+			$items_tipos[] = array(
+				'TAG' => $tipos[$i],
+			);
+		}
+			
+		$items[] = array(
+			'ITEM_ID'		=> $row['item_id'],
+			'NOMBRE'		=> $row['nombre'],
+			'DESCRIPCION'	=> $row['descripcion'],
+			'IMAGEN'		=> '<img src="/images/shop_icons/' . $row['url_imagen'] . '" border="0" />',
+			'REQS'			=> $row['requisitos'],
+			'EFECTOS'		=> $row['efectos'],
+			'CANTIDAD'		=> $row['cantidad'],
+			'tags'			=> $items_tipos,
+		);
+	}
+	$db->sql_freeresult($query);
+	
+	return $items;								
+}
