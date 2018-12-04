@@ -70,7 +70,7 @@
     border-radius: 5px;
     position: relative;
     padding-top: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 5px;
 }
 
 .postinventory .item {
@@ -78,6 +78,7 @@
 	float: left;
 	position: relative;
 	margin-left: 3px;
+	margin-bottom: 3px;
 }
 
 .postinventory .item .qty {
