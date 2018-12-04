@@ -1608,7 +1608,8 @@ function append_sid($url, $params = false, $is_amp = true, $session_id = false, 
 	}
 	
 	// Modify URL if viewing forum or topic, unless it's a mark as read action // mgomez // 2018-11-13
-	if ((strpos($url, 'viewforum') !== false || strpos($url, 'viewtopic') !== false) && strpos($params, 'mark=') === false) {
+	if ((strpos($url, 'viewforum') !== false || strpos($url, 'viewtopic') !== false)
+	  && strpos($params, 'mark=') === false && strpos($params, 'watch=') === false) {
 		$url = rewrite_url_with_title($url, $params);
 		if ($params == '' || $params == '&amp;') $params = false;
 	}

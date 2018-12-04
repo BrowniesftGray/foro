@@ -348,7 +348,7 @@ function parseDocument($container) {
 	$container.find('jutsu datos').on('click', function() {
 		var height = 15;
 		
-		if($(this).height() == height) 
+		if(Math.floor($(this).height()) <= height) 
 			height = $(this)[0].scrollHeight - 10;
 		
 		$(this).animate({height: height}, 100 );
