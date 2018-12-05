@@ -47,7 +47,7 @@ function get_pj_inventory($pj_id, $post_id = 0) {
 	if ($pj_id === false) return false;
 	
 	$query = $db->sql_query(
-		'SELECT i.item_id, 
+		"SELECT i.item_id, 
 				i.nombre, 
 				i.tipos, 
 				i.descripcion, 
@@ -55,8 +55,8 @@ function get_pj_inventory($pj_id, $post_id = 0) {
 				i.requisitos, 
 				i.efectos,
 				pi.cantidad
-			FROM ' . ITEMS_TABLE . ' i
-				INNER JOIN ' . PERSONAJE_ITEMS_TABLE . " pi
+			FROM " . ITEMS_TABLE . " i
+				INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
 					ON pi.item_id = i.item_id
 			WHERE pi.pj_id = '$pj_id'
 			ORDER BY i.nombre");

@@ -6,7 +6,7 @@
     <p><strong>Rama Principal:</strong> {FICHA_CLAN}</p>
     <p><strong>Nivel:</strong> {NIVEL}</p>
     <p><strong>Rango:</strong> {FICHA_RANGO}</p>
-    <p><strong>Arquetipo:</strong>{VISTA_ARQUETIPO}</p>
+    <p><strong>Arquetipo:</strong> {VISTA_ARQUETIPO}</p>
     <p><strong>Segunda Rama:</strong> {FICHA_RAMA1}</p>
     <p><strong>Tercera Rama:</strong> {FICHA_RAMA2}</p>
     <p><strong>Cuarta Rama:</strong> {FICHA_RAMA3}</p>
@@ -29,19 +29,46 @@
     <p><strong>Puntos de vida:</strong> <pv>{FICHA_PV}</pv></p>
     <p><strong>Puntos de chakra:</strong> <pc>{FICHA_PC}</pc></p>
     <p><strong>Puntos de stamina:</strong> <sta>{FICHA_STA}</sta></p>
+	
+	<!-- IF FICHA_JUTSUS -->
     <h2>Técnicas ninja</h2>
     {FICHA_JUTSUS}
-
+	<!-- ENDIF -->
+	
+	<!-- IF habilidades -->
+    <h2>Habilidades</h2>
+	<!-- BEGIN habilidades -->
+	<habilidad>
+		<nombre>{habilidades.NOMBRE}</nombre>
+		<!-- IF habilidades.requisitos -->
+		<requisitos>
+			<ul>
+				<!-- BEGIN habilidades.requisitos -->
+				<li>{habilidades.requisitos.REQUISITO}</li>
+				<!-- END habilidades.requisitos -->
+			</ul>
+		</requisitos>
+		<!-- ENDIF -->
+		<efecto>{habilidades.EFECTO}</efecto>
+	</habilidad>
+	<!-- END habilidades -->
+	<br class="clear" />
+	<!-- ENDIF -->
+	
+	<!-- IF PUEDE_MODERAR -->
     <h2>Moderaciones</h2>
-    <!-- IF PUEDE_MODERAR == true --><a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><!-- ENDIF -->
-      <!-- BEGIN loopname -->
-      {loopname.RAZON_MODERACION} {loopname.USER_MODERACION} {loopname.FECHA_MODERACION}</br>
-      <!-- END loopname -->
-
+    <a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><br/>
+      <!-- BEGIN moderaciones -->
+      {moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</br>
+      <!-- END moderaciones -->
+	<!-- ENDIF -->
+	  
+	<!-- IF PUEDE_BORRAR -->
     <h2>Borrar Personaje</h2>
     <form class="" action="{U_ACTION}" method="POST">
-      <!-- IF PUEDE_BORRAR == true --><button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button><!-- ENDIF -->
+      <button type="submit" class="btn btn-warning" name="submit" id="submit">Borrar Personaje</button>
     </form>
+	<!-- ENDIF -->
   </div>
 </div>
 
