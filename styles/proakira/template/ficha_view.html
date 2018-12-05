@@ -20,11 +20,19 @@
                           </li>
                           <!-- IF PUEDE_MODERAR -->
                           <li class="nav-item">
-                            <a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
-                          </li>
-                          <li class="nav-item">
                             <a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
                           </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
+                          </li>
+                          <!-- ENDIF -->
+                          <!-- IF PUEDE_BORRAR -->
+                          <!-- <li class="nav-item">
+                            <form class="" action="{FICHA_URL}" method="POST">
+
+                            <button type="submit" class="nav-link warning" name="submit" id="submit">Borrar Personaje</button>
+                            </form>
+                          </li> -->
                           <!-- ENDIF -->
                         </ul>
                     </div>
@@ -35,39 +43,39 @@
                                 <label for="name" class="col-4 col-form-label text-md-left"><h6>Nombre</h6></label>
 
                                 <div class="col-4">
-                                    <div>{FICHA_NOMBRE}</div>
+                                    <p>{FICHA_NOMBRE}</p>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="arquetipo" class="col-4 col-form-label text-md-left"><h6>Arquetipo</h6></label>
 
                                 <div class="col-4">
-                                  <div>{VISTA_ARQUETIPO}</div>  
+                                  <p>{VISTA_ARQUETIPO}</p>  
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="edad" class="col-4 col-form-label text-md-left"><h6>Edad</h6></label>
 
                                 <div class="col-4">
-                                  <div>{FICHA_EDAD}</div>  
+                                  <p>{FICHA_EDAD}</p>  
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descFis" class="col-4 col-form-label text-md-left"><h6>Descripción Física</h6></label>
                                 <div class="col-6">
-                                   <div>{FICHA_FISICO}</div> 
+                                   <p>{FICHA_FISICO}</p> 
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descPsic" class="col-4 col-form-label text-md-left"><h6>Descripción Psicológica</h6></label>
                                 <div class="col-6">                                  
-                                    <div>{FICHA_PSICOLOGICO}</div>
+                                    <p>{FICHA_PSICOLOGICO}</p>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descHis" class="col-4 col-form-label text-md-left"><h6>Historia</h6></label>
                                 <div class="col-6">    
-                                    <div>{FICHA_HISTORIA}</div>
+                                    <p>{FICHA_HISTORIA}</p>
                                 </div>
                             </div>
                           </div>
@@ -75,37 +83,37 @@
                                 <div class="form-group row">
                                     <label for="ramaPrincipal" class="col-2 col-form-label text-md-left"><h6>Rama Principal:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_CLAN}</div> 
+                                       <p>{FICHA_CLAN}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec1" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
                                     <div class="col-4">
-                                        <div>{FICHA_RAMA1}</div>
+                                        <p>{FICHA_RAMA1}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_RAMA2}</div> 
+                                       <p>{FICHA_RAMA2}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_RAMA3}</div> 
+                                       <p>{FICHA_RAMA3}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_RAMA4}</div> 
+                                       <p>{FICHA_RAMA4}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_RAMA5}</div> 
+                                       <p>{FICHA_RAMA5}</p> 
                                     </div>
                                 </div>
                           </div>
@@ -114,56 +122,56 @@
                                 <div class="form-group row">
                                     <label for="atrFuerza" class="col-2 col-form-label text-md-left"><h6>Fuerza:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_FUERZA}</div> 
+                                       <p>{FICHA_FUERZA}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="artAg" class="col-2 col-form-label text-md-left"><h6>Agilidad:</h6></label>
                                     <div class="col-4">
-                                        <div>{FICHA_AGI}</div>
+                                        <p>{FICHA_AGI}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="atrVit" class="col-2 col-form-label text-md-left"><h6>Vitalidad:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_VIT}</div> 
+                                       <p>{FICHA_VIT}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="atrCon" class="col-2 col-form-label text-md-left"><h6>Concentracion:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_CON}</div> 
+                                       <p>{FICHA_CON}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="atrCCK" class="col-2 col-form-label text-md-left"><h6>Control del chakra:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_CCK}</div> 
+                                       <p>{FICHA_CCK}</p> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="atrVol" class="col-2 col-form-label text-md-left"><h6>Voluntad:</h6></label>
                                     <div class="col-4">
-                                        <div>{FICHA_VOL}</div>
+                                        <p>{FICHA_VOL}</p>
                                     </div>
                                 </div>
                                 <h3>Estadísticas</h3><br>
                                     <div class="form-group row">
                                     <label for="vida" class="col-2 col-form-label text-md-left"><h6>Puntos de vida:</h6></label>
                                     <div class="col-4">
-                                        <div>{FICHA_PV}</div>
+                                        <p>{FICHA_PV}</p>
                                     </div>
                                   </div>
                                   <div class="form-group row">
                                     <label for="chakra" class="col-2 col-form-label text-md-left"><h6>Puntos de chakra:</h6></label>
                                     <div class="col-4">
-                                        <div>{FICHA_PC}</div>
+                                        <p>{FICHA_PC}</p>
                                     </div>
                                   </div>
                                   <div class="form-group row">
                                     <label for="stamina" class="col-2 col-form-label text-md-left"><h6>Puntos de stamina:</h6></label>
                                     <div class="col-4">
-                                       <div>{FICHA_STA}</div> 
+                                       <p>{FICHA_STA}</p> 
                                     </div>
                                   </div>
                           </div>

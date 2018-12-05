@@ -226,8 +226,9 @@ class main
                 'FICHA_PC'              => calcula_pc($row),
                 'FICHA_PV'              => calcula_pv($row),
                 'FICHA_STA'             => calcula_sta($row),
-                'FICHA_URL'             => append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
+                'FICHA_URL'             => append_sid("/ficha/". $user_id),
                 'FICHA_MODERACIONES'    => append_sid("/ficha.php", 'mode=moderar&pj=' . $user_id),
+                'FICHA_BORRAR'    => append_sid("/ficha/borrar/". $user_id),
             ));
             
 
