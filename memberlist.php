@@ -705,7 +705,7 @@ switch ($mode)
 		$template->assign_vars(array(
 
 			'U_FICHA_EXISTE'	=> ficha_exists($user_id),
-			'U_FICHA_USER'		=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
+			'U_FICHA_USER'		=> append_sid("{$phpbb_root_path}ficha/$user_id"),
 			'L_POSTS_IN_QUEUE'	=> $user->lang('NUM_POSTS_IN_QUEUE', $member['posts_in_queue']),
 
 			'POSTS_DAY'			=> $user->lang('POST_DAY', $posts_per_day),
