@@ -99,6 +99,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 function get_ficha($user_id, $return = false, $ver = false)
 {
 	global $user, $db, $template, $phpbb_root_path, $auth;
+	$hab_disp = false;
 
 	$query = $db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
 	if ($row = $db->sql_fetchrow($query)) {
@@ -136,7 +137,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			));
 			
 			if ($row4['requisitos']) {
-				$requisitos = explode(';', $row4['requisitos']);
+				$requisitos = explode('|', $row4['requisitos']);
 				for ($i = 0; $i < count($requisitos); $i++) {
 					$hab_requisitos[] = array('REQUISITO' => $requisitos[$i]);
 				}
@@ -160,6 +161,38 @@ function get_ficha($user_id, $return = false, $ver = false)
 		}
 		else{
 			$borrarPersonaje = false;
+		}
+		
+		if ($borrarPersonaje) $hab_disp = get_habilidades_disponibles($pj_id);
+		if ($hab_disp) {
+			$user->get_profile_fields($user_id);
+			if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
+				$ptos_aprendizaje = 0;
+			}
+			else{
+				$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
+			}
+		
+			foreach($hab_disp as $hab) {
+				$template->assign_block_vars('habilidades_compra', array(
+					'ID'			=> $hab['habilidad_id'],
+					'NOMBRE'		=> $hab['nombre'],
+					'EFECTO'		=> $hab['efecto'],
+					'URL_IMAGEN'	=> $hab['url_imagen'],
+					'COSTE'			=> $hab['coste'],
+					'PUEDE_COMPRAR' => ($hab['coste'] <= $ptos_aprendizaje),
+					'U_ACTION'		=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&amp;b=hab&amp;pj='.$user_id),
+				));
+				
+				$requisitos = $hab['requisitos'];
+				$hab_disp_requisitos = array();
+				for ($i = 0; $i < count($requisitos); $i++) {
+					$hab_disp_requisitos[] = array(
+						'REQUISITO' => $requisitos[$i]
+					);
+				}
+				$template->assign_block_vars_array('habilidades_compra.requisitos', $hab_disp_requisitos);	
+			}
 		}
 
 		$user->get_profile_fields($user_id);
@@ -192,7 +225,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'EXPERIENCIA_F' => $subida[2],
 			'PUEDE_MODERAR'	=> $moderador,
 			'FICHA_RANGO' => $row['rango'],
-			'FICHA_ARQUETIPO' => obtener_arquetipo ($pj_id, $row['arquetipo_id']),
+			'FICHA_ARQUETIPO' => obtener_arquetipo_select($pj_id, $row['arquetipo_id']),
 			'VISTA_ARQUETIPO' => vista_arquetipo ($row['arquetipo_id']),
 			'ID_ARQUETIPO' => $row['arquetipo_id'],
 			'FICHA_NOMBRE' => stripslashes($row['nombre']),
@@ -238,26 +271,68 @@ function get_ficha($user_id, $return = false, $ver = false)
 	}
 }
 
-function obtener_arquetipo($usuario, $arquetipo){
+function get_arquetipos_disponibles($pj_id) {
 	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
-	$variableA = 0;
+	$data = false;
+	
+	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+	$query = mysqli_query($connection,
+		"CALL ObtenerArquetiposDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+		
+	while ($row = mysqli_fetch_array($query)){
+		$data[] = array(
+			'id'		=> $row['arquetipo_id'],
+			'nombre'	=> $row['nombre_es'],
+		);
+	}
+	
+	return $data;
+}
 
-		// code...
-	//connect to database
-  $connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+function reemplazar_acentos_html($string) {
+	
+}
 
-  //run the store proc
-  $result = mysqli_query($connection,
-     "CALL ObtenerArquetiposDisponibles ('".$usuario."')") or die("Query fail: " . mysqli_error());
+function get_habilidades_disponibles($pj_id) {
+	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	$data = false;
+	
+	// Si tiene arquetipos disponibles, no puede aprender habilidades
+	if (get_arquetipos_disponibles($pj_id) !== false)
+		return false;
+	
+	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
+	$query = mysqli_query($connection,
+		"CALL ObtenerHabilidadesDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+		
+	while ($row = mysqli_fetch_array($query)){
+		$data[] = array(
+			'habilidad_id'	=> $row['habilidad_id'],
+			'nombre'		=> $row['nombre'],
+			'requisitos'	=> explode('|', $row['requisitos']),
+			'efecto'		=> $row['efecto'],
+			'coste'			=> $row['coste'],
+			'url_imagen'	=> $row['url_imagen'],
+		);
+	}
+	
+	return $data;
+}
 
-  //loop the result set
-  while ($row = mysqli_fetch_array($result)){
-		$variableA .= "<option value='".$row['arquetipo_id']."'>";
-		$variableA .= $row['nombre_es'];
-		$variableA .= "</option>";
-  }
+function obtener_arquetipo_select($pj_id, $arquetipo){
+	$options = get_arquetipos_disponibles($pj_id);
+	$select = false;
+	
+	if ($options !== false) {
+		$select = '';
+		foreach($options as $option) {
+			$select .= "<option value='".$option['id']."'>";
+			$select .= $option['nombre'];
+			$select .= "</option>";
+		}
+	}
 
-	return $variableA;
+	return $select;
 }
 
 function vista_arquetipo ($arquetipo){
@@ -354,7 +429,7 @@ function guardar_ficha(array $fields)
 	$fields['FISICO'] = addslashes($fields['FISICO']);
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 	$idUsuario = $user->data['user_id'];
-//		$sql = 'INSERT INTO ' . FICHAS_TABLE . " (user_id, nivel, rango, nombre, clan, kekkei_genkai, elementos, fisico, caracter, historia, fuerza, destreza, constitucion, cck, inteligencia, agilidad, velocidad, presencia, voluntad, bbcode_uid, bbcode_bitfield, bbcode_options, tecnicas) VALUES ('{$user->data['user_id']}', '1', '0', '{$fields['NOMBRE']}', '{$fields['CLAN']}', '{$fields['KEKKEI']}', '{$fields['ELEMENTOS']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}', '{$fields['FUERZA']}', '{$fields['DESTREZA']}', '{$fields['CONSTITUCION']}', '{$fields['CCK']}', '{$fields['INTELIGENCIA']}', '{$fields['AGILIDAD']}', '{$fields['VELOCIDAD']}', '0', '{$fields['VOLUNTAD']}', '', '', '0', '')";
+	
 	$sql = "INSERT INTO personajes (user_id, nivel, rango, arquetipo_id, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, tecnicas, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
 	$sql .= "values (	$idUsuario, '1', 'Estudiante', '0', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
 	$sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
@@ -371,16 +446,18 @@ function actualizar_Ficha(array $fields){
 	$fields['CARACTER'] = addslashes($fields['CARACTER']);
 
 	$sql = "UPDATE personajes SET ";
-	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}', arquetipo_id = '{$fields['ARQUETIPO']}',";
+	$sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}',";
 	$sql .= "clan = '{$fields['PRINCIPAL']}', rama1 = '{$fields['RAMA1']}', rama2 = '{$fields['RAMA2']}', rama3 = '{$fields['RAMA3']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
 	$sql .= 'tecnicas = "'.$fields['TEC_JUTSUS'].'",';
 	$sql .= "fuerza = '{$fields['FUERZA']}', vitalidad = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', cck = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
 	$sql .= "fisico = '{$fields['FISICO']}', psicologico = '{$fields['CARACTER']}', historia = '{$fields['HISTORIA']}'";
 	$sql .= "WHERE pj_id = '{$fields['PJ_ID']}'";
-
 	$db->sql_query($sql);
+	
+	if ($fields['ARQUETIPO'] != '') {
+		$sql = "UPDATE personajes SET arquetipo_id = '{$fields['ARQUETIPO']}' WHERE pj_id = '{$fields['PJ_ID']}'";
+	}
 }
-
 
 function registrar_moderacion(array $fields){
 

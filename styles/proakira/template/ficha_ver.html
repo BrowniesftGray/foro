@@ -55,6 +55,33 @@
 	<br class="clear" />
 	<!-- ENDIF -->
 	
+	<!-- IF habilidades_compra -->
+	<div class="spoiler"><div class="spoiler-header spoiler-trigger"><span class="spoiler-title">Habilidades Disponibles de Aprendizaje</span><span class="spoiler-status">Mostrar</span></div><div class="spoiler-body">
+	<!-- BEGIN habilidades_compra -->
+	<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
+		<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
+		<input type="hidden" name="nombre" value="{habilidades_compra.NOMBRE}"></input>
+		<input type="hidden" name="coste" value="{habilidades_compra.COSTE}"></input>
+		<habilidad>
+			<nombre>{habilidades_compra.NOMBRE}</nombre>
+			<!-- IF habilidades_compra.requisitos -->
+			<requisitos>
+				<ul>
+					<!-- BEGIN habilidades_compra.requisitos -->
+					<li>{habilidades_compra.requisitos.REQUISITO}</li>
+					<!-- END habilidades_compra.requisitos -->
+				</ul>
+			</requisitos>
+			<!-- ENDIF -->
+			<efecto>{habilidades_compra.EFECTO}</efecto>
+			<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
+			<!-- IF habilidades_compra.PUEDE_COMPRAR --><br/><input type="submit" style="float: right;" class="button1" name="submit" value="Comprar" /><!-- ENDIF -->
+		</habilidad>
+    </form>
+	<!-- END habilidades_compra -->
+	</div></div>
+	<!-- ENDIF -->
+	
 	<!-- IF PUEDE_MODERAR -->
     <h2>Moderaciones</h2>
     <a href="{FICHA_MODERACIONES}" class="btn btn-success">Moderar Personaje</a><br/>

@@ -22,7 +22,13 @@
     </dl>
     <dl>
       <dt><label for="arquetipo">Arquetipo:</label><br /></dt>
-      <dd><select id="arquetipo" name="arquetipo"><option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select></dd>
+      <dd>
+	  <!-- IF FICHA_ARQUETIPO -->
+	  <select id="arquetipo" name="arquetipo"><option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select>
+	  <!-- ELSE -->
+	  {VISTA_ARQUETIPO}
+	  <!-- ENDIF -->
+	  </dd>
     </dl>
 		<dl>
 			<dt><label for="principal">Rama Principal:</label><br /></dt>

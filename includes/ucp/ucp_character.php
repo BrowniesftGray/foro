@@ -116,69 +116,46 @@ class ucp_character
 				$return = false;
 				$ver = true;
 				$exists = get_ficha($user_id, $return, $ver);
-				if (!$exists)					trigger_error('No existe la ficha para este usuario.');
+				if (!$exists) trigger_error('No existe la ficha para este usuario.');
 
 				$template->assign_vars(array(
-					'U_DEL_ACTION' => append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=borrar&amp;pj=' . $user_id),
+					'U_DEL_ACTION' => append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=ver&amp;b=borrar&amp;pj=' . $user_id),
 				));
-			break;
-			
-			case 'delete_char':	
-				$this->tpl_name = 'ficha_ver';
-				if ($submit) {
-					if (confirm_box(true)){
-						borrar_personaje($user->data['user_id']);
-						trigger_error('Personaje borrado correctamente.');
+				
+				if(isset($_GET['b'])) {
+					$btn = $_GET['b'];
+					
+					if ($submit && ($btn == 'hab') && isset($_POST['habilidad_id'])) {
+						$hab_id = $_POST['habilidad_id'];
+						$hab_nombre = utf8_normalize_nfc($_POST['nombre']);
+						$hab_coste = $_POST['coste'];
+						
+						if (confirm_box(true)){
+							if(true) { //if (comprar_habilidad($user->data['user_id'], $hab_id, &$msg_error) {
+								trigger_error('Habilidad añadida correctamente.');
+							}
+							else {
+								trigger_error($msg_error);
+							}
+						}
+						else {
+							$s_hidden_fields = build_hidden_fields(array('submit' => true));
+							confirm_box(false, "¿Deseas aprender la habilidad '$hab_nombre' por $hab_coste Puntos de Aprendizaje?", $s_hidden_fields);
+						}
 					}
-					else{
-						$s_hidden_fields = build_hidden_fields(array('submit' => true));
-						confirm_box(false, '¿Estás seguro de que quieres borrar tu personaje?', $s_hidden_fields);
+					
+					if ($submit && ($btn == 'borrar')) {
+						if (confirm_box(true)) {
+							borrar_personaje($user->data['user_id']);
+							trigger_error('Personaje borrado correctamente.');
+						}
+						else {
+							$s_hidden_fields = build_hidden_fields(array('submit' => true));
+							confirm_box(false, '¿Estás seguro de que quieres borrar tu personaje?', $s_hidden_fields);
+						}
 					}
 				}
 			break;
-
-			// case 'subir_char':
-			// $this->tpl_name = 'ficha_subir';
-			//
-			// @$user_id = (int) $_GET['pj'];
-			// $exists = get_ficha($user_id);
-			// if (!$exists)					trigger_error('No existe la ficha para este usuario.');
-			//
-			// // Common tpl vars
-			// $template->assign_vars(array(
-			// 	'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=subir&amp;pj=' . $user_id),
-			// ));
-			//
-			// if ($submit) {
-			//
-			// 	$atrs = array(
-			// 		'FUERZA'			=> (int) request_var('atrFuerza', 1),
-			// 		'VITALIDAD'			=> (int) request_var('atrVit', 1),
-			// 		'AGILIDAD'			=> (int) request_var('artAg', 1),
-			// 		'CCK'		=> (int) request_var('atrCCK', 1),
-			// 		'CONCENTRACION'				=> (int) request_var('atrCon', 1),
-			// 		'VOLUNTAD'			=> (int) request_var('atrVol', 1),
-			// 	);
-			//
-			// 	$fields = array_merge(array(
-			// 		'PUNTOS'				=> array_sum(array_values($atrs)),
-			// 		'PJ_ID'					=> utf8_normalize_nfc(request_var('pj_id', '', true))
-			// 	), $atrs);
-			//
-			// 	$errores = array();
-			//
-			// 	if (count($errores) == 0) {
-			// 		$user_id = (int) $user->data['user_id'];
-			// 		subirNivel($user_id, $fields);
-			// 		trigger_error('Subida de nivel correcta.');
-			// 	}
-			// 	else {
-			// 		$fields['ERRORES'] = implode('<br />', $errores);
-			// 	}
-			//
-			// 	$template->assign_vars($fields);
-			// }
-			// break;
 
 			case 'mod_char':
 			$this->tpl_name = 'ficha_mod';
