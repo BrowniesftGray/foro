@@ -111,7 +111,7 @@ class ucp_character
 			break;
 
 			case 'view_char':
-			$this->tpl_name = 'ficha_ver';
+				$this->tpl_name = 'ficha_ver';
 				@$user_id = (int) $_GET['pj'];
 				$return = false;
 				$ver = true;
@@ -119,19 +119,21 @@ class ucp_character
 				if (!$exists)					trigger_error('No existe la ficha para este usuario.');
 
 				$template->assign_vars(array(
-					'U_ACTION'				=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=ver&amp;pj=' . $user_id),
+					'U_DEL_ACTION' => append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=borrar&amp;pj=' . $user_id),
 				));
-
+			break;
+			
+			case 'delete_char':	
+				$this->tpl_name = 'ficha_ver';
 				if ($submit) {
 					if (confirm_box(true)){
 						borrar_personaje($user->data['user_id']);
 						trigger_error('Personaje borrado correctamente.');
-			    }
-			    else{
-			    	$s_hidden_fields = build_hidden_fields(array(
-			      'submit'    => true,));
-			      confirm_box(false, '¿Estás seguro de que quieres borrar el personaje?', $s_hidden_fields);
-			    }
+					}
+					else{
+						$s_hidden_fields = build_hidden_fields(array('submit' => true));
+						confirm_box(false, '¿Estás seguro de que quieres borrar tu personaje?', $s_hidden_fields);
+					}
 				}
 			break;
 

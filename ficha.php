@@ -24,7 +24,7 @@ include_once($phpbb_root_path . 'includes/functions_ficha.' . $phpEx);
 $id 	= request_var('i', '');
 $mode	= request_var('mode', '');
 
-if (!in_array($mode, array('nueva', 'moderar', 'ver')))
+if (!in_array($mode, array('nueva', 'moderar', 'ver', 'borrar')))
 {
 	trigger_error('La página que buscas no existe.');
 }
@@ -50,7 +50,7 @@ switch ($mode)
  		}
 		$module->p_mode = 'create_char';
 		$module->load('ucp', 'character');
-		$module->display('Nueva ficha :: Shinobi Legacy');
+		$module->display('Nueva ficha');
 	break;
 
 	case 'moderar':
@@ -59,7 +59,7 @@ switch ($mode)
 	if ($grupo == 5 || $grupo == 4){
 		$module->p_mode = 'mod_char';
 		$module->load('ucp', 'character');
-		$module->display('Moderar ficha :: Shinobi Legacy');
+		$module->display('Moderar ficha');
 	}
 	else{
 		trigger_error('No puedes acceder aquí sin ser moderador o administrador.');
@@ -69,7 +69,13 @@ switch ($mode)
 	case 'ver':
 		$module->p_mode = 'view_char';
 		$module->load('ucp', 'character');
-		$module->display('Ficha de personaje :: Shinobi Legacy');
+		$module->display('Ficha de personaje');
+	break;
+	
+	case 'borrar':
+		$module->p_mode = 'delete_char';
+		$module->load('ucp', 'character');
+		$module->display('Borrar personaje');
 	break;
 
 	// case 'subir':
