@@ -18,6 +18,9 @@
                           <li class="nav-item">
                             <a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
                           </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
+                          </li>
                           <!-- IF PUEDE_MODERAR -->
                           <li class="nav-item">
                             <a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
@@ -27,12 +30,9 @@
                           </li>
                           <!-- ENDIF -->
                           <!-- IF PUEDE_BORRAR -->
-                          <!-- <li class="nav-item">
-                            <form class="" action="{FICHA_URL}" method="POST">
-
-                            <button type="submit" class="nav-link warning" name="submit" id="submit">Borrar Personaje</button>
-                            </form>
-                          </li> -->
+                          <li class="nav-item">
+                            <a class="nav-link" href="{FICHA_BORRAR_2}"><h5>Borrar Personaje</h5></a>
+                          </li>
                           <!-- ENDIF -->
                         </ul>
                     </div>
@@ -116,6 +116,13 @@
                                        <p>{FICHA_RAMA5}</p> 
                                     </div>
                                 </div>
+                          </div>
+                          <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
+                                <!-- IF FICHA_JUTSUS -->
+                                <h2>Técnicas ninja</h2>
+                                <hr>
+                                {FICHA_JUTSUS}
+                                <!-- ENDIF -->
                           </div>
                           <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
                             <h3>Atributos</h3><br></h5>

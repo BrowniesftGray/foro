@@ -4589,7 +4589,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	$template->assign_vars(array(
 		'SITENAME'						=> $config['sitename'],
 		'SITE_DESCRIPTION'				=> $config['site_desc'],
-		'FICHA_URL'						=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=ver&pj=' . $user_id),
+		'FICHA_URL'						=> append_sid("/ficha/". $user_id),
 		'FICHA_EXISTE'					=> ficha_exists($user->data['user_id']),
 		'FICHA_BORRAR'					=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=borrar'),
 		'FICHA_CREAR'					=> "/ficha/new", //append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=nueva'),

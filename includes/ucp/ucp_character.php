@@ -195,8 +195,6 @@ class ucp_character
 					'FISICO'				=> utf8_normalize_nfc(request_var('descFis', '', true)),
 					'CARACTER'			=> utf8_normalize_nfc(request_var('descPsic', '', true)),
 					'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),
-					'ELEMENTO'			=> utf8_normalize_nfc(request_var('rama1', '', true)),
-					'ESPECIALIDAD'	=> utf8_normalize_nfc(request_var('rama2', '', true)),
 					'FISICO'				=> utf8_normalize_nfc(request_var('descFis', '', true)),
 					'CARACTER'			=> utf8_normalize_nfc(request_var('descPsic', '', true)),
 					'HISTORIA'			=> utf8_normalize_nfc(request_var('descHis', '', true)),

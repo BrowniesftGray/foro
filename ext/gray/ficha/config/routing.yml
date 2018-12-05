@@ -9,3 +9,7 @@ gray_ficha_store:
 gray_ficha_view:    
     path: /ficha/{user_id}
     defaults: { _controller: gray.ficha.controller:view }
+
+gray_ficha_delete:
+  path: /ficha/delete/{user_id}
+  defaults: { _controller: gray.ficha.controller:delete }

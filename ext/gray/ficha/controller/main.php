@@ -91,7 +91,7 @@ class main
         $this->db->sql_query($sql);
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
-        return $this->helper->render('ficha_message.html');
+        trigger_error("Personaje creado correctamente.");
     }
 
     function ficha_exists($user_id)
@@ -179,17 +179,11 @@ class main
             }
             
 
-            if ($ver == true) {
                 //Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
                 $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
                 $allow_bbcode = $allow_urls = $allow_smilies = true;
                 generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
                 $jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
-            }
-            else{
-                $uid = $bitfield = $options = '';
-                $jutsus = $row['tecnicas'];
-            }
 
             $this->template->assign_vars(array(
                 //'FICHA_COMPLETA'      => $puede_ver,
@@ -228,7 +222,7 @@ class main
                 'FICHA_STA'             => calcula_sta($row),
                 'FICHA_URL'             => append_sid("/ficha/". $user_id),
                 'FICHA_MODERACIONES'    => append_sid("/ficha.php", 'mode=moderar&pj=' . $user_id),
-                'FICHA_BORRAR'    => append_sid("/ficha/borrar/". $user_id),
+                'FICHA_BORRAR_2'    => append_sid("/ficha/delete/". $user_id),
             ));
             
 
@@ -243,6 +237,29 @@ class main
            
         }
         return $this->helper->render('ficha_view.html');
+    }
+
+    function delete($user_id)
+    {
+        $borrar = $this->user->data['user_id'];
+
+        if ($borrar == $user_id) {
+            // check mode
+            if (confirm_box(true))
+            {
+                borrar_personaje($user_id);
+                trigger_error('Personaje borrado correctamente.');
+            }
+            else
+            {
+                $s_hidden_fields = build_hidden_fields(array('submit' => true));
+                confirm_box(false, '¿Estás seguro de que quieres borrar tu personaje? Él no lo haría.', $s_hidden_fields);
+            }
+        }
+        else{
+            trigger_error("No puede borrar un personaje de otro usuario.");
+        }
+        return $this->helper->render('ficha_delete.html');
     }
 
     function vista_arquetipo ($arquetipo){
@@ -328,5 +345,14 @@ class main
         $sta = $sta + $bono;
         
         return $sta;
+    }
+
+    function borrar_personaje($pj) {
+
+    global $db;
+
+    $db->sql_query("DELETE FROM personajes WHERE user_id = '$pj'");
+    $db->sql_query("DELETE FROM tecnicas WHERE pj_id = '$pj'");
+    $db->sql_query("DELETE FROM moderaciones WHERE pj_moderado = '$pj'");
     }
 }
