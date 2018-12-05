@@ -97,11 +97,235 @@ class main
     function ficha_exists($user_id)
     {
         $query = $this->db->sql_query('SELECT pj_id FROM personajes WHERE user_id='.$user_id.'');
-        if ($row = $db->sql_fetchrow($query)) {
-            $db->sql_freeresult($query);
+        if ($row = $this->db->sql_fetchrow($query)) {
+            $this->db->sql_freeresult($query);
             return true;
         } else {
             return false;
         }
+    }
+
+
+    function view($user_id, $return = false, $ver = false)
+    {
+            $query = $this->db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
+            if ($row = $this->db->sql_fetchrow($query)) {
+            $this->db->sql_freeresult($query);
+            $pj_id = $row['pj_id'];
+            //$puede_ver = ($auth->acl_get('m_modera_ficha') || $this->user->data['user_id'] == $pj) ? true : false;
+
+            $queryTec = $this->db->sql_query("SELECT * FROM tecnicas WHERE pj_id=".$pj_id."");
+            $row2 = $this->db->sql_fetchrow($queryTec);
+            $this->db->sql_freeresult($queryTec);
+
+            $queryModeraciones = $this->db->sql_query("SELECT * FROM moderaciones WHERE pj_moderado=".$pj_id."");
+
+            while ($row3 = $this->db->sql_fetchrow($queryModeraciones))
+            {
+                $this->template->assign_block_vars('moderaciones', array(
+                        'RAZON_MODERACION' => $row3['razon'],
+                        'USER_MODERACION' => $row3['moderador'],
+                        'FECHA_MODERACION' => $row3['fecha'],
+                ));
+            }
+            $this->db->sql_freeresult($queryModeraciones);
+            
+            $queryHab = $this->db->sql_query("SELECT h.* 
+                                            FROM ".HABILIDADES_TABLE." h
+                                                INNER JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
+                                                    ON ph.habilidad_id = h.habilidad_id
+                                            WHERE ph.pj_id = '$pj_id'");
+            while ($row4 = $this->db->sql_fetchrow($queryHab)) {
+                $this->template->assign_block_vars('habilidades', array(
+                        'ID'            => $row4['habilidad_id'],
+                        'NOMBRE'        => $row4['nombre'],
+                        'EFECTO'        => $row4['efecto'],
+                        'URL_IMAGEN'    => $row4['url_imagen'],
+                ));
+                
+                if ($row4['requisitos']) {
+                    $requisitos = explode(';', $row4['requisitos']);
+                    for ($i = 0; $i < count($requisitos); $i++) {
+                        $hab_requisitos[] = array('REQUISITO' => $requisitos[$i]);
+                    }
+                    $this->template->assign_block_vars_array('habilidades.requisitos', $hab_requisitos);  
+                }           
+            }
+            $this->db->sql_freeresult($queryHab);
+            
+            $grupo = $this->user->data['group_id'];
+            $borrar = $this->user->data['user_id'];
+
+            if ($grupo == 5 || $grupo == 4){
+                    $moderador = true;
+                }
+                else{
+                    $moderador = false;
+                }
+
+            if ($borrar == $user_id) {
+                $borrarPersonaje = true;
+            }
+            else{
+                $borrarPersonaje = false;
+            }
+
+            $this->user->get_profile_fields($user_id);
+            if (!array_key_exists('pf_experiencia', $this->user->profile_fields)) {
+                $experiencia = 0;
+            }
+            else{
+                $experiencia = $this->user->profile_fields['pf_experiencia'];
+            }
+            
+
+            if ($ver == true) {
+                //Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
+                $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+                $allow_bbcode = $allow_urls = $allow_smilies = true;
+                generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+                $jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
+            }
+            else{
+                $uid = $bitfield = $options = '';
+                $jutsus = $row['tecnicas'];
+            }
+
+            $this->template->assign_vars(array(
+                //'FICHA_COMPLETA'      => $puede_ver,
+                'NIVEL' => $row['nivel'],
+                'PUEDE_BORRAR' => $borrarPersonaje,
+                'PUEDE_MODERAR' => $moderador,
+                'FICHA_RANGO' => $row['rango'],
+                // 'FICHA_ARQUETIPO' => obtener_arquetipo ($pj_id, $row['arquetipo_id']),
+                'VISTA_ARQUETIPO' => vista_arquetipo ($row['arquetipo_id']),
+                'ID_ARQUETIPO' => $row['arquetipo_id'],
+                'FICHA_NOMBRE' => stripslashes($row['nombre']),
+                'FICHA_ID' => $pj_id,
+                'FICHA_EDAD' => $row['edad'],
+                'FICHA_CLAN' => $row['clan'],
+                'TECNICAS_CLAN' => $row2['clan'],
+                'FICHA_RAMA1' => stripslashes($row['rama1']),
+                'FICHA_RAMA2' => stripslashes($row['rama2']),
+                'FICHA_RAMA3' => stripslashes($row['rama3']),
+                'FICHA_RAMA4' => stripslashes($row['rama4']),
+                'FICHA_RAMA5' => stripslashes($row['rama5']),
+                //'PUNTOS'              => $row['puntos'],
+                //'GRUPO' => $this->user->data['group_id'],
+                'FICHA_RAMA5' => stripslashes($row['rama5']),
+                'FICHA_FUERZA' => $row['fuerza'],
+                'FICHA_AGI' => $row['agilidad'],
+                'FICHA_VIT' => $row['vitalidad'],
+                'FICHA_CCK' => $row['cck'],
+                'FICHA_CON' => $row['concentracion'],
+                'FICHA_VOL' => $row['voluntad'],
+                'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
+                'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
+                'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
+                'FICHA_JUTSUS'          => $jutsus,
+                'FICHA_PC'              => calcula_pc($row),
+                'FICHA_PV'              => calcula_pv($row),
+                'FICHA_STA'             => calcula_sta($row),
+                'FICHA_URL'             => append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
+                'FICHA_MODERACIONES'    => append_sid("/ficha.php", 'mode=moderar&pj=' . $user_id),
+            ));
+            
+
+        } else {
+            if ($return) {
+                return false;
+            }
+
+            $this->template->assign_vars(array(
+                'FICHA_EXISTS'          => false,
+            ));
+           
+        }
+        return $this->helper->render('ficha_view.html');
+    }
+
+    function vista_arquetipo ($arquetipo){
+        if ($arquetipo != 0) {
+            $query = $this->db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
+            $row = $this->db->sql_fetchrow($query);
+            $this->db->sql_freeresult($query);
+            $nombre = $row['nombre_es'];
+        } else{
+            $nombre = "Sin arquetipo";
+        }
+        
+        return $nombre;
+    }
+
+    function calcula_pc($datos_pj)
+    {
+        global $db; 
+        $pc = $bono = 0;
+        
+        $pc = (int)$datos_pj['cck'] + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
+        
+        if((int)$datos_pj['arquetipo_id'] > 0) {
+            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
+            $row = $db->sql_fetchrow($query);
+            $db->sql_freeresult($query);
+            
+            if((bool)$row['bono_es_porcentaje']) {
+                $bono = round((int)$row['bono_pc'] * $pc / 100);
+            } else {
+                $bono = (int)$row['bono_pc'];
+            }
+        }
+        
+        $pc = $pc + $bono;
+        
+        return $pc;
+    }
+
+    function calcula_pv($datos_pj)
+    {
+        global $db; 
+        $pv = $bono = 0;
+        
+        $pv = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'];
+        
+        if((int)$datos_pj['arquetipo_id'] > 0) {
+            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
+            $row = $db->sql_fetchrow($query);
+            $db->sql_freeresult($query);
+            
+            if((bool)$row['bono_es_porcentaje']) {
+                $bono = round((int)$row['bono_pv'] * $pv / 100);
+            } else {
+                $bono = (int)$row['bono_pv'];
+            }
+        }
+        
+        $pv = $pv + $bono;
+        
+        return $pv;
+    }
+
+    function calcula_sta($datos_pj)
+    {
+        global $db; 
+        $sta = $bono = 0;
+        
+        $sta = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
+        
+        if((int)$datos_pj['arquetipo_id'] > 0) {
+            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".(int)$datos_pj['arquetipo_id']."");
+            $row = $db->sql_fetchrow($query);
+            $db->sql_freeresult($query);
+            
+            if((bool)$row['bono_es_porcentaje']) {
+                $bono = round((int)$row['bono_sta'] * $sta / 100);
+            } else {
+                $bono = (int)$row['bono_sta'];
+            }
+        }
+        
+        $sta = $sta + $bono;
+        
+        return $sta;
     }
 }

@@ -1,0 +1,186 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=0.0.2" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=0.0.2" type="text/css">
+	
+	<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <form method="POST" action="/ficha/store" onsubmit="return checkFicha();">
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist" style="">
+                          <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5>Datos Personales</h5></a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><h5>Ramas</h5></a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
+                          </li>
+                          <!-- IF PUEDE_MODERAR -->
+                          <li class="nav-item">
+                            <a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
+                          </li>
+                          <!-- ENDIF -->
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label text-md-left"><h6>Nombre</h6></label>
+
+                                <div class="col-4">
+                                    <div>{FICHA_NOMBRE}</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="arquetipo" class="col-4 col-form-label text-md-left"><h6>Arquetipo</h6></label>
+
+                                <div class="col-4">
+                                  <div>{VISTA_ARQUETIPO}</div>  
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="edad" class="col-4 col-form-label text-md-left"><h6>Edad</h6></label>
+
+                                <div class="col-4">
+                                  <div>{FICHA_EDAD}</div>  
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descFis" class="col-4 col-form-label text-md-left"><h6>Descripción Física</h6></label>
+                                <div class="col-6">
+                                   <div>{FICHA_FISICO}</div> 
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descPsic" class="col-4 col-form-label text-md-left"><h6>Descripción Psicológica</h6></label>
+                                <div class="col-6">                                  
+                                    <div>{FICHA_PSICOLOGICO}</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descHis" class="col-4 col-form-label text-md-left"><h6>Historia</h6></label>
+                                <div class="col-6">    
+                                    <div>{FICHA_HISTORIA}</div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                <div class="form-group row">
+                                    <label for="ramaPrincipal" class="col-2 col-form-label text-md-left"><h6>Rama Principal:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_CLAN}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="ramaSec1" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <div class="col-4">
+                                        <div>{FICHA_RAMA1}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_RAMA2}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_RAMA3}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_RAMA4}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_RAMA5}</div> 
+                                    </div>
+                                </div>
+                          </div>
+                          <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
+                            <h3>Atributos</h3><br></h5>
+                                <div class="form-group row">
+                                    <label for="atrFuerza" class="col-2 col-form-label text-md-left"><h6>Fuerza:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_FUERZA}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="artAg" class="col-2 col-form-label text-md-left"><h6>Agilidad:</h6></label>
+                                    <div class="col-4">
+                                        <div>{FICHA_AGI}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="atrVit" class="col-2 col-form-label text-md-left"><h6>Vitalidad:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_VIT}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="atrCon" class="col-2 col-form-label text-md-left"><h6>Concentracion:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_CON}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="atrCCK" class="col-2 col-form-label text-md-left"><h6>Control del chakra:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_CCK}</div> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="atrVol" class="col-2 col-form-label text-md-left"><h6>Voluntad:</h6></label>
+                                    <div class="col-4">
+                                        <div>{FICHA_VOL}</div>
+                                    </div>
+                                </div>
+                                <h3>Estadísticas</h3><br>
+                                    <div class="form-group row">
+                                    <label for="vida" class="col-2 col-form-label text-md-left"><h6>Puntos de vida:</h6></label>
+                                    <div class="col-4">
+                                        <div>{FICHA_PV}</div>
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="chakra" class="col-2 col-form-label text-md-left"><h6>Puntos de chakra:</h6></label>
+                                    <div class="col-4">
+                                        <div>{FICHA_PC}</div>
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="stamina" class="col-2 col-form-label text-md-left"><h6>Puntos de stamina:</h6></label>
+                                    <div class="col-4">
+                                       <div>{FICHA_STA}</div> 
+                                    </div>
+                                  </div>
+                          </div>
+                          <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
+                            <h3>Moderaciones</h3><br></h5>
+                                <!-- BEGIN moderaciones -->
+                                  {moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</br>
+                                <!-- END moderaciones -->
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- INCLUDE overall_footer.html -->

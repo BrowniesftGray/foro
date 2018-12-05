@@ -5,3 +5,7 @@ gray_ficha_home:
 gray_ficha_store:    
     path: /ficha/store
     defaults: { _controller: gray.ficha.controller:store }
+
+gray_ficha_view:    
+    path: /ficha/{user_id}
+    defaults: { _controller: gray.ficha.controller:view }
