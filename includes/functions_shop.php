@@ -59,6 +59,7 @@ function get_pj_inventory($pj_id, $post_id = 0) {
 				INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
 					ON pi.item_id = i.item_id
 			WHERE pi.pj_id = '$pj_id'
+				AND pi.cantidad > 0
 			ORDER BY i.nombre");
 			
 	while ($row = $db->sql_fetchrow($query)) {

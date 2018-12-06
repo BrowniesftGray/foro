@@ -1438,7 +1438,19 @@ class acp_users
 					'bday_day'		=> 0,
 					'bday_month'	=> 0,
 					'bday_year'		=> 0,
+					'item_nombre'	=> '',
+					'item_cantidad'	=> 0,
 				);
+				
+				$sql = 'SELECT pj_id
+					FROM ' . PERSONAJES_TABLE . "
+					WHERE user_id = '$user_id'";
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$db->sql_freeresult($result);
+				$template->assign_vars(array(
+					'TIENE_PERSONAJE'	=> $row['pj_id'],
+				));
 
 				if ($user_row['user_birthday'])
 				{
@@ -1449,7 +1461,9 @@ class acp_users
 				$data['bday_month']		= $request->variable('bday_month', $data['bday_month']);
 				$data['bday_year']		= $request->variable('bday_year', $data['bday_year']);
 				$data['user_birthday']	= sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
-
+				$data['item_nombre']	= $request->variable('item_nombre', $data['item_nombre']);
+				$data['item_cantidad']	= $request->variable('item_cantidad', $data['item_cantidad']);
+				
 				/**
 				* Modify user data on editing profile in ACP
 				*
@@ -1529,6 +1543,64 @@ class acp_users
 
 						// Update Custom Fields
 						$cp->update_profile_field_data($user_id, $cp_data);
+						
+						if (isset($data['item_nombre']) && isset($data['item_cantidad'])) {
+							$item_nombre = $data['item_nombre'];
+							$item_cantidad = (int) $data['item_cantidad'];
+							$item_id = false;
+							
+							$sql = "SELECT item_id FROM ".ITEMS_TABLE." WHERE nombre = '$item_nombre'";
+							$result = $db->sql_query($sql);
+							if ($item_row = $db->sql_fetchrow($result)) {
+								$item_id = (int)$item_row['item_id'];
+							}
+							$db->sql_freeresult($result);
+							
+							if ($item_id) {
+								
+								$sql = "SELECT pj_id FROM ".PERSONAJES_TABLE." WHERE user_id = '$user_id'";
+								$result = $db->sql_query($sql);
+								if ($pj_row = $db->sql_fetchrow($result)) {
+									$pj_id = (int) $pj_row['pj_id'];
+								}
+								$db->sql_freeresult($result);
+								
+								$sql = "SELECT cantidad FROM ".PERSONAJE_ITEMS_TABLE." WHERE pj_id = '$pj_id' AND item_id = $item_id";
+								$result = $db->sql_query($sql);
+								if ($item_row = $db->sql_fetchrow($result)) {
+									$cantidad_old = (int) $item_row['cantidad'];
+								}
+								else {
+									$cantidad_old = 0;
+								}
+								$db->sql_freeresult($result);
+								
+								$cantidad_new = $cantidad_old + $item_cantidad;
+								if ($cantidad_new < 0) {
+									$cantidad_new = 0;
+								}
+								
+								$sql_ary = array(
+									'pj_id'		=> $pj_id,
+									'item_id'	=> $item_id,
+									'cantidad'	=> $cantidad_new,
+								);
+								
+								$sql = 'UPDATE ' . PERSONAJE_ITEMS_TABLE . '
+									SET ' . $db->sql_build_array('UPDATE', $sql_ary) . "
+									WHERE pj_id = $pj_id AND item_id = $item_id";
+								$db->sql_query($sql);
+								
+								if(!$db->sql_affectedrows()) {
+									$sql = 'INSERT INTO ' . PERSONAJE_ITEMS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary);
+									$db->sql_query($sql);
+								}
+							}
+							else {
+								trigger_error("No se encontró ítem llamado '$item_nombre'." . adm_back_link($this->u_action . '&amp;u=' . $user_id));
+							}
+							
+						}
 
 						trigger_error($user->lang['USER_PROFILE_UPDATED'] . adm_back_link($this->u_action . '&amp;u=' . $user_id));
 					}

@@ -28,6 +28,21 @@
 		<!-- END profile_fields -->
 		</fieldset>
 	<!-- ENDIF -->
+	
+	<!-- IF TIENE_PERSONAJE -->
+		<fieldset>
+			<legend>Agregar &iacute;tem a inventario</legend>
+			<dl>
+				<dt><label for="item_nombre">Nombre del &iacute;tem{L_COLON}</label></dt>
+				<dd><input type="text" class="autowidth" name="item_nombre" id="item_nombre" size="10" maxlength="50" value="" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="item_cantidad">Cantidad a agregar (negativo para restar){L_COLON}</label></dt>
+				<dd><input min="-1000" max="1000" type="number" class="autowidth" name="item_cantidad" id="item_cantidad" size="10" value="0" /></dd>
+			</dl>
+		</fieldset>
+	<!-- ENDIF -->	
+	
 	<!-- EVENT acp_users_profile_custom_after -->
 	<fieldset class="quick">
 		<input class="button1" type="submit" name="update" value="{L_SUBMIT}" />
