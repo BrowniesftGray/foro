@@ -1,3 +1,29 @@
+/* CUSTOM */
+
+.card {
+	font-size: 16px;
+}
+
+.card-body {
+	background-color: #fff;
+}
+
+.spoiler .spoiler-header {
+	font-size: 20px;
+}
+
+.col-3 div, .col-4 div, .col-5 div, .col-6 div, .col-7 div {
+    padding-top: calc(0.375rem + 3px);
+}
+
+@media (max-width: 700px) {
+	.col-md-12 {
+		padding: 0 !important;
+	}
+}
+
+/*-------------*/
+
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -266,7 +292,7 @@
 }
 
 .card-header {
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.25rem 0 1.25rem;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);

@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
-<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=0.0.2" type="text/css">
-<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=0.0.2" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.1" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.1" type="text/css">
 	
 	<div class="container">
     <div class="row justify-content-center">
@@ -39,153 +39,160 @@
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
                           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+						  <h3>Datos Personales</h3><br>
                             <div class="form-group row">
-                                <label for="name" class="col-4 col-form-label text-md-left"><h6>Nombre</h6></label>
+                                <label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
 
                                 <div class="col-4">
-                                    <p>{FICHA_NOMBRE}</p>
+                                    <div>{FICHA_NOMBRE}</div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="arquetipo" class="col-4 col-form-label text-md-left"><h6>Arquetipo</h6></label>
+                                <label for="arquetipo" class="col-3 col-form-label text-md-left">Arquetipo</label>
 
                                 <div class="col-4">
-                                  <p>{VISTA_ARQUETIPO}</p>  
+                                  <div>{VISTA_ARQUETIPO}</div> 
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="edad" class="col-4 col-form-label text-md-left"><h6>Edad</h6></label>
+                                <label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
 
                                 <div class="col-4">
-                                  <p>{FICHA_EDAD}</p>  
+                                  <div>{FICHA_EDAD}</div>  
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="descFis" class="col-4 col-form-label text-md-left"><h6>Descripción Física</h6></label>
+                                <label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
                                 <div class="col-6">
-                                   <p>{FICHA_FISICO}</p> 
+                                   <div>{FICHA_FISICO}</div> 
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="descPsic" class="col-4 col-form-label text-md-left"><h6>Descripción Psicológica</h6></label>
+                                <label for="descPsic" class="col-3 col-form-label text-md-left">Descripci&oacute;n Psicol&oacute;gica</label>
                                 <div class="col-6">                                  
-                                    <p>{FICHA_PSICOLOGICO}</p>
+                                    <div>{FICHA_PSICOLOGICO}</div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="descHis" class="col-4 col-form-label text-md-left"><h6>Historia</h6></label>
+                                <label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
                                 <div class="col-6">    
-                                    <p>{FICHA_HISTORIA}</p>
+                                    <div>{FICHA_HISTORIA}</div>
                                 </div>
                             </div>
                           </div>
                           <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+							<h3>Ramas de Técnicas</h3><br>
                                 <div class="form-group row">
-                                    <label for="ramaPrincipal" class="col-2 col-form-label text-md-left"><h6>Rama Principal:</h6></label>
+                                    <label for="ramaPrincipal" class="col-2 col-form-label text-md-left">Rama Principal:</label>
                                     <div class="col-4">
-                                       <p>{FICHA_CLAN}</p> 
+                                       <div>{FICHA_CLAN}</div> 
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="ramaSec1" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
                                     <div class="col-4">
-                                        <p>{FICHA_RAMA1}</p>
+                                        <div>{FICHA_RAMA1}</div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
                                     <div class="col-4">
-                                       <p>{FICHA_RAMA2}</p> 
+                                       <div>{FICHA_RAMA2}</div> 
                                     </div>
                                 </div>
+								<!-- IF FICHA_RAMA3 -->
                                 <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Cuarta Rama:</label>
                                     <div class="col-4">
-                                       <p>{FICHA_RAMA3}</p> 
+                                       <div>{FICHA_RAMA3}</div> 
                                     </div>
                                 </div>
+								<!-- ENDIF -->
+								<!-- IF FICHA_RAMA4 -->
                                 <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Quinta Rama:</label>
                                     <div class="col-4">
-                                       <p>{FICHA_RAMA4}</p> 
+                                       <div>{FICHA_RAMA4}</div> 
                                     </div>
                                 </div>
+								<!-- ENDIF -->
+								<!-- IF FICHA_RAMA5 -->
                                 <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left"><h6>Rama Secundaria:</h6></label>
+                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Sexta Rama:</label>
                                     <div class="col-4">
-                                       <p>{FICHA_RAMA5}</p> 
+                                       <div>{FICHA_RAMA5}</div> 
                                     </div>
                                 </div>
+								<!-- ENDIF -->
                           </div>
                           <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
                                 <!-- IF FICHA_JUTSUS -->
-                                <h2>Técnicas ninja</h2>
-                                <hr>
+                                <h3>Técnicas ninja</h3>
                                 {FICHA_JUTSUS}
                                 <!-- ENDIF -->
                           </div>
                           <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
-                            <h3>Atributos</h3><br></h5>
-                                <div class="form-group row">
-                                    <label for="atrFuerza" class="col-2 col-form-label text-md-left"><h6>Fuerza:</h6></label>
-                                    <div class="col-4">
-                                       <p>{FICHA_FUERZA}</p> 
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="artAg" class="col-2 col-form-label text-md-left"><h6>Agilidad:</h6></label>
-                                    <div class="col-4">
-                                        <p>{FICHA_AGI}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="atrVit" class="col-2 col-form-label text-md-left"><h6>Vitalidad:</h6></label>
-                                    <div class="col-4">
-                                       <p>{FICHA_VIT}</p> 
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="atrCon" class="col-2 col-form-label text-md-left"><h6>Concentracion:</h6></label>
-                                    <div class="col-4">
-                                       <p>{FICHA_CON}</p> 
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="atrCCK" class="col-2 col-form-label text-md-left"><h6>Control del chakra:</h6></label>
-                                    <div class="col-4">
-                                       <p>{FICHA_CCK}</p> 
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="atrVol" class="col-2 col-form-label text-md-left"><h6>Voluntad:</h6></label>
-                                    <div class="col-4">
-                                        <p>{FICHA_VOL}</p>
-                                    </div>
-                                </div>
-                                <h3>Estadísticas</h3><br>
-                                    <div class="form-group row">
-                                    <label for="vida" class="col-2 col-form-label text-md-left"><h6>Puntos de vida:</h6></label>
-                                    <div class="col-4">
-                                        <p>{FICHA_PV}</p>
-                                    </div>
-                                  </div>
-                                  <div class="form-group row">
-                                    <label for="chakra" class="col-2 col-form-label text-md-left"><h6>Puntos de chakra:</h6></label>
-                                    <div class="col-4">
-                                        <p>{FICHA_PC}</p>
-                                    </div>
-                                  </div>
-                                  <div class="form-group row">
-                                    <label for="stamina" class="col-2 col-form-label text-md-left"><h6>Puntos de stamina:</h6></label>
-                                    <div class="col-4">
-                                       <p>{FICHA_STA}</p> 
-                                    </div>
-                                  </div>
+                            <h3>Atributos</h3><br>
+							<div class="form-group row">
+								<label for="atrFuerza" class="col-2 col-form-label text-md-left">Fuerza:</label>
+								<div class="col-4">
+								   <div>{FICHA_FUERZA}</div> 
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="artAg" class="col-2 col-form-label text-md-left">Agilidad:</label>
+								<div class="col-4">
+									<div>{FICHA_AGI}</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="atrVit" class="col-2 col-form-label text-md-left">Vitalidad:</label>
+								<div class="col-4">
+								   <div>{FICHA_VIT}</div> 
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="atrCon" class="col-2 col-form-label text-md-left">Concentraci&oacute;n:</label>
+								<div class="col-4">
+								   <div>{FICHA_CON}</div> 
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="atrCCK" class="col-2 col-form-label text-md-left">Control del chakra:</label>
+								<div class="col-4">
+								   <div>{FICHA_CCK}</div> 
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="atrVol" class="col-2 col-form-label text-md-left">Voluntad:</label>
+								<div class="col-4">
+									<div>{FICHA_VOL}</div>
+								</div>
+							</div>
+							<h3>Estadísticas</h3><br>
+								<div class="form-group row">
+								<label for="vida" class="col-2 col-form-label text-md-left">Puntos de vida:</label>
+								<div class="col-4">
+									<div>{FICHA_PV}</div>
+								</div>
+							  </div>
+							  <div class="form-group row">
+								<label for="chakra" class="col-2 col-form-label text-md-left">Puntos de chakra:</label>
+								<div class="col-4">
+									<div>{FICHA_PC}</div>
+								</div>
+							  </div>
+							  <div class="form-group row">
+								<label for="stamina" class="col-2 col-form-label text-md-left">Puntos de stamina:</label>
+								<div class="col-4">
+								   <div>{FICHA_STA}</div> 
+								</div>
+							  </div>
                           </div>
                           <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
                             <h3>Moderaciones</h3><br></h5>
                                 <!-- BEGIN moderaciones -->
-                                  {moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</br>
+                                  <div style="border-bottom:solid 1px #d9d9d9">{moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</div>
                                 <!-- END moderaciones -->
                           </div>
                         </div>

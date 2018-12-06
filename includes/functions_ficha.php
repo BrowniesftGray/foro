@@ -455,10 +455,8 @@ function actualizar_Ficha(array $fields){
 	
 	if ($fields['ARQUETIPO'] != '') {
 		$sql = "UPDATE personajes SET arquetipo_id = '{$fields['ARQUETIPO']}' WHERE pj_id = '{$fields['PJ_ID']}'";
+		$db->sql_query($sql);
 	}
-
-	$db->sql_freeresult($sql);
-
 }
 
 function registrar_moderacion(array $fields){

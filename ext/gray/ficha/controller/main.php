@@ -105,7 +105,6 @@ class main
         }
     }
 
-
     function view($user_id, $return = false, $ver = false)
     {
             $query = $this->db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
@@ -155,20 +154,9 @@ class main
             
             $grupo = $this->user->data['group_id'];
             $borrar = $this->user->data['user_id'];
-
-            if ($grupo == 5 || $grupo == 4){
-                    $moderador = true;
-                }
-                else{
-                    $moderador = false;
-                }
-
-            if ($borrar == $user_id) {
-                $borrarPersonaje = true;
-            }
-            else{
-                $borrarPersonaje = false;
-            }
+				
+			$moderador = ($grupo == 5 || $grupo == 4);
+			$borrarPersonaje = ($borrar == $user_id);
 
             $this->user->get_profile_fields($user_id);
             if (!array_key_exists('pf_experiencia', $this->user->profile_fields)) {
@@ -179,19 +167,17 @@ class main
             }
             
 
-                //Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
-                $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-                $allow_bbcode = $allow_urls = $allow_smilies = true;
-                generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
-                $jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
+			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
+			$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+			$allow_bbcode = $allow_urls = $allow_smilies = true;
+			generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+			$jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
 
             $this->template->assign_vars(array(
-                //'FICHA_COMPLETA'      => $puede_ver,
                 'NIVEL' => $row['nivel'],
                 'PUEDE_BORRAR' => $borrarPersonaje,
                 'PUEDE_MODERAR' => $moderador,
                 'FICHA_RANGO' => $row['rango'],
-                // 'FICHA_ARQUETIPO' => obtener_arquetipo ($pj_id, $row['arquetipo_id']),
                 'VISTA_ARQUETIPO' => vista_arquetipo ($row['arquetipo_id']),
                 'ID_ARQUETIPO' => $row['arquetipo_id'],
                 'FICHA_NOMBRE' => stripslashes($row['nombre']),
@@ -203,9 +189,6 @@ class main
                 'FICHA_RAMA2' => stripslashes($row['rama2']),
                 'FICHA_RAMA3' => stripslashes($row['rama3']),
                 'FICHA_RAMA4' => stripslashes($row['rama4']),
-                'FICHA_RAMA5' => stripslashes($row['rama5']),
-                //'PUNTOS'              => $row['puntos'],
-                //'GRUPO' => $this->user->data['group_id'],
                 'FICHA_RAMA5' => stripslashes($row['rama5']),
                 'FICHA_FUERZA' => $row['fuerza'],
                 'FICHA_AGI' => $row['agilidad'],
@@ -223,8 +206,7 @@ class main
                 'FICHA_URL'             => append_sid("/ficha/". $user_id),
                 'FICHA_MODERACIONES'    => append_sid("/ficha.php", 'mode=moderar&pj=' . $user_id),
                 'FICHA_BORRAR_2'    => append_sid("/ficha/delete/". $user_id),
-            ));
-            
+            ));            
 
         } else {
             if ($return) {
