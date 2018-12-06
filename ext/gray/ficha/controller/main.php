@@ -1,6 +1,7 @@
 <?php
 
 namespace gray\ficha\controller;
+require_once('/home/shinobil/public_html/includes/functions_ficha.php');
 
 class main
 {
@@ -93,18 +94,7 @@ class main
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         trigger_error("Personaje creado correctamente.");
     }
-
-    function ficha_exists($user_id)
-    {
-        $query = $this->db->sql_query('SELECT pj_id FROM personajes WHERE user_id='.$user_id.'');
-        if ($row = $this->db->sql_fetchrow($query)) {
-            $this->db->sql_freeresult($query);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+	
     function view($user_id, $return = false, $ver = false)
     {
             $query = $this->db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
@@ -243,92 +233,7 @@ class main
         }
         return $this->helper->render('ficha_delete.html');
     }
-
-    function vista_arquetipo ($arquetipo){
-        if ($arquetipo != 0) {
-            $query = $this->db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$arquetipo."");
-            $row = $this->db->sql_fetchrow($query);
-            $this->db->sql_freeresult($query);
-            $nombre = $row['nombre_es'];
-        } else{
-            $nombre = "Sin arquetipo";
-        }
-        
-        return $nombre;
-    }
-
-    function calcula_pc($datos_pj)
-    {
-        global $db; 
-        $pc = $bono = 0;
-        
-        $pc = (int)$datos_pj['cck'] + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
-        
-        if((int)$datos_pj['arquetipo_id'] > 0) {
-            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
-            $row = $db->sql_fetchrow($query);
-            $db->sql_freeresult($query);
-            
-            if((bool)$row['bono_es_porcentaje']) {
-                $bono = round((int)$row['bono_pc'] * $pc / 100);
-            } else {
-                $bono = (int)$row['bono_pc'];
-            }
-        }
-        
-        $pc = $pc + $bono;
-        
-        return $pc;
-    }
-
-    function calcula_pv($datos_pj)
-    {
-        global $db; 
-        $pv = $bono = 0;
-        
-        $pv = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'];
-        
-        if((int)$datos_pj['arquetipo_id'] > 0) {
-            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
-            $row = $db->sql_fetchrow($query);
-            $db->sql_freeresult($query);
-            
-            if((bool)$row['bono_es_porcentaje']) {
-                $bono = round((int)$row['bono_pv'] * $pv / 100);
-            } else {
-                $bono = (int)$row['bono_pv'];
-            }
-        }
-        
-        $pv = $pv + $bono;
-        
-        return $pv;
-    }
-
-    function calcula_sta($datos_pj)
-    {
-        global $db; 
-        $sta = $bono = 0;
-        
-        $sta = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
-        
-        if((int)$datos_pj['arquetipo_id'] > 0) {
-            $query = $db->sql_query("SELECT * FROM arquetipos WHERE arquetipo_id=".(int)$datos_pj['arquetipo_id']."");
-            $row = $db->sql_fetchrow($query);
-            $db->sql_freeresult($query);
-            
-            if((bool)$row['bono_es_porcentaje']) {
-                $bono = round((int)$row['bono_sta'] * $sta / 100);
-            } else {
-                $bono = (int)$row['bono_sta'];
-            }
-        }
-        
-        $sta = $sta + $bono;
-        
-        return $sta;
-    }
-
+	
     function borrar_personaje($pj) {
 
     global $db;
