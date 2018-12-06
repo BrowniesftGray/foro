@@ -213,9 +213,6 @@ function get_ficha($user_id, $return = false, $ver = false)
 		else{
 			$uid = $bitfield = $options = '';
 			$jutsus = $row['tecnicas'];
-			$row['fisico'] = str_replace('<br />', "\n", $row['fisico']);
-			$row['psicologico'] = str_replace('<br/>', "\n", $row['psicologico']);
-			$row['historia'] = str_replace('<br />', "\n", $row['historia']);
 		}
 		
 

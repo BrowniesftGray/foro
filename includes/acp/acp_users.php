@@ -1544,7 +1544,7 @@ class acp_users
 						// Update Custom Fields
 						$cp->update_profile_field_data($user_id, $cp_data);
 						
-						if (isset($data['item_nombre']) && isset($data['item_cantidad'])) {
+						if ($data['item_nombre'] != '' && $data['item_cantidad'] != 0) {
 							$item_nombre = $data['item_nombre'];
 							$item_cantidad = (int) $data['item_cantidad'];
 							$item_id = false;

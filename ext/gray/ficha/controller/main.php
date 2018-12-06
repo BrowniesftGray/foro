@@ -206,24 +206,43 @@ class main
                     'RAZON'                 => utf8_normalize_nfc(request_var('razon', '', true)),
                 ), $atrs);
 
-            $fields['HISTORIA'] = nl2br(addslashes($fields['HISTORIA']));
-            $fields['FISICO'] = nl2br(addslashes($fields['FISICO']));
-            $fields['CARACTER'] = nl2br(addslashes($fields['CARACTER']));
+            $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
+            $fields['FISICO'] = addslashes($fields['FISICO']);
+            $fields['CARACTER'] = addslashes($fields['CARACTER']);
             $idUsuario = $this->user->data['user_id'];
-
-            $sql = "UPDATE personajes SET ";
-            $sql .= "nombre = '{$fields['NOMBRE']}', edad = '{$fields['EDAD']}', rango = '{$fields['RANGO']}',";
-            $sql .= "clan = '{$fields['PRINCIPAL']}', rama1 = '{$fields['RAMA1']}', rama2 = '{$fields['RAMA2']}', rama3 = '{$fields['RAMA3']}', rama4 = '{$fields['RAMA4']}', rama5 = '{$fields['RAMA5']}',";
-            $sql .= 'tecnicas = "'.$fields['TEC_JUTSUS'].'",';
-            $sql .= "fuerza = '{$fields['FUERZA']}', vitalidad = '{$fields['RESISTENCIA']}', agilidad = '{$fields['AGILIDAD']}', cck = '{$fields['ESPIRITU']}', concentracion = '{$fields['CONCENTRACION']}', voluntad = '{$fields['VOLUNTAD']}',";
-            $sql .= "fisico = '{$fields['FISICO']}', psicologico = '{$fields['CARACTER']}', historia = '{$fields['HISTORIA']}'";
-            $sql .= "WHERE user_id = $user_id";
-            $this->db->sql_query($sql);
-            
-            if ($fields['ARQUETIPO'] != '') {
-                $sql = "UPDATE personajes SET arquetipo_id = '{$fields['ARQUETIPO']}' WHERE pj_id = '{$fields['PJ_ID']}'";
-                $this->db->sql_query($sql);
+			
+			$sql_array = array(
+				'user_id'	=> $idUsuario,
+				'rango'		=> $fields['RANGO'],
+				'nombre'	=> $fields['NOMBRE'],
+				'edad'		=> $fields['EDAD'],
+				'clan'		=> $fields['PRINCIPAL'],
+				'rama1'		=> $fields['RAMA1'],
+				'rama2'		=> $fields['RAMA2'],
+				'rama3'		=> $fields['RAMA3'],
+				'rama4'		=> $fields['RAMA4'],
+				'rama5'		=> $fields['RAMA5'],
+				'tecnicas'	=> $fields['TEC_JUTSUS'],
+				'fuerza'	=> $fields['FUERZA'],
+				'vitalidad'	=> $fields['RESISTENCIA'],
+				'agilidad'	=> $fields['AGILIDAD'],
+				'cck'		=> $fields['ESPIRITU'],
+				'concentracion'	=> $fields['CONCENTRACION'],
+				'voluntad'	=> $fields['VOLUNTAD'],
+				'fisico'	=> $fields['FISICO'],
+				'psicologico'	=> $fields['CARACTER'],
+				'historia'	=> $fields['HISTORIA'],			
+			);
+			
+			if ($fields['ARQUETIPO'] != '') {
+                $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
             }
+
+            $sql = "UPDATE personajes SET "
+						. $this->db->sql_build_array('UPDATE', $sql_array) .
+						" WHERE user_id = $user_id";
+            $this->db->sql_query($sql);
+			
             registrar_moderacion($fields);
 
             trigger_error("Personaje moderado correctamente.");
