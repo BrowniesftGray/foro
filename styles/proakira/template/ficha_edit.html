@@ -242,20 +242,9 @@ function calcStats(finalCheck) {
 
     if (finalCheck == true) {
     usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
-    if (usados > 50) {
-        alert('¡No puedes repartir más de 50 puntos!');
-        success = false;
-    } else {
-        pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
-        pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
-        sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
-    }
-
-    puntos.innerHTML = 50 - usados;
-    
-    if (usados < 50 && finalCheck) {
-        alert('Aún te faltan puntos de atributo por repartir');
-        success = false;
+    pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
+    pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
+    sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
     }
 
     return success;

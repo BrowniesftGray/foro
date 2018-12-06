@@ -156,7 +156,7 @@ class main
         $db->sql_query("DELETE FROM moderaciones WHERE pj_moderado = '$pj'");
     }
 
-    
+
     public function viewMod($user_id)
     {   
         $grupo = $this->user->data['group_id'];
@@ -206,12 +206,9 @@ class main
                     'RAZON'                 => utf8_normalize_nfc(request_var('razon', '', true)),
                 ), $atrs);
 
-            $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
-            str_replace('<br />', "\n", $fields['HISTORIA']);
-            $fields['FISICO'] = addslashes($fields['FISICO']);
-            str_replace('<br />', "\n", $fields['FISICO']);
-            $fields['CARACTER'] = addslashes($fields['CARACTER']);
-            str_replace('<br />', "\n", $fields['CARACTER']);
+            $fields['HISTORIA'] = nl2br(addslashes($fields['HISTORIA']));
+            $fields['FISICO'] = nl2br(addslashes($fields['FISICO']));
+            $fields['CARACTER'] = nl2br(addslashes($fields['CARACTER']));
             $idUsuario = $this->user->data['user_id'];
 
             $sql = "UPDATE personajes SET ";

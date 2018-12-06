@@ -213,7 +213,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 		else{
 			$uid = $bitfield = $options = '';
 			$jutsus = $row['tecnicas'];
+			$row['fisico'] = str_replace('<br />', "\n", $row['fisico']);
+			$row['psicologico'] = str_replace('<br/>', "\n", $row['psicologico']);
+			$row['historia'] = str_replace('<br />', "\n", $row['historia']);
 		}
+		
 
 		$template->assign_vars(array(
 			//'FICHA_COMPLETA'		=> $puede_ver,
@@ -244,15 +248,19 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_CCK' => $row['cck'],
 			'FICHA_CON' => $row['concentracion'],
 			'FICHA_VOL' => $row['voluntad'],
-			'FICHA_FISICO' => nl2br(stripslashes($row['fisico'])),
-			'FICHA_PSICOLOGICO' => nl2br(stripslashes($row['psicologico'])),
-			'FICHA_HISTORIA' => nl2br(stripslashes($row['historia'])),
+			'FICHA_FISICO' => stripslashes($row['fisico']),
+			'FICHA_PSICOLOGICO' => stripslashes($row['psicologico']),
+			'FICHA_HISTORIA' => stripslashes($row['historia']),
+			'FICHA_FISICO_TXT' => nl2br(stripslashes($row['fisico'])),
+			'FICHA_PSICOLOGICO_TXT' => nl2br(stripslashes($row['psicologico'])),
+			'FICHA_HISTORIA_TXT' => nl2br(stripslashes($row['historia'])),
 			'FICHA_JUTSUS'			=> $jutsus,
 			'FICHA_PC'				=> calcula_pc($row),
 			'FICHA_PV'				=> calcula_pv($row),
 			'FICHA_STA'				=> calcula_sta($row),
-			'FICHA_URL'				=> append_sid("{$phpbb_root_path}ficha.php", 'mode=ver&pj=' . $user_id),
-			'FICHA_MODERACIONES'	=> append_sid("{$phpbb_root_path}ficha.php", 'mode=moderar&pj=' . $user_id),
+			'FICHA_URL'				=> append_sid("/ficha/". $user_id),
+			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
+			'FICHA_BORRAR_2'			=> append_sid("/ficha/delete/" . $user_id),
 		));
 		
 		return true;
