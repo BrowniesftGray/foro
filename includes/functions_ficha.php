@@ -429,8 +429,6 @@ function guardar_ficha(array $fields)
 	$sql .= "values (	$idUsuario, '1', 'Estudiante', '0', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
 	$sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
 	$db->sql_query($sql);
-
-	$db->sql_freeresult($sql);
 }
 
 function actualizar_Ficha(array $fields){
@@ -467,7 +465,6 @@ function registrar_moderacion(array $fields){
 	$sql .= "values ('".$mod."', '{$fields['RAZON']}', '{$fields['PJ_ID']}','".$fecha."')";
 
 	$db->sql_query($sql);
-	$db->sql_freeresult($sql);
 }
 function borrar_personaje($pj) {
 
@@ -476,5 +473,4 @@ function borrar_personaje($pj) {
 	$db->sql_query("DELETE FROM personajes WHERE user_id = '$pj'");
 	$db->sql_query("DELETE FROM tecnicas WHERE pj_id = '$pj'");
 	$db->sql_query("DELETE FROM moderaciones WHERE pj_moderado = '$pj'");
-	$db->sql_freeresult($sql);
 }

@@ -85,10 +85,33 @@ class main
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
         $idUsuario = $this->user->data['user_id'];
+		
+		$sql_array = array(
+			'user_id'	=> $idUsuario,
+			'nivel'		=> 1,
+			'rango'		=> 'Estudiante',
+			'arquetipo_id'	=> 0,
+			'nombre'	=> $fields['NOMBRE'],
+			'edad'		=> $fields['EDAD'],
+			'clan'		=> $fields['PRINCIPAL'],
+			'rama1'		=> $fields['RAMA1'],
+			'rama2'		=> $fields['RAMA2'],
+			'rama3'		=> '',
+			'rama4'		=> '',
+			'rama5'		=> '',
+			'tecnicas'	=> '',
+			'fuerza'	=> $fields['FUERZA'],
+			'vitalidad'	=> $fields['RESISTENCIA'],
+			'agilidad'	=> $fields['AGILIDAD'],
+			'cck'		=> $fields['ESPIRITU'],
+			'concentracion'	=> $fields['CONCENTRACION'],
+			'voluntad'	=> $fields['VOLUNTAD'],
+			'fisico'	=> $fields['FISICO'],
+			'psicologico'	=> $fields['CARACTER'],
+			'historia'	=> $fields['HISTORIA'],			
+		);
 
-        $sql = "INSERT INTO personajes (user_id, nivel, rango, arquetipo_id, nombre, edad, clan, rama1, rama2, rama3, rama4, rama5, tecnicas, fuerza, vitalidad, agilidad, cck, concentracion, voluntad, fisico, psicologico, historia)";
-        $sql .= "values (   $idUsuario, '1', 'Estudiante', '0', '{$fields['NOMBRE']}', '{$fields['EDAD']}',";
-        $sql .="'{$fields['PRINCIPAL']}', '{$fields['RAMA1']}', '{$fields['RAMA2']}', 'No seleccionada', 'No seleccionada', 'No seleccionada', '', '{$fields['FUERZA']}', '{$fields['RESISTENCIA']}', '{$fields['AGILIDAD']}', '{$fields['ESPIRITU']}', '{$fields['CONCENTRACION']}', '{$fields['VOLUNTAD']}', '{$fields['FISICO']}', '{$fields['CARACTER']}', '{$fields['HISTORIA']}')";
+        $sql = "INSERT INTO personajes " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
