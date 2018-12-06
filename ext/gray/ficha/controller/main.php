@@ -95,7 +95,7 @@ class main
         trigger_error("Personaje creado correctamente.");
     }
 	
-    function view($user_id, $return = false, $ver = false)
+    function view($user_id, $return = false, $ver = true)
     {
             $query = $this->db->sql_query("SELECT * FROM personajes WHERE user_id=".$user_id."");
             if ($row = $this->db->sql_fetchrow($query)) {
@@ -157,11 +157,17 @@ class main
             }
             
 
-			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
-			$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
-			$allow_bbcode = $allow_urls = $allow_smilies = true;
-			generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
-			$jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
+            if ($ver == true) {
+                # code...
+                //Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
+                $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+                $allow_bbcode = $allow_urls = $allow_smilies = true;
+                generate_text_for_storage($row['tecnicas'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+                $jutsus = generate_text_for_display($row['tecnicas'], $uid, $bitfield, $options);
+            }
+            else{
+               $jutsus = $row['tecnicas']; 
+            }
 
             $this->template->assign_vars(array(
                 'NIVEL' => $row['nivel'],
