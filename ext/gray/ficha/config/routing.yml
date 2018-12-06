@@ -13,3 +13,11 @@ gray_ficha_view:
 gray_ficha_delete:
   path: /ficha/delete/{user_id}
   defaults: { _controller: gray.ficha.controller:delete }
+
+gray_ficha_viewMod:    
+    path: /ficha/mod/{user_id}
+    defaults: { _controller: gray.ficha.controller:viewMod }
+
+gray_ficha_storeMod:    
+    path: /ficha/storeMod/{user_id}
+    defaults: { _controller: gray.ficha.controller:storeMod }
