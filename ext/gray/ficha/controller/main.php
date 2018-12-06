@@ -212,7 +212,6 @@ class main
             $idUsuario = $this->user->data['user_id'];
 			
 			$sql_array = array(
-				'user_id'	=> $idUsuario,
 				'rango'		=> $fields['RANGO'],
 				'nombre'	=> $fields['NOMBRE'],
 				'edad'		=> $fields['EDAD'],
