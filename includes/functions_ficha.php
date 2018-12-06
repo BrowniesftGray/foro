@@ -202,7 +202,6 @@ function get_ficha($user_id, $return = false, $ver = false)
 		else{
 			$experiencia = $user->profile_fields['pf_experiencia'];
 		}
-		$subida = comprobarNivel($experiencia, $row['nivel']);
 
 		if ($ver == true) {
 			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
@@ -221,8 +220,6 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'NIVEL' => $row['nivel'],
 			'PUEDE_BORRAR' => $borrarPersonaje,
 			'EXPERIENCIA' => $experiencia,
-			'PUEDE_SUBIR' => $subida[1],
-			'EXPERIENCIA_F' => $subida[2],
 			'PUEDE_MODERAR'	=> $moderador,
 			'FICHA_RANGO' => $row['rango'],
 			'FICHA_ARQUETIPO' => obtener_arquetipo_select($pj_id, $row['arquetipo_id']),
@@ -480,54 +477,4 @@ function borrar_personaje($pj) {
 	$db->sql_query("DELETE FROM tecnicas WHERE pj_id = '$pj'");
 	$db->sql_query("DELETE FROM moderaciones WHERE pj_moderado = '$pj'");
 	$db->sql_freeresult($sql);
-}
-
-function comprobarNivel($experiencia, $nivel){
-
-	$niveles = array(
-		1 => "55",
-		2 => "60",
-		3 => "66",
-		4 => "72",
-		5 => "79",
-		6 => "86",
-		7 => "94",
-		8 => "103",
-		9 => "115",
-		10 => "128",
-		11 => "143",
-		12 => "160",
-		13 => "179",
-		14 => "200",
-		15 => "224",
-		16 => "250",
-		17 => "280",
-		18 => "313",
-		19 => "356",
-		20 => "405",
-		21 => "461",
-		22 => "525",
-		23 => "598",
-		24 => "681",
-		25 => "776",
-		26 => "884",
-		27 => "1007",
-		28 => "1147",
-		29 => "1307"
-	);
-
-	if ($experiencia >= $niveles[$nivel]) {
-		$respuesta = array(
-			1 => true,
-			2 => 0
-		);
-	}
-	else{
-		$respuesta = array(
-			1 => false,
-			2 => $niveles[$nivel] - $experiencia
-		);
-	}
-
-	return $respuesta;
 }
