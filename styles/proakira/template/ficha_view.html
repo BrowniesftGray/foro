@@ -5,207 +5,261 @@
 	<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <form method="POST" action="/ficha/store" onsubmit="return checkFicha();">
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist" style="">
-                          <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5>Datos Personales</h5></a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><h5>Ramas</h5></a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
-                          </li>
-                          <!-- IF PUEDE_MODERAR -->
-                          <li class="nav-item">
-                            <a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
-                          </li>
-                          <!-- ENDIF -->
-                          <!-- IF PUEDE_BORRAR -->
-                          <li class="nav-item">
-                            <a class="nav-link" href="{FICHA_BORRAR_2}"><h5>Borrar Personaje</h5></a>
-                          </li>
-                          <!-- ENDIF -->
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="myTabContent">
-                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-						  <h3>Datos Personales</h3><br>
-                            <div class="form-group row">
-                                <label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
+			<div class="card">
+				<div class="card-header">
+					<ul class="nav nav-tabs" id="myTab" role="tablist" style="">
+					  <li class="nav-item">
+						<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5>Datos Personales</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><h5>Ramas</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" id="habilidades-tab" data-toggle="tab" href="#habilidades" role="tab" aria-controls="habilidades" aria-selected="false"><h5>Habilidades</h5></a>
+					  </li>
+					  <!-- IF PUEDE_MODERAR -->
+					  <li class="nav-item">
+						<a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
+					  </li>
+					  <!-- ENDIF -->
+					  <!-- IF PUEDE_BORRAR -->
+					  <li class="nav-item">
+						<a class="nav-link" href="{FICHA_BORRAR_2}"><h5>Borrar Personaje</h5></a>
+					  </li>
+					  <!-- ENDIF -->
+					</ul>
+				</div>
+				<div class="card-body">
+					<div class="tab-content" id="myTabContent">
+					  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					  <h3>Datos Personales</h3><br>
+						<div class="form-group row">
+							<label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
 
-                                <div class="col-4">
-                                    <div>{FICHA_NOMBRE}</div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="nivel" class="col-3 col-form-label text-md-left">Nivel</label>
+							<div class="col-4">
+								<div>{FICHA_NOMBRE}</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="nivel" class="col-3 col-form-label text-md-left">Nivel</label>
 
-                                <div class="col-4">
-                                    <div>{NIVEL}</div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="arquetipo" class="col-3 col-form-label text-md-left">Arquetipo</label>
+							<div class="col-4">
+								<div>{NIVEL}</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="arquetipo" class="col-3 col-form-label text-md-left">Arquetipo</label>
 
-                                <div class="col-4">
-                                  <div>{VISTA_ARQUETIPO}</div> 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
+							<div class="col-4">
+							  <div>{VISTA_ARQUETIPO}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
 
-                                <div class="col-4">
-                                  <div>{FICHA_EDAD}</div>  
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
-                                <div class="col-6">
-                                   <div>{FICHA_FISICO_TXT}</div> 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="descPsic" class="col-3 col-form-label text-md-left">Descripci&oacute;n Psicol&oacute;gica</label>
-                                <div class="col-6">                                  
-                                    <div>{FICHA_PSICOLOGICO_TXT}</div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
-                                <div class="col-6">    
-                                    <div>{FICHA_HISTORIA_TXT}</div>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-							<h3>Ramas de Técnicas</h3><br>
-                                <div class="form-group row">
-                                    <label for="ramaPrincipal" class="col-2 col-form-label text-md-left">Rama Principal:</label>
-                                    <div class="col-4">
-                                       <div>{FICHA_CLAN}</div> 
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
-                                    <div class="col-4">
-                                        <div>{FICHA_RAMA1}</div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
-                                    <div class="col-4">
-                                       <div>{FICHA_RAMA2}</div> 
-                                    </div>
-                                </div>
-								<!-- IF FICHA_RAMA3 -->
-                                <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Cuarta Rama:</label>
-                                    <div class="col-4">
-                                       <div>{FICHA_RAMA3}</div> 
-                                    </div>
-                                </div>
-								<!-- ENDIF -->
-								<!-- IF FICHA_RAMA4 -->
-                                <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Quinta Rama:</label>
-                                    <div class="col-4">
-                                       <div>{FICHA_RAMA4}</div> 
-                                    </div>
-                                </div>
-								<!-- ENDIF -->
-								<!-- IF FICHA_RAMA5 -->
-                                <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Sexta Rama:</label>
-                                    <div class="col-4">
-                                       <div>{FICHA_RAMA5}</div> 
-                                    </div>
-                                </div>
-								<!-- ENDIF -->
-                          </div>
-                          <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
-                                <!-- IF FICHA_JUTSUS -->
-                                <h3>Técnicas ninja</h3>
-                                {FICHA_JUTSUS}
-                                <!-- ENDIF -->
-                          </div>
-                          <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
-                            <h3>Atributos</h3><br>
+							<div class="col-4">
+							  <div>{FICHA_EDAD}</div>  
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
+							<div class="col-6">
+							   <div>{FICHA_FISICO_TXT}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="descPsic" class="col-3 col-form-label text-md-left">Descripci&oacute;n Psicol&oacute;gica</label>
+							<div class="col-6">                                  
+								<div>{FICHA_PSICOLOGICO_TXT}</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
+							<div class="col-6">    
+								<div>{FICHA_HISTORIA_TXT}</div>
+							</div>
+						</div>
+					  </div>
+					  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+						<h3>Ramas de Técnicas</h3><br>
 							<div class="form-group row">
-								<label for="atrFuerza" class="col-2 col-form-label text-md-left">Fuerza:</label>
+								<label for="ramaPrincipal" class="col-2 col-form-label text-md-left">Rama Principal:</label>
 								<div class="col-4">
-								   <div>{FICHA_FUERZA}</div> 
+								   <div>{FICHA_CLAN}</div> 
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="artAg" class="col-2 col-form-label text-md-left">Agilidad:</label>
+								<label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
 								<div class="col-4">
-									<div>{FICHA_AGI}</div>
+									<div>{FICHA_RAMA1}</div>
 								</div>
 							</div>
 							<div class="form-group row">
-								<label for="atrVit" class="col-2 col-form-label text-md-left">Vitalidad:</label>
+								<label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
 								<div class="col-4">
-								   <div>{FICHA_VIT}</div> 
+								   <div>{FICHA_RAMA2}</div> 
 								</div>
 							</div>
+							<!-- IF FICHA_RAMA3 -->
 							<div class="form-group row">
-								<label for="atrCon" class="col-2 col-form-label text-md-left">Concentraci&oacute;n:</label>
+								<label for="ramaSec2" class="col-2 col-form-label text-md-left">Cuarta Rama:</label>
 								<div class="col-4">
-								   <div>{FICHA_CON}</div> 
+								   <div>{FICHA_RAMA3}</div> 
 								</div>
 							</div>
+							<!-- ENDIF -->
+							<!-- IF FICHA_RAMA4 -->
 							<div class="form-group row">
-								<label for="atrCCK" class="col-2 col-form-label text-md-left">Control del chakra:</label>
+								<label for="ramaSec2" class="col-2 col-form-label text-md-left">Quinta Rama:</label>
 								<div class="col-4">
-								   <div>{FICHA_CCK}</div> 
+								   <div>{FICHA_RAMA4}</div> 
 								</div>
 							</div>
+							<!-- ENDIF -->
+							<!-- IF FICHA_RAMA5 -->
 							<div class="form-group row">
-								<label for="atrVol" class="col-2 col-form-label text-md-left">Voluntad:</label>
+								<label for="ramaSec2" class="col-2 col-form-label text-md-left">Sexta Rama:</label>
 								<div class="col-4">
-									<div>{FICHA_VOL}</div>
+								   <div>{FICHA_RAMA5}</div> 
 								</div>
 							</div>
-							<h3>Estadísticas</h3><br>
-								<div class="form-group row">
-								<label for="vida" class="col-2 col-form-label text-md-left"><pv>Puntos de vida:</pv></label>
-								<div class="col-4">
-									<div>{FICHA_PV}</div>
-								</div>
-							  </div>
-							  <div class="form-group row">
-								<label for="chakra" class="col-2 col-form-label text-md-left"><pc>Puntos de chakra:</pc></label>
-								<div class="col-4">
-									<div>{FICHA_PC}</div>
-								</div>
-							  </div>
-							  <div class="form-group row">
-								<label for="stamina" class="col-2 col-form-label text-md-left"><sta>Puntos de stamina:</sta></label>
-								<div class="col-4">
-								   <div>{FICHA_STA}</div> 
-								</div>
-							  </div>
-                          </div>
-                          <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
-                            <h3>Moderaciones</h3><br></h5>
-                                <!-- BEGIN moderaciones -->
-                                  <div style="border-bottom:solid 1px #d9d9d9">{moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</div>
-                                <!-- END moderaciones -->
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+							<!-- ENDIF -->
+					  </div>
+					  <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
+							<h3>Técnicas ninja</h3>
+							<!-- IF FICHA_JUTSUS -->
+							{FICHA_JUTSUS}
+							<!-- ENDIF -->
+					  </div>
+					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
+							<h3>Habilidades ninja</h3><br>
+							<!-- IF habilidades -->
+							<div class="habilidades">
+								<!-- BEGIN habilidades -->
+								<habilidad>
+									<nombre>{habilidades.NOMBRE}</nombre>
+									<!-- IF habilidades.requisitos -->
+									<requisitos>
+										<ul>
+											<!-- BEGIN habilidades.requisitos -->
+											<li>{habilidades.requisitos.REQUISITO}</li>
+											<!-- END habilidades.requisitos -->
+										</ul>
+									</requisitos>
+									<!-- ENDIF -->
+									<efecto>{habilidades.EFECTO}</efecto>
+								</habilidad>
+								<!-- END habilidades -->
+								<br class="clear" />
+							</div>
+							<!-- ENDIF -->
+							
+							<!-- IF habilidades_compra -->
+							<h3>Habilidades disponibles para aprender</h3><br>
+							<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
+							<div class="habilidades">
+							<!-- BEGIN habilidades_compra -->
+								<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
+									<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
+									<habilidad>
+										<nombre>{habilidades_compra.NOMBRE}</nombre>
+										<!-- IF habilidades_compra.requisitos -->
+										<requisitos>
+											<ul>
+												<!-- BEGIN habilidades_compra.requisitos -->
+												<li>{habilidades_compra.requisitos.REQUISITO}</li>
+												<!-- END habilidades_compra.requisitos -->
+											</ul>
+										</requisitos>
+										<!-- ENDIF -->
+										<efecto>{habilidades_compra.EFECTO}</efecto>
+										<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
+										<!-- IF habilidades_compra.PUEDE_COMPRAR -->
+										<br/><input type="submit" style="float: right;" class="button1" name="submit" value="Aprender" />
+										<!-- ENDIF -->
+									</habilidad>
+								</form>
+							<!-- END habilidades_compra -->
+								<br class="clear" />
+							</div>
+							<!-- ENDIF -->
+					  </div>
+					  <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
+						<h3>Atributos</h3><br>
+						<div class="form-group row">
+							<label for="atrFuerza" class="col-2 col-form-label text-md-left">Fuerza:</label>
+							<div class="col-4">
+							   <div>{FICHA_FUERZA}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="artAg" class="col-2 col-form-label text-md-left">Agilidad:</label>
+							<div class="col-4">
+								<div>{FICHA_AGI}</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="atrVit" class="col-2 col-form-label text-md-left">Vitalidad:</label>
+							<div class="col-4">
+							   <div>{FICHA_VIT}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="atrCon" class="col-2 col-form-label text-md-left">Concentraci&oacute;n:</label>
+							<div class="col-4">
+							   <div>{FICHA_CON}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="atrCCK" class="col-2 col-form-label text-md-left">Control del chakra:</label>
+							<div class="col-4">
+							   <div>{FICHA_CCK}</div> 
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="atrVol" class="col-2 col-form-label text-md-left">Voluntad:</label>
+							<div class="col-4">
+								<div>{FICHA_VOL}</div>
+							</div>
+						</div>
+						<h3>Estadísticas</h3><br>
+							<div class="form-group row">
+							<label for="vida" class="col-2 col-form-label text-md-left"><pv>Puntos de vida:</pv></label>
+							<div class="col-4">
+								<div>{FICHA_PV}</div>
+							</div>
+						  </div>
+						  <div class="form-group row">
+							<label for="chakra" class="col-2 col-form-label text-md-left"><pc>Puntos de chakra:</pc></label>
+							<div class="col-4">
+								<div>{FICHA_PC}</div>
+							</div>
+						  </div>
+						  <div class="form-group row">
+							<label for="stamina" class="col-2 col-form-label text-md-left"><sta>Puntos de stamina:</sta></label>
+							<div class="col-4">
+							   <div>{FICHA_STA}</div> 
+							</div>
+						  </div>
+					  </div>
+					  <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
+						<h3>Moderaciones</h3><br></h5>
+							<!-- BEGIN moderaciones -->
+							  <div style="border-bottom:solid 1px #d9d9d9">{moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</div>
+							<!-- END moderaciones -->
+					  </div>
+					</div>
+				</div>
+			</div>
         </div>
     </div>
 </div>

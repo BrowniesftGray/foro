@@ -123,6 +123,10 @@ habilidad {
 	cursor: default;
 }
 
+.habilidades form:nth-child(3n+1) habilidad {
+    clear: left;
+}
+
 habilidad nombre {
 	display: block;
 	font-size: 20px;
@@ -131,8 +135,7 @@ habilidad nombre {
 }
 
 habilidad requisitos ul{
-	margin-top: 0 !important;
-	margin-bottom: 0 !important;
+	margin: 0 0 0 3em !important;
 }
 
 habilidad requisitos::before {

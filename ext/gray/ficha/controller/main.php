@@ -115,7 +115,7 @@ class main
         $this->db->sql_query($sql);
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
-        trigger_error("Personaje creado correctamente.");
+        trigger_error("Personaje creado correctamente." . $this->get_return_link($idUsuario));
     }
 	
     function view($user_id)
@@ -133,7 +133,7 @@ class main
             if (confirm_box(true))
             {
                 borrar_personaje($user_id);
-                trigger_error('Personaje borrado correctamente.');
+                trigger_error('Personaje borrado correctamente.' . $this->get_return_link($user_id));
             }
             else
             {
@@ -142,9 +142,10 @@ class main
             }
         }
         else{
-            trigger_error("No puede borrar un personaje de otro usuario.");
+            trigger_error("No puede borrar un personaje de otro usuario." . $this->get_return_link($user_id));
         }
-        return $this->helper->render('ficha_delete.html');
+        
+		return $this->view($user_id);
     }
 	
     function borrar_personaje($pj) {
@@ -169,7 +170,7 @@ class main
         }
         else
         {
-            trigger_error("No puedes acceder a esta sección.");
+            trigger_error("No puedes acceder a esta sección.". $this->get_return_link($user_id));
         }
     }
 
@@ -244,11 +245,59 @@ class main
 			
             registrar_moderacion($fields);
 
-            trigger_error("Personaje moderado correctamente.");
+            trigger_error("Personaje moderado correctamente." . $this->get_return_link($user_id));
         }
         else{
-            trigger_error("No eres moderador o administrador.");
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
         }
-
+		
+		return $this->view($user_id);
     }
+	
+	public function buyHab($user_id) 
+	{
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes comprar habilidades para un personaje que no te pertenece.' . $this->get_return_link($user_id));
+		}
+		
+		$hab_id = (int) request_var('habilidad_id', 0);
+		
+		if ($hab_id > 0) {
+			$sql = "SELECT nombre, coste FROM habilidades WHERE habilidad_id = '$hab_id'";
+			$query = $this->db->sql_query($sql);
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$hab_nombre = $row['nombre'];
+				$hab_coste = (int) $row['coste'];
+			}
+			else {
+				trigger_error('No se ha encontró la habilidad.' . $this->get_return_link($user_id));
+			}
+			
+			if (confirm_box(true)){
+				if (comprar_habilidad($user_id, $hab_id, $hab_coste, $msg_error)) {
+					trigger_error("Habilidad aprendida exitosamente." . $this->get_return_link($user_id));
+				}
+				else {
+					trigger_error($msg_error . $this->get_return_link($user_id));
+				}
+			}
+			else {
+				$s_hidden_fields = build_hidden_fields(array(
+					'submit' 		=> true,
+					'habilidad_id'	=> $hab_id,
+				));
+				
+				confirm_box(false, "¿Deseas aprender la habilidad '$hab_nombre' por $hab_coste Puntos de Aprendizaje?", $s_hidden_fields);
+			}
+		}
+		else {
+			trigger_error('No se ha seleccionado una habilidad.' . $this->get_return_link($user_id));
+		}
+        
+		return $this->view($user_id);
+	}
+	
+	function get_return_link($user_id) {
+		return "<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.";
+	}
 }

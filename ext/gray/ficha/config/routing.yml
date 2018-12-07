@@ -21,3 +21,7 @@ gray_ficha_viewMod:
 gray_ficha_storeMod:    
     path: /ficha/storeMod/{user_id}
     defaults: { _controller: gray.ficha.controller:storeMod }
+
+gray_ficha_buyHab:    
+    path: /ficha/hab/{user_id}
+    defaults: { _controller: gray.ficha.controller:buyHab }
