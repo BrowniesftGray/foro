@@ -51,6 +51,8 @@ RewriteRule ^[\w\-]+\-p(\d+)\??(.*)$ viewtopic.php?p=$1&$2
 RewriteRule ^[\w\-]+\-p(\d+)\/(\d+)\??(.*)$ viewtopic.php?p=$1&start=$2&$3
 # Post solo sin leer
 RewriteRule ^[\w\-]+\-p(\d+)\/view-(\w+)(.*)$$ viewtopic.php?p=$1&view=$2#$3
+# Foro paginado
+RewriteRule ^[\w\-]+\-f(\d+)\/(\d+)\??(.*)$ viewforum.php?f=$1&start=$2&$3
 # Foro
 RewriteRule ^[\w\-]+\-f(\d+)\??(.*)$ viewforum.php?f=$1&$2
 
