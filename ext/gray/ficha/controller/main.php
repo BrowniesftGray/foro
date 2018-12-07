@@ -133,7 +133,7 @@ class main
             if (confirm_box(true))
             {
                 borrar_personaje($user_id);
-                trigger_error('Personaje borrado correctamente.' . $this->get_return_link($user_id));
+                trigger_error('Personaje borrado correctamente.<br><a href="/ficha/new">Crear nuevo personaje</a>.');
             }
             else
             {

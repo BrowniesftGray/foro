@@ -477,6 +477,17 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 			return false;
 		}
 		
+		$disponible = false;
+		$hab_disp = get_habilidades_disponibles($pj_id);
+		foreach ($hab_disp as $hab) {
+			if ((int) $hab['habilidad_id'] == $hab_id)
+				$disponible = true;
+		}
+		if (!$disponible) {
+			$msg_error = 'Esta habilidad no está disponible para tu personaje.';
+			return false;
+		}		
+		
 		$sql_array = array(
 			'pj_id'			=> $pj_id,
 			'habilidad_id'	=> $hab_id,
