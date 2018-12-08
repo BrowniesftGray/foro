@@ -106,6 +106,20 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
 		//$puede_ver = ($auth->acl_get('m_modera_ficha') || $user->data['user_id'] == $pj) ? true : false;
+		
+		$queryCamino = $db->sql_query("
+			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
+				FROM ".PERSONAJES_HISTORICO_TABLE." ph 
+					INNER JOIN ".ARQUETIPOS_TABLE." a
+						ON a.arquetipo_id = ph.arquetipo_id
+				WHERE ph.pj_id = '$pj_id'
+				ORDER BY historico_id ASC");
+		while ($row2 = $db->sql_fetchrow($queryCamino))
+		{
+			if ($str_camino) $str_camino .= ' &raquo; ';
+			$str_camino .= $row2['arquetipo'];
+		}
+		$db->sql_freeresult($queryCamino);
 
 		$queryModeraciones = $db->sql_query("SELECT * FROM ".MODERACIONES_TABLE." WHERE pj_moderado='$pj_id'");
 
@@ -211,6 +225,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_ARQUETIPO' 		=> obtener_arquetipo_select($pj_id, $row['arquetipo_id']),
 			'VISTA_ARQUETIPO' 		=> vista_arquetipo ($row['arquetipo_id']),
 			'ID_ARQUETIPO' 			=> $row['arquetipo_id'],
+			'FICHA_CAMINO'			=> $str_camino,
 			'FICHA_NOMBRE' 			=> stripslashes($row['nombre']),
 			'FICHA_ID' 				=> $pj_id,
 			'FICHA_EDAD' 			=> $row['edad'],

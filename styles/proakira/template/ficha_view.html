@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
-<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.1" type="text/css">
-<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.1" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.2" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.2" type="text/css">
 	
 	<div class="container">
     <div class="row justify-content-center">
@@ -141,57 +141,65 @@
 							<!-- ENDIF -->
 					  </div>
 					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
-							<h3>Habilidades ninja</h3><br>
-							<!-- IF habilidades -->
-							<div class="habilidades">
-								<!-- BEGIN habilidades -->
+					    <!-- IF FICHA_CAMINO -->
+						<div class="form-group row">
+							<label for="arquetipo" class="col-2 col-form-label text-md-left">Camino Ninja</label>
+							<div class="col-8">
+							  <div>{FICHA_CAMINO}</div> 
+							</div>
+						</div>
+						<!-- ENDIF -->
+						<h3>Habilidades ninja</h3><br>
+						<!-- IF habilidades -->
+						<div class="habilidades">
+							<!-- BEGIN habilidades -->
+							<habilidad>
+								<nombre>{habilidades.NOMBRE}</nombre>
+								<!-- IF habilidades.requisitos -->
+								<requisitos>
+									<ul>
+										<!-- BEGIN habilidades.requisitos -->
+										<li>{habilidades.requisitos.REQUISITO}</li>
+										<!-- END habilidades.requisitos -->
+									</ul>
+								</requisitos>
+								<!-- ENDIF -->
+								<efecto>{habilidades.EFECTO}</efecto>
+							</habilidad>
+							<!-- END habilidades -->
+							<br class="clear" />
+						</div>
+						<!-- ENDIF -->
+						
+						<!-- IF habilidades_compra -->
+						<h3>Habilidades disponibles para aprender</h3><br>
+						<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
+						<div class="habilidades">
+						<!-- BEGIN habilidades_compra -->
+							<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
+								<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
 								<habilidad>
-									<nombre>{habilidades.NOMBRE}</nombre>
-									<!-- IF habilidades.requisitos -->
+									<nombre>{habilidades_compra.NOMBRE}</nombre>
+									<!-- IF habilidades_compra.requisitos -->
 									<requisitos>
 										<ul>
-											<!-- BEGIN habilidades.requisitos -->
-											<li>{habilidades.requisitos.REQUISITO}</li>
-											<!-- END habilidades.requisitos -->
+											<!-- BEGIN habilidades_compra.requisitos -->
+											<li>{habilidades_compra.requisitos.REQUISITO}</li>
+											<!-- END habilidades_compra.requisitos -->
 										</ul>
 									</requisitos>
 									<!-- ENDIF -->
-									<efecto>{habilidades.EFECTO}</efecto>
+									<efecto>{habilidades_compra.EFECTO}</efecto>
+									<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
+									<!-- IF habilidades_compra.PUEDE_COMPRAR -->
+									<br/><input type="submit" style="float: right;" class="button1" name="submit" value="Aprender" />
+									<!-- ENDIF -->
 								</habilidad>
-								<!-- END habilidades -->
-								<br class="clear" />
-							</div>
-							<!-- ENDIF -->
-							
-							<!-- IF habilidades_compra -->
-							<h3>Habilidades disponibles para aprender</h3><br>
-							<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
-							<div class="habilidades">
-							<!-- BEGIN habilidades_compra -->
-								<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
-									<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
-									<habilidad>
-										<nombre>{habilidades_compra.NOMBRE}</nombre>
-										<!-- IF habilidades_compra.requisitos -->
-										<requisitos>
-											<ul>
-												<!-- BEGIN habilidades_compra.requisitos -->
-												<li>{habilidades_compra.requisitos.REQUISITO}</li>
-												<!-- END habilidades_compra.requisitos -->
-											</ul>
-										</requisitos>
-										<!-- ENDIF -->
-										<efecto>{habilidades_compra.EFECTO}</efecto>
-										<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
-										<!-- IF habilidades_compra.PUEDE_COMPRAR -->
-										<br/><input type="submit" style="float: right;" class="button1" name="submit" value="Aprender" />
-										<!-- ENDIF -->
-									</habilidad>
-								</form>
-							<!-- END habilidades_compra -->
-								<br class="clear" />
-							</div>
-							<!-- ENDIF -->
+							</form>
+						<!-- END habilidades_compra -->
+							<br class="clear" />
+						</div>
+						<!-- ENDIF -->
 					  </div>
 					  <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
 						<h3>Atributos</h3><br>

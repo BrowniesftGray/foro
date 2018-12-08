@@ -319,6 +319,7 @@ define('HABILIDADES_TABLE',				'habilidades');
 define('ITEMS_TABLE',					'items');
 define('MODERACIONES_TABLE',			'moderaciones');
 define('PERSONAJES_TABLE',				'personajes');
+define('PERSONAJES_HISTORICO_TABLE',	'personajes_historico');
 define('PERSONAJE_HABILIDADES_TABLE',	'personaje_habilidades');
 define('PERSONAJE_ITEMS_TABLE',			'personaje_items');
 define('SHOPS_TABLE',					'categorias_items');
