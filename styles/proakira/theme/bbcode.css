@@ -115,7 +115,7 @@ habilidad {
 	color: #6b6b6b;
 	margin: 5px;
 	padding: 10px;
-	max-width: 250px;
+	width: 250px;
 	font-family: Roboto, Verdana, sans-serif;
 	font-size: 12px;
 	box-shadow: 1px 1px 1px #333;

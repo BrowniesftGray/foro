@@ -492,6 +492,12 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . " 
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
+							
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON' => 'Compra Habilidad.'
+		);
+		registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
