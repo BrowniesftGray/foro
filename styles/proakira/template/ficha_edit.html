@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
-<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.2" type="text/css">
-<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.2" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.1" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.1" type="text/css">
 	
 	<div class="container">
     <div class="row justify-content-center">
@@ -40,13 +40,13 @@
                             <div class="form-group row">
                                 <label for="name" class="col-3 col-form-label text-md-left">Arquetipo</label>
                                 <div class="col-6">
-									<input type="hidden" name="pj_id" value="{FICHA_ID}"/>
-									<!-- IF FICHA_ARQUETIPO -->
-									<select id="arquetipo" class="form-control" name="arquetipo"><option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select>
-									<!-- ELSE -->
-									<div>{VISTA_ARQUETIPO}</div>
-									<!-- ENDIF -->
-								</div>
+                                <input type="hidden" name="pj_id" value="{FICHA_ID}"/>
+                            <!-- IF FICHA_ARQUETIPO -->
+							  <select id="arquetipo" class="form-control" name="arquetipo"><option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select>
+							  <!-- ELSE -->
+							  {VISTA_ARQUETIPO}
+							  <!-- ENDIF -->
+							  </div>
                             </div>
                             <div class="form-group row">
                                 <label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
@@ -186,7 +186,7 @@
                     <div class="card-footer text-center">
                        <div class="form-group row mb-0">
                             <div class="col-4 offset-md-3">
-                                <input type="submit" class="btn btn-primary" value="Moderar Ficha">
+                                <input type="submit" class="btn btn-success" value="Moderar Ficha">
                                 </input>
                             </div>
                         </div>
