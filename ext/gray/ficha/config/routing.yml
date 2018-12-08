@@ -25,3 +25,7 @@ gray_ficha_storeMod:
 gray_ficha_buyHab:    
     path: /ficha/hab/{user_id}
     defaults: { _controller: gray.ficha.controller:buyHab }
+
+gray_ficha_lvlUp:    
+    path: /ficha/lvlup/{user_id}
+    defaults: { _controller: gray.ficha.controller:lvlUp }

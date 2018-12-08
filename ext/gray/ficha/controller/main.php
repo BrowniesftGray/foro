@@ -297,6 +297,86 @@ class main
 		return $this->view($user_id);
 	}
 	
+	function lvlUp($user_id) 
+	{
+		$atrs_new = array(
+			'ARQUETIPO'		=> (int) request_var('arquetipo', 0),
+			'FUERZA'		=> (int) request_var('atrFuerza', 0),
+			'AGILIDAD'		=> (int) request_var('artAg', 0),
+			'VITALIDAD'		=> (int) request_var('atrVit', 0),
+			'CCK'			=> (int) request_var('atrCCK', 0),
+			'CONCENTRACION'	=> (int) request_var('atrCon', 0),
+			'VOLUNTAD'		=> (int) request_var('atrVol', 0),
+		);
+		
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes distribuir atributos para un personaje que no te pertenece.' . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
+		
+		$pj_data = get_pj_data($pj_id, 0);
+		if (!$pj_data) trigger_error('Hubo un error obteniendo los datos de tu personaje.' . $this->get_return_link($user_id));
+		
+		$diff = ($atrs_new['FUERZA']+$atrs_new['AGILIDAD']+$atrs_new['VITALIDAD']+$atrs_new['CCK']+$atrs_new['CONCENTRACION']+$atrs_new['VOLUNTAD'])
+				- ($pj_data['PJ_FUE']+$pj_data['PJ_AGI']+$pj_data['PJ_VIT']+$pj_data['PJ_CCK']+$pj_data['PJ_CON']+$pj_data['PJ_VOL']);
+				
+		$attr_disp = (int) $pj_data['PJ_ATTR_DISP'];
+		if ($diff > $attr_disp) {
+			trigger_error("No puedes repartir más de $attr_disp puntos." . $this->get_return_link($user_id));
+		}
+		
+		if ($atrs_new['FUERZA'] < $pj_data['PJ_FUE']) 
+			trigger_error("La Fuerza ingresada es incorrecta." . $this->get_return_link($user_id));
+		
+		if ($atrs_new['AGILIDAD'] < $pj_data['PJ_AGI']) 
+			trigger_error("La Agilidad ingresada es incorrecta." . $this->get_return_link($user_id));
+		
+		if ($atrs_new['VITALIDAD'] < $pj_data['PJ_VIT']) 
+			trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
+		
+		if ($atrs_new['CCK'] < $pj_data['PJ_CCK']) 
+			trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
+		
+		if ($atrs_new['CONCENTRACION'] < $pj_data['PJ_CON']) 
+			trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
+		
+		if ($atrs_new['VOLUNTAD'] < $pj_data['PJ_VOL']) 
+			trigger_error("La Voluntad ingresada es incorrecta." . $this->get_return_link($user_id));
+		
+		try {
+			$sql_array = array(
+				'fuerza'		=> $atrs_new['FUERZA'],
+				'agilidad'		=> $atrs_new['AGILIDAD'],
+				'vitalidad'		=> $atrs_new['VITALIDAD'],
+				'cck'			=> $atrs_new['CCK'],
+				'concentracion'	=> $atrs_new['CONCENTRACION'],
+				'voluntad'		=> $atrs_new['VOLUNTAD'],
+			);
+			
+			if ($atrs_new['ARQUETIPO'] > 0)
+				$sql_array['arquetipo_id'] = $atrs_new['ARQUETIPO'];
+			
+			$this->db->sql_query("UPDATE personajes SET " 
+									. $this->db->sql_build_array('UPDATE', $sql_array)
+									. " WHERE user_id = $user_id");
+			
+			$moderacion = array(
+				'PJ_ID'	=> $pj_id,
+				'RAZON'	=> 'Subida de Nivel',
+			);
+			registrar_moderacion($moderacion);
+			
+			trigger_error("Ficha actualizada exitosamente." . $this->get_return_link($user_id));
+		} catch (Exception $e) {
+			trigger_error("Ocurrió un error al actualizar la ficha; contacta a Administración.<br>" 
+							. $e->getMessage()
+							. $this->get_return_link($user_id));
+		}
+		
+	}
+	
 	function get_return_link($user_id) {
 		return "<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.";
 	}

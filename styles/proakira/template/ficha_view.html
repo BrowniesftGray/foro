@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
-<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.2" type="text/css">
-<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.2" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.3" type="text/css">
 	
 	<div class="container">
     <div class="row justify-content-center">
@@ -144,7 +144,7 @@
 					    <!-- IF FICHA_CAMINO -->
 						<div class="form-group row">
 							<label for="arquetipo" class="col-2 col-form-label text-md-left">Camino Ninja</label>
-							<div class="col-8">
+							<div class="col-7">
 							  <div>{FICHA_CAMINO}</div> 
 							</div>
 						</div>
@@ -203,59 +203,101 @@
 					  </div>
 					  <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
 						<h3>Atributos</h3><br>
+						<!-- IF PUEDE_SUBIR -->
+						<form action="{U_ACTION_LVL}" method="post">
+						<!-- IF FICHA_ARQUETIPO -->
+						<div class="form-group row">
+							<label for="name" class="col-2 col-form-label text-md-left">Arquetipo</label>
+							<div class="col-6">
+								<select id="arquetipo" class="form-control" name="arquetipo">
+									<option value="{ID_ARQUETIPO}">{VISTA_ARQUETIPO}</option>{FICHA_ARQUETIPO}</select>
+							</div>
+						</div>
+						<!-- ENDIF -->
+						<h5>Puntos Disponibles: <span id="puntos">{FICHA_ATRIBUTOS_DISP}</span></h5>
+						<input type="hidden" id="attrdisp" value="{FICHA_ATRIBUTOS_TOT}" />
+						<hr></hr>
 						<div class="form-group row">
 							<label for="atrFuerza" class="col-2 col-form-label text-md-left">Fuerza:</label>
-							<div class="col-4">
-							   <div>{FICHA_FUERZA}</div> 
+							<div class="col-3">
+								<input type="number" class="form-control" name="atrFuerza" id="atrFuerza" size="10" value="{FICHA_FUERZA}" min="{FICHA_FUERZA}" onblur="calcEstadisticas(false);" />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="artAg" class="col-2 col-form-label text-md-left">Agilidad:</label>
-							<div class="col-4">
-								<div>{FICHA_AGI}</div>
+							<div class="col-3">
+								<input type="number" class="form-control" name="artAg" id="artAg" size="10" value="{FICHA_AGI}" min="{FICHA_AGI}" onblur="calcEstadisticas(false); " />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="atrVit" class="col-2 col-form-label text-md-left">Vitalidad:</label>
-							<div class="col-4">
-							   <div>{FICHA_VIT}</div> 
+							<div class="col-3">
+								<input type="number" class="form-control" name="atrVit" id="atrVit" size="10" value="{FICHA_VIT}" min="{FICHA_VIT}" onblur="calcEstadisticas(false); " />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="atrCon" class="col-2 col-form-label text-md-left">Concentraci&oacute;n:</label>
-							<div class="col-4">
-							   <div>{FICHA_CON}</div> 
+							<div class="col-3">
+								<input type="number" class="form-control" name="atrCon" id="atrCon" size="10" value="{FICHA_CON}" min="{FICHA_CON}" onblur="calcEstadisticas(false); " />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="atrCCK" class="col-2 col-form-label text-md-left">Control del chakra:</label>
-							<div class="col-4">
-							   <div>{FICHA_CCK}</div> 
+							<div class="col-3">
+								<input type="number" class="form-control" name="atrCCK" id="atrCCK" size="10" value="{FICHA_CCK}" min="{FICHA_CCK}" onblur="calcEstadisticas(false); " />
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="atrVol" class="col-2 col-form-label text-md-left">Voluntad:</label>
-							<div class="col-4">
-								<div>{FICHA_VOL}</div>
+							<div class="col-3">
+								<input type="number" class="form-control" name="atrVol" id="atrVol" size="10" value="{FICHA_VOL}" min="{FICHA_VOL}" onblur="calcEstadisticas(false); " />
 							</div>
 						</div>
+						<input type="submit" class="btn btn-success" value="Guardar Cambios" />
+						</form>
+						<!-- ELSE -->
+						<div class="form-group row">
+							<label for="atrFuerza" class="col-2 col-form-label text-md-left">Fuerza:</label>
+							<div class="col-4"><div>{FICHA_FUERZA}</div></div>
+						</div>
+						<div class="form-group row">
+							<label for="artAg" class="col-2 col-form-label text-md-left">Agilidad:</label>
+							<div class="col-4"><div>{FICHA_AGI}</div></div>
+						</div>
+						<div class="form-group row">
+							<label for="atrVit" class="col-2 col-form-label text-md-left">Vitalidad:</label>
+							<div class="col-4"><div>{FICHA_VIT}</div></div>
+						</div>
+						<div class="form-group row">
+							<label for="atrCon" class="col-2 col-form-label text-md-left">Concentraci&oacute;n:</label>
+							<div class="col-4"><div>{FICHA_CON}</div></div>
+						</div>
+						<div class="form-group row">
+							<label for="atrCCK" class="col-2 col-form-label text-md-left">Control del chakra:</label>
+							<div class="col-4"><div>{FICHA_CCK}</div></div>
+						</div>
+						<div class="form-group row">
+							<label for="atrVol" class="col-2 col-form-label text-md-left">Voluntad:</label>
+							<div class="col-4"><div>{FICHA_VOL}</div></div>
+						</div>
+						<!-- ENDIF -->
 						<h3>Estadísticas</h3><br>
 							<div class="form-group row">
 							<label for="vida" class="col-2 col-form-label text-md-left"><pv>Puntos de vida:</pv></label>
 							<div class="col-4">
-								<div>{FICHA_PV}</div>
+								<div id="vida">{FICHA_PV}</div>
 							</div>
 						  </div>
 						  <div class="form-group row">
 							<label for="chakra" class="col-2 col-form-label text-md-left"><pc>Puntos de chakra:</pc></label>
 							<div class="col-4">
-								<div>{FICHA_PC}</div>
+								<div id="chakra">{FICHA_PC}</div>
 							</div>
 						  </div>
 						  <div class="form-group row">
 							<label for="stamina" class="col-2 col-form-label text-md-left"><sta>Puntos de stamina:</sta></label>
 							<div class="col-4">
-							   <div>{FICHA_STA}</div> 
+							   <div id="stamina">{FICHA_STA}</div> 
 							</div>
 						  </div>
 					  </div>
@@ -271,6 +313,29 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+	function calcEstadisticas(){
+		var fue = document.getElementById('atrFuerza').value;
+		var vit = document.getElementById('atrVit').value;
+		var con = document.getElementById('atrCon').value;
+		var cck = document.getElementById('atrCCK').value;
+		var agi = document.getElementById('artAg').value;
+		var vol = document.getElementById('atrVol').value;
+		var pv = document.getElementById('vida');
+		var pc = document.getElementById('chakra');
+		var sta = document.getElementById('stamina');
+		var puntos = document.getElementById('puntos');
+
+		var usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
+
+		var disponibles = parseInt(document.getElementById('attrdisp').value);
+		puntos.innerHTML = disponibles - usados;
+
+		pv.innerHTML = parseInt(fue) + parseInt(agi) + parseInt(vit);
+		pc.innerHTML = parseInt(cck) + parseInt(con) + parseInt(vol);
+		sta.innerHTML = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
+	}
+</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
