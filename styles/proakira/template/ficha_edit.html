@@ -241,14 +241,13 @@ function calcStats(finalCheck) {
     var success = true;
 
     if (finalCheck == true) {
-    usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
-    pv.value = parseInt(fue) + parseInt(agi) + parseInt(vit);
-    pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
-    sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
+		usados = parseInt(fue) + parseInt(vit) + parseInt(agi) + parseInt(con) + parseInt(cck) + parseInt(vol);
+		pv.value = 10 + parseInt(fue) + parseInt(agi) + parseInt(vit);
+		pc.value = parseInt(cck) + parseInt(con) + parseInt(vol);
+		sta.value = parseInt(fue) + parseInt(agi) + parseInt(vit) + parseInt(vol);
     }
 
     return success;
-    }
 }
 
 function checkRamas(){
