@@ -207,15 +207,25 @@ function get_ficha($user_id, $return = false, $ver = false)
 		
 		$attr_disp = get_atributos_disponibles($pj_id);
 		$attr_tot = $attr_disp + $row['fuerza'] + $row['agilidad'] + $row['vitalidad'] + $row['cck'] + $row['concentracion'] + $row['voluntad'];
-
+		$arquetipo_select = obtener_arquetipo_select($pj_id, $row['arquetipo_id']);
+		
+		$puede_elegir_rama1 = ($row['rama1'] == '');
+		$puede_elegir_rama2 = ($row['rama2'] == '');
+		$puede_elegir_rama3 = ($row['rama3'] == '' && (int)$row['nivel'] >= 10);
+		$puede_elegir_rama4 = ($row['rama4'] == '' && (int)$row['nivel'] >= 15);
+		$puede_elegir_rama5 = ($row['rama5'] == '' && (int)$row['nivel'] >= 25);
+		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
+		
+		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
+		
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
 			'PUEDE_BORRAR'			=> $personajePropio,
-			'PUEDE_SUBIR'			=> $personajePropio && $attr_disp,
+			'PUEDE_SUBIR'			=> $puede_subir_nivel,
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
 			'PUEDE_MODERAR'			=> $moderador,
-			'FICHA_ARQUETIPO' 		=> obtener_arquetipo_select($pj_id, $row['arquetipo_id']),
+			'FICHA_ARQUETIPO' 		=> $arquetipo_select,
 			'VISTA_ARQUETIPO' 		=> vista_arquetipo ($row['arquetipo_id']),
 			'ID_ARQUETIPO' 			=> $row['arquetipo_id'],
 			'FICHA_CAMINO'			=> $str_camino,
@@ -230,6 +240,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_RAMA5' 			=> stripslashes($row['rama5']),
 			'FICHA_ATRIBUTOS_DISP'	=> $attr_disp,
 			'FICHA_ATRIBUTOS_TOT'	=> $attr_tot,
+			'FICHA_ATRIBUTOS_MAX'	=> 10 + ((int)$row['nivel'] * 5),
 			'FICHA_FUERZA' 			=> $row['fuerza'],
 			'FICHA_AGI' 			=> $row['agilidad'],
 			'FICHA_VIT' 			=> $row['vitalidad'],
@@ -251,6 +262,31 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
 		));
+		
+		if (!$ver || $puede_elegir_ramas) {
+			if ($ver) {
+				$exluir_ramas[0] = $row['rama1'];
+				$exluir_ramas[1] = $row['rama2'];
+				$exluir_ramas[2] = $row['rama3'];
+				$exluir_ramas[3] = $row['rama4'];
+				$exluir_ramas[4] = $row['rama5'];	
+			}			
+			
+			$template->assign_vars(array(
+				'PUEDE_ELEGIR_RAMAS'	=> $puede_elegir_ramas,
+				'PUEDE_ELEGIR_RAMA1'	=> $puede_elegir_rama1,
+				'PUEDE_ELEGIR_RAMA2'	=> $puede_elegir_rama2,
+				'PUEDE_ELEGIR_RAMA3'	=> $puede_elegir_rama3,
+				'PUEDE_ELEGIR_RAMA4'	=> $puede_elegir_rama4,
+				'PUEDE_ELEGIR_RAMA5'	=> $puede_elegir_rama5,
+				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, $row['clan'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(0, $row['rama1'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, $row['rama2'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, $row['rama3'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, $row['rama4'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(0, $row['rama5'], $exluir_ramas),
+			));
+		}
 		
 		return true;
 	} else {
@@ -334,6 +370,30 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 			$select .= "</option>";
 		}
 	}
+	return $select;
+}
+
+function get_ramas_select($principales, $selected, $exclude){
+	global $db;
+	if(!isset($exclude)) $exclude = array();
+	$select = '';
+	
+	$query = $db->sql_query('SELECT rama_id, nombre, aldea 
+								FROM '.RAMAS_TABLE." 
+								WHERE principal = $principales 
+								ORDER BY primero DESC, nombre ASC");
+	while($row = $db->sql_fetchrow($query)) {
+		$str_selected = ($row['nombre'] === $selected) ? 'selected' : '';
+		if (!in_array($row['nombre'], $exclude) || $str_selected == 'selected') {
+			$select .= "<option $str_selected value='".$row['nombre']."'>";
+			if ($row['aldea']) 
+				$select .= '(' . $row['aldea'] . ') ';
+			$select .= $row['nombre'];
+			$select .= "</option>";
+		}
+	}
+	$db->sql_freeresult($query);
+	
 	return $select;
 }
 

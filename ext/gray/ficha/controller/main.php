@@ -55,7 +55,8 @@ class main
             trigger_error('No puedes acceder aquí sin conectarte');
         }
 
-        $this->template->assign_var('DEMO_MESSAGE', $this->user->data['group_id']);
+        $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null));
+        $this->template->assign_var('RAMAS_SECUNDARIAS', get_ramas_select(0, false, null));
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 	
@@ -299,7 +300,13 @@ class main
 	
 	function lvlUp($user_id) 
 	{
-		$atrs_new = array(
+		$sql_array = array();
+		$lvlup_data = array(
+			'RAMA1'			=> utf8_normalize_nfc(request_var('ramaSec1', '', true)),
+			'RAMA2'			=> utf8_normalize_nfc(request_var('ramaSec2', '', true)),
+			'RAMA3'			=> utf8_normalize_nfc(request_var('ramaSec3', '', true)),
+			'RAMA4'			=> utf8_normalize_nfc(request_var('ramaSec4', '', true)),
+			'RAMA5'			=> utf8_normalize_nfc(request_var('ramaSec5', '', true)),
 			'ARQUETIPO'		=> (int) request_var('arquetipo', 0),
 			'FUERZA'		=> (int) request_var('atrFuerza', 0),
 			'AGILIDAD'		=> (int) request_var('artAg', 0),
@@ -307,10 +314,11 @@ class main
 			'CCK'			=> (int) request_var('atrCCK', 0),
 			'CONCENTRACION'	=> (int) request_var('atrCon', 0),
 			'VOLUNTAD'		=> (int) request_var('atrVol', 0),
+			'ATTR_DISP'		=> (int) request_var('attrdisp', 0),
 		);
 		
 		if ($user_id != $this->user->data['user_id']) {
-			trigger_error('No puedes distribuir atributos para un personaje que no te pertenece.' . $this->get_return_link($user_id));
+			trigger_error('No puedes modificar un personaje que no te pertenece.' . $this->get_return_link($user_id));
 		}
 		
 		$pj_id = get_pj_id($user_id);
@@ -319,52 +327,69 @@ class main
 		$pj_data = get_pj_data($pj_id, 0);
 		if (!$pj_data) trigger_error('Hubo un error obteniendo los datos de tu personaje.' . $this->get_return_link($user_id));
 		
-		$diff = ($atrs_new['FUERZA']+$atrs_new['AGILIDAD']+$atrs_new['VITALIDAD']+$atrs_new['CCK']+$atrs_new['CONCENTRACION']+$atrs_new['VOLUNTAD'])
-				- ($pj_data['PJ_FUE']+$pj_data['PJ_AGI']+$pj_data['PJ_VIT']+$pj_data['PJ_CCK']+$pj_data['PJ_CON']+$pj_data['PJ_VOL']);
-				
-		$attr_disp = (int) $pj_data['PJ_ATTR_DISP'];
-		if ($diff > $attr_disp) {
-			trigger_error("No puedes repartir más de $attr_disp puntos." . $this->get_return_link($user_id));
+		if ($lvlup_data['ATTR_DISP'] > 0) {
+			$diff = ($lvlup_data['FUERZA']+$lvlup_data['AGILIDAD']+$lvlup_data['VITALIDAD']+$lvlup_data['CCK']+$lvlup_data['CONCENTRACION']+$lvlup_data['VOLUNTAD'])
+					- ($pj_data['PJ_FUE']+$pj_data['PJ_AGI']+$pj_data['PJ_VIT']+$pj_data['PJ_CCK']+$pj_data['PJ_CON']+$pj_data['PJ_VOL']);
+					
+			$attr_disp = (int) $pj_data['PJ_ATTR_DISP'];
+			if ($diff > $attr_disp) {
+				trigger_error("No puedes repartir más de $attr_disp puntos." . $this->get_return_link($user_id));
+			}
+			
+			if ($lvlup_data['FUERZA'] < $pj_data['PJ_FUE']) 
+				trigger_error("La Fuerza ingresada es incorrecta." . $this->get_return_link($user_id));
+			
+			if ($lvlup_data['AGILIDAD'] < $pj_data['PJ_AGI']) 
+				trigger_error("La Agilidad ingresada es incorrecta." . $this->get_return_link($user_id));
+			
+			if ($lvlup_data['VITALIDAD'] < $pj_data['PJ_VIT']) 
+				trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
+			
+			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK']) 
+				trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
+			
+			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON']) 
+				trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
+			
+			if ($lvlup_data['VOLUNTAD'] < $pj_data['PJ_VOL']) 
+				trigger_error("La Voluntad ingresada es incorrecta." . $this->get_return_link($user_id));
+			
+			$sql_array = array_merge(array(
+				'fuerza'		=> $lvlup_data['FUERZA'],
+				'agilidad'		=> $lvlup_data['AGILIDAD'],
+				'vitalidad'		=> $lvlup_data['VITALIDAD'],
+				'cck'			=> $lvlup_data['CCK'],
+				'concentracion'	=> $lvlup_data['CONCENTRACION'],
+				'voluntad'		=> $lvlup_data['VOLUNTAD'],
+			), $sql_array);
 		}
 		
-		if ($atrs_new['FUERZA'] < $pj_data['PJ_FUE']) 
-			trigger_error("La Fuerza ingresada es incorrecta." . $this->get_return_link($user_id));
+		if ($lvlup_data['ARQUETIPO'] > 0)
+			$sql_array['arquetipo_id'] = $lvlup_data['ARQUETIPO'];
 		
-		if ($atrs_new['AGILIDAD'] < $pj_data['PJ_AGI']) 
-			trigger_error("La Agilidad ingresada es incorrecta." . $this->get_return_link($user_id));
+		if ($lvlup_data['RAMA1'] != '')
+			$sql_array['rama1'] = $lvlup_data['RAMA1'];
 		
-		if ($atrs_new['VITALIDAD'] < $pj_data['PJ_VIT']) 
-			trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
+		if ($lvlup_data['RAMA2'] != '')
+			$sql_array['rama2'] = $lvlup_data['RAMA2'];
 		
-		if ($atrs_new['CCK'] < $pj_data['PJ_CCK']) 
-			trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
+		if ($lvlup_data['RAMA3'] != '')
+			$sql_array['rama3'] = $lvlup_data['RAMA3'];
 		
-		if ($atrs_new['CONCENTRACION'] < $pj_data['PJ_CON']) 
-			trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
+		if ($lvlup_data['RAMA4'] != '')
+			$sql_array['rama4'] = $lvlup_data['RAMA4'];
 		
-		if ($atrs_new['VOLUNTAD'] < $pj_data['PJ_VOL']) 
-			trigger_error("La Voluntad ingresada es incorrecta." . $this->get_return_link($user_id));
+		if ($lvlup_data['RAMA5'] != '')
+			$sql_array['rama5'] = $lvlup_data['RAMA5'];
 		
 		try {
-			$sql_array = array(
-				'fuerza'		=> $atrs_new['FUERZA'],
-				'agilidad'		=> $atrs_new['AGILIDAD'],
-				'vitalidad'		=> $atrs_new['VITALIDAD'],
-				'cck'			=> $atrs_new['CCK'],
-				'concentracion'	=> $atrs_new['CONCENTRACION'],
-				'voluntad'		=> $atrs_new['VOLUNTAD'],
-			);
-			
-			if ($atrs_new['ARQUETIPO'] > 0)
-				$sql_array['arquetipo_id'] = $atrs_new['ARQUETIPO'];
-			
 			$this->db->sql_query("UPDATE personajes SET " 
 									. $this->db->sql_build_array('UPDATE', $sql_array)
 									. " WHERE user_id = $user_id");
 			
 			$moderacion = array(
 				'PJ_ID'	=> $pj_id,
-				'RAZON'	=> 'Subida de Nivel',
+				'RAZON'	=> 'Modificación por Usuario',
 			);
 			registrar_moderacion($moderacion);
 			

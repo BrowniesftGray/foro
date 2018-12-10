@@ -79,37 +79,52 @@
                                 <div class="form-group row">
                                     <label for="ramaPrincipal" class="col-2 col-form-label text-md-left">Rama Principal:</label>
                                     <div class="col-7">
-                                        <input type="text" class="form-control" name="ramaPrincipal" value="{FICHA_CLAN}" />
+										<select class="form-control" name="ramaPrincipal">
+                                            {RAMAS_PRINCIPALES}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
                                     <div class="col-7">
-                                        <input type="text" id="ramaSec1" class="form-control" name="ramaSec1" value="{FICHA_RAMA1}" />
+                                        <select id="ramaSec1" class="form-control" name="ramaSec1">
+                                            {RAMAS_SECUNDARIAS1}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
                                     <div class="col-7">
-                                        <input type="text" id="ramaSec2" class="form-control" name="ramaSec2" value="{FICHA_RAMA2}" />
+                                        <select id="ramaSec2" class="form-control" name="ramaSec2">
+                                            {RAMAS_SECUNDARIAS2}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec3" class="col-2 col-form-label text-md-left">Cuarta Rama:</label>
                                     <div class="col-7">
-                                        <input type="text" id="ramaSec3" class="form-control" name="ramaSec3" value="{FICHA_RAMA3}" />
+                                        <select id="ramaSec3" class="form-control" name="ramaSec3">
+											<option value="">-- Ninguna --</option>
+                                            {RAMAS_SECUNDARIAS3}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec4" class="col-2 col-form-label text-md-left">Quinta Rama:</label>
                                     <div class="col-7">
-                                        <input type="text" id="ramaSec4" class="form-control" name="ramaSec4" value="{FICHA_RAMA4}" />
+                                        <select id="ramaSec4" class="form-control" name="ramaSec4">
+											<option value="">-- Ninguna --</option>
+                                            {RAMAS_SECUNDARIAS4}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="ramaSec5" class="col-2 col-form-label text-md-left">Sexta Rama:</label>
                                     <div class="col-7">
-                                        <input type="text" id="ramaSec5" class="form-control" name="ramaSec5" value="{FICHA_RAMA5}" />
+                                        <select id="ramaSec5" class="form-control" name="ramaSec5">
+											<option value="">-- Ninguna --</option>
+                                            {RAMAS_SECUNDARIAS5}
+                                        </select>
                                     </div>
                                 </div>
                           </div>
@@ -264,27 +279,6 @@ function checkRamas(){
 }
 
 function checkAtributos(atr) {
-  var fue = document.getElementById('atrFuerza').value;
-  var vit = document.getElementById('atrVit').value;
-  var con = document.getElementById('atrCon').value;
-  var cck = document.getElementById('atrCCK').value;
-  var agi = document.getElementById('artAg').value;
-  var vol = document.getElementById('atrVol').value;
-
-  var points = [fue, vit, con, cck, agi, vol];
-
-  points.sort(function(a, b){return a-b});
-
-  var attr_min = 10;
-  var dif = points[5] - points[0];
-
-  if (dif > 10) {
-    alert('La puntuación maxima no debe superar al atributo menor en mas de 10 puntos.');
-    attr_min = parseInt(points[0]) + 10;
-    atr.value = attr_min;
-    return false;
-  }
-
     if (parseInt(atr.value) < 1) {
         alert('La puntuación mínima en atributos es 1.');
         return false;
