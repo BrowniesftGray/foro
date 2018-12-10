@@ -331,27 +331,29 @@ class main
 			$diff = ($lvlup_data['FUERZA']+$lvlup_data['AGILIDAD']+$lvlup_data['VITALIDAD']+$lvlup_data['CCK']+$lvlup_data['CONCENTRACION']+$lvlup_data['VOLUNTAD'])
 					- ($pj_data['PJ_FUE']+$pj_data['PJ_AGI']+$pj_data['PJ_VIT']+$pj_data['PJ_CCK']+$pj_data['PJ_CON']+$pj_data['PJ_VOL']);
 					
+			$attr_max = 10 + ((int)$pj_data['PJ_NIVEL'] * 5);
+					
 			$attr_disp = (int) $pj_data['PJ_ATTR_DISP'];
 			if ($diff > $attr_disp) {
 				trigger_error("No puedes repartir más de $attr_disp puntos." . $this->get_return_link($user_id));
 			}
 			
-			if ($lvlup_data['FUERZA'] < $pj_data['PJ_FUE']) 
+			if ($lvlup_data['FUERZA'] < $pj_data['PJ_FUE'] || $lvlup_data['FUERZA'] > $attr_max) 
 				trigger_error("La Fuerza ingresada es incorrecta." . $this->get_return_link($user_id));
 			
-			if ($lvlup_data['AGILIDAD'] < $pj_data['PJ_AGI']) 
+			if ($lvlup_data['AGILIDAD'] < $pj_data['PJ_AGI'] || $lvlup_data['AGILIDAD'] > $attr_max) 
 				trigger_error("La Agilidad ingresada es incorrecta." . $this->get_return_link($user_id));
 			
-			if ($lvlup_data['VITALIDAD'] < $pj_data['PJ_VIT']) 
+			if ($lvlup_data['VITALIDAD'] < $pj_data['PJ_VIT'] || $lvlup_data['VITALIDAD'] > $attr_max) 
 				trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
 			
-			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK']) 
+			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK'] || $lvlup_data['CCK'] > $attr_max) 
 				trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
 			
-			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON']) 
+			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON'] || $lvlup_data['CONCENTRACION'] > $attr_max) 
 				trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
 			
-			if ($lvlup_data['VOLUNTAD'] < $pj_data['PJ_VOL']) 
+			if ($lvlup_data['VOLUNTAD'] < $pj_data['PJ_VOL'] || $lvlup_data['VOLUNTAD'] > $attr_max) 
 				trigger_error("La Voluntad ingresada es incorrecta." . $this->get_return_link($user_id));
 			
 			$sql_array = array_merge(array(
