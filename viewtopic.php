@@ -734,6 +734,7 @@ $template->assign_vars(array(
 	'FORUM_DESC'	=> generate_text_for_display($topic_data['forum_desc'], $topic_data['forum_desc_uid'], $topic_data['forum_desc_bitfield'], $topic_data['forum_desc_options']),
 	'TOPIC_ID' 		=> $topic_id,
 	'TOPIC_TITLE' 	=> $topic_data['topic_title'],
+	'TOPIC_SUBTITLE'=> censor_text($topic_data['topic_subtitle']),	// mgomez // 11-12-2018
 	'TOPIC_POSTER'	=> $topic_data['topic_poster'],
 
 	'TOPIC_AUTHOR_FULL'		=> get_username_string('full', $topic_data['topic_poster'], $topic_data['topic_first_poster_name'], $topic_data['topic_first_poster_colour']),

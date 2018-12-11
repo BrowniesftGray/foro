@@ -228,6 +228,57 @@ imgscroll span{
     padding: 5px;
 }
 
+/* RECUADRO DE MENSAJES
+---------------------------------------- */
+msg {
+    border: solid 2px;
+    border-radius: 5px;
+    padding: 5px;    
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+	display: block;
+}
+
+msg::before {
+    display: block;
+    font-weight: bold;
+}
+
+msg[type="ok"] {
+	color: #4caf50;
+	background-color: #f0ffff;
+}
+
+msg[type="ok"]::before {
+	content: "Correcto:"
+}
+
+msg[type="info"] {
+	color: #2196F3;
+	background-color: #dff2f5;
+}
+
+msg[type="info"]::before {
+	content: "Información:"
+}
+
+msg[type="err"] {
+	color: #F44336;
+	background-color: #ffe6e5;
+}
+
+msg[type="err"]::before {
+	content: "Incorrecto:"
+}
+
+msg[type="warn"] {
+	color: #FFC107;
+	background-color: #fffbf0;
+}
+
+msg[type="warn"]::before {
+	content: "Aviso:"
+}
+
 /* BBCODE GENÉRICOS
 ---------------------------------------- */
 .bbcode-recuadro {

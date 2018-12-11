@@ -841,6 +841,7 @@ if ($submit || $preview || $refresh)
 {
 	$post_data['topic_cur_post_id']	= $request->variable('topic_cur_post_id', 0);
 	$post_data['post_subject']		= $request->variable('subject', '', true);
+	$post_data['topic_subtitle']	= $request->variable('subtitle', '', true);	// mgomez // 11-12-2018
 	$message_parser->message		= $request->variable('message', '', true);
 
 	$post_data['username']			= $request->variable('username', $post_data['username'], true);
@@ -1148,8 +1149,8 @@ if ($submit || $preview || $refresh)
 	}
 
 	// Check for out-of-bounds characters that are currently
-	// not supported by utf8_bin in MySQL
-	if (preg_match_all('/[\x{10000}-\x{10FFFF}]/u', $post_data['post_subject'], $matches))
+	// not supported by utf8_bin in MySQL	// mgomez // 11-12-2018
+	if (preg_match_all('/[\x{10000}-\x{10FFFF}]/u', $post_data['post_subject'], $matches) || preg_match_all('/[\x{10000}-\x{10FFFF}]/u', $post_data['topic_subtitle'], $matches))
 	{
 		$character_list = implode('<br />', $matches[0]);
 		$error[] = $user->lang('UNSUPPORTED_CHARACTERS_SUBJECT', $character_list);
@@ -1359,6 +1360,7 @@ if ($submit || $preview || $refresh)
 
 			$data = array(
 				'topic_title'			=> (empty($post_data['topic_title'])) ? $post_data['post_subject'] : $post_data['topic_title'],
+				'topic_subtitle'		=> (isset($post_data['topic_subtitle'])) ? $post_data['topic_subtitle'] : $request->variable('subtitle',''),	// mgomez // 11-12-2018
 				'topic_first_post_id'	=> (isset($post_data['topic_first_post_id'])) ? (int) $post_data['topic_first_post_id'] : 0,
 				'topic_last_post_id'	=> (isset($post_data['topic_last_post_id'])) ? (int) $post_data['topic_last_post_id'] : 0,
 				'topic_time_limit'		=> (int) $post_data['topic_time_limit'],
@@ -1798,6 +1800,7 @@ $page_data = array(
 	'MODERATORS'			=> (count($moderators)) ? implode($user->lang['COMMA_SEPARATOR'], $moderators[$forum_id]) : '',
 	'USERNAME'				=> ((!$preview && $mode != 'quote') || $preview) ? $post_data['username'] : '',
 	'SUBJECT'				=> $post_data['post_subject'],
+	'SUBTITLE'				=> $post_data['topic_subtitle'],	// mgomez // 11-12-2018
 	'MESSAGE'				=> $post_data['post_text'],
 	'BBCODE_STATUS'			=> $user->lang(($bbcode_status ? 'BBCODE_IS_ON' : 'BBCODE_IS_OFF'), '<a href="' . $controller_helper->route('phpbb_help_bbcode_controller') . '">', '</a>'),
 	'IMG_STATUS'			=> ($img_status) ? $user->lang['IMAGES_ARE_ON'] : $user->lang['IMAGES_ARE_OFF'],

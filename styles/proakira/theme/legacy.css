@@ -565,7 +565,7 @@ li.row.pais.unread::after {
 	display: none;
 }
 
-h2.topic-title, h2.forum-title {
+h2.topic-title, h2.forum-title, h2.posting-title {
 	font-family: Anton;
     text-transform: uppercase;
     text-align: center;
@@ -574,6 +574,11 @@ h2.topic-title, h2.forum-title {
     margin: 0;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .4);
 	clear: both;
+}
+
+h4.topic-subtitle {
+    text-align: center;
+    color: #333;
 }
 
 .action-bar.bar-top {
@@ -686,7 +691,7 @@ h2.topic-title, h2.forum-title {
     right: 0px;
 }
 
-.postprofile a.username-coloured {
+.postprofile a.username-coloured, .postprofile .username {
 	font-family: Righteous;
 	display: block !important;
 	font-weight: 400;

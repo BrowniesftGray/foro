@@ -1715,6 +1715,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				'topic_visibility'			=> $post_visibility,
 				'topic_delete_user'			=> ($post_visibility != ITEM_APPROVED) ? (int) $user->data['user_id'] : 0,
 				'topic_title'				=> $subject,
+				'topic_subtitle'			=> $data_ary['topic_subtitle'],	// mgomez // 11-12-2018
 				'topic_first_poster_name'	=> (!$user->data['is_registered'] && $username) ? $username : (($user->data['user_id'] != ANONYMOUS) ? $user->data['username'] : ''),
 				'topic_first_poster_colour'	=> $user->data['user_colour'],
 				'topic_type'				=> $topic_type,
@@ -1811,6 +1812,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				'forum_id'					=> $data_ary['forum_id'],
 				'icon_id'					=> $data_ary['icon_id'],
 				'topic_title'				=> $subject,
+				'topic_subtitle'			=> $data_ary['topic_subtitle'],		// mgomez // 11-12-2018
 				'topic_first_poster_name'	=> $username,
 				'topic_type'				=> $topic_type,
 				'topic_time_limit'			=> $topic_type != POST_NORMAL ? ($data_ary['topic_time_limit'] * 86400) : 0,

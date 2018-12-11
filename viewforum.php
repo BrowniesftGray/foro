@@ -923,6 +923,7 @@ if (count($topic_list))
 			'REPLIES'			=> $replies,
 			'VIEWS'				=> $row['topic_views'],
 			'TOPIC_TITLE'		=> censor_text($row['topic_title']),
+			'TOPIC_SUBTITLE'	=> censor_text($row['topic_subtitle']),
 			'TOPIC_TYPE'		=> $topic_type,
 			'FORUM_NAME'		=> (isset($row['forum_name'])) ? $row['forum_name'] : $forum_data['forum_name'],
 
