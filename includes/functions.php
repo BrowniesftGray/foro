@@ -4586,11 +4586,13 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 
 	// The following assigns all _common_ variables that may be used at any point in a template.
 	$user_id = $user->data['user_id'];
+	$ficha_exists = ficha_exists($user_id);
+	
 	$template->assign_vars(array(
 		'SITENAME'						=> $config['sitename'],
 		'SITE_DESCRIPTION'				=> $config['site_desc'],
 		'FICHA_URL'						=> append_sid("/ficha/". $user_id),
-		'FICHA_EXISTE'					=> ficha_exists($user->data['user_id']),
+		'FICHA_EXISTE'					=> $ficha_exists,
 		'FICHA_BORRAR'					=> append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=borrar'),
 		'FICHA_CREAR'					=> "/ficha/new", //append_sid("{$phpbb_root_path}ficha.$phpEx", 'mode=nueva'),
 		'TIENDA'						=> append_sid("{$phpbb_root_path}shop.$phpEx", 'mode=ver'),
@@ -4725,6 +4727,12 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 
 		'SITE_LOGO_IMG'			=> $user->img('site_logo'),
 	));
+	
+	$template->assign_var('OCULTAR_CHARACTER', ($user_id != 50 && $user_id != 52));
+	if ($ficha_exists) {
+		$pj_id = get_pj_id($user_id);
+		$template->assign_vars(get_pj_data($pj_id));
+	}
 
 	$http_headers = array();
 

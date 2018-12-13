@@ -45,23 +45,47 @@ function get_pj_data($pj_id, $post_id = 0) {
 	$data = false;
 	
 	$query = $db->sql_query(
-		"SELECT p.*, pf.pf_experiencia, nv.experiencia
+		"SELECT p.*, 
+				pf.pf_experiencia, 
+				nv.experiencia as experiencia_old,
+				nvup.experiencia as experiencia_new,
+				r.rank_title as rango,
+				CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
 			FROM ".PERSONAJES_TABLE." p
 				INNER JOIN ".PROFILE_FIELDS_DATA_TABLE." pf
 					ON pf.user_id = p.user_id
 				INNER JOIN ".NIVELES_TABLE." nv
-					ON nv.nivel = p.nivel + 1
+					ON nv.nivel = p.nivel
+				INNER JOIN ".NIVELES_TABLE." nvup
+					ON nvup.nivel = p.nivel + 1
 					OR (p.nivel = (SELECT MAX(nivel) FROM ".NIVELES_TABLE.")
-						AND nv.nivel = p.nivel)
+						AND nvup.nivel = p.nivel)
+				INNER JOIN ".USERS_TABLE." u
+					ON u.user_id = p.user_id
+				LEFT JOIN ".RANKS_TABLE." r
+					ON r.rank_id = u.user_rank
+				LEFT JOIN ".ARQUETIPOS_TABLE." a
+					ON a.arquetipo_id = p.arquetipo_id
 			WHERE pj_id = '$pj_id'");
 			
 	if ($row = $db->sql_fetchrow($query)) {
+		$exp_req = (int)$row['experiencia_new'] - (int)$row['experiencia_old'];
+		$exp_avance = (int)$row['pf_experiencia'] - (int)$row['experiencia_old'];
+		if ($exp_req == 0 || $exp_req <= $exp_avance) {
+			$exp_avance = 100;
+		} else {
+			$exp_avance = floor($exp_avance * 100 / $exp_req);
+		}
+		
 		$data = array(
 			'PJ_NOMBRE'				=> $row['nombre'],
 			'PJ_CLAN'				=> $row['clan'],
 			'PJ_NIVEL'				=> (int)$row['nivel'],
 			'PJ_EXPERIENCIA'		=> (int)$row['pf_experiencia'],
-			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia'],
+			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_new'],
+			'PJ_EXPERIENCIA_PORC'	=> $exp_avance,
+			'PJ_ARQUETIPO'			=> $row['arquetipo'],
+			'PJ_RANGO'				=> $row['rango'],
 			'PJ_FUE'				=> (int)$row['fuerza'],
 			'PJ_AGI'				=> (int)$row['agilidad'],
 			'PJ_VIT'				=> (int)$row['vitalidad'],

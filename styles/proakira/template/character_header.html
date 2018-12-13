@@ -1,0 +1,44 @@
+<!-- IF not OCULTAR_CHARACTER -->
+<div class="character">
+	<div class="content">
+		<!-- IF PJ_NOMBRE -->
+		<div class="avatar-container">
+			<div class="avatar">{CURRENT_USER_AVATAR}</div>
+		</div>
+		<div class="datos-container">
+			<div class="progreso">
+				<div class="nombre">{PJ_NOMBRE}</div>
+				<div class="clan">{PJ_CLAN}</div>
+				<!-- IF PJ_ARQUETIPO --><div class="arquetipo">{PJ_ARQUETIPO}</div><!-- ENDIF -->
+				<div class="nivel"><!-- IF PJ_RANGO -->{PJ_RANGO}<!-- ELSE -->Estudiante<!-- ENDIF --> &bull; Nivel {PJ_NIVEL}</div>
+				<div class="exp-container">
+					<div class="exp-legend">{PJ_EXPERIENCIA} / {PJ_EXPERIENCIA_SIG}</div>
+					<div class="exp-bar" style="width:{PJ_EXPERIENCIA_PORC}%"></div>
+				</div>
+				<a href="{FICHA_URL}">Ver Ficha de Personaje</a>
+			</div>
+			<div class="stats">
+				<ul class="atributos">
+					<li>Fuerza: {PJ_FUE}</li>
+					<li>Agilidad: {PJ_AGI}</li>
+					<li>Vitalidad: {PJ_VIT}</li>
+					<li>Concentraci&oacute;n: {PJ_CON}</li>
+					<li>Control de Chakra: {PJ_CCK}</li>
+					<li>Voluntad: {PJ_VOL}</li>
+				</ul>
+				<ul class="estadisticas">
+					<li class="pv">{PJ_PV_TOT}</li>
+					<li class="sta">{PJ_STA_TOT}</li>
+					<li class="pc">{PJ_PC_TOT}</li>
+				</ul>
+			</div>
+		</div>
+		<!-- ELSE -->
+		<div>
+			Aún no tienes personaje.<br />¿Qué tal si creas uno?
+		</div>
+		<a href="{FICHA_CREAR}">Crear Personaje</a>
+		<!-- ENDIF -->
+	</div>
+</div>
+<!-- ENDIF -->

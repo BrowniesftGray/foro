@@ -944,3 +944,108 @@ h4.topic-subtitle {
 .collapse-btn:hover, .collapse-btn:hover:after, .collapse-btn:hover:before {
 	background-color: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* Sub-Header Personaje
+-----------------------------------------*/
+
+.character {
+	clear: both;
+    position: relative;
+    height: 200px;
+    margin: 10px;
+    overflow: hidden;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+    border-top-left-radius: 100px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 5px;
+    background-color: #d9cdb3;
+}
+
+.character .content {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 10px;
+	font-family: Roboto;
+}
+
+.character .avatar-container {
+	width: 176px;
+    height: 176px;
+    overflow: hidden;
+    border-radius: 100px;
+    position: relative;
+    border: solid 2px;
+	float: left;
+}
+
+.character .avatar {
+    position: absolute;
+    width: 180px;
+    height: auto;
+    margin-top: -20px;
+}
+
+.character .datos-container {
+    float: left;
+    width: calc(100% - 190px);
+    margin-left: 10px;
+	position: relative;
+	height: 100%;
+}
+
+.character .progreso, .character .stats {
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+
+.character .nombre {
+    font-size: 20px;
+    font-family: Montserrat;
+    background-color: #508772;
+    padding: 5px;
+    border-radius: 2px;
+    color: #eee;
+}
+
+.character .clan, .character .arquetipo {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.character .nivel {
+    width: 80%;
+    margin: 20px auto 0 auto;
+    text-align: center;
+    font-size: 14px;
+    color: #eee;
+    background: #333;
+    padding: 2px 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.character .exp-container {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    background: #e4e0d8;
+    position: relative;
+    height: 12px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.character .exp-legend {
+    position: absolute;
+    left: 50%;
+    margin-left: -25px;
+}
+
+.character .exp-bar {
+    height: 100%;
+    background: #85b0c1;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
