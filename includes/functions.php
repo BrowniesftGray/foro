@@ -4728,7 +4728,6 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		'SITE_LOGO_IMG'			=> $user->img('site_logo'),
 	));
 	
-	$template->assign_var('OCULTAR_CHARACTER', ($user_id != 50 && $user_id != 52));
 	if ($ficha_exists) {
 		$pj_id = get_pj_id($user_id);
 		$template->assign_vars(get_pj_data($pj_id));

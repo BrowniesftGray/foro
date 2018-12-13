@@ -1,7 +1,6 @@
-<!-- IF not OCULTAR_CHARACTER -->
+<!-- IF PJ_NOMBRE -->
 <div class="character">
 	<div class="content">
-		<!-- IF PJ_NOMBRE -->
 		<div class="avatar-container">
 			<div class="avatar">{CURRENT_USER_AVATAR}</div>
 		</div>
@@ -15,9 +14,9 @@
 					<div class="exp-legend">{PJ_EXPERIENCIA} / {PJ_EXPERIENCIA_SIG}</div>
 					<div class="exp-bar" style="width:{PJ_EXPERIENCIA_PORC}%"></div>
 				</div>
-				<a href="{FICHA_URL}">Ver Ficha de Personaje</a>
 			</div>
 			<div class="stats">
+				<h3>Estad&iacute;sticas</h3>
 				<ul class="atributos">
 					<li>Fuerza: {PJ_FUE}</li>
 					<li>Agilidad: {PJ_AGI}</li>
@@ -25,20 +24,25 @@
 					<li>Concentraci&oacute;n: {PJ_CON}</li>
 					<li>Control de Chakra: {PJ_CCK}</li>
 					<li>Voluntad: {PJ_VOL}</li>
+					<br class="clear" />
 				</ul>
 				<ul class="estadisticas">
 					<li class="pv">{PJ_PV_TOT}</li>
 					<li class="sta">{PJ_STA_TOT}</li>
 					<li class="pc">{PJ_PC_TOT}</li>
+					<br class="clear" />
 				</ul>
 			</div>
 		</div>
-		<!-- ELSE -->
-		<div>
-			Aún no tienes personaje.<br />¿Qué tal si creas uno?
-		</div>
-		<a href="{FICHA_CREAR}">Crear Personaje</a>
-		<!-- ENDIF -->
+		<a href="{FICHA_URL}" class="character-btn">
+			<!-- IF PJ_ATTR_DISP > 0 -->Mejorar Personaje <i class="icon fa-arrow-circle-up fa-fw"></i>
+			<!-- ELSE -->Ver Ficha de Personaje<!-- ENDIF -->
+		</a>
 	</div>
+</div>
+<!-- ELSE -->
+<div class="no-character">
+	<a href="{FICHA_CREAR}" class="character-btn">Crear Personaje</a>
+	<div class="mensaje">Aún no tienes personaje. ¿Qué tal si creas uno?</div>
 </div>
 <!-- ENDIF -->
