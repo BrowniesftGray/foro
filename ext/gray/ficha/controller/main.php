@@ -121,7 +121,20 @@ class main
 	
     function view($user_id)
     {   
+		$pj_id = get_pj_id($user_id);		
         get_ficha($user_id,$return = false, $ver = true);
+		
+		$categorias = get_full_shops();
+		foreach($categorias as $cat) {
+			$this->template->assign_block_vars('categoria_item', $cat);
+			$items = get_pj_inventory($pj_id, 0, $cat['ID']);
+			if($items)
+				foreach($items as $item) {
+					$this->template->assign_block_vars('categoria_item.items', $item);
+					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
+				}
+		}
+		
         return $this->helper->render('ficha_view.html');
     }
 

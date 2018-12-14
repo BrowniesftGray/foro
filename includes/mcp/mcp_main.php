@@ -299,7 +299,11 @@ function lock_unlock($action, $ids)
 	unset($orig_ids);
 
 	$redirect = $request->variable('redirect', build_url(array('action', 'quickmod')));
-	$redirect = reapply_sid($redirect);
+	
+	// mgomez // 13-12-2018 : Arreglo la URL por mi cuenta
+	//$redirect = reapply_sid($redirect);
+	$redirect = str_replace('.', '', $redirect);
+	$redirect = str_replace('//', '/', $redirect);
 
 	$s_hidden_fields = build_hidden_fields(array(
 		$sql_id . '_list'	=> $ids,

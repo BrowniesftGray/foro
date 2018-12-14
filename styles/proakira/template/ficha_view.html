@@ -22,12 +22,21 @@
 					  <li class="nav-item">
 						<a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
 					  </li>
+					  <!-- IF FICHA_JUTSUS -->
 					  <li class="nav-item">
 						<a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
 					  </li>
+					  <!-- ENDIF -->
+					  <!-- IF habilidades or habilidades_compra -->
 					  <li class="nav-item">
 						<a class="nav-link" id="habilidades-tab" data-toggle="tab" href="#habilidades" role="tab" aria-controls="habilidades" aria-selected="false"><h5>Habilidades</h5></a>
 					  </li>
+					  <!-- ENDIF -->
+					  <!-- IF categoria_item -->
+					  <li class="nav-item">
+						<a class="nav-link" id="inventario-tab" data-toggle="tab" href="#inventario" role="tab" aria-controls="inventario" aria-selected="false"><h5>Inventario</h5></a>
+					  </li>
+					  <!-- ENDIF -->
 					  <!-- IF PUEDE_MODERAR -->
 					  <li class="nav-item">
 						<a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
@@ -139,12 +148,39 @@
 							</div>
 							<!-- ENDIF -->
 					  </div>
+					  <!-- IF FICHA_JUTSUS -->
 					  <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
 							<h3>Técnicas ninja</h3>
-							<!-- IF FICHA_JUTSUS -->
 							{FICHA_JUTSUS}
-							<!-- ENDIF -->
 					  </div>
+					  <!-- ENDIF -->
+					  <!-- IF categoria_item -->
+					  <div class="tab-pane fade" id="inventario" role="tabpanel" aria-labelledby="inventario-tab">
+						<!-- BEGIN categoria_item -->
+						<h3><i class="icon fa-fw {categoria_item.FA_ICON}"></i>{categoria_item.NOMBRE}</h3>
+						<ul class="inventory">
+							<!-- BEGIN categoria_item.items -->
+							<li class="item" data-tooltip="item-{categoria_item.items.ITEM_ID}">
+								<span class="qty">{categoria_item.items.CANTIDAD}</span>
+								{categoria_item.items.IMAGEN}
+								<div style="display:none">
+									<div class="tooltip" id="item-{categoria_item.items.ITEM_ID}">
+										<div class="nombre">{categoria_item.items.NOMBRE}</div>
+										<!-- IF categoria_item.items.REQS --><div class="reqs"><b>Requisitos:</b>&nbsp;{categoria_item.items.REQS}</div><!-- ENDIF -->
+										<!-- IF categoria_item.items.EFECTOS --><div class="efectos"><b>Efectos:</b>&nbsp;{categoria_item.items.EFECTOS}</div><!-- ENDIF -->
+										<div class="desc">{categoria_item.items.DESCRIPCION}</div>
+										<!-- BEGIN categoria_item.items.tipos -->
+										<span class="item-tipo">{categoria_item.items.tipos.TAG}</span>
+										<!-- END categoria_item.items.tipos -->
+									</div>
+								</div>
+							</li>
+							<!-- END categoria_item.items -->
+							<br class="clear" />
+						</ul>
+						<!-- END categoria_item -->
+					  </div>
+					  <!-- ENDIF -->
 					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
 					    <!-- IF FICHA_CAMINO -->
 						<div class="form-group row">

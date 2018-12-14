@@ -73,7 +73,7 @@
     padding-bottom: 5px;
 }
 
-.postinventory .item {
+.inventory .item {
 	list-style-type: none;
 	float: left;
 	position: relative;
@@ -81,7 +81,7 @@
 	margin-bottom: 3px;
 }
 
-.postinventory .item .qty {
+.inventory .item .qty {
 	position: absolute;
     color: #fff;
     border: solid 1px #393939;
@@ -89,6 +89,7 @@
     bottom: 0;
     padding: 0px 4px;
     border-top-right-radius: 4px;
+	font-size: 10px;
 }
 
 .tooltip {
