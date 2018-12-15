@@ -945,6 +945,24 @@ h4.topic-subtitle {
 	background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* Fecha On-Rol
+-----------------------------------------*/
+.fecharol {
+    background-color: #caba9a;
+    border: solid 1px #b9b09b;
+    border-radius: 2px;
+    left: 50%;
+    margin: 3px auto 0 auto;
+    text-align: center;
+    width: 79%;
+}
+
+@media (max-width: 500px) {
+	.fecharol b {
+		display: none;
+	}
+}
+
 /* Sub-Header Personaje
 -----------------------------------------*/
 
