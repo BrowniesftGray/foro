@@ -185,6 +185,7 @@ function user_add($user_row, $cp_data = false, $notifications_data = null)
 	}
 
 	$username_clean = utf8_clean_string($user_row['username']);
+	$ref_username_clean = utf8_clean_string($user_row['ref_username']);
 
 	if (empty($username_clean))
 	{
@@ -398,6 +399,32 @@ function user_add($user_row, $cp_data = false, $notifications_data = null)
 		{
 			$phpbb_notifications->add_subscription($subscription['item_type'], 0, $subscription['method'], $user_id);
 		}
+	}
+	
+	// Add user refferer if provided	// mgomez // 15-12-2018
+	if ($ref_username_clean != '') {
+		$ref_username_clean = $db->sql_escape($ref_username_clean);
+		$sql = 'SELECT user_id, user_ip 
+				FROM '.USERS_TABLE."
+				WHERE username_clean = '$ref_username_clean'";
+				
+		$query = $db->sql_query($sql);
+		if ($ref_row = $db->sql_fetchrow($query)) {
+			$ref_user_id = $ref_row['user_id'];
+			$ref_user_ip = $ref_row['user_ip'];
+			
+			$sql_ary = array(
+				'user_id'			=> $user_id,
+				'user_id_referente'	=> $ref_user_id,
+				'fecha'				=> date('Y-m-d'),
+				'user_ip'			=> $user_row['user_ip'],
+				'user_ip_referente'	=> $ref_user_ip,
+			);
+			
+			$sql = "INSERT INTO " . REFERENTES_TABLE . $db->sql_build_array('INSERT', $sql_ary);
+			$db->sql_query($sql);
+		}
+		$db->sql_freeresult($query);
 	}
 
 	/**

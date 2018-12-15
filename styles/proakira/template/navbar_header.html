@@ -184,14 +184,7 @@
 					<i class="icon fa-inbox fa-fw" aria-hidden="true"></i><span>{L_PRIVATE_MESSAGES} </span><strong class="badge<!-- IF not PRIVATE_MESSAGE_COUNT --> hidden<!-- ENDIF -->">{PRIVATE_MESSAGE_COUNT}</strong>
 				</a>
 			</li>
-		<!-- ENDIF -->
-		
-			<li class="rightside" data-skip-responsive="true">
-				<a href="https://discord.gg/7NEPpYh" role="menuitem">
-					<i class="icon fa-commenting-o fa-fw" aria-hidden="true"></i><span>Chat </span>
-				</a>
-			</li>
-			
+		<!-- ENDIF -->			
 		<!-- IF S_NOTIFICATIONS_DISPLAY -->
 			<li class="dropdown-container dropdown-{S_CONTENT_FLOW_END} rightside" data-skip-responsive="true">
 				<a href="{U_VIEW_ALL_NOTIFICATIONS}" id="notification_list_button" class="dropdown-trigger">
@@ -216,6 +209,11 @@
 		<!-- ENDIF -->
 		<!-- EVENT navbar_header_logged_out_content -->
 	<!-- ENDIF -->
+		<li class="rightside" data-skip-responsive="true">
+			<a href="https://discord.gg/7NEPpYh" role="menuitem">
+				<i class="icon fa-commenting-o fa-fw" aria-hidden="true"></i><span>Chat</span>
+			</a>
+		</li>
 	</ul>
 
 	</div>

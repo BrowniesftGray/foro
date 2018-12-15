@@ -250,6 +250,7 @@ class ucp_register
 			'new_password'		=> $request->variable('new_password', '', true),
 			'password_confirm'	=> $request->variable('password_confirm', '', true),
 			'email'				=> strtolower($request->variable('email', '')),
+			'ref_username'		=> $request->variable('ref_username', '', true),
 			'lang'				=> basename($request->variable('lang', $user->lang_name)),
 			'tz'				=> $request->variable('tz', $timezone),
 		);
@@ -387,6 +388,7 @@ class ucp_register
 					'username'				=> $data['username'],
 					'user_password'			=> $passwords_manager->hash($data['new_password']),
 					'user_email'			=> $data['email'],
+					'ref_username'			=> $data['ref_username'],
 					'group_id'				=> (int) $group_id,
 					'user_timezone'			=> $data['tz'],
 					'user_lang'				=> $data['lang'],

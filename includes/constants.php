@@ -325,3 +325,4 @@ define('PERSONAJE_ITEMS_TABLE',			'personaje_items');
 define('SHOPS_TABLE',					'categorias_items');
 define('NIVELES_TABLE',					'niveles');
 define('RAMAS_TABLE',					'ramas');
+define('REFERENTES_TABLE',				'referidos');
