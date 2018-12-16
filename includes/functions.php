@@ -4731,7 +4731,8 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	
 	if ($ficha_exists) {
 		$pj_id = get_pj_id($user_id);
-		$template->assign_vars(get_pj_data($pj_id));
+		$pj_data = get_pj_data($pj_id);
+		if ($pj_data) $template->assign_vars($pj_data);
 	}
 
 	$http_headers = array();

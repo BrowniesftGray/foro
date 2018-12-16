@@ -271,7 +271,7 @@ function checkRamas(){
     var rama2 = document.getElementById('ramaSec1').value;
     var rama3 = document.getElementById('ramaSec2').value;
     var success = true;
-    if (rama2 == rama3) 
+    if (rama2 == rama3 && rama2 != '' && rama3 != '') 
     { 
         alert("Las ramas secundarias no pueden ser iguales");
         success = false;
