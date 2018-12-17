@@ -114,6 +114,22 @@ class main
 
         $sql = "INSERT INTO personajes " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
+		
+		$sql_ary = array(
+			'pf_ryos'			=> '1500',
+			'pf_experiencia'	=> '0',
+			'pf_puntos_apren'	=> '10',
+		);
+		$sql = 'UPDATE phpbby1_profile_fields_data SET ' . 
+					$this->db->sql_build_array('UPDATE', $sql_ary)
+					." WHERE user_id = $idUsuario";
+		$this->db->sql_query($sql);
+		
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			$sql_ary['user_id'] = $idUsuario;
+			$sql = 'INSERT INTO phpbby1_profile_fields_data' . $this->db->sql_build_array('INSERT', $sql_ary);
+			$this->db->sql_query($sql);
+		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         trigger_error("Personaje creado correctamente." . $this->get_return_link($idUsuario));
