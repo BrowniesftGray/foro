@@ -48,6 +48,7 @@ class main
     public function handle()
     {   
         $user_id = $this->user->data['user_id'];
+		
         if (ficha_exists($user_id) == true) {
             trigger_error('Ya tienes ficha creada.');
         }
@@ -74,9 +75,9 @@ class main
         $fields = array_merge(array(
             'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'EDAD'              => utf8_normalize_nfc(request_var('edad', '', true)),
-            'PRINCIPAL'         => utf8_normalize_nfc(request_var('ramaPrincipal', '', true)),
-            'RAMA1'             => utf8_normalize_nfc(request_var('ramaSec1', '', true)),
-            'RAMA2'             => utf8_normalize_nfc(request_var('ramaSec2', '', true)),
+            'PRINCIPAL'         => request_var('ramaPrincipal', 0, true),
+            'RAMA1'             => request_var('ramaSec1', 0, true),
+            'RAMA2'             => request_var('ramaSec2', 0, true),
             'FISICO'            => utf8_normalize_nfc(request_var('descFis', '', true)),
             'CARACTER'          => utf8_normalize_nfc(request_var('descPsic', '', true)),
             'HISTORIA'          => utf8_normalize_nfc(request_var('descHis', '', true)),
@@ -94,12 +95,12 @@ class main
 			'arquetipo_id'	=> 0,
 			'nombre'	=> $fields['NOMBRE'],
 			'edad'		=> $fields['EDAD'],
-			'clan'		=> $fields['PRINCIPAL'],
-			'rama1'		=> $fields['RAMA1'],
-			'rama2'		=> $fields['RAMA2'],
-			'rama3'		=> '',
-			'rama4'		=> '',
-			'rama5'		=> '',
+			'rama_id_pri'	=> $fields['PRINCIPAL'],
+			'rama_id1'	=> $fields['RAMA1'],
+			'rama_id2'	=> $fields['RAMA2'],
+			'rama_id3'	=> 0,
+			'rama_id4'	=> 0,
+			'rama_id5'	=> 0,
 			'tecnicas'	=> '',
 			'fuerza'	=> $fields['FUERZA'],
 			'vitalidad'	=> $fields['RESISTENCIA'],
@@ -219,22 +220,22 @@ class main
             );
             //profile_fields_data -> Tabla donde se encuentra la experiencia
             $fields = array_merge(array(
-                    'NOMBRE'                => utf8_normalize_nfc(request_var('name', '', true)),
-                    'PJ_ID'                 => utf8_normalize_nfc(request_var('pj_id', '', true)),
-                    'EDAD'                  => utf8_normalize_nfc(request_var('edad', '', true)),
-                    'RANGO'                 => utf8_normalize_nfc(request_var('rango', '', true)),
-                    'ARQUETIPO'         => utf8_normalize_nfc(request_var('arquetipo', '', true)),
-                    'PRINCIPAL'         => utf8_normalize_nfc(request_var('ramaPrincipal', '', true)),
-                    'RAMA1'                 => utf8_normalize_nfc(request_var('ramaSec1', '', true)),
-                    'RAMA2'                 => utf8_normalize_nfc(request_var('ramaSec2', '', true)),
-                    'RAMA3'                 => utf8_normalize_nfc(request_var('ramaSec3', '', true)),
-                    'RAMA4'                 => utf8_normalize_nfc(request_var('ramaSec4', '', true)),
-                    'RAMA5'                 => utf8_normalize_nfc(request_var('ramaSec5', '', true)),
-                    'FISICO'                => utf8_normalize_nfc(request_var('descFis', '', true)),
-                    'CARACTER'          => utf8_normalize_nfc(request_var('descPsic', '', true)),
-                    'HISTORIA'          => utf8_normalize_nfc(request_var('descHis', '', true)),
-                    'TEC_JUTSUS'        => utf8_normalize_nfc(request_var('tecnicas', '', true)),
-                    'RAZON'                 => utf8_normalize_nfc(request_var('razon', '', true)),
+                    'NOMBRE'		=> utf8_normalize_nfc(request_var('name', '', true)),
+                    'PJ_ID'			=> utf8_normalize_nfc(request_var('pj_id', '', true)),
+                    'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
+                    'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
+                    'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
+                    'PRINCIPAL'		=> (request_var('ramaPrincipal', 0, true)),
+                    'RAMA1'			=> (request_var('ramaSec1', 0, true)),
+                    'RAMA2'			=> (request_var('ramaSec2', 0, true)),
+                    'RAMA3'			=> (request_var('ramaSec3', 0, true)),
+                    'RAMA4'			=> (request_var('ramaSec4', 0, true)),
+                    'RAMA5'			=> (request_var('ramaSec5', 0, true)),
+                    'FISICO'		=> utf8_normalize_nfc(request_var('descFis', '', true)),
+                    'CARACTER'		=> utf8_normalize_nfc(request_var('descPsic', '', true)),
+                    'HISTORIA'		=> utf8_normalize_nfc(request_var('descHis', '', true)),
+                    'TEC_JUTSUS'	=> utf8_normalize_nfc(request_var('tecnicas', '', true)),
+                    'RAZON'			=> utf8_normalize_nfc(request_var('razon', '', true)),
                 ), $atrs);
 
             $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
@@ -246,12 +247,12 @@ class main
 				'rango'		=> $fields['RANGO'],
 				'nombre'	=> $fields['NOMBRE'],
 				'edad'		=> $fields['EDAD'],
-				'clan'		=> $fields['PRINCIPAL'],
-				'rama1'		=> $fields['RAMA1'],
-				'rama2'		=> $fields['RAMA2'],
-				'rama3'		=> $fields['RAMA3'],
-				'rama4'		=> $fields['RAMA4'],
-				'rama5'		=> $fields['RAMA5'],
+				'rama_id_pri'	=> $fields['PRINCIPAL'],
+				'rama_id1'	=> $fields['RAMA1'],
+				'rama_id2'	=> $fields['RAMA2'],
+				'rama_id3'	=> $fields['RAMA3'],
+				'rama_id4'	=> $fields['RAMA4'],
+				'rama_id5'	=> $fields['RAMA5'],
 				'tecnicas'	=> $fields['TEC_JUTSUS'],
 				'fuerza'	=> $fields['FUERZA'],
 				'vitalidad'	=> $fields['RESISTENCIA'],
@@ -331,11 +332,11 @@ class main
 	{
 		$sql_array = array();
 		$lvlup_data = array(
-			'RAMA1'			=> utf8_normalize_nfc(request_var('ramaSec1', '', true)),
-			'RAMA2'			=> utf8_normalize_nfc(request_var('ramaSec2', '', true)),
-			'RAMA3'			=> utf8_normalize_nfc(request_var('ramaSec3', '', true)),
-			'RAMA4'			=> utf8_normalize_nfc(request_var('ramaSec4', '', true)),
-			'RAMA5'			=> utf8_normalize_nfc(request_var('ramaSec5', '', true)),
+			'RAMA1'			=> (request_var('ramaSec1', 0, true)),
+			'RAMA2'			=> (request_var('ramaSec2', 0, true)),
+			'RAMA3'			=> (request_var('ramaSec3', 0, true)),
+			'RAMA4'			=> (request_var('ramaSec4', 0, true)),
+			'RAMA5'			=> (request_var('ramaSec5', 0, true)),
 			'ARQUETIPO'		=> (int) request_var('arquetipo', 0),
 			'FUERZA'		=> (int) request_var('atrFuerza', 0),
 			'AGILIDAD'		=> (int) request_var('artAg', 0),
@@ -398,20 +399,20 @@ class main
 		if ($lvlup_data['ARQUETIPO'] > 0)
 			$sql_array['arquetipo_id'] = $lvlup_data['ARQUETIPO'];
 		
-		if ($lvlup_data['RAMA1'] != '')
-			$sql_array['rama1'] = $lvlup_data['RAMA1'];
+		if ($lvlup_data['RAMA1'] > 0)
+			$sql_array['rama_id1'] = $lvlup_data['RAMA1'];
 		
-		if ($lvlup_data['RAMA2'] != '')
-			$sql_array['rama2'] = $lvlup_data['RAMA2'];
+		if ($lvlup_data['RAMA2'] > 0)
+			$sql_array['rama_id2'] = $lvlup_data['RAMA2'];
 		
-		if ($lvlup_data['RAMA3'] != '')
-			$sql_array['rama3'] = $lvlup_data['RAMA3'];
+		if ($lvlup_data['RAMA3'] > 0)
+			$sql_array['rama_id3'] = $lvlup_data['RAMA3'];
 		
-		if ($lvlup_data['RAMA4'] != '')
-			$sql_array['rama4'] = $lvlup_data['RAMA4'];
+		if ($lvlup_data['RAMA4'] > 0)
+			$sql_array['rama_id4'] = $lvlup_data['RAMA4'];
 		
-		if ($lvlup_data['RAMA5'] != '')
-			$sql_array['rama5'] = $lvlup_data['RAMA5'];
+		if ($lvlup_data['RAMA5'] > 0)
+			$sql_array['rama_id5'] = $lvlup_data['RAMA5'];
 		
 		try {
 			$this->db->sql_query("UPDATE personajes SET " 

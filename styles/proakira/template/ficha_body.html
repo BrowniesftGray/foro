@@ -71,7 +71,7 @@
                                     <label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
                                     <div class="col-7">
                                         <select id="ramaSec1" class="form-control" name="ramaSec1">
-											<option value="">-- Ninguna --</option>
+											<option value="0">-- Ninguna --</option>
                                             {RAMAS_SECUNDARIAS}
                                         </select>
                                     </div>
@@ -80,7 +80,7 @@
                                     <label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
                                     <div class="col-7">
                                         <select id="ramaSec2" class="form-control" name="ramaSec2">
-											<option value="">-- Ninguna --</option>
+											<option value="0">-- Ninguna --</option>
                                             {RAMAS_SECUNDARIAS}
                                         </select>
                                     </div>
@@ -233,7 +233,7 @@ function checkRamas(){
     var rama2 = document.getElementById('ramaSec1').value;
     var rama3 = document.getElementById('ramaSec2').value;
     var success = true;
-    if (rama2 == rama3 && rama2 != '' && rama3 != '') 
+    if (rama2 == rama3 && rama2 != '0' && rama3 != '0') 
     { 
         alert("Las ramas secundarias no pueden ser iguales");
         success = false;

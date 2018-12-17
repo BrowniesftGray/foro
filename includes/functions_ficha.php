@@ -46,12 +46,15 @@ function get_pj_data($pj_id, $post_id = 0) {
 	
 	$query = $db->sql_query(
 		"SELECT p.*, 
+				m.nombre as clan,
 				pf.pf_experiencia, 
 				nv.experiencia as experiencia_old,
 				nvup.experiencia as experiencia_new,
 				r.rank_title as rango,
 				CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
 			FROM ".PERSONAJES_TABLE." p
+				INNER JOIN ".RAMAS_TABLE." m
+					ON m.rama_id = p.rama_id_pri
 				INNER JOIN ".PROFILE_FIELDS_DATA_TABLE." pf
 					ON pf.user_id = p.user_id
 				INNER JOIN ".NIVELES_TABLE." nv
@@ -233,11 +236,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$attr_tot = $attr_disp + $row['fuerza'] + $row['agilidad'] + $row['vitalidad'] + $row['cck'] + $row['concentracion'] + $row['voluntad'];
 		$arquetipo_select = obtener_arquetipo_select($pj_id, $row['arquetipo_id']);
 		
-		$puede_elegir_rama1 = ($row['rama1'] == '');
-		$puede_elegir_rama2 = ($row['rama2'] == '');
-		$puede_elegir_rama3 = ($row['rama3'] == '' && (int)$row['nivel'] >= 10);
-		$puede_elegir_rama4 = ($row['rama4'] == '' && (int)$row['nivel'] >= 15);
-		$puede_elegir_rama5 = ($row['rama5'] == '' && (int)$row['nivel'] >= 25);
+		$puede_elegir_rama1 = ((int)$row['rama_id1'] == 0);
+		$puede_elegir_rama2 = ((int)$row['rama_id2'] == 0);
+		$puede_elegir_rama3 = ((int)$row['rama_id3'] == 0 && (int)$row['nivel'] >= 10);
+		$puede_elegir_rama4 = ((int)$row['rama_id4'] == 0 && (int)$row['nivel'] >= 15);
+		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
 		
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
@@ -256,12 +259,12 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_NOMBRE' 			=> stripslashes($row['nombre']),
 			'FICHA_ID' 				=> $pj_id,
 			'FICHA_EDAD' 			=> $row['edad'],
-			'FICHA_CLAN' 			=> $row['clan'],
-			'FICHA_RAMA1' 			=> stripslashes($row['rama1']),
-			'FICHA_RAMA2' 			=> stripslashes($row['rama2']),
-			'FICHA_RAMA3' 			=> stripslashes($row['rama3']),
-			'FICHA_RAMA4' 			=> stripslashes($row['rama4']),
-			'FICHA_RAMA5' 			=> stripslashes($row['rama5']),
+			'FICHA_CLAN' 			=> get_nombre_rama($row['rama_id_pri']),
+			'FICHA_RAMA1' 			=> get_nombre_rama($row['rama_id1']),
+			'FICHA_RAMA2' 			=> get_nombre_rama($row['rama_id2']),
+			'FICHA_RAMA3' 			=> get_nombre_rama($row['rama_id3']),
+			'FICHA_RAMA4' 			=> get_nombre_rama($row['rama_id4']),
+			'FICHA_RAMA5' 			=> get_nombre_rama($row['rama_id5']),
 			'FICHA_ATRIBUTOS_DISP'	=> $attr_disp,
 			'FICHA_ATRIBUTOS_TOT'	=> $attr_tot,
 			'FICHA_ATRIBUTOS_MAX'	=> 10 + ((int)$row['nivel'] * 5),
@@ -288,13 +291,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 		));
 		
 		if (!$ver || $puede_elegir_ramas) {
-			if ($ver) {
-				$exluir_ramas[0] = $row['rama1'];
-				$exluir_ramas[1] = $row['rama2'];
-				$exluir_ramas[2] = $row['rama3'];
-				$exluir_ramas[3] = $row['rama4'];
-				$exluir_ramas[4] = $row['rama5'];	
-			}			
+			$exluir_ramas[0] = (int)$row['rama_id1'];
+			$exluir_ramas[1] = (int)$row['rama_id2'];
+			$exluir_ramas[2] = (int)$row['rama_id3'];
+			$exluir_ramas[3] = (int)$row['rama_id4'];
+			$exluir_ramas[4] = (int)$row['rama_id5'];	
 			
 			$template->assign_vars(array(
 				'PUEDE_ELEGIR_RAMAS'	=> $puede_elegir_ramas,
@@ -303,12 +304,12 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'PUEDE_ELEGIR_RAMA3'	=> $puede_elegir_rama3,
 				'PUEDE_ELEGIR_RAMA4'	=> $puede_elegir_rama4,
 				'PUEDE_ELEGIR_RAMA5'	=> $puede_elegir_rama5,
-				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, $row['clan'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(0, $row['rama1'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, $row['rama2'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, $row['rama3'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, $row['rama4'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(0, $row['rama5'], $exluir_ramas),
+				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, (int)$row['rama_id_pri'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(0, (int)$row['rama_id1'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(0, (int)$row['rama_id5'], $exluir_ramas),
 			));
 		}
 		
@@ -397,6 +398,21 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 	return $select;
 }
 
+function get_nombre_rama($rama_id) {
+	global $db;
+	$nombre = '';
+	
+	$query = $db->sql_query("SELECT nombre, aldea
+								FROM ".RAMAS_TABLE."
+								WHERE rama_id = '$rama_id'");
+	if ($row = $db->sql_fetchrow($query)) {
+		$nombre = $row['nombre'];
+	}
+	$db->sql_freeresult($query);
+	
+	return $nombre;
+}
+
 function get_ramas_select($principales, $selected, $exclude){
 	global $db;
 	if(!isset($exclude)) $exclude = array();
@@ -407,9 +423,9 @@ function get_ramas_select($principales, $selected, $exclude){
 								WHERE principal = $principales 
 								ORDER BY primero DESC, nombre ASC");
 	while($row = $db->sql_fetchrow($query)) {
-		$str_selected = ($row['nombre'] === $selected) ? 'selected' : '';
-		if (!in_array($row['nombre'], $exclude) || $str_selected == 'selected') {
-			$select .= "<option $str_selected value='".$row['nombre']."'>";
+		$str_selected = ($row['rama_id'] == $selected) ? 'selected' : '';
+		if (!in_array($row['rama_id'], $exclude) || $str_selected == 'selected') {
+			$select .= "<option $str_selected value='".$row['rama_id']."'>";
 			if ($row['aldea']) 
 				$select .= '(' . $row['aldea'] . ') ';
 			$select .= $row['nombre'];
