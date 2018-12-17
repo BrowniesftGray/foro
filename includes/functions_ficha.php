@@ -291,11 +291,12 @@ function get_ficha($user_id, $return = false, $ver = false)
 		));
 		
 		if (!$ver || $puede_elegir_ramas) {
-			$exluir_ramas[0] = (int)$row['rama_id1'];
-			$exluir_ramas[1] = (int)$row['rama_id2'];
-			$exluir_ramas[2] = (int)$row['rama_id3'];
-			$exluir_ramas[3] = (int)$row['rama_id4'];
-			$exluir_ramas[4] = (int)$row['rama_id5'];	
+			$exluir_ramas[0] = (int)$row['rama_id_pri'];
+			$exluir_ramas[1] = (int)$row['rama_id1'];
+			$exluir_ramas[2] = (int)$row['rama_id2'];
+			$exluir_ramas[3] = (int)$row['rama_id3'];
+			$exluir_ramas[4] = (int)$row['rama_id4'];
+			$exluir_ramas[5] = (int)$row['rama_id5'];	
 			
 			$template->assign_vars(array(
 				'PUEDE_ELEGIR_RAMAS'	=> $puede_elegir_ramas,
@@ -305,7 +306,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'PUEDE_ELEGIR_RAMA4'	=> $puede_elegir_rama4,
 				'PUEDE_ELEGIR_RAMA5'	=> $puede_elegir_rama5,
 				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, (int)$row['rama_id_pri'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(0, (int)$row['rama_id1'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(2, (int)$row['rama_id1'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas),
@@ -414,14 +415,34 @@ function get_nombre_rama($rama_id) {
 }
 
 function get_ramas_select($principales, $selected, $exclude){
-	global $db;
-	if(!isset($exclude)) $exclude = array();
+	global $db;	
 	$select = '';
+	$obligatorias = false;
 	
-	$query = $db->sql_query('SELECT rama_id, nombre, aldea 
-								FROM '.RAMAS_TABLE." 
-								WHERE principal = $principales 
-								ORDER BY primero DESC, nombre ASC");
+	if(!isset($exclude)) $exclude = array();
+	
+	if ($principales == 2) {
+		$query = $db->sql_query('SELECT r.rama_id, r.nombre, r.aldea 
+								FROM '.RAMAS_TABLE.' rp
+									INNER JOIN '.RAMAS_TABLE." r
+										ON r.rama_id = rp.rama_id_req1
+										OR r.rama_id = rp.rama_id_req2
+								WHERE rp.rama_id = $exclude[0]
+								ORDER BY r.nombre ASC");
+								
+		$obligatorias = ((int)$db->sql_affectedrows() > 0);
+	}
+	
+	if ($principales < 2 || !$obligatorias) {
+		$query = $db->sql_query('SELECT rama_id, nombre, aldea 
+									FROM '.RAMAS_TABLE." 
+									WHERE principal = $principales 
+									ORDER BY primero DESC, nombre ASC");
+	}
+	
+	if ($principales != 1 && !$obligatorias)
+		$select = '<option value="0">-- Ninguna --</option>';
+		
 	while($row = $db->sql_fetchrow($query)) {
 		$str_selected = ($row['rama_id'] == $selected) ? 'selected' : '';
 		if (!in_array($row['rama_id'], $exclude) || $str_selected == 'selected') {

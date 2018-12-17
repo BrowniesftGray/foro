@@ -57,7 +57,6 @@ class main
         }
 
         $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null));
-        $this->template->assign_var('RAMAS_SECUNDARIAS', get_ramas_select(0, false, null));
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 	

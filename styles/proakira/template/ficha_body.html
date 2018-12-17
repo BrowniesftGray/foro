@@ -12,9 +12,6 @@
                           <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5>Datos Personales</h5></a>
                           </li>
-                          <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><h5>Ramas</h5></a>
-                          </li>
                           <li class="nav-item" onclick="calcEstadisticas()">
                             <a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
                           </li>
@@ -31,6 +28,14 @@
                                     <input id="name" type="text" class="form-control" name="name" value="" required>
                                 </div>
                             </div>
+							<div class="form-group row">
+								<label for="ramaPrincipal" class="col-3 col-form-label text-md-left">Rama Principal:</label>
+								<div class="col-6">
+									<select class="form-control" name="ramaPrincipal">
+										{RAMAS_PRINCIPALES}
+									</select>
+								</div>
+							</div>
                             <div class="form-group row">
                                 <label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
 
@@ -56,35 +61,6 @@
                                     <textarea class="form-control" name="descHis" id="descHis" placeholder="Historia" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px'"></textarea>
                                 </div>
                             </div>
-                          </div>
-                          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-							<h3>Ramas de Técnicas</h3><br>
-                                <div class="form-group row">
-                                    <label for="ramaPrincipal" class="col-2 col-form-label text-md-left">Rama Principal:</label>
-                                    <div class="col-7">
-                                        <select class="form-control" name="ramaPrincipal">
-                                            {RAMAS_PRINCIPALES}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="ramaSec1" class="col-2 col-form-label text-md-left">Segunda Rama:</label>
-                                    <div class="col-7">
-                                        <select id="ramaSec1" class="form-control" name="ramaSec1">
-											<option value="0">-- Ninguna --</option>
-                                            {RAMAS_SECUNDARIAS}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="ramaSec2" class="col-2 col-form-label text-md-left">Tercera Rama:</label>
-                                    <div class="col-7">
-                                        <select id="ramaSec2" class="form-control" name="ramaSec2">
-											<option value="0">-- Ninguna --</option>
-                                            {RAMAS_SECUNDARIAS}
-                                        </select>
-                                    </div>
-                                </div>
                           </div>
                           <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
                             <h3>Atributos</h3><br>
@@ -229,19 +205,6 @@ function calcStats(finalCheck) {
     }
 }
 
-function checkRamas(){
-    var rama2 = document.getElementById('ramaSec1').value;
-    var rama3 = document.getElementById('ramaSec2').value;
-    var success = true;
-    if (rama2 == rama3 && rama2 != '0' && rama3 != '0') 
-    { 
-        alert("Las ramas secundarias no pueden ser iguales");
-        success = false;
-    }
-
-    return success;
-}
-
 function checkAtributos(atr) {
   var fue = document.getElementById('atrFuerza').value;
   var vit = document.getElementById('atrVit').value;
@@ -281,10 +244,8 @@ function checkFicha() {
     var cck = document.getElementById('atrCCK').value;
     var agi = document.getElementById('artAg').value;
     var vol = document.getElementById('atrVol').value;
-    var rama2 = document.getElementById('ramaSec1').value;
-    var rama3 = document.getElementById('ramaSec2').value;
 
-    return checkAtributos(fue) && checkAtributos(vit) && checkAtributos(con) && checkAtributos(cck) && checkAtributos(agi) && checkAtributos(vol) && calcStats(true) && checkText(nombre, 5) && checkText(descFis, 200) && checkText(descPsic, 200) && checkRamas();
+    return checkAtributos(fue) && checkAtributos(vit) && checkAtributos(con) && checkAtributos(cck) && checkAtributos(agi) && checkAtributos(vol) && calcStats(true) && checkText(nombre, 5) && checkText(descFis, 200) && checkText(descPsic, 200);
 }
 </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
