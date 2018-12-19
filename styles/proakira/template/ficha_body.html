@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
 <link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.3" type="text/css">
-	
+
 	<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -46,19 +46,19 @@
                             <div class="form-group row">
                                 <label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
                                 <div class="col-6">
-                                    <textarea class="form-control" name="descFis" id="descFis" placeholder="Descripción física" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'"></textarea>
+                                    <textarea class="form-control" name="descFis" id="descFis" placeholder="Descripción física" required="required" style="height:200px" ></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descPsic" class="col-3 col-form-label text-md-left">Descripción Psicol&oacute;gica</label>
-                                <div class="col-6">                                  
-                                    <textarea class="form-control" name="descPsic" id="descPsic" placeholder="Descripción Psicológica" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'"></textarea>
+                                <div class="col-6">
+                                    <textarea class="form-control" name="descPsic" id="descPsic" placeholder="Descripción Psicológica" required="required"style="height:200px"></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
-                                <div class="col-6">    
-                                    <textarea class="form-control" name="descHis" id="descHis" placeholder="Historia" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px'"></textarea>
+                                <div class="col-6">
+                                    <textarea class="form-control" name="descHis" id="descHis" placeholder="Historia" required="required" style="height:200px"></textarea>
                                 </div>
                             </div>
                           </div>
@@ -195,7 +195,7 @@ function calcStats(finalCheck) {
     }
 
     puntos.innerHTML = 50 - usados;
-    
+
     if (usados < 50 && finalCheck) {
         alert('Aún te faltan puntos de atributo por repartir');
         success = false;

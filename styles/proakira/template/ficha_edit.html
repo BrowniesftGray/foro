@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
 <link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.3" type="text/css">
-	
+
 	<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -58,19 +58,19 @@
                             <div class="form-group row">
                                 <label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
                                 <div class="col-6">
-                                    <textarea class="form-control" name="descFis" id="descFis" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'">{FICHA_FISICO}</textarea>
+                                    <textarea class="form-control" name="descFis" id="descFis" required="required" style="height:200px">{FICHA_FISICO}</textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descPsic" class="col-3 col-form-label text-md-left">Descripción Psicol&oacute;gica</label>
-                                <div class="col-6">                                  
-                                    <textarea class="form-control" name="descPsic" id="descPsic" required="required" onfocus="this.style.height='200px';" onblur="this.style.height='60px'">{FICHA_PSICOLOGICO}</textarea>
+                                <div class="col-6">
+                                    <textarea class="form-control" name="descPsic" id="descPsic" required="required" style="height:200px">{FICHA_PSICOLOGICO}</textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
-                                <div class="col-6">    
-                                    <textarea class="form-control" name="descHis" id="descHis" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px'">{FICHA_HISTORIA}</textarea>
+                                <div class="col-6">
+                                    <textarea class="form-control" name="descHis" id="descHis" required="required" style="height:200px">{FICHA_HISTORIA}</textarea>
                                 </div>
                             </div>
                           </div>
@@ -127,7 +127,7 @@
                           </div>
                           <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
                                 <h3>Técnicas ninja</h3>
-                                <textarea id="tecnicas" name="tecnicas" onfocus="this.style.height='300px';" onblur="this.style.height='60px';">{FICHA_JUTSUS}</textarea>
+                                <textarea id="tecnicas" name="tecnicas" style="height:200px">{FICHA_JUTSUS}</textarea>
                           </div>
                           <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
                             <h3>Atributos</h3><br>
@@ -190,7 +190,7 @@
                           </div>
                           <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
                             <h3>Moderaciones</h3><br></h5>
-                                <textarea id="razon" name="razon" required="required" onfocus="this.style.height='300px';" onblur="this.style.height='60px';"></textarea>
+                                <textarea id="razon" name="razon" required="required" style="height:200px"></textarea>
                           </div>
 
                         </div>
@@ -266,8 +266,8 @@ function checkRamas(){
     var rama2 = document.getElementById('ramaSec1').value;
     var rama3 = document.getElementById('ramaSec2').value;
     var success = true;
-    if (rama2 == rama3 && rama2 != '0' && rama3 != '0') 
-    { 
+    if (rama2 == rama3 && rama2 != '0' && rama3 != '0')
+    {
         alert("Las ramas secundarias no pueden ser iguales");
         success = false;
     }
