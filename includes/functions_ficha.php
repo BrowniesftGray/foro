@@ -306,11 +306,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'PUEDE_ELEGIR_RAMA4'	=> $puede_elegir_rama4,
 				'PUEDE_ELEGIR_RAMA5'	=> $puede_elegir_rama5,
 				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, (int)$row['rama_id_pri'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(2, (int)$row['rama_id1'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(($ver ? 2 : 0), (int)$row['rama_id1'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(3, (int)$row['rama_id5'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas),
 			));
 		}
 		
