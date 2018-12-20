@@ -310,7 +310,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas),
 				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(0, (int)$row['rama_id5'], $exluir_ramas),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(3, (int)$row['rama_id5'], $exluir_ramas),
 			));
 		}
 		
@@ -414,30 +414,38 @@ function get_nombre_rama($rama_id) {
 	return $nombre;
 }
 
+/* param $principales: 
+1: rama principal; 2: segunda rama; 3: sexta rama; 0: cualquier otra genérica */
 function get_ramas_select($principales, $selected, $exclude){
 	global $db;	
 	$select = '';
 	$obligatorias = false;
 	
 	if(!isset($exclude)) $exclude = array();
+	if ($principales > 1 && count($exclude) == 0) $principales = 0;
 	
-	if ($principales == 2) {
+	if ($principales >= 2) {
 		$query = $db->sql_query('SELECT r.rama_id, r.nombre, r.aldea 
 								FROM '.RAMAS_TABLE.' rp
 									INNER JOIN '.RAMAS_TABLE." r
 										ON r.rama_id = rp.rama_id_req1
 										OR r.rama_id = rp.rama_id_req2
 								WHERE rp.rama_id = $exclude[0]
-								ORDER BY r.nombre ASC");
+								" . ($principales == 3 ? "AND r.rama_id <> $exclude[1]" : '') . '
+								ORDER BY r.nombre ASC');
 								
 		$obligatorias = ((int)$db->sql_affectedrows() > 0);
+		if(!$obligatorias) {
+			$db->sql_freeresult($query);
+			$principales = 0;
+		}
 	}
 	
-	if ($principales < 2 || !$obligatorias) {
+	if (!$obligatorias) {
 		$query = $db->sql_query('SELECT rama_id, nombre, aldea 
-									FROM '.RAMAS_TABLE." 
-									WHERE principal = $principales 
-									ORDER BY primero DESC, nombre ASC");
+								FROM '.RAMAS_TABLE." 
+								WHERE principal = $principales 
+								ORDER BY primero DESC, nombre ASC");
 	}
 	
 	if ($principales != 1 && !$obligatorias)
