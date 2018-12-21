@@ -425,13 +425,14 @@ function get_ramas_select($principales, $selected, $exclude){
 	if ($principales > 1 && count($exclude) == 0) $principales = 0;
 	
 	if ($principales >= 2) {
+		$not_in = implode(',', $exclude);
 		$query = $db->sql_query('SELECT r.rama_id, r.nombre, r.aldea 
 								FROM '.RAMAS_TABLE.' rp
 									INNER JOIN '.RAMAS_TABLE." r
 										ON r.rama_id = rp.rama_id_req1
 										OR r.rama_id = rp.rama_id_req2
 								WHERE rp.rama_id = $exclude[0]
-								" . ($principales == 3 ? "AND r.rama_id <> $exclude[1]" : '') . '
+								" . ($principales == 3 && count($exclude) > 0 ? "AND r.rama_id NOT IN($not_in)" : '') . '
 								ORDER BY r.nombre ASC');
 								
 		$obligatorias = ((int)$db->sql_affectedrows() > 0);
