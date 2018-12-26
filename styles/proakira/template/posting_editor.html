@@ -82,7 +82,17 @@
 	<div id="message-box" class="message-box">
 		<textarea <!-- IF S_UCP_ACTION and not S_PRIVMSGS and not S_EDIT_DRAFT -->name="signature" id="signature" style="height: 9em;"<!-- ELSE -->name="message" id="message"<!-- ENDIF --> rows="15" cols="76" tabindex="4" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox">{MESSAGE}{DRAFT_MESSAGE}{SIGNATURE}</textarea>
 	</div>
-
+	
+	<!-- IF S_POST_ACTION and S_ROLEPLAY_FORUM -->
+	<div id="stats-box" class="stats-box">
+		<ul>
+			<li><label>Puntos de Vida:</label> <pv><span id="pv_old">{PJ_PV_OLD}</span></pv> + <input type="number" value="{PJ_DIFF_PV}" name="diff_pv" id="diff_pv" onchange="calcStat(this, 'pv')" onblur="calcStat(this, 'pv')" /> = <pv><span id="pv_new">{PJ_PV_OLD}</span></pv></li>
+			<li><label>Puntos de Chakra:</label> <pc><span id="pc_old">{PJ_PC_OLD}</span></pc> + <input type="number" value="{PJ_DIFF_PC}" name="diff_pc" id="diff_pc" onchange="calcStat(this, 'pc')" onblur="calcStat(this, 'pc')" /> = <pc><span id="pc_new">{PJ_PC_OLD}</span></pc></li>
+			<li><label>Puntos de Stamina:</label> <sta><span id="sta_old">{PJ_STA_OLD}</span></sta> + <input type="number" value="{PJ_DIFF_STA}" name="diff_sta" id="diff_sta" onchange="calcStat(this, 'sta')" onblur="calcStat(this, 'sta')" /> = <sta><span id="sta_new">{PJ_STA_OLD}</span></sta></li>
+		</ul>
+	</div>
+	<!-- ENDIF -->
+	
 	<!-- EVENT posting_editor_message_after -->
 	</fieldset>
 
@@ -200,3 +210,12 @@
 		<!-- ENDIF -->
 
 <!-- ENDIF -->
+
+<script type="text/javascript">
+	function calcStat(elem, stat) {
+		var stat_old = parseInt(document.getElementById(stat + '_old').innerHTML);
+		var elem_new = document.getElementById(stat + '_new');
+		var stat_new = stat_old + parseInt(elem.value);
+		elem_new.innerHTML = stat_new;
+	}
+</script>

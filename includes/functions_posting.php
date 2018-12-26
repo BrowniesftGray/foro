@@ -1616,7 +1616,11 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				'bbcode_bitfield'	=> $data_ary['bbcode_bitfield'],
 				'bbcode_uid'		=> $data_ary['bbcode_uid'],
 				'post_postcount'	=> ($auth->acl_get('f_postcount', $data_ary['forum_id'])) ? 1 : 0,
-				'post_edit_locked'	=> $data_ary['post_edit_locked']
+				'post_edit_locked'	=> $data_ary['post_edit_locked'],
+				// mgomez // 26-12-2018
+				'diff_pv'			=> $data_ary['diff_pv'],
+				'diff_pc'			=> $data_ary['diff_pc'],
+				'diff_sta'			=> $data_ary['diff_sta'],
 			);
 		break;
 
@@ -1688,7 +1692,11 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				'post_attachment'	=> (!empty($data_ary['attachment_data'])) ? 1 : 0,
 				'bbcode_bitfield'	=> $data_ary['bbcode_bitfield'],
 				'bbcode_uid'		=> $data_ary['bbcode_uid'],
-				'post_edit_locked'	=> $data_ary['post_edit_locked'])
+				'post_edit_locked'	=> $data_ary['post_edit_locked'],
+				// mgomez // 26-12-2018
+				'diff_pv'			=> $data_ary['diff_pv'],
+				'diff_pc'			=> $data_ary['diff_pc'],
+				'diff_sta'			=> $data_ary['diff_sta'])
 			);
 
 			if ($update_message)
@@ -1923,6 +1931,9 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 		}
 
 		unset($sql_data[POSTS_TABLE]['sql']);
+		
+		// Datos del pj referentes al post // mgomez // 26-12-2018
+		store_pj_data($data_ary);
 	}
 
 	// Update the topics table
@@ -1945,6 +1956,9 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 		$db->sql_query($sql);
 
 		unset($sql_data[POSTS_TABLE]['sql']);
+		
+		// Datos del pj referentes al post // mgomez // 26-12-2018
+		store_pj_data($data_ary, $data_ary['post_id']);
 	}
 
 	// Update Poll Tables
@@ -2743,4 +2757,94 @@ function phpbb_handle_post_delete($forum_id, $topic_id, $post_id, &$post_data, $
 	}
 
 	trigger_error('USER_CANNOT_DELETE');
+}
+
+// Datos del pj referentes al post // mgomez // 26-12-2018
+function store_pj_data($data_ary, $post_id = 0) {
+	global $db;
+	$pj_id = $es_primero = $pj_data = false;
+	
+	// RPG forum
+	if (in_array($data_ary['forum_id'], get_foros_generales()) || in_array($data_ary['forum_id'], get_foros_estilo_tabla()))
+		return false;
+	
+	$pj_id = get_pj_id($data_ary['poster_id']);
+	if (!$pj_id) return false;
+	
+	if ($post_id > 0)
+		$db->sql_query("DELETE FROM ".PERSONAJES_POSTS_TABLE." WHERE post_id = '$post_id'");
+	
+	$query = $db->sql_query("SELECT
+								pj.*,
+								p.nombre,
+								m.nombre as clan
+							FROM ".PERSONAJES_POSTS_TABLE." pj
+								INNER JOIN ".PERSONAJES_TABLE." p
+									ON p.pj_id = pj.pj_id
+								INNER JOIN ".RAMAS_TABLE." m
+									ON m.rama_id = p.rama_id_pri
+							WHERE pj.pj_id = '$pj_id' 
+								AND pj.topic_id = ".$data_ary['topic_id']." 
+							ORDER BY pj.post_id DESC
+							LIMIT 1");
+							
+	if ($row = $db->sql_fetchrow($query)) {
+		$pj_data = array(
+			'PJ_NOMBRE'				=> $row['nombre'],
+			'PJ_CLAN'				=> $row['clan'],
+			'PJ_NIVEL'				=> (int)$row['nivel'],
+			'PJ_EXPERIENCIA'		=> (int)$row['experiencia'],
+			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_sig'],
+			'PJ_EXPERIENCIA_PORC'	=> (int)$row['experiencia_porc'],
+			'PJ_RANGO'				=> $row['rango'],
+			'PJ_FUE'				=> (int)$row['fuerza'],
+			'PJ_AGI'				=> (int)$row['agilidad'],
+			'PJ_VIT'				=> (int)$row['vitalidad'],
+			'PJ_CCK'				=> (int)$row['cck'],
+			'PJ_CON'				=> (int)$row['concentracion'],
+			'PJ_VOL'				=> (int)$row['voluntad'],
+			'PJ_PV_TOT'				=> calcula_pv($row),
+			'PJ_STA_TOT'			=> calcula_sta($row),
+			'PJ_PC_TOT'				=> calcula_pc($row),
+			'PJ_PV_POST'			=> ($row['pv'] ? $row['pv'] : calcula_pv($row)),
+			'PJ_STA_POST'			=> ($row['sta'] ? $row['sta'] : calcula_sta($row)),
+			'PJ_PC_POST'			=> ($row['pc'] ? $row['pc'] : calcula_pc($row)),
+		);
+	}
+	else {
+		$es_primero = true;
+		$pj_data = get_pj_data($pj_id);
+	}
+	$db->sql_freeresult($query);
+	
+	if (!$pj_data) return false;
+	
+	$pj_data['PJ_PV_POST'] = $pj_data['PJ_PV_POST'] + (int)$data_ary['diff_pv'];
+	$pj_data['PJ_PC_POST'] = $pj_data['PJ_PC_POST'] + (int)$data_ary['diff_pc'];
+	$pj_data['PJ_STA_POST'] = $pj_data['PJ_STA_POST'] + (int)$data_ary['diff_sta'];
+	
+	$sql_ary = array(
+		'post_id'			=> $data_ary['post_id'],
+		'topic_id'			=> $data_ary['topic_id'],
+		'forum_id'			=> $data_ary['forum_id'],
+		'user_id'			=> $data_ary['poster_id'],
+		'pj_id'				=> $pj_id,
+		'nivel'				=> $pj_data['PJ_NIVEL'],
+		'experiencia'		=> $pj_data['PJ_EXPERIENCIA'],
+		'experiencia_sig'	=> $pj_data['PJ_EXPERIENCIA_SIG'],
+		'experiencia_porc'	=> $pj_data['PJ_EXPERIENCIA_PORC'],
+		'rango'				=> $pj_data['PJ_RANGO'],
+		'pv'				=> $pj_data['PJ_PV_POST'],
+		'pc'				=> $pj_data['PJ_PC_POST'],
+		'sta'				=> $pj_data['PJ_STA_POST'],
+		'fuerza'			=> $pj_data['PJ_FUE'],
+		'agilidad'			=> $pj_data['PJ_AGI'],
+		'vitalidad'			=> $pj_data['PJ_VIT'],
+		'concentracion'		=> $pj_data['PJ_CON'],
+		'cck'				=> $pj_data['PJ_CCK'],
+		'voluntad'			=> $pj_data['PJ_VOL'],
+		'primero'			=> $es_primero,
+	);
+	
+	$db->sql_query('INSERT INTO ' . PERSONAJES_POSTS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
 }

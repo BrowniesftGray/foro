@@ -731,29 +731,6 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 	return array($active_forum_ary, array());
 }
 
-/* Foros Generales */
-function get_foros_generales() {
-	return array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92);
-}
-		
-/* Países Principales - Contenedores de aldea - Estilo largo y ancho */
-function get_foros_paises_principales() {
-	$foros_paises_principales = array(16, 17); // 18, 19 - Ame e Iwa
-	/* Aldeas - Se añaden a los países para compartir estilo */
-	array_push($foros_paises_principales, 41, 42, 43, 76);
-	return $foros_paises_principales;	
-}
-
-/* Resto de los Países - Estilo largo y angosto - Por defecto en todos los subforos*/		
-function get_foros_paises_neutrales() {
-	return array(18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
-}
-
-/* Foros que deben mostrarse con el estilo estándar de tabla */		
-function get_foros_estilo_tabla() {
-	return array(0);
-}
-
 /**
 * Create forum rules for given forum
 */

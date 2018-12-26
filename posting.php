@@ -843,6 +843,11 @@ if ($submit || $preview || $refresh)
 	$post_data['post_subject']		= $request->variable('subject', '', true);
 	$post_data['topic_subtitle']	= $request->variable('subtitle', '', true);	// mgomez // 11-12-2018
 	$message_parser->message		= $request->variable('message', '', true);
+	
+	// mgomez // 26-12-2018
+	$post_data['diff_pv']			= $request->variable('diff_pv', 0, true);	
+	$post_data['diff_pc']			= $request->variable('diff_pc', 0, true);
+	$post_data['diff_sta']			= $request->variable('diff_sta', 0, true);
 
 	$post_data['username']			= $request->variable('username', $post_data['username'], true);
 	$post_data['post_edit_reason']	= ($request->variable('edit_reason', false, false, \phpbb\request\request_interface::POST) && $mode == 'edit' && $auth->acl_get('m_edit', $forum_id)) ? $request->variable('edit_reason', '', true) : '';
@@ -1391,6 +1396,11 @@ if ($submit || $preview || $refresh)
 				'attachment_data'		=> $message_parser->attachment_data,
 				'filename_data'			=> $message_parser->filename_data,
 				'topic_status'			=> $post_data['topic_status'],
+					
+				// mgomez // 26-12-2018
+				'diff_pv'				=> (int)$post_data['diff_pv'],
+				'diff_pc'				=> (int)$post_data['diff_pc'],
+				'diff_sta'				=> (int)$post_data['diff_sta'],
 
 				'topic_visibility'			=> (isset($post_data['topic_visibility'])) ? $post_data['topic_visibility'] : false,
 				'post_visibility'			=> (isset($post_data['post_visibility'])) ? $post_data['post_visibility'] : false,
