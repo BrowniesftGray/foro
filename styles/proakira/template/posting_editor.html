@@ -85,10 +85,11 @@
 	
 	<!-- IF S_POST_ACTION and S_ROLEPLAY_FORUM -->
 	<div id="stats-box" class="stats-box">
+		<h3>Estad&iacute;sticas</h3>
 		<ul>
-			<li><label>Puntos de Vida:</label> <pv><span id="pv_old">{PJ_PV_OLD}</span></pv> + <input type="number" value="{PJ_DIFF_PV}" name="diff_pv" id="diff_pv" onchange="calcStat(this, 'pv')" onblur="calcStat(this, 'pv')" /> = <pv><span id="pv_new">{PJ_PV_OLD}</span></pv></li>
-			<li><label>Puntos de Chakra:</label> <pc><span id="pc_old">{PJ_PC_OLD}</span></pc> + <input type="number" value="{PJ_DIFF_PC}" name="diff_pc" id="diff_pc" onchange="calcStat(this, 'pc')" onblur="calcStat(this, 'pc')" /> = <pc><span id="pc_new">{PJ_PC_OLD}</span></pc></li>
-			<li><label>Puntos de Stamina:</label> <sta><span id="sta_old">{PJ_STA_OLD}</span></sta> + <input type="number" value="{PJ_DIFF_STA}" name="diff_sta" id="diff_sta" onchange="calcStat(this, 'sta')" onblur="calcStat(this, 'sta')" /> = <sta><span id="sta_new">{PJ_STA_OLD}</span></sta></li>
+			<li><label for="diff_pv">Puntos de Vida:</label> <pv><span id="pv_old">{PJ_PV_OLD}</span></pv> + <input type="number" value="{PJ_DIFF_PV}" name="diff_pv" id="diff_pv" onchange="calcStat('pv')" onblur="calcStat('pv')" /> = <pv><span id="pv_new">{PJ_PV_OLD}</span></pv></li>
+			<li><label for="diff_pc">Puntos de Chakra:</label> <pc><span id="pc_old">{PJ_PC_OLD}</span></pc> + <input type="number" value="{PJ_DIFF_PC}" name="diff_pc" id="diff_pc" onchange="calcStat('pc')" onblur="calcStat('pc')" /> = <pc><span id="pc_new">{PJ_PC_OLD}</span></pc></li>
+			<li><label for="diff_sta">Puntos de Stamina:</label> <sta><span id="sta_old">{PJ_STA_OLD}</span></sta> + <input type="number" value="{PJ_DIFF_STA}" name="diff_sta" id="diff_sta" onchange="calcStat('sta')" onblur="calcStat('sta')" /> = <sta><span id="sta_new">{PJ_STA_OLD}</span></sta></li>
 		</ul>
 	</div>
 	<!-- ENDIF -->
@@ -212,10 +213,14 @@
 <!-- ENDIF -->
 
 <script type="text/javascript">
-	function calcStat(elem, stat) {
+	function calcStat(stat) {
+		var elem = document.getElementById('diff_' + stat);
 		var stat_old = parseInt(document.getElementById(stat + '_old').innerHTML);
 		var elem_new = document.getElementById(stat + '_new');
 		var stat_new = stat_old + parseInt(elem.value);
 		elem_new.innerHTML = stat_new;
 	}
+	calcStat('pv');
+	calcStat('pc');
+	calcStat('sta');
 </script>

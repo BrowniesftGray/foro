@@ -44,7 +44,32 @@ function get_pj_data($pj_id, $post_id = 0) {
 	global $db;
 	$data = false;
 	
-	if ($post_id == 0) {
+	if ($post_id > 0) {
+		$sql = "SELECT
+					pj.*,
+					p.nombre,
+					m.nombre as clan,
+					CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
+				FROM ".PERSONAJES_POSTS_TABLE." pj
+					INNER JOIN ".PERSONAJES_TABLE." p
+						ON p.pj_id = pj.pj_id
+					INNER JOIN ".RAMAS_TABLE." m
+						ON m.rama_id = p.rama_id_pri
+					LEFT JOIN ".ARQUETIPOS_TABLE." a
+						ON a.arquetipo_id = p.arquetipo_id
+				WHERE pj.pj_id = '$pj_id' 
+					AND pj.post_id = '$post_id'";
+				
+		$query = $db->sql_query($sql);
+		
+		if ($db->sql_affectedrows() == 0) {
+			$db->sql_freeresult($query);
+			$post_id = 0;
+		}
+	}
+	
+	if ($post_id == 0)
+	{
 		$sql =
 			"SELECT p.*, 
 					m.nombre as clan,
@@ -71,25 +96,9 @@ function get_pj_data($pj_id, $post_id = 0) {
 					LEFT JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
 				WHERE pj_id = '$pj_id'";
-	}
-	else {
-		$sql = "SELECT
-					pj.*,
-					p.nombre,
-					m.nombre as clan,
-					CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
-				FROM ".PERSONAJES_POSTS_TABLE." pj
-					INNER JOIN ".PERSONAJES_TABLE." p
-						ON p.pj_id = pj.pj_id
-					INNER JOIN ".RAMAS_TABLE." m
-						ON m.rama_id = p.rama_id_pri
-					LEFT JOIN ".ARQUETIPOS_TABLE." a
-						ON a.arquetipo_id = p.arquetipo_id
-				WHERE pj.pj_id = '$pj_id' 
-					AND pj.post_id = '$post_id'";
-	}
 	
-	$query = $db->sql_query($sql);
+		$query = $db->sql_query($sql);
+	}
 			
 	if ($row = $db->sql_fetchrow($query)) {
 		$exp_avance = ($row['experiencia_porc'] ? (int)$row['experiencia_porc'] : -1);
@@ -104,13 +113,24 @@ function get_pj_data($pj_id, $post_id = 0) {
 			}
 		}
 		
+		$pv_total = calcula_pv($row);
+		$pc_total = calcula_pc($row);
+		$sta_total = calcula_sta($row);
+		$pv_post = (isset($row['pv']) ? $row['pv'] : $pv_total);
+		$pc_post = (isset($row['pc']) ? $row['pc'] : $pc_total);
+		$sta_post = (isset($row['sta']) ? $row['sta'] : $sta_total);
+		$pv_porc = floor($pv_post * 100 / $pv_total);
+		$pc_porc = floor($pc_post * 100 / $pc_total);
+		$sta_porc = floor($sta_post * 100 / $sta_total);
+		
 		$data = array(
 			'PJ_NOMBRE'				=> $row['nombre'],
 			'PJ_CLAN'				=> $row['clan'],
 			'PJ_NIVEL'				=> (int)$row['nivel'],
 			'PJ_EXPERIENCIA'		=> (int)$row['experiencia'],
 			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_sig'],
-			'PJ_EXPERIENCIA_PORC'	=> $exp_avance,
+			'PJ_EXPERIENCIA_PORC'	=> ($exp_avance > 100 ? 100 : $exp_avance),
+			'PJ_ARQUETIPO_ID'		=> (int)$row['arquetipo_id'],
 			'PJ_ARQUETIPO'			=> $row['arquetipo'],
 			'PJ_RANGO'				=> $row['rango'],
 			'PJ_FUE'				=> (int)$row['fuerza'],
@@ -120,12 +140,15 @@ function get_pj_data($pj_id, $post_id = 0) {
 			'PJ_CON'				=> (int)$row['concentracion'],
 			'PJ_VOL'				=> (int)$row['voluntad'],
 			'PJ_ATTR_DISP'			=> get_atributos_disponibles($pj_id),
-			'PJ_PV_TOT'				=> calcula_pv($row),
-			'PJ_STA_TOT'			=> calcula_sta($row),
-			'PJ_PC_TOT'				=> calcula_pc($row),
-			'PJ_PV_POST'			=> ($row['pv'] ? $row['pv'] : calcula_pv($row)),
-			'PJ_STA_POST'			=> ($row['sta'] ? $row['sta'] : calcula_sta($row)),
-			'PJ_PC_POST'			=> ($row['pc'] ? $row['pc'] : calcula_pc($row)),
+			'PJ_PV_TOT'				=> $pv_total,
+			'PJ_PC_TOT'				=> $pc_total,
+			'PJ_STA_TOT'			=> $sta_total,
+			'PJ_PV_POST'			=> $pv_post,
+			'PJ_PC_POST'			=> $pc_post,
+			'PJ_STA_POST'			=> $sta_post,
+			'PJ_PV_PORC'			=> ($pv_porc > 100 ? 100 : $pv_porc),
+			'PJ_PC_PORC'			=> ($pc_porc > 100 ? 100 : $pc_porc),
+			'PJ_STA_PORC'			=> ($sta_porc > 100 ? 100 : $sta_porc),
 		);
 	}
 	$db->sql_freeresult($query);

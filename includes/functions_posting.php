@@ -2784,7 +2784,8 @@ function store_pj_data($data_ary, $post_id = 0) {
 								INNER JOIN ".RAMAS_TABLE." m
 									ON m.rama_id = p.rama_id_pri
 							WHERE pj.pj_id = '$pj_id' 
-								AND pj.topic_id = ".$data_ary['topic_id']." 
+								AND pj.topic_id = ".$data_ary['topic_id']."
+								AND pj.post_id < ".$data_ary['post_id']."
 							ORDER BY pj.post_id DESC
 							LIMIT 1");
 							
@@ -2797,18 +2798,16 @@ function store_pj_data($data_ary, $post_id = 0) {
 			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_sig'],
 			'PJ_EXPERIENCIA_PORC'	=> (int)$row['experiencia_porc'],
 			'PJ_RANGO'				=> $row['rango'],
+			'PJ_ARQUETIPO_ID'		=> $row['arquetipo_id'],
 			'PJ_FUE'				=> (int)$row['fuerza'],
 			'PJ_AGI'				=> (int)$row['agilidad'],
 			'PJ_VIT'				=> (int)$row['vitalidad'],
 			'PJ_CCK'				=> (int)$row['cck'],
 			'PJ_CON'				=> (int)$row['concentracion'],
 			'PJ_VOL'				=> (int)$row['voluntad'],
-			'PJ_PV_TOT'				=> calcula_pv($row),
-			'PJ_STA_TOT'			=> calcula_sta($row),
-			'PJ_PC_TOT'				=> calcula_pc($row),
-			'PJ_PV_POST'			=> ($row['pv'] ? $row['pv'] : calcula_pv($row)),
-			'PJ_STA_POST'			=> ($row['sta'] ? $row['sta'] : calcula_sta($row)),
-			'PJ_PC_POST'			=> ($row['pc'] ? $row['pc'] : calcula_pc($row)),
+			'PJ_PV_POST'			=> (isset($row['pv']) ? $row['pv'] : calcula_pv($row)),
+			'PJ_PC_POST'			=> (isset($row['pc']) ? $row['pc'] : calcula_pc($row)),
+			'PJ_STA_POST'			=> (isset($row['sta']) ? $row['sta'] : calcula_sta($row)),
 		);
 	}
 	else {
@@ -2834,6 +2833,7 @@ function store_pj_data($data_ary, $post_id = 0) {
 		'experiencia_sig'	=> $pj_data['PJ_EXPERIENCIA_SIG'],
 		'experiencia_porc'	=> $pj_data['PJ_EXPERIENCIA_PORC'],
 		'rango'				=> $pj_data['PJ_RANGO'],
+		'arquetipo_id'		=> $pj_data['PJ_ARQUETIPO_ID'],
 		'pv'				=> $pj_data['PJ_PV_POST'],
 		'pc'				=> $pj_data['PJ_PC_POST'],
 		'sta'				=> $pj_data['PJ_STA_POST'],

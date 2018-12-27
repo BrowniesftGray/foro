@@ -169,9 +169,42 @@
 							<!-- EVENT viewtopic_body_postrow_rank_before -->
 							<!-- IF postrow.RANK_TITLE or postrow.RANK_IMG --><dd class="profile-rank"><!-- IF postrow.RANK_IMG -->{postrow.RANK_IMG}<!-- ELSE -->{postrow.RANK_TITLE}<!-- ENDIF --></dd><!-- ENDIF -->
 							<!-- EVENT viewtopic_body_postrow_rank_after -->
-
+							
+							<!-- IF postrow.U_POST_AUTHOR_ALIAS -->
+							<div class="profile-character">
+								<div class="nivel">Nivel {postrow.PJ_NIVEL}</div>
+								<div class="exp-container">
+									<div class="exp-legend">{postrow.PJ_EXPERIENCIA} / {postrow.PJ_EXPERIENCIA_SIG}</div>
+									<div class="exp-bar" style="width:{postrow.PJ_EXPERIENCIA_PORC}%"></div>
+								</div>
+								<!-- IF postrow.S_ROLEPLAY_FORUM -->
+								<table class="stats" cellpadding="0" cellspacing="0" border="0">
+									<tr>
+										<td class="pv">
+											<div class="stat-container" title="Puntos de Vida: {postrow.PJ_PV_POST} / {postrow.PJ_PV_TOT}">
+												<div class="stat-legend">{postrow.PJ_PV_POST} PV</div>
+												<div class="stat-bar" style="width:{postrow.PJ_PV_PORC}%"></div>
+											</div>
+										</td>
+										<td class="pc">
+											<div class="stat-container" title="Puntos de Chakra: {postrow.PJ_PC_POST} / {postrow.PJ_PC_TOT}">
+												<div class="stat-legend">{postrow.PJ_PC_POST} PC</div>
+												<div class="stat-bar" style="width:{postrow.PJ_PC_PORC}%"></div>
+											</div>
+										</td>
+										<td class="sta">
+											<div class="stat-container" title="Puntos de Stamina: {postrow.PJ_STA_POST} / {postrow.PJ_STA_TOT}">
+												<div class="stat-legend">{postrow.PJ_STA_POST} STA</div>
+												<div class="stat-bar" style="width:{postrow.PJ_STA_PORC}%"></div>
+											</div>
+										</td>
+									</tr>
+								</table>
+								<!-- ENDIF -->
+							</div>
+							<!-- ENDIF -->
+							
 							<!-- IF postrow.POSTER_POSTS != '' --><dd class="profile-posts"><span class="field-name">{L_POSTS}{L_COLON}</span> <!-- IF postrow.U_SEARCH !== '' --><a class="field-value" href="{postrow.U_SEARCH}"><!-- ELSE --><span  class="field-value"><!-- ENDIF -->{postrow.POSTER_POSTS}<!-- IF postrow.U_SEARCH !== '' --></a><!-- ELSE --></span><!-- ENDIF --></dd><!-- ENDIF -->
-							<!-- IF postrow.POSTER_JOINED --><dd class="profile-joined"><span class="field-name">{L_JOINED}{L_COLON}</span> <span  class="field-value">{postrow.POSTER_JOINED}</span></dd><!-- ENDIF -->
 							<!-- IF postrow.POSTER_WARNINGS --><dd class="profile-warnings"><span class="field-name">{L_WARNINGS}{L_COLON}</span> <span class="field-value">{postrow.POSTER_WARNINGS}</span></dd><!-- ENDIF -->
 
 							<!-- IF postrow.S_PROFILE_FIELD1 -->
@@ -407,6 +440,17 @@
 							<span class="responsive-hide"><strong>{postrow.POST_AUTHOR_FULL}</strong>,&nbsp;</span>{postrow.POST_DATE}
 						</p>
 						<!-- EVENT viewtopic_body_postrow_post_details_after -->
+						
+						<!-- IF postrow.S_ROLEPLAY_FORUM and postrow.S_STATS_CHANGED -->
+						<div class="stats-box">
+							<h3>Cambios en Estad&iacute;sticas</h3>
+							<ul>
+								<!-- IF postrow.PJ_DIFF_PV --><li><label>Puntos de Vida:</label> <pv><span>{postrow.PJ_PV_OLD}</span></pv> + <pv><span>{postrow.PJ_DIFF_PV}</span></pv> = <pv><span>{postrow.PJ_PV_NEW}</span></pv></li><!-- ENDIF -->
+								<!-- IF postrow.PJ_DIFF_PC --><li><label>Puntos de Chakra:</label> <pc><span>{postrow.PJ_PC_OLD}</span></pc> + <pc><span>{postrow.PJ_DIFF_PC}</span></pc> = <pc><span>{postrow.PJ_PC_NEW}</span></pc></li><!-- ENDIF -->
+								<!-- IF postrow.PJ_DIFF_STA --><li><label>Puntos de Stamina:</label> <sta><span>{postrow.PJ_STA_OLD}</span></sta> + <sta><span>{postrow.PJ_DIFF_STA}</span></sta> = <sta><span>{postrow.PJ_STA_NEW}</span></sta></li><!-- ENDIF -->
+							</ul>
+						</div>
+						<!-- ENDIF -->
 						
 						<!-- EVENT viewtopic_body_post_buttons_list_before -->
 						<!-- IF not S_IS_BOT and $SHOW_POST_BUTTONS -->

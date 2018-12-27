@@ -1291,6 +1291,10 @@ while ($row = $db->sql_fetchrow($result))
 		'enable_sig'		=> $row['enable_sig'],
 		'friend'			=> $row['friend'],
 		'foe'				=> $row['foe'],
+		
+		'diff_pv'			=> $row['diff_pv'],
+		'diff_pc'			=> $row['diff_pc'],
+		'diff_sta'			=> $row['diff_sta'],
 	);
 
 	/**
@@ -1929,7 +1933,25 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	}
 	
 	$is_rpg_forum = (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla()));
-
+	$stats_changed = ((int)$row['diff_pv'] != 0 || (int)$row['diff_pc'] != 0 || (int)$row['diff_sta'] != 0);
+	
+	if ($is_rpg_forum && $stats_changed) {
+		$sql = 'SELECT pv, pc, sta
+					FROM '.PERSONAJES_POSTS_TABLE.'
+					WHERE topic_id = '.$row['topic_id'].'
+						AND user_id = '.$poster_id.'
+						AND post_id = '.$row['post_id'].'
+					ORDER BY post_id DESC
+					LIMIT 1';
+		$query = $db->sql_query($sql);
+		$row_stats = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+		
+		$row_stats['pv'] = (int)$row_stats['pv'] - (int)$row['diff_pv'];
+		$row_stats['pc'] = (int)$row_stats['pc'] - (int)$row['diff_pc'];
+		$row_stats['sta'] = (int)$row_stats['sta'] - (int)$row['diff_sta'];
+	}
+	
 	//
 	$post_row = array(
 		'POST_AUTHOR_FULL'		=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_full'] : get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
@@ -2007,7 +2029,19 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'S_FIRST_UNREAD'	=> $s_first_unread,
 		'S_CUSTOM_FIELDS'	=> (isset($cp_row['row']) && count($cp_row['row'])) ? true : false,
 		'S_TOPIC_POSTER'	=> ($topic_data['topic_poster'] == $poster_id) ? true : false,
+		
+		// mgomez // 27-12-2018
 		'S_ROLEPLAY_FORUM'	=> $is_rpg_forum,
+		'S_STATS_CHANGED'	=> $stats_changed,
+		'PJ_DIFF_PV'		=> (int)$row['diff_pv'],
+		'PJ_DIFF_PC'		=> (int)$row['diff_pc'],
+		'PJ_DIFF_STA'		=> (int)$row['diff_sta'],
+		'PJ_PV_OLD'			=> (isset($row_stats) ? (int)$row_stats['pv'] : 0),
+		'PJ_PC_OLD'			=> (isset($row_stats) ? (int)$row_stats['pc'] : 0),
+		'PJ_STA_OLD'		=> (isset($row_stats) ? (int)$row_stats['sta'] : 0),
+		'PJ_PV_NEW'			=> (isset($row_stats) ? (int)$row_stats['pv'] : 0) + (int)$row['diff_pv'],
+		'PJ_PC_NEW'			=> (isset($row_stats) ? (int)$row_stats['pc'] : 0) + (int)$row['diff_pc'],
+		'PJ_STA_NEW'		=> (isset($row_stats) ? (int)$row_stats['sta'] : 0) + (int)$row['diff_sta'],
 
 		'S_IGNORE_POST'		=> ($row['foe']) ? true : false,
 		'L_IGNORE_POST'		=> ($row['foe']) ? sprintf($user->lang['POST_BY_FOE'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
@@ -2066,6 +2100,14 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	{
 		$post_row = array_merge($post_row, $cp_row['row']);
 	}
+	
+	// mgomez // 27-12-2018
+	if ($is_rpg_forum) {
+		$pj_data = false;
+		$pj_id = get_pj_id($poster_id);
+		if ($pj_id) $pj_data = get_pj_data($pj_id, $row['post_id']);
+		if ($pj_data) $post_row = array_merge($post_row, $pj_data);
+	}
 
 	// Dump vars into template
 	$template->assign_block_vars('postrow', $post_row);
@@ -2098,7 +2140,6 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	
 	if ($is_rpg_forum) 
 	{
-		$pj_id = get_pj_id($poster_id);
 		$items = get_pj_inventory($pj_id, $row['post_id']);
 		
 		if ($items !== false)

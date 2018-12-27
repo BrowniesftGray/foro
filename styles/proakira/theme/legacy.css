@@ -706,6 +706,7 @@ h4.topic-subtitle {
 
 .postprofile .profile-rank {
 	text-align: center;
+	margin-bottom: 5px !important;
 }
 
 .postprofile .field-name {
@@ -1035,7 +1036,7 @@ h4.topic-subtitle {
     border-bottom: solid 1px #666;
 }
 
-.character .nivel {
+.character .nivel, .profile-character .nivel {
     width: 80%;
     margin: 20px auto 0 auto;
     text-align: center;
@@ -1047,7 +1048,7 @@ h4.topic-subtitle {
     border-top-right-radius: 5px;
 }
 
-.character .exp-container {
+.character .exp-container, .profile-character .exp-container {
     text-align: center;
     width: 80%;
     margin: 0 auto;
@@ -1058,13 +1059,14 @@ h4.topic-subtitle {
     border-bottom-right-radius: 5px;
 }
 
-.character .exp-legend {
+.character .exp-legend, .profile-character .exp-legend {
     position: absolute;
     left: 50%;
-    margin-left: -25px;
+    margin-left: -50px;
+	width: 100px;
 }
 
-.character .exp-bar {
+.character .exp-bar, .profile-character .exp-bar {
     height: 100%;
     background: #85b0c1;
     border-bottom-left-radius: 5px;
@@ -1248,4 +1250,114 @@ h4.topic-subtitle {
 		font-size: 14px;
 		margin-top: 0;
 	}
+}
+
+/* Perfil Post Personaje
+-----------------------------------------*/
+
+.profile-character {
+	position: relative;
+}
+
+.profile-character .nivel, .profile-character .exp-container {
+	margin-top: 0;
+	width: calc(100% - 16px);
+}
+
+.profile-character .stat-container {
+    text-align: center;
+    width: 80%;
+    margin: 5px auto;
+    background: #eee;
+    position: relative;
+    border-radius: 3px;
+    font-size: 8px;
+    height: 16px;
+	color: #222;
+    font-weight: bold;
+}
+
+.profile-character .stat-legend {
+    left: 50%;
+    margin-left: -25px;
+	margin-top: 2px;
+    position: absolute;
+	width: 50px;
+}
+
+.profile-character .stat-bar {
+    height: 100%;
+    background-color: inherit;
+    border-radius: 3px;
+}
+
+.profile-character .pv .stat-bar {
+	background-color: #5cb85c;
+}
+
+.profile-character .pc .stat-bar {
+	background-color: #337ab7;
+}
+
+.profile-character .sta .stat-bar {
+	background-color: #f0ad4e;
+}
+
+@media (max-width: 700px) {
+	.profile-character {
+		display: none;
+	}
+}
+
+/* Stats al Postear
+-----------------------------------------*/
+
+.stats-box {
+    width: calc(80% - 20px);
+    margin: 10px 0;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+    background-color: #efe7d1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.stats-box li {
+	list-style-type: none;
+    margin-top: 5px;
+}
+
+.stats-box li:first-child {
+	margin-top: 0;
+}
+
+.stats-box label {
+	font-weight: bold;
+	width: 130px;
+    display: inline-block;
+}
+
+.stats-box input {
+    margin-top: -2px;
+	width: 40px;
+}
+
+.stats-box span {
+    display: inline-block;
+    min-width: 35px;
+}
+
+/* Al pie del post */
+.cell-post .stats-box {
+    background-color: #efefef;
+    width: calc(100% - 35px);
+    margin: 10px 10px 0 15px;
+    clear: both;
+}
+
+.cell-post .stats-box h3 {
+	margin-top: 0;
+}
+
+.cell-post .stats-box label, .cell-post .stats-box span {
+	display: inline;
 }

@@ -1797,6 +1797,47 @@ add_form_key('posting');
 /** @var \phpbb\controller\helper $controller_helper */
 $controller_helper = $phpbb_container->get('controller.helper');
 
+$is_rpg_forum = (!in_array($post_data['forum_id'], get_foros_generales()) && !in_array($post_data['forum_id'], get_foros_estilo_tabla()));
+
+if ($is_rpg_forum)
+{
+	if (in_array($mode, ['reply', 'edit']) && ($post_id != $post_data['topic_first_post_id']))
+	{
+		//Stats del post anterior
+		$sql = 'SELECT pv, pc, sta
+					FROM '.PERSONAJES_POSTS_TABLE.'
+					WHERE topic_id = '.$post_data['topic_id'].'
+						AND user_id = '.$post_data['poster_id'];
+						
+		if ($mode == 'edit') 
+			$sql .= ' AND post_id < '.$post_id;
+		
+		$sql .= ' ORDER BY post_id DESC
+					LIMIT 1';
+		$query = $db->sql_query($sql);
+		if ($db->sql_affectedrows() > 0)
+			$row_stats = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+	}
+	
+	if ($mode == 'post' 
+		|| ($mode == 'edit' && $post_id == $post_data['topic_first_post_id'])
+		|| (in_array($mode, ['reply', 'edit']) && !isset($row_stats)))
+	{
+		//Stats actuales del personaje
+		$pj_data = false;
+		$pj_id = get_pj_id($user->data['user_id']);
+		if ($pj_id) $pj_data = get_pj_data($pj_id);
+		if ($pj_data) {
+			$row_stats = array(
+				'pv'	=> $pj_data['PJ_PV_TOT'],
+				'pc'	=> $pj_data['PJ_PC_TOT'],
+				'sta'	=> $pj_data['PJ_STA_TOT'],
+			);
+		}
+	}
+}
+
 // Build array of variables for main posting page
 $page_data = array(
 	'L_POST_A'					=> $page_title,
@@ -1828,6 +1869,15 @@ $page_data = array(
 	'U_VIEW_TOPIC'			=> ($mode != 'post') ? append_sid("{$phpbb_root_path}viewtopic.$phpEx", "f=$forum_id&amp;t=$topic_id") : '',
 	'U_PROGRESS_BAR'		=> append_sid("{$phpbb_root_path}posting.$phpEx", "f=$forum_id&amp;mode=popup"),
 	'UA_PROGRESS_BAR'		=> addslashes(append_sid("{$phpbb_root_path}posting.$phpEx", "f=$forum_id&amp;mode=popup")),
+	
+	// mgomez // 27-12-2018
+	'S_ROLEPLAY_FORUM'		=> $is_rpg_forum,
+	'PJ_DIFF_PV'			=> (int)$post_data['diff_pv'],
+	'PJ_DIFF_PC'			=> (int)$post_data['diff_pc'],
+	'PJ_DIFF_STA'			=> (int)$post_data['diff_sta'],
+	'PJ_PV_OLD'				=> (isset($row_stats) ? (int)$row_stats['pv'] : 0),
+	'PJ_PC_OLD'				=> (isset($row_stats) ? (int)$row_stats['pc'] : 0),
+	'PJ_STA_OLD'			=> (isset($row_stats) ? (int)$row_stats['sta'] : 0),
 
 	'S_PRIVMSGS'				=> false,
 	'S_CLOSE_PROGRESS_WINDOW'	=> (isset($_POST['add_file'])) ? true : false,
