@@ -2102,12 +2102,10 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	}
 	
 	// mgomez // 27-12-2018
-	if ($is_rpg_forum) {
-		$pj_data = false;
-		$pj_id = get_pj_id($poster_id);
-		if ($pj_id) $pj_data = get_pj_data($pj_id, $row['post_id']);
-		if ($pj_data) $post_row = array_merge($post_row, $pj_data);
-	}
+	$pj_data = false;
+	$pj_id = get_pj_id($poster_id);
+	if ($pj_id) $pj_data = get_pj_data($pj_id, $row['post_id']);
+	if ($pj_data) $post_row = array_merge($post_row, $pj_data);
 
 	// Dump vars into template
 	$template->assign_block_vars('postrow', $post_row);
