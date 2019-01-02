@@ -289,7 +289,7 @@
 						<!-- EVENT viewtopic_body_post_buttons_list_before -->
 						
 						
-						<div class="postbody"<!-- IF postrow.POST_ALIGN --> style="text-align:{postrow.POST_ALIGN}"<!-- ENDIF -->>
+						<div class="postbody" style="<!-- IF postrow.POST_ALIGN --> text-align:{postrow.POST_ALIGN};<!-- ENDIF --> <!-- IF postrow.S_POST_HIDDEN -->min-height:0!important;<!-- ENDIF -->">
 							<!-- IF not S_IS_BOT and $SHOW_POST_BUTTONS -->
 							<ul class="post-buttons">
 								<!-- EVENT viewtopic_body_post_buttons_before -->

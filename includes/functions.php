@@ -4804,8 +4804,17 @@ function getGameDate() {
 	$season = $seasons[(int)date('m')-1];
 	$diff = $now - $then;
 	$year = $initialYear + floor($diff / 60 / 60 / 24 / 30 / 4);
+	$day = floor($diff / 60 / 60 / 24);
 
-	return sprintf("%s del año %d", $season, $year);
+	$day = (int) date('d') * 3;
+	$hour = (int) time('H');
+	if ($hour <= 8) {
+		$day = $day - 2;
+	} else if ($hour <= 16) {
+		$day = $day - 1;	
+	}
+	
+	return sprintf("%d de %s del año %d", $day, $season, $year);
 }
 
 /**
