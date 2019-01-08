@@ -413,8 +413,19 @@ class main
 		if ($lvlup_data['RAMA5'] > 0)
 			$sql_array['rama_id5'] = $lvlup_data['RAMA5'];
 		
+		$query = $this->db->sql_query('SELECT nivel, arquetipo_id, cambio_arquetipo
+										FROM '.PERSONAJES_TABLE."
+										WHERE user_id = $user_id");
+		if($row = $this->db->sql_fetchrow($query)) {
+			if ((int)$row['cambio_arquetipo'] == -1 && (int)$row['nivel'] >= 5) {
+				$no_cambia_arq = ((int)$lvlup_data['ARQUETIPO'] == (int)$row['arquetipo_id']);
+				$sql_array['cambio_arquetipo'] = $no_cambia_arq ? 0 : 1;
+			}
+		}
+		$this->db->sql_freeresult($query);
+		
 		try {
-			$this->db->sql_query("UPDATE personajes SET " 
+			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET ' 
 									. $this->db->sql_build_array('UPDATE', $sql_array)
 									. " WHERE user_id = $user_id");
 			
@@ -423,6 +434,18 @@ class main
 				'RAZON'	=> 'Modificación por Usuario',
 			);
 			registrar_moderacion($moderacion);
+			
+			if ($no_cambia_arq) {
+				$this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
+										SET pf_puntos_apren = pf_puntos_apren + 10
+										WHERE user_id = $user_id");
+										
+				$moderacion = array(
+					'PJ_ID'	=> $pj_id,
+					'RAZON'	=> '+10 PA por mantener Arquetipo.',
+				);
+				registrar_moderacion($moderacion);
+			}
 			
 			trigger_error("Ficha actualizada exitosamente." . $this->get_return_link($user_id));
 		} catch (Exception $e) {

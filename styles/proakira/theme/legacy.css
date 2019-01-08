@@ -1066,6 +1066,14 @@ h4.topic-subtitle {
 	width: 100px;
 }
 
+.profile-character .exp-legend {
+	display: none;
+}
+
+.profile-character:hover .exp-legend {
+	display: block;
+}
+
 .character .exp-bar, .profile-character .exp-bar {
     height: 100%;
     background: #85b0c1;
@@ -1125,12 +1133,38 @@ h4.topic-subtitle {
     border-bottom: solid 1px;
 }
 
+.postattr {
+    border: 1px solid rgb(25, 25, 25);
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+    margin: 10px 0 10px 10px;
+    width: calc(100% - 14px);
+    display: block;
+    background: rgb(180, 180, 140);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.postattr h3 {
+	margin: 0 5px;
+    border-color: rgb(25, 25, 25);
+    color: #333;
+}
+
 .character .atributos {
     padding-left: 10px;
     margin: 0;
 }
 
-.character .atributos li {
+.postattr .atributos {
+	margin: 0 5px;
+}
+
+.character .atributos li, .postattr .atributos li {
     list-style-type: none;
     display: block;
     background-color: #333;
@@ -1144,12 +1178,16 @@ h4.topic-subtitle {
     text-align: center;
 }
 
-.character .atributos li:nth-child(odd) {
+.postattr .atributos li {
+	font-size: 9px;
+}
+
+.character .atributos li:nth-child(odd), .postattr .atributos li:nth-child(odd) {
     float: left;
     clear: both;
 }
 
-.character .atributos li:nth-child(even) {
+.character .atributos li:nth-child(even), .postattr .atributos li:nth-child(even) {
     float: right;
 }
 

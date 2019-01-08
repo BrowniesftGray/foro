@@ -258,8 +258,25 @@
 								</center>
 							<!-- ENDIF -->
 						</dl>
+						
+						<!-- IF postrow.S_ROLEPLAY_FORUM and postrow.U_POST_AUTHOR_ALIAS -->
+						<dl class="postattr">
+							<h3>Atributos</h3>
+							<ul class="atributos">
+								<li>Fuerza: {postrow.PJ_FUE}</li>
+								<li>Agilidad: {postrow.PJ_AGI}</li>
+								<li>Vitalidad: {postrow.PJ_VIT}</li>
+								<li>Concentraci&oacute;n: {postrow.PJ_CON}</li>
+								<li>C. de Chakra: {postrow.PJ_CCK}</li>
+								<li>Voluntad: {postrow.PJ_VOL}</li>
+								<br class="clear">
+							</ul>
+						</dl>
+						<!-- ENDIF -->
+						
 						<!-- IF postrow.S_ROLEPLAY_FORUM and postrow.items -->
 						<dl class="postinventory">
+							<h3>Inventario</h3>
 							<ul class="inventory">
 								<!-- BEGIN postrow.items -->
 								<li class="item" data-tooltip="item-{postrow.POST_ID}-{postrow.items.ITEM_ID}">
