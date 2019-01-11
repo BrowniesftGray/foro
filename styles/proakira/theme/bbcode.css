@@ -173,7 +173,7 @@ imgscroll {
 }
 
 imgscroll:hover {
-	filter: grayscale(100%);
+	filter: grayscale(50%);
 }
 
 imgscroll watermark {

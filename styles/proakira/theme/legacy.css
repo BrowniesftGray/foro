@@ -1288,6 +1288,14 @@ h4.topic-subtitle {
 		font-size: 14px;
 		margin-top: 0;
 	}
+	
+	.postattr, .postinventory {
+		border: none !important;
+		box-shadow: none !important;
+		margin: 0 !important;
+		border-radius: 0 !important;
+		width: 100% !important;
+	}
 }
 
 /* Perfil Post Personaje

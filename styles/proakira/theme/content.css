@@ -303,6 +303,7 @@ dd.option {
 	/* If there is a post-profile, we position the post-buttons differently */
 	float: none !important;
 	margin-right: 180px;
+    font-size: 20px;
 }
 
 .postbody .content {
