@@ -1407,3 +1407,25 @@ h4.topic-subtitle {
 .cell-post .stats-box label, .cell-post .stats-box span {
 	display: inline;
 }
+
+/* Modo Safe For Work */
+body.sfw {
+	background-image: none !important;
+}
+
+body.sfw * {
+	background-image: none !important;
+	font-size: 12px !important;
+}
+
+body.sfw img, body.sfw .character {
+	display: none !important;
+}
+
+body.sfw .header-avatar img {
+	display: inline-block !important;
+}
+
+body.sfw #page-header {
+	position: absolute;
+}

@@ -46,6 +46,21 @@ function toggleCookieExpandir(cat) {
 	setCookie('expandir_' + cat.id, n_val);
 }
 
+function toggleCookieSFW() {
+	var val, n_val;
+	val = getCookie('SFWmode');
+	if (val == 1) {
+		n_val = 0;
+		document.body.className = document.body.className.replace('sfw', '');
+		document.title = document.title.replace('Wikipedia', 'Shinobi Legacy');
+	} else {
+		n_val = 1;
+		document.body.className += ' sfw';
+		document.title = document.title.replace('Shinobi Legacy', 'Wikipedia');
+	}
+	setCookie('SFWmode', n_val);
+}
+
 /**
 * Find a member
 */
@@ -1012,6 +1027,12 @@ jQuery(function($) {
 			$(this).find('.row').addClass('expandir');
 		}
 	});
+	
+	//Modo SFW
+	if (getCookie('SFWmode') == 1) {
+		document.body.className += ' sfw'; 
+		document.title = document.title.replace('Shinobi Legacy', 'Wikipedia');
+	}
 
 	parseDocument($('body'));
 });
