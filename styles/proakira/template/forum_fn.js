@@ -360,13 +360,28 @@ function parseDocument($container) {
 	/**
 	* Mostrar info jutsu onclick // mgomez
 	*/
-	$container.find('jutsu datos').on('click', function() {
+	$container.find('jutsu datos, .postattr').on('click', function() {
 		var height = 15;
 		
 		if(Math.floor($(this).height()) <= height) 
 			height = $(this)[0].scrollHeight - 10;
-		
+				
 		$(this).animate({height: height}, 100 );
+	});
+	
+	/**
+	* Mostrar inventario onclick // mgomez
+	*/
+	$container.find('.postinventory').on('click', function() {
+		var height = 15;
+		
+		if(Math.floor($(this).height()) <= height) 
+			height = $(this)[0].scrollHeight - 10;
+		console.log(height);
+		if (height == 15) { $(this).css('overflow-y', 'hidden'); }
+		$(this).animate({height: height}, 100, function(){
+			if (height > 15) { $(this).css('overflow-y', 'visible'); }
+		});
 	});
 	
 	/**
