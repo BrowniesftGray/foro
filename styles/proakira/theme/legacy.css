@@ -1411,6 +1411,85 @@ h4.topic-subtitle {
 	display: inline;
 }
 
+/* Al pie del foro */
+.stat-block-container {
+    width: calc(50% - 15px);
+    float: left;
+    text-align: justify;
+    margin-left: 10px;
+    background-color: #d8e8e5;
+}
+
+.stat-block-container:before {
+    display: block;
+    content: "Estadísticas / Usuarios en Línea";
+    text-transform: uppercase;
+    font-family: Anton;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    background-color: #81aca2;
+    padding: 3px 0 1px 0;
+	text-shadow: 0 0 2px #111;
+}
+
+.stat-block-container .stat-scroll {
+	height: 250px;
+	overflow-y: auto;
+}
+
+.stat-block-container h3 {
+	margin-top: 5px;
+}
+
+.stat-block-container p {
+	margin-bottom: 5px;
+}
+
+.afiliados-container {
+	width: calc(50% - 15px);
+    float: right;
+    text-align: justify;
+    margin-right: 10px;
+}
+
+.afiliados-container:before {
+    display: block;
+    content: "Afiliados Elite";
+    text-transform: uppercase;
+    font-family: Anton;
+    text-align: center;
+    font-size: 22px;
+    color: #111;
+    padding: 3px 0 1px 0;
+}
+
+.afiliados-container ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0 auto;
+	max-width: 450px;
+}
+
+.afiliados-container ul li {
+	background-color: #81aca2;
+	margin: 5px;
+	display: block;
+	float: left;
+	width: 100px;
+	height: 40px;
+}
+
+.afiliados-container a {
+	text-decoration: none;
+	outline: 0;
+}
+
+.afiliados-container img {
+	width: 100px;
+	height: 50px;	
+}
+
 /* Modo Safe For Work */
 body.sfw {
 	background-image: none !important;
