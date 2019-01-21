@@ -1490,6 +1490,18 @@ h4.topic-subtitle {
 	height: 50px;	
 }
 
+@media (max-width:700px) {
+	.stat-block-container {
+		float: none;
+		width: auto;
+		margin: 0;
+	}
+	
+	.afiliados-container {
+		display: none;
+	}
+}
+
 /* Modo Safe For Work */
 body.sfw {
 	background-image: none !important;
