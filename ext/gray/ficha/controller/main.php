@@ -274,7 +274,7 @@ class main
 						" WHERE user_id = $user_id";
             $this->db->sql_query($sql);
 
-            registrar_moderacion($fields);
+            registrar_moderacion($fields, $user_id);
 
             trigger_error("Personaje moderado correctamente." . $this->get_return_link($user_id));
         }

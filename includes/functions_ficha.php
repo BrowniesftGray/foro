@@ -600,16 +600,15 @@ function calcula_sta($datos_pj)
 	return $sta;
 }
 
-function registrar_moderacion(array $fields){
+function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
 	$mod = $user->data['username'];
 	$fecha = date('Y-m-d' );
-	$user_id = $this->user->data['user_id']
 
 	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
-		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA".;
+		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
 	}
 
 	$sql_array = array(
