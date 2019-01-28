@@ -723,12 +723,13 @@ function comprarTecnica ($user_id, $coste, &$msg_error){
 
 }
 
-function registrar_tema($user_id, $enlace, $coste, &$msg_error)
+function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$msg_error)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
 	$user->get_profile_fields($user_id);
+
 	if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
 		$puntos_experiencia = 0;
 	}
@@ -736,15 +737,35 @@ function registrar_tema($user_id, $enlace, $coste, &$msg_error)
 		$puntos_experiencia = $user->profile_fields['pf_experiencia'];
 	}
 
-	$ptos_experiencia_total = $puntos_experiencia + $coste;
+	if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
+		$ptos_aprendizaje = 0;
+	}
+	else{
+		$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
+	}
+
+	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
+		$ptos_ryos = 0;
+	}
+	else{
+		$ptos_ryos = $user->profile_fields['pf_ryos'];
+	}
+
+	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
+	$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+	$ptos_ryos 							= $ptos_ryos + $ryos;
+
 
 	$pj_id = get_pj_id($user_id);
 	if ($pj_id) {
 
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
-							SET pf_experiencia = '$ptos_experiencia_total'
+							SET pf_experiencia = '$ptos_experiencia_total',
+									pf_puntos_apren = '$ptos_aprendizaje_restantes',
+									pf_ryos = '$ptos_ryos'
 							WHERE user_id = '$user_id'");
 
+		$enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON' => $enlace
