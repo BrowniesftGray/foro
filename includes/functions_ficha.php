@@ -609,6 +609,7 @@ function registrar_moderacion(array $fields){
 
 	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
+		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA".;
 	}
 
 	$sql_array = array(
