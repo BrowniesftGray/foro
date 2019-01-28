@@ -15,7 +15,7 @@ function ficha_exists($user_id)
 	}
 }
 
-function get_pj_id($user_id) 
+function get_pj_id($user_id)
 {
 	global $db;
 	$query = $db->sql_query("SELECT pj_id FROM personajes WHERE user_id=$user_id");
@@ -43,7 +43,7 @@ function get_pj_name($user_id) {
 function get_pj_data($pj_id, $post_id = 0) {
 	global $db;
 	$data = false;
-	
+
 	if ($post_id > 0) {
 		$sql = "SELECT
 					pj.*,
@@ -57,23 +57,23 @@ function get_pj_data($pj_id, $post_id = 0) {
 						ON m.rama_id = p.rama_id_pri
 					LEFT JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
-				WHERE pj.pj_id = '$pj_id' 
+				WHERE pj.pj_id = '$pj_id'
 					AND pj.post_id = '$post_id'";
-				
+
 		$query = $db->sql_query($sql);
-		
+
 		if ($db->sql_affectedrows() == 0) {
 			$db->sql_freeresult($query);
 			$post_id = 0;
 		}
 	}
-	
+
 	if ($post_id == 0)
 	{
 		$sql =
-			"SELECT p.*, 
+			"SELECT p.*,
 					m.nombre as clan,
-					pf.pf_experiencia as experiencia, 
+					pf.pf_experiencia as experiencia,
 					nv.experiencia as experiencia_old,
 					nvup.experiencia as experiencia_sig,
 					r.rank_title as rango,
@@ -96,13 +96,13 @@ function get_pj_data($pj_id, $post_id = 0) {
 					LEFT JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
 				WHERE pj_id = '$pj_id'";
-	
+
 		$query = $db->sql_query($sql);
 	}
-			
+
 	if ($row = $db->sql_fetchrow($query)) {
 		$exp_avance = ($row['experiencia_porc'] ? (int)$row['experiencia_porc'] : -1);
-		
+
 		if ($exp_avance == -1) {
 			$exp_req = (int)$row['experiencia_sig'] - (int)$row['experiencia_old'];
 			$exp_avance = (int)$row['experiencia'] - (int)$row['experiencia_old'];
@@ -112,7 +112,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 				$exp_avance = floor($exp_avance * 100 / $exp_req);
 			}
 		}
-		
+
 		$pv_total = calcula_pv($row);
 		$pc_total = calcula_pc($row);
 		$sta_total = calcula_sta($row);
@@ -122,7 +122,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 		$pv_porc = floor($pv_post * 100 / $pv_total);
 		$pc_porc = floor($pc_post * 100 / $pc_total);
 		$sta_porc = floor($sta_post * 100 / $sta_total);
-		
+
 		$data = array(
 			'PJ_NOMBRE'				=> $row['nombre'],
 			'PJ_CLAN'				=> $row['clan'],
@@ -152,7 +152,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 		);
 	}
 	$db->sql_freeresult($query);
-	
+
 	return $data;
 }
 
@@ -166,10 +166,10 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
 		//$puede_ver = ($auth->acl_get('m_modera_ficha') || $user->data['user_id'] == $pj) ? true : false;
-		
+
 		$queryCamino = $db->sql_query("
 			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
-				FROM ".PERSONAJES_HISTORICO_TABLE." ph 
+				FROM ".PERSONAJES_HISTORICO_TABLE." ph
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = ph.arquetipo_id
 				WHERE ph.pj_id = '$pj_id'
@@ -197,8 +197,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			));
 		}
 		$db->sql_freeresult($queryModeraciones);
-		
-		$queryHab = $db->sql_query("SELECT h.* 
+
+		$queryHab = $db->sql_query("SELECT h.*
 										FROM ".HABILIDADES_TABLE." h
 											INNER JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
 												ON ph.habilidad_id = h.habilidad_id
@@ -210,22 +210,22 @@ function get_ficha($user_id, $return = false, $ver = false)
 					'EFECTO'		=> $row4['efecto'],
 					'URL_IMAGEN'	=> $row4['url_imagen'],
 			));
-			
+
 			if ($row4['requisitos']) {
 				$requisitos = explode('|', $row4['requisitos']);
 				$hab_requisitos = array();
 				for ($i = 0; $i < count($requisitos); $i++) {
 					$hab_requisitos[] = array('REQUISITO' => $requisitos[$i]);
 				}
-				$template->assign_block_vars_array('habilidades.requisitos', $hab_requisitos);	
-			}			
+				$template->assign_block_vars_array('habilidades.requisitos', $hab_requisitos);
+			}
 		}
 		$db->sql_freeresult($queryHab);
-		
+
 		$grupo = $user->data['group_id'];
 		$moderador = ($grupo == 5 || $grupo == 4);
 		$personajePropio = ($user_id == $user->data['user_id']);
-		
+
 		if ($personajePropio) $hab_disp = get_habilidades_disponibles($pj_id);
 		if ($hab_disp) {
 			$user->get_profile_fields($user_id);
@@ -235,7 +235,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			else{
 				$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
 			}
-		
+
 			foreach($hab_disp as $hab) {
 				$template->assign_block_vars('habilidades_compra', array(
 					'ID'			=> $hab['habilidad_id'],
@@ -246,16 +246,16 @@ function get_ficha($user_id, $return = false, $ver = false)
 					'PUEDE_COMPRAR' => ($hab['coste'] <= $ptos_aprendizaje),
 					'U_ACTION'		=> append_sid("/ficha/hab/$user_id"),
 				));
-				
+
 				$requisitos = $hab['requisitos'];
 				$hab_disp_requisitos = array();
 				for ($i = 0; $i < count($requisitos); $i++) {
 					if (strlen($requisitos[$i]) > 0)
 						$hab_disp_requisitos[] = array('REQUISITO' => $requisitos[$i]);
 				}
-				
+
 				if (count($hab_disp_requisitos) > 0)
-					$template->assign_block_vars_array('habilidades_compra.requisitos', $hab_disp_requisitos);	
+					$template->assign_block_vars_array('habilidades_compra.requisitos', $hab_disp_requisitos);
 			}
 		}
 
@@ -278,20 +278,20 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$uid = $bitfield = $options = '';
 			$jutsus = $row['tecnicas'];
 		}
-		
+
 		$attr_disp = get_atributos_disponibles($pj_id);
 		$attr_tot = $attr_disp + $row['fuerza'] + $row['agilidad'] + $row['vitalidad'] + $row['cck'] + $row['concentracion'] + $row['voluntad'];
 		$arquetipo_select = obtener_arquetipo_select($pj_id, $row['arquetipo_id']);
-		
+
 		$puede_elegir_rama1 = ((int)$row['rama_id1'] == 0);
 		$puede_elegir_rama2 = ((int)$row['rama_id2'] == 0);
 		$puede_elegir_rama3 = ((int)$row['rama_id3'] == 0 && (int)$row['nivel'] >= 10);
 		$puede_elegir_rama4 = ((int)$row['rama_id4'] == 0 && (int)$row['nivel'] >= 15);
 		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
-		
+
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
-		
+
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
 			'PUEDE_BORRAR'			=> $personajePropio,
@@ -336,15 +336,15 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
 		));
-		
+
 		if (!$ver || $puede_elegir_ramas) {
 			$exluir_ramas[0] = (int)$row['rama_id_pri'];
 			$exluir_ramas[1] = (int)$row['rama_id1'];
 			$exluir_ramas[2] = (int)$row['rama_id2'];
 			$exluir_ramas[3] = (int)$row['rama_id3'];
 			$exluir_ramas[4] = (int)$row['rama_id4'];
-			$exluir_ramas[5] = (int)$row['rama_id5'];	
-			
+			$exluir_ramas[5] = (int)$row['rama_id5'];
+
 			$template->assign_vars(array(
 				'PUEDE_ELEGIR_RAMAS'	=> $puede_elegir_ramas,
 				'PUEDE_ELEGIR_RAMA1'	=> $puede_elegir_rama1,
@@ -360,7 +360,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas),
 			));
 		}
-		
+
 		return true;
 	} else {
 		if ($return) {
@@ -377,33 +377,33 @@ function get_ficha($user_id, $return = false, $ver = false)
 function get_arquetipos_disponibles($pj_id) {
 	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
 	$data = false;
-	
+
 	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 	$query = mysqli_query($connection,
 		"CALL ObtenerArquetiposDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
-		
+
 	while ($row = mysqli_fetch_array($query)){
 		$data[] = array(
 			'id'		=> $row['arquetipo_id'],
 			'nombre'	=> $row['nombre_es'],
 		);
 	}
-	
+
 	return $data;
 }
 
 function get_habilidades_disponibles($pj_id) {
 	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
 	$data = false;
-	
+
 	// Si tiene arquetipos disponibles, no puede aprender habilidades
 	if (get_arquetipos_disponibles($pj_id) !== false)
 		return false;
-	
+
 	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 	$query = mysqli_query($connection,
 		"CALL ObtenerHabilidadesDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
-		
+
 	while ($row = mysqli_fetch_array($query)){
 		$data[] = array(
 			'habilidad_id'	=> $row['habilidad_id'],
@@ -420,21 +420,21 @@ function get_habilidades_disponibles($pj_id) {
 function get_atributos_disponibles ($pj_id) {
 	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
 	$cantidad = false;
-	
+
 	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
 	$query = mysqli_query($connection,
 		"CALL ObtenerCantidadAtributosDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
-		
+
 	if ($row = mysqli_fetch_array($query))
 		$cantidad = (int)$row['atributos'];
-	
+
 	return $cantidad;
 }
 
 function obtener_arquetipo_select($pj_id, $arquetipo){
 	$options = get_arquetipos_disponibles($pj_id);
 	$select = false;
-	
+
 	if ($options !== false) {
 		$select = '';
 		foreach($options as $option) {
@@ -449,7 +449,7 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 function get_nombre_rama($rama_id) {
 	global $db;
 	$nombre = '';
-	
+
 	$query = $db->sql_query("SELECT nombre, aldea
 								FROM ".RAMAS_TABLE."
 								WHERE rama_id = '$rama_id'");
@@ -457,23 +457,23 @@ function get_nombre_rama($rama_id) {
 		$nombre = $row['nombre'];
 	}
 	$db->sql_freeresult($query);
-	
+
 	return $nombre;
 }
 
-/* param $principales: 
+/* param $principales:
 1: rama principal; 2: segunda rama; 3: sexta rama; 0: cualquier otra genérica */
 function get_ramas_select($principales, $selected, $exclude){
-	global $db;	
+	global $db;
 	$select = '';
 	$obligatorias = false;
-	
+
 	if(!isset($exclude)) $exclude = array();
 	if ($principales > 1 && count($exclude) == 0) $principales = 0;
-	
+
 	if ($principales >= 2) {
 		$not_in = implode(',', $exclude);
-		$query = $db->sql_query('SELECT r.rama_id, r.nombre, r.aldea 
+		$query = $db->sql_query('SELECT r.rama_id, r.nombre, r.aldea
 								FROM '.RAMAS_TABLE.' rp
 									INNER JOIN '.RAMAS_TABLE." r
 										ON r.rama_id = rp.rama_id_req1
@@ -481,36 +481,36 @@ function get_ramas_select($principales, $selected, $exclude){
 								WHERE rp.rama_id = $exclude[0]
 								" . ($principales == 3 && count($exclude) > 0 ? "AND r.rama_id NOT IN($not_in)" : '') . '
 								ORDER BY r.nombre ASC');
-								
+
 		$obligatorias = ((int)$db->sql_affectedrows() > 0);
 		if(!$obligatorias) {
 			$db->sql_freeresult($query);
 			$principales = 0;
 		}
 	}
-	
+
 	if (!$obligatorias) {
-		$query = $db->sql_query('SELECT rama_id, nombre, aldea 
-								FROM '.RAMAS_TABLE." 
-								WHERE principal = $principales 
+		$query = $db->sql_query('SELECT rama_id, nombre, aldea
+								FROM '.RAMAS_TABLE."
+								WHERE principal = $principales
 								ORDER BY primero DESC, nombre ASC");
 	}
-	
+
 	if ($principales != 1 && !$obligatorias)
 		$select = '<option value="0">-- Ninguna --</option>';
-		
+
 	while($row = $db->sql_fetchrow($query)) {
 		$str_selected = ($row['rama_id'] == $selected) ? 'selected' : '';
 		if (!in_array($row['rama_id'], $exclude) || $str_selected == 'selected') {
 			$select .= "<option $str_selected value='".$row['rama_id']."'>";
-			if ($row['aldea']) 
+			if ($row['aldea'])
 				$select .= '(' . $row['aldea'] . ') ';
 			$select .= $row['nombre'];
 			$select .= "</option>";
 		}
 	}
 	$db->sql_freeresult($query);
-	
+
 	return $select;
 }
 
@@ -524,79 +524,79 @@ function vista_arquetipo ($arquetipo){
 	} else{
 		$nombre = "Sin arquetipo";
 	}
-	
+
 	return $nombre;
 }
 
 function calcula_pc($datos_pj)
 {
-	global $db;	
+	global $db;
 	$pc = $bono = 0;
-	
+
 	$pc = (int)$datos_pj['cck'] + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
-	
+
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
 		$row = $db->sql_fetchrow($query);
 		$db->sql_freeresult($query);
-		
+
 		if((bool)$row['bono_es_porcentaje']) {
 			$bono = round((int)$row['bono_pc'] * $pc / 100);
 		} else {
 			$bono = (int)$row['bono_pc'];
 		}
 	}
-	
+
 	$pc = $pc + $bono;
-	
+
 	return $pc;
 }
 
 function calcula_pv($datos_pj)
 {
-	global $db;	
+	global $db;
 	$pv = $bono = 0;
-	
+
 	$pv = 10 + (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'];
-	
+
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
 		$row = $db->sql_fetchrow($query);
 		$db->sql_freeresult($query);
-		
+
 		if((bool)$row['bono_es_porcentaje']) {
 			$bono = round((int)$row['bono_pv'] * $pv / 100);
 		} else {
 			$bono = (int)$row['bono_pv'];
 		}
 	}
-	
+
 	$pv = $pv + $bono;
-	
+
 	return $pv;
 }
 
 function calcula_sta($datos_pj)
 {
-	global $db;	
+	global $db;
 	$sta = $bono = 0;
-	
+
 	$sta = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
-	
+
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".(int)$datos_pj['arquetipo_id']."");
 		$row = $db->sql_fetchrow($query);
 		$db->sql_freeresult($query);
-		
+
 		if((bool)$row['bono_es_porcentaje']) {
 			$bono = round((int)$row['bono_sta'] * $sta / 100);
 		} else {
 			$bono = (int)$row['bono_sta'];
 		}
 	}
-	
+
 	$sta = $sta + $bono;
-	
+
 	return $sta;
 }
 
@@ -605,7 +605,12 @@ function registrar_moderacion(array $fields){
 
 	$mod = $user->data['username'];
 	$fecha = date('Y-m-d' );
-	
+	$user_id = $this->user->data['user_id']
+
+	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
+		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
+	}
+
 	$sql_array = array(
 		'moderador'		=> $mod,
 		'razon'			=> $fields['RAZON'],
@@ -617,11 +622,11 @@ function registrar_moderacion(array $fields){
 	$db->sql_query($sql);
 }
 
-function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error) 
+function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
-	
+
 	$user->get_profile_fields($user_id);
 	if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
 		$ptos_aprendizaje = 0;
@@ -629,22 +634,22 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 	else{
 		$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
 	}
-	
+
 	if ($coste > $ptos_aprendizaje) {
 		$msg_error = 'No tienes suficientes Puntos de Aprendizaje.';
 		return false;
 	}
 	$ptos_aprendizaje_restantes = $ptos_aprendizaje - $coste;
-	
+
 	$pj_id = get_pj_id($user_id);
 	if ($pj_id) {
-		$db->sql_query('SELECT 1 FROM '.PERSONAJE_HABILIDADES_TABLE." 
+		$db->sql_query('SELECT 1 FROM '.PERSONAJE_HABILIDADES_TABLE."
 							WHERE pj_id = '$pj_id' AND habilidad_id = '$hab_id'");
-		if ((int) $db->sql_affectedrows() > 0) { 
+		if ((int) $db->sql_affectedrows() > 0) {
 			$msg_error = 'Tu personaje ya posee esa habilidad.';
 			return false;
 		}
-		
+
 		$disponible = false;
 		$hab_disp = get_habilidades_disponibles($pj_id);
 		foreach ($hab_disp as $hab) {
@@ -654,22 +659,22 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 		if (!$disponible) {
 			$msg_error = 'Esta habilidad no está disponible para tu personaje.';
 			return false;
-		}		
-		
+		}
+
 		$sql_array = array(
 			'pj_id'			=> $pj_id,
 			'habilidad_id'	=> $hab_id,
 		);
 		$db->sql_query('INSERT INTO '.PERSONAJE_HABILIDADES_TABLE. $db->sql_build_array('INSERT', $sql_array));
-		if ((int) $db->sql_affectedrows() < 1) { 
+		if ((int) $db->sql_affectedrows() < 1) {
 			$msg_error = 'Hubo un error agregando la habilidad.';
 			return false;
 		}
-		
-		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . " 
+
+		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
-							
+
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON' => 'Compra Habilidad.'
@@ -680,7 +685,77 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 		$msg_error = 'Hubo un error buscando tu personaje.';
 		return false;
 	}
-	
+
+	return true;
+}
+
+function comprarTecnica ($user_id, $coste, &$msg_error){
+
+	global $db, $user;
+	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
+
+	$user->get_profile_fields($user_id);
+	if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
+		$ptos_aprendizaje = 0;
+	}
+	else{
+		$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
+	}
+
+	if ($coste > $ptos_aprendizaje) {
+		$msg_error = 'No tienes suficientes Puntos de Aprendizaje.';
+		return false;
+	}
+	$ptos_aprendizaje_restantes = $ptos_aprendizaje - $coste;
+
+	$pj_id = get_pj_id($user_id);
+
+	if ($pj_id) {
+
+		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
+							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
+							WHERE user_id = '$user_id'");
+	}
+	else {
+		$msg_error = 'Hubo un error buscando tu personaje.';
+		return false;
+	}
+
+}
+
+function registrar_tema($user_id, $enlace, $coste, &$msg_error)
+{
+	global $db, $user;
+	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
+
+	$user->get_profile_fields($user_id);
+	if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
+		$puntos_experiencia = 0;
+	}
+	else{
+		$puntos_experiencia = $user->profile_fields['pf_experiencia'];
+	}
+
+	$ptos_experiencia_total = $puntos_experiencia + $coste;
+
+	$pj_id = get_pj_id($user_id);
+	if ($pj_id) {
+
+		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
+							SET pf_experiencia = '$ptos_experiencia_total'
+							WHERE user_id = '$user_id'");
+
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON' => $enlace
+		);
+		registrar_moderacion($moderacion);
+	}
+	else {
+		$msg_error = 'Hubo un error buscando tu personaje.';
+		return false;
+	}
+
 	return true;
 }
 

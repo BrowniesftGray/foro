@@ -46,9 +46,9 @@ class main
      * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
      */
     public function handle()
-    {   
+    {
         $user_id = $this->user->data['user_id'];
-		
+
         if (ficha_exists($user_id) == true) {
             trigger_error('Ya tienes ficha creada.');
         }
@@ -59,9 +59,9 @@ class main
         $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null));
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
-	
+
 	public function store()
-    {   
+    {
         $atrs = array(
             'FUERZA'            => (int) request_var('atrFuerza', 1),
             'RESISTENCIA'       => (int) request_var('atrVit', 1),
@@ -86,7 +86,7 @@ class main
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
         $idUsuario = $this->user->data['user_id'];
-		
+
 		$sql_array = array(
 			'user_id'	=> $idUsuario,
 			'nivel'		=> 1,
@@ -109,22 +109,22 @@ class main
 			'voluntad'	=> $fields['VOLUNTAD'],
 			'fisico'	=> $fields['FISICO'],
 			'psicologico'	=> $fields['CARACTER'],
-			'historia'	=> $fields['HISTORIA'],			
+			'historia'	=> $fields['HISTORIA'],
 		);
 
         $sql = "INSERT INTO personajes " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
-		
+
 		$sql_ary = array(
 			'pf_ryos'			=> '1500',
 			'pf_experiencia'	=> '0',
 			'pf_puntos_apren'	=> '10',
 		);
-		$sql = 'UPDATE phpbby1_profile_fields_data SET ' . 
+		$sql = 'UPDATE phpbby1_profile_fields_data SET ' .
 					$this->db->sql_build_array('UPDATE', $sql_ary)
 					." WHERE user_id = $idUsuario";
 		$this->db->sql_query($sql);
-		
+
 		if ((int) $this->db->sql_affectedrows() < 1) {
 			$sql_ary['user_id'] = $idUsuario;
 			$sql = 'INSERT INTO phpbby1_profile_fields_data' . $this->db->sql_build_array('INSERT', $sql_ary);
@@ -134,12 +134,12 @@ class main
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
         trigger_error("Personaje creado correctamente." . $this->get_return_link($idUsuario));
     }
-	
+
     function view($user_id)
-    {   
-		$pj_id = get_pj_id($user_id);		
+    {
+		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
-		
+
 		$categorias = get_full_shops();
 		foreach($categorias as $cat) {
 			$this->template->assign_block_vars('categoria_item', $cat);
@@ -150,7 +150,7 @@ class main
 					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
 				}
 		}
-		
+
         return $this->helper->render('ficha_view.html');
     }
 
@@ -174,10 +174,10 @@ class main
         else{
             trigger_error("No puede borrar un personaje de otro usuario." . $this->get_return_link($user_id));
         }
-        
+
 		return $this->view($user_id);
     }
-	
+
     function borrar_personaje($pj) {
 
         global $db;
@@ -189,7 +189,7 @@ class main
 
 
     public function viewMod($user_id)
-    {   
+    {
         $grupo = $this->user->data['group_id'];
         if ($grupo == 5 || $grupo == 4) {
             get_ficha($user_id,$return = false, $ver = false);
@@ -205,7 +205,7 @@ class main
     }
 
     public function storeMod($user_id)
-    {   
+    {
         $grupo = $this->user->data['group_id'];
 
         if ($grupo == 5 || $grupo == 4) {
@@ -235,13 +235,14 @@ class main
                     'HISTORIA'		=> utf8_normalize_nfc(request_var('descHis', '', true)),
                     'TEC_JUTSUS'	=> utf8_normalize_nfc(request_var('tecnicas', '', true)),
                     'RAZON'			=> utf8_normalize_nfc(request_var('razon', '', true)),
+                    'PUNTOS_APRENDIZAJE' => utf8_normalize_nfc(request_var('puntos_aprendizaje', '', true)),
                 ), $atrs);
 
             $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
             $fields['FISICO'] = addslashes($fields['FISICO']);
             $fields['CARACTER'] = addslashes($fields['CARACTER']);
             $idUsuario = $this->user->data['user_id'];
-			
+
 			$sql_array = array(
 				'rango'		=> $fields['RANGO'],
 				'nombre'	=> $fields['NOMBRE'],
@@ -261,9 +262,9 @@ class main
 				'voluntad'	=> $fields['VOLUNTAD'],
 				'fisico'	=> $fields['FISICO'],
 				'psicologico'	=> $fields['CARACTER'],
-				'historia'	=> $fields['HISTORIA'],			
+				'historia'	=> $fields['HISTORIA'],
 			);
-			
+
 			if ($fields['ARQUETIPO'] != '') {
                 $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
             }
@@ -272,7 +273,7 @@ class main
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
 						" WHERE user_id = $user_id";
             $this->db->sql_query($sql);
-			
+
             registrar_moderacion($fields);
 
             trigger_error("Personaje moderado correctamente." . $this->get_return_link($user_id));
@@ -280,18 +281,18 @@ class main
         else{
             trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
         }
-		
+
 		return $this->view($user_id);
     }
-	
-	public function buyHab($user_id) 
+
+	public function buyHab($user_id)
 	{
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes comprar habilidades para un personaje que no te pertenece.' . $this->get_return_link($user_id));
 		}
-		
+
 		$hab_id = (int) request_var('habilidad_id', 0);
-		
+
 		if ($hab_id > 0) {
 			$sql = "SELECT nombre, coste FROM habilidades WHERE habilidad_id = '$hab_id'";
 			$query = $this->db->sql_query($sql);
@@ -302,7 +303,7 @@ class main
 			else {
 				trigger_error('No se ha encontró la habilidad.' . $this->get_return_link($user_id));
 			}
-			
+
 			if (confirm_box(true)){
 				if (comprar_habilidad($user_id, $hab_id, $hab_coste, $msg_error)) {
 					trigger_error("Habilidad aprendida exitosamente." . $this->get_return_link($user_id));
@@ -316,18 +317,18 @@ class main
 					'submit' 		=> true,
 					'habilidad_id'	=> $hab_id,
 				));
-				
+
 				confirm_box(false, "¿Deseas aprender la habilidad '$hab_nombre' por $hab_coste Puntos de Aprendizaje?", $s_hidden_fields);
 			}
 		}
 		else {
 			trigger_error('No se ha seleccionado una habilidad.' . $this->get_return_link($user_id));
 		}
-        
+
 		return $this->view($user_id);
 	}
-	
-	function lvlUp($user_id) 
+
+	function lvlUp($user_id)
 	{
 		$sql_array = array();
 		$lvlup_data = array(
@@ -345,46 +346,46 @@ class main
 			'VOLUNTAD'		=> (int) request_var('atrVol', 0),
 			'ATTR_DISP'		=> (int) request_var('attrdisp', 0),
 		);
-		
+
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece.' . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
-		
+
 		$pj_data = get_pj_data($pj_id, 0);
 		if (!$pj_data) trigger_error('Hubo un error obteniendo los datos de tu personaje.' . $this->get_return_link($user_id));
-		
+
 		if ($lvlup_data['ATTR_DISP'] > 0) {
 			$diff = ($lvlup_data['FUERZA']+$lvlup_data['AGILIDAD']+$lvlup_data['VITALIDAD']+$lvlup_data['CCK']+$lvlup_data['CONCENTRACION']+$lvlup_data['VOLUNTAD'])
 					- ($pj_data['PJ_FUE']+$pj_data['PJ_AGI']+$pj_data['PJ_VIT']+$pj_data['PJ_CCK']+$pj_data['PJ_CON']+$pj_data['PJ_VOL']);
-					
+
 			$attr_max = 10 + ((int)$pj_data['PJ_NIVEL'] * 5);
-					
+
 			$attr_disp = (int) $pj_data['PJ_ATTR_DISP'];
 			if ($diff > $attr_disp) {
 				trigger_error("No puedes repartir más de $attr_disp puntos." . $this->get_return_link($user_id));
 			}
-			
-			if ($lvlup_data['FUERZA'] < $pj_data['PJ_FUE'] || $lvlup_data['FUERZA'] > $attr_max) 
+
+			if ($lvlup_data['FUERZA'] < $pj_data['PJ_FUE'] || $lvlup_data['FUERZA'] > $attr_max)
 				trigger_error("La Fuerza ingresada es incorrecta." . $this->get_return_link($user_id));
-			
-			if ($lvlup_data['AGILIDAD'] < $pj_data['PJ_AGI'] || $lvlup_data['AGILIDAD'] > $attr_max) 
+
+			if ($lvlup_data['AGILIDAD'] < $pj_data['PJ_AGI'] || $lvlup_data['AGILIDAD'] > $attr_max)
 				trigger_error("La Agilidad ingresada es incorrecta." . $this->get_return_link($user_id));
-			
-			if ($lvlup_data['VITALIDAD'] < $pj_data['PJ_VIT'] || $lvlup_data['VITALIDAD'] > $attr_max) 
+
+			if ($lvlup_data['VITALIDAD'] < $pj_data['PJ_VIT'] || $lvlup_data['VITALIDAD'] > $attr_max)
 				trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
-			
-			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK'] || $lvlup_data['CCK'] > $attr_max) 
+
+			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK'] || $lvlup_data['CCK'] > $attr_max)
 				trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
-			
-			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON'] || $lvlup_data['CONCENTRACION'] > $attr_max) 
+
+			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON'] || $lvlup_data['CONCENTRACION'] > $attr_max)
 				trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
-			
-			if ($lvlup_data['VOLUNTAD'] < $pj_data['PJ_VOL'] || $lvlup_data['VOLUNTAD'] > $attr_max) 
+
+			if ($lvlup_data['VOLUNTAD'] < $pj_data['PJ_VOL'] || $lvlup_data['VOLUNTAD'] > $attr_max)
 				trigger_error("La Voluntad ingresada es incorrecta." . $this->get_return_link($user_id));
-			
+
 			$sql_array = array_merge(array(
 				'fuerza'		=> $lvlup_data['FUERZA'],
 				'agilidad'		=> $lvlup_data['AGILIDAD'],
@@ -394,25 +395,25 @@ class main
 				'voluntad'		=> $lvlup_data['VOLUNTAD'],
 			), $sql_array);
 		}
-		
+
 		if ($lvlup_data['ARQUETIPO'] > 0)
 			$sql_array['arquetipo_id'] = $lvlup_data['ARQUETIPO'];
-		
+
 		if ($lvlup_data['RAMA1'] > 0)
 			$sql_array['rama_id1'] = $lvlup_data['RAMA1'];
-		
+
 		if ($lvlup_data['RAMA2'] > 0)
 			$sql_array['rama_id2'] = $lvlup_data['RAMA2'];
-		
+
 		if ($lvlup_data['RAMA3'] > 0)
 			$sql_array['rama_id3'] = $lvlup_data['RAMA3'];
-		
+
 		if ($lvlup_data['RAMA4'] > 0)
 			$sql_array['rama_id4'] = $lvlup_data['RAMA4'];
-		
+
 		if ($lvlup_data['RAMA5'] > 0)
 			$sql_array['rama_id5'] = $lvlup_data['RAMA5'];
-		
+
 		$query = $this->db->sql_query('SELECT nivel, arquetipo_id, cambio_arquetipo
 										FROM '.PERSONAJES_TABLE."
 										WHERE user_id = $user_id");
@@ -423,39 +424,39 @@ class main
 			}
 		}
 		$this->db->sql_freeresult($query);
-		
+
 		try {
-			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET ' 
+			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET '
 									. $this->db->sql_build_array('UPDATE', $sql_array)
 									. " WHERE user_id = $user_id");
-			
+
 			$moderacion = array(
 				'PJ_ID'	=> $pj_id,
 				'RAZON'	=> 'Modificación por Usuario',
 			);
 			registrar_moderacion($moderacion);
-			
+
 			if ($no_cambia_arq) {
 				$this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
 										SET pf_puntos_apren = pf_puntos_apren + 10
 										WHERE user_id = $user_id");
-										
+
 				$moderacion = array(
 					'PJ_ID'	=> $pj_id,
 					'RAZON'	=> '+10 PA por mantener Arquetipo.',
 				);
 				registrar_moderacion($moderacion);
 			}
-			
+
 			trigger_error("Ficha actualizada exitosamente." . $this->get_return_link($user_id));
 		} catch (Exception $e) {
-			trigger_error("Ocurrió un error al actualizar la ficha; contacta a Administración.<br>" 
+			trigger_error("Ocurrió un error al actualizar la ficha; contacta a Administración.<br>"
 							. $e->getMessage()
 							. $this->get_return_link($user_id));
 		}
-		
+
 	}
-	
+
 	function get_return_link($user_id) {
 		return "<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.";
 	}
