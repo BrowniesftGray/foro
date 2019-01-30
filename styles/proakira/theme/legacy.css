@@ -1416,6 +1416,7 @@ h4.topic-subtitle {
     width: calc(50% - 15px);
     float: left;
     text-align: justify;
+    margin-top: 10px;
     margin-left: 10px;
     background-color: #d8e8e5;
 }
