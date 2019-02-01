@@ -462,9 +462,9 @@
 						<div class="stats-box">
 							<h3>Cambios en Estad&iacute;sticas</h3>
 							<ul>
-								<!-- IF postrow.PJ_DIFF_PV --><li><label>Puntos de Vida:</label> <pv><span>{postrow.PJ_PV_OLD}</span></pv> + <pv><span>{postrow.PJ_DIFF_PV}</span></pv> = <pv><span>{postrow.PJ_PV_NEW}</span></pv></li><!-- ENDIF -->
-								<!-- IF postrow.PJ_DIFF_PC --><li><label>Puntos de Chakra:</label> <pc><span>{postrow.PJ_PC_OLD}</span></pc> + <pc><span>{postrow.PJ_DIFF_PC}</span></pc> = <pc><span>{postrow.PJ_PC_NEW}</span></pc></li><!-- ENDIF -->
-								<!-- IF postrow.PJ_DIFF_STA --><li><label>Puntos de Stamina:</label> <sta><span>{postrow.PJ_STA_OLD}</span></sta> + <sta><span>{postrow.PJ_DIFF_STA}</span></sta> = <sta><span>{postrow.PJ_STA_NEW}</span></sta></li><!-- ENDIF -->
+								<!-- IF postrow.PJ_DIFF_PV --><li><label>Puntos de Vida:</label> <pv><span>{postrow.PJ_PV_OLD}</span></pv> {postrow.PJ_SIGNO_PV} <pv><span>{postrow.PJ_DIFF_PV}</span></pv> = <pv><span>{postrow.PJ_PV_NEW}</span></pv></li><!-- ENDIF -->
+								<!-- IF postrow.PJ_DIFF_PC --><li><label>Puntos de Chakra:</label> <pc><span>{postrow.PJ_PC_OLD}</span></pc> {postrow.PJ_SIGNO_PC} <pc><span>{postrow.PJ_DIFF_PC}</span></pc> = <pc><span>{postrow.PJ_PC_NEW}</span></pc></li><!-- ENDIF -->
+								<!-- IF postrow.PJ_DIFF_STA --><li><label>Puntos de Stamina:</label> <sta><span>{postrow.PJ_STA_OLD}</span></sta> {postrow.PJ_SIGNO_STA} <sta><span>{postrow.PJ_DIFF_STA}</span></sta> = <sta><span>{postrow.PJ_STA_NEW}</span></sta></li><!-- ENDIF -->
 							</ul>
 						</div>
 						<!-- ENDIF -->
