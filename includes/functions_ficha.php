@@ -426,7 +426,7 @@ function get_atributos_disponibles ($pj_id) {
 		"CALL ObtenerCantidadAtributosDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
 
 	if ($row = mysqli_fetch_array($query))
-		$cantidad = (int)$row['atributos'];
+		$cantidad = ((int)$row['atributos'] > 0 ? (int)$row['atributos'] : false);
 
 	return $cantidad;
 }
