@@ -29,3 +29,7 @@ gray_ficha_buyHab:
 gray_ficha_lvlUp:    
     path: /ficha/lvlup/{user_id}
     defaults: { _controller: gray.ficha.controller:lvlUp }
+    
+gray_ficha_nextLvl:
+    path: /ficha/nextlvl/{user_id}
+    defaults: { _controller: gray.ficha.controller:nextLvl }

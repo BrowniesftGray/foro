@@ -305,7 +305,7 @@ class main
 			}
 
 			if (confirm_box(true)){
-				if (comprar_habilidad($user_id, $hab_id, $hab_coste, $msg_error)) {
+				if (comprar_habilidad($user_id, $hab_id, $hab_nombre, $hab_coste, $msg_error)) {
 					trigger_error("Habilidad aprendida exitosamente." . $this->get_return_link($user_id));
 				}
 				else {
@@ -455,6 +455,59 @@ class main
 							. $this->get_return_link($user_id));
 		}
 
+	}
+	
+	function nextLvl($user_id)
+	{
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes modificar un personaje que no te pertenece.' . $this->get_return_link($user_id));
+		}
+
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
+
+		$pj_data = get_pj_data($pj_id, 0);
+		if (!$pj_data) trigger_error('Hubo un error obteniendo los datos de tu personaje.' . $this->get_return_link($user_id));
+		
+		$nivel = $pj_data['PJ_NIVEL'];
+		$nivel_inicial = $pj_data['PJ_NIVEL_INICIAL'];
+		$nivel_sig = $nivel + 1;
+		$exp_subir = $pj_data['PJ_EXPERIENCIA_SIG'] - $pj_data['PJ_EXPERIENCIA'];
+		$pa_subir = ($nivel_sig > 10 ? 5 : 3); // Si el próximo nivel es mayor a 10, gana 5 PA. Si no, 3 PA.
+		$ryos_subir = 1000;
+				
+		if ($nivel >= $nivel_inicial)
+			trigger_error('El personaje ya ha alcanzado su nivel inicial.' . $this->get_return_link($user_id));
+	
+		if (confirm_box(true)){
+			try {
+				$this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE." 
+										SET pf_experiencia = pf_experiencia + $exp_subir,
+											pf_puntos_apren = pf_puntos_apren + $pa_subir,
+											pf_ryos = pf_ryos + $ryos_subir
+										WHERE user_id = '$user_id'");
+										
+				$moderacion = array(
+						'PJ_ID'	=> $pj_id,
+						'RAZON'	=> "Subir de Nivel $nivel a Nivel $nivel_sig.",
+					);
+				registrar_moderacion($moderacion);
+			} catch (Exception $e) {
+				trigger_error("Ocurrió un error al actualizar la ficha; contacta a Administración.<br>"
+								. $e->getMessage()
+								. $this->get_return_link($user_id));
+			}
+		}
+		else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit'	=> true
+			));
+
+			confirm_box(false, "¿Deseas subir de Nivel $nivel a Nivel $nivel_sig?<br/>
+								Tu personaje podrá seguir subiendo hasta Nivel $nivel_inicial.", $s_hidden_fields);
+		}
+		
+		return $this->view($user_id);
 	}
 
 	function get_return_link($user_id) {

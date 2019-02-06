@@ -127,6 +127,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 			'PJ_NOMBRE'				=> $row['nombre'],
 			'PJ_CLAN'				=> $row['clan'],
 			'PJ_NIVEL'				=> (int)$row['nivel'],
+			'PJ_NIVEL_INICIAL'		=> (int)$row['nivel_inicial'],
 			'PJ_EXPERIENCIA'		=> (int)$row['experiencia'],
 			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_sig'],
 			'PJ_EXPERIENCIA_PORC'	=> ($exp_avance > 100 ? 100 : $exp_avance),
@@ -179,6 +180,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
 				WHERE p.pj_id = '$pj_id'");
+				
 		while ($row2 = $db->sql_fetchrow($queryCamino))
 		{
 			if ($str_camino) $str_camino .= ' &raquo; ';
@@ -289,13 +291,17 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$puede_elegir_rama4 = ((int)$row['rama_id4'] == 0 && (int)$row['nivel'] >= 15);
 		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
+		
+		$tiene_nivel_regalado = ((int)$row['nivel_inicial'] > (int)$row['nivel']);
 
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
 
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
+			'NIVEL_INICIAL'			=> $row['nivel_inicial'],
 			'PUEDE_BORRAR'			=> $personajePropio,
 			'PUEDE_SUBIR'			=> $puede_subir_nivel,
+			'TIENE_NIVEL_REGALADO'	=> $tiene_nivel_regalado,
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
 			'PUEDE_MODERAR'			=> $moderador,
@@ -335,6 +341,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
+			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 		));
 
 		if (!$ver || $puede_elegir_ramas) {
@@ -622,7 +629,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	$db->sql_query($sql);
 }
 
-function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
+function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -677,7 +684,7 @@ function comprar_habilidad($user_id, $hab_id, $coste, &$msg_error)
 
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
-			'RAZON' => 'Compra Habilidad.'
+			'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
 		);
 		registrar_moderacion($moderacion);
 	}
