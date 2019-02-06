@@ -217,6 +217,7 @@ class main
                 'CONCENTRACION'     => (int) request_var('atrCon', 1),
                 'VOLUNTAD'          => (int) request_var('atrVol', 1),
             );
+			
             //profile_fields_data -> Tabla donde se encuentra la experiencia
             $fields = array_merge(array(
                     'NOMBRE'		=> utf8_normalize_nfc(request_var('name', '', true)),
@@ -224,12 +225,13 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
-                    'PRINCIPAL'		=> (request_var('ramaPrincipal', 0, true)),
-                    'RAMA1'			=> (request_var('ramaSec1', 0, true)),
-                    'RAMA2'			=> (request_var('ramaSec2', 0, true)),
-                    'RAMA3'			=> (request_var('ramaSec3', 0, true)),
-                    'RAMA4'			=> (request_var('ramaSec4', 0, true)),
-                    'RAMA5'			=> (request_var('ramaSec5', 0, true)),
+					'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
+                    'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
+                    'RAMA1'			=> request_var('ramaSec1', 0, true),
+                    'RAMA2'			=> request_var('ramaSec2', 0, true),
+                    'RAMA3'			=> request_var('ramaSec3', 0, true),
+                    'RAMA4'			=> request_var('ramaSec4', 0, true),
+                    'RAMA5'			=> request_var('ramaSec5', 0, true),
                     'FISICO'		=> utf8_normalize_nfc(request_var('descFis', '', true)),
                     'CARACTER'		=> utf8_normalize_nfc(request_var('descPsic', '', true)),
                     'HISTORIA'		=> utf8_normalize_nfc(request_var('descHis', '', true)),
@@ -268,6 +270,9 @@ class main
 			if ($fields['ARQUETIPO'] != '') {
                 $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
             }
+			
+			if ((int)$fields['NIVEL_INICIAL'] > 0)
+				$sql_array['nivel_inicial'] = $fields['NIVEL_INICIAL'];
 
             $sql = "UPDATE personajes SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .

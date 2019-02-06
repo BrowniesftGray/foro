@@ -226,6 +226,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 
 		$grupo = $user->data['group_id'];
 		$moderador = ($grupo == 5 || $grupo == 4);
+		$admin = ($grupo == 5);
 		$personajePropio = ($user_id == $user->data['user_id']);
 
 		if ($personajePropio) $hab_disp = get_habilidades_disponibles($pj_id);
@@ -305,6 +306,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
 			'PUEDE_MODERAR'			=> $moderador,
+			'PUEDE_ADMINISTRAR'		=> $admin,
 			'FICHA_ARQUETIPO' 		=> $arquetipo_select,
 			'VISTA_ARQUETIPO' 		=> vista_arquetipo ($row['arquetipo_id']),
 			'ID_ARQUETIPO' 			=> $row['arquetipo_id'],
