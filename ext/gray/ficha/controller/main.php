@@ -62,6 +62,12 @@ class main
 
 	public function store()
     {
+        $user_id = $this->user->data['user_id'];
+		$pj_id = get_pj_id($user_id);
+		
+		if($pj_id)
+			trigger_error('Ya posees un personaje; no puedes crear otro.' . $this->get_return_link($user_id));
+		
         $atrs = array(
             'FUERZA'            => (int) request_var('atrFuerza', 1),
             'RESISTENCIA'       => (int) request_var('atrVit', 1),
@@ -85,10 +91,9 @@ class main
         $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
-        $idUsuario = $this->user->data['user_id'];
 
 		$sql_array = array(
-			'user_id'	=> $idUsuario,
+			'user_id'	=> $user_id,
 			'nivel'		=> 1,
 			'rango'		=> 'Estudiante',
 			'arquetipo_id'	=> 0,
@@ -122,17 +127,17 @@ class main
 		);
 		$sql = 'UPDATE phpbby1_profile_fields_data SET ' .
 					$this->db->sql_build_array('UPDATE', $sql_ary)
-					." WHERE user_id = $idUsuario";
+					." WHERE user_id = $user_id";
 		$this->db->sql_query($sql);
 
 		if ((int) $this->db->sql_affectedrows() < 1) {
-			$sql_ary['user_id'] = $idUsuario;
+			$sql_ary['user_id'] = $user_id;
 			$sql = 'INSERT INTO phpbby1_profile_fields_data' . $this->db->sql_build_array('INSERT', $sql_ary);
 			$this->db->sql_query($sql);
 		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
-        trigger_error("Personaje creado correctamente." . $this->get_return_link($idUsuario));
+        trigger_error("Personaje creado correctamente." . $this->get_return_link($user_id));
     }
 
     function view($user_id)
