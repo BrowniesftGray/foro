@@ -5134,7 +5134,7 @@ function phpbb_get_board_contact_link(\phpbb\config\config $config, $phpbb_root_
 
 /* Foros Generales */
 function get_foros_generales() {
-	return array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92, 98, 99, 100, 102, 103, 104, 105);
+	return array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92, 98, 99, 100, 102, 103, 104, 105, 107);
 }
 		
 /* Países Principales - Contenedores de aldea - Estilo largo y ancho */
