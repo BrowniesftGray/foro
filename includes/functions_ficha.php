@@ -361,12 +361,12 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'PUEDE_ELEGIR_RAMA3'	=> $puede_elegir_rama3,
 				'PUEDE_ELEGIR_RAMA4'	=> $puede_elegir_rama4,
 				'PUEDE_ELEGIR_RAMA5'	=> $puede_elegir_rama5,
-				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, (int)$row['rama_id_pri'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(($ver ? 2 : 0), (int)$row['rama_id1'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas),
-				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas),
+				'RAMAS_PRINCIPALES'		=> get_ramas_select(1, (int)$row['rama_id_pri'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS1'	=> get_ramas_select(($ver ? 2 : 0), (int)$row['rama_id1'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas, $moderador),
 			));
 		}
 
@@ -472,7 +472,7 @@ function get_nombre_rama($rama_id) {
 
 /* param $principales:
 1: rama principal; 2: segunda rama; 3: sexta rama; 0: cualquier otra genérica */
-function get_ramas_select($principales, $selected, $exclude){
+function get_ramas_select($principales, $selected, $exclude, $moderador){
 	global $db;
 	$select = '';
 	$obligatorias = false;
@@ -488,7 +488,7 @@ function get_ramas_select($principales, $selected, $exclude){
 										ON r.rama_id = rp.rama_id_req1
 										OR r.rama_id = rp.rama_id_req2
 								WHERE rp.rama_id = $exclude[0]
-								" . ($principales == 3 && count($exclude) > 0 ? "AND r.rama_id NOT IN($not_in)" : '') . '
+								" . ($principales == 3 && count($exclude) > 0 ? " AND r.rama_id NOT IN($not_in) " : '') . '
 								ORDER BY r.nombre ASC');
 
 		$obligatorias = ((int)$db->sql_affectedrows() > 0);
@@ -502,6 +502,7 @@ function get_ramas_select($principales, $selected, $exclude){
 		$query = $db->sql_query('SELECT rama_id, nombre, aldea
 								FROM '.RAMAS_TABLE."
 								WHERE principal = $principales
+								" . ($moderador ? '' : ' AND visible = 1 ') . "
 								ORDER BY primero DESC, nombre ASC");
 	}
 
