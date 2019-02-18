@@ -5139,7 +5139,7 @@ function get_foros_generales() {
 		
 /* Países Principales - Contenedores de aldea - Estilo largo y ancho */
 function get_foros_paises_principales() {
-	$foros_paises_principales = array(16, 17); // 18, 19 - Ame e Iwa
+	$foros_paises_principales = array(16, 17, 19); // 18 - Iwa
 	/* Aldeas - Se añaden a los países para compartir estilo */
 	array_push($foros_paises_principales, 41, 42, 43, 76);
 	return $foros_paises_principales;	
@@ -5147,7 +5147,7 @@ function get_foros_paises_principales() {
 
 /* Resto de los Países - Estilo largo y angosto - Por defecto en todos los subforos*/		
 function get_foros_paises_neutrales() {
-	return array(18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
+	return array(18, 21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
 }
 
 /* Foros que deben mostrarse con el estilo estándar de tabla */		
