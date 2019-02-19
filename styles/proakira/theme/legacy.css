@@ -639,7 +639,7 @@ h4.topic-subtitle {
 }
 
 .profile-rank img {
-	max-width: 200px;
+	max-width: 210px;
 }
 
 .post .inner table .cell-profile {
@@ -706,7 +706,7 @@ h4.topic-subtitle {
 
 .postprofile .profile-rank {
 	text-align: center;
-	margin-bottom: 5px !important;
+	margin: 0 auto 5px auto !important;
 }
 
 .postprofile .field-name {
