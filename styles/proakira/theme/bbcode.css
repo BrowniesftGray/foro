@@ -57,6 +57,11 @@ jutsu tipo[gen] {
 	border-color: #604382;
 }
 
+jutsu tipo[biju] {
+	background: #982d2d;
+	border-color: #4e3030;
+}
+
 jutsu datos {
 	clear: both;
 	display: block;
