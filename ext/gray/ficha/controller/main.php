@@ -234,6 +234,7 @@ class main
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
 					'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
+					'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
                     'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
                     'RAMA1'			=> request_var('ramaSec1', 0, true),
                     'RAMA2'			=> request_var('ramaSec2', 0, true),
@@ -281,6 +282,9 @@ class main
 			
 			if ((int)$fields['NIVEL_INICIAL'] > 0)
 				$sql_array['nivel_inicial'] = $fields['NIVEL_INICIAL'];
+			
+			if ((int)$fields['ES_BIJUU'] > -1)
+				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
 
             $sql = "UPDATE personajes SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .

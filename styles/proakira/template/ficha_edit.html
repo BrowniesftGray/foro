@@ -56,6 +56,16 @@
                                     <input id="nivel_inicial" type="number" class="form-control" name="nivel_inicial" value="{NIVEL_INICIAL}" min="0" max="30">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="es_bijuu" class="col-3 col-form-label text-md-left">Es Bijū</label>
+
+                                <div class="col-6">
+                                    <input id="es_bijuu1" style="width: auto; display: inline-block" type="radio" class="form-control" name="es_bijuu" <!-- IF ES_BIJUU --> checked <!-- ENDIF --> value="1">
+									<label for="es_bijuu1">Si</label>
+                                    <input id="es_bijuu0" style="width: auto; display: inline-block" type="radio" class="form-control" name="es_bijuu" <!-- IF not ES_BIJUU --> checked <!-- ENDIF --> value="0">
+									<label for="es_bijuu0">No</label>
+                                </div>
+                            </div>
 							<!-- ENDIF -->
                             <div class="form-group row">
                                 <label for="edad" class="col-3 col-form-label text-md-left">Edad</label>

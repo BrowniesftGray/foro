@@ -318,6 +318,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'TIENE_NIVEL_REGALADO'	=> $tiene_nivel_regalado,
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
+			'ES_BIJUU'				=> (int)$row['es_bijuu'],
 			'PUEDE_MODERAR'			=> $moderador,
 			'PUEDE_ADMINISTRAR'		=> $admin,
 			'FICHA_ARQUETIPO' 		=> $arquetipo_select,
@@ -571,6 +572,9 @@ function calcula_pc($datos_pj)
 	}
 
 	$pc = $pc + $bono;
+	
+	if((int)$datos_pj['es_bijuu'] == 1)
+		$pc = $pc * 3;
 
 	return $pc;
 }
@@ -595,6 +599,9 @@ function calcula_pv($datos_pj)
 	}
 
 	$pv = $pv + $bono;
+	
+	if((int)$datos_pj['es_bijuu'] == 1)
+		$pv = $pv * 3;
 
 	return $pv;
 }
@@ -619,6 +626,9 @@ function calcula_sta($datos_pj)
 	}
 
 	$sta = $sta + $bono;
+	
+	if((int)$datos_pj['es_bijuu'] == 1)
+		$sta = $sta * 3;
 
 	return $sta;
 }
