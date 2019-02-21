@@ -56,7 +56,7 @@ class main
             trigger_error('No puedes acceder aquí sin conectarte');
         }
 
-        $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null));
+        $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null, false));
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 
@@ -91,8 +91,11 @@ class main
         $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
+		
+		$pj_id = get_max_pj_id() + 1;
 
 		$sql_array = array(
+			'pj_id'		=> $pj_id,
 			'user_id'	=> $user_id,
 			'nivel'		=> 1,
 			'rango'		=> 'Estudiante',

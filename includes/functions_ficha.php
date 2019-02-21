@@ -28,6 +28,19 @@ function get_pj_id($user_id)
 	return $pj_id;
 }
 
+function get_max_pj_id()
+{
+	global $db;
+	$query = $db->sql_query('SELECT MAX(pj_id) AS pj_id FROM personajes_historico');
+	if ($row = $db->sql_fetchrow($query)) {
+		$pj_id = $row['pj_id'];
+	} else {
+		$pj_id = 0;
+	}
+	$db->sql_freeresult($query);
+	return $pj_id;
+}
+
 function get_pj_name($user_id) {
 	global $db;
 	$query = $db->sql_query("SELECT nombre FROM personajes WHERE user_id=".$user_id);
@@ -472,7 +485,7 @@ function get_nombre_rama($rama_id) {
 
 /* param $principales:
 1: rama principal; 2: segunda rama; 3: sexta rama; 0: cualquier otra genérica */
-function get_ramas_select($principales, $selected, $exclude, $moderador){
+function get_ramas_select($principales, $selected, $exclude, $moderador = false){
 	global $db;
 	$select = '';
 	$obligatorias = false;
@@ -794,6 +807,5 @@ function borrar_personaje($pj) {
 	global $db;
 
 	$db->sql_query("DELETE FROM ".PERSONAJES_TABLE." WHERE user_id = '$pj'");
-	$db->sql_query("DELETE FROM tecnicas WHERE pj_id = '$pj'");
 	//$db->sql_query("DELETE FROM ".MODERACIONES_TABLE." WHERE pj_moderado = '$pj'");	// Si se borra accidental y se recupera, se mantienen las moderaciones
 }
