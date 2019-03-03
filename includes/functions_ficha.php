@@ -575,6 +575,9 @@ function calcula_pc($datos_pj)
 	
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$pc = $pc * 3;
+	
+	if((int)$datos_pj['rama_id_pri'] == 44)	//clan Uzumaki
+		$pc = $pc + ((int)$datos_pj['nivel'] * 5);
 
 	return $pc;
 }
