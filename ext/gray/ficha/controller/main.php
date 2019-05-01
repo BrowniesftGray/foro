@@ -92,10 +92,10 @@ class main
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
 		
-		//$pj_id = get_max_pj_id() + 1;
+		$pj_id = get_max_pj_id() + 1;
 
 		$sql_array = array(
-			//'pj_id'		=> $pj_id,
+			'pj_id'		=> $pj_id,
 			'user_id'	=> $user_id,
 			'nivel'		=> 1,
 			'rango'		=> 'Estudiante',

@@ -31,13 +31,22 @@ function get_pj_id($user_id)
 function get_max_pj_id()
 {
 	global $db;
-	$query = $db->sql_query('SELECT MAX(pj_id) AS pj_id FROM personajes_historico');
+	$query = $db->sql_query('SELECT MAX(pj_id) AS pj_id FROM personajes');
+	$query2 = $db->sql_query('SELECT MAX(pj_id) AS pj_id FROM personajes_historico');
 	if ($row = $db->sql_fetchrow($query)) {
 		$pj_id = $row['pj_id'];
 	} else {
 		$pj_id = 0;
 	}
+	
+	if ($row = $db->sql_fetchrow($query2)) {
+		if ((int)$row['pj_id'] > $pj_id)
+			$pj_id = $row['pj_id'];
+	}
+	
 	$db->sql_freeresult($query);
+	$db->sql_freeresult($query2);
+	
 	return $pj_id;
 }
 
