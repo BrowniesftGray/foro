@@ -160,6 +160,7 @@ a:hover	{ text-decoration: underline; }
 .page-body {
 	clear: both;
 	padding-bottom: 10px;
+	position: relative;
 }
 
 .page-footer {

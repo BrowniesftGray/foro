@@ -561,10 +561,6 @@ li.row.pais.unread::after {
 }
 
 /* Contenido del Tema */
-#recent-topics {
-	display: none;
-}
-
 h2.topic-title, h2.forum-title, h2.posting-title {
 	font-family: Anton;
     text-transform: uppercase;
@@ -970,6 +966,7 @@ h4.topic-subtitle {
 .character {
 	clear: both;
     position: relative;
+	float: left;
     height: 200px;
     margin: 10px;
     overflow: hidden;
@@ -979,6 +976,13 @@ h4.topic-subtitle {
     border-bottom-left-radius: 100px;
     border-bottom-right-radius: 5px;
     background-color: #d9cdb3;
+	width: calc(100% - 270px);
+}
+
+@media (max-width: 1100px) { 
+	.character {
+		width: calc(100% - 20px);
+	}
 }
 
 .character .content {
@@ -1097,7 +1101,7 @@ h4.topic-subtitle {
     user-select: none;
     border: 1px solid transparent;
     padding: 0.375rem 0.75rem;
-    font-size: 1rem;
+    font-size: .8rem;
     line-height: 1.5;
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -1248,8 +1252,9 @@ h4.topic-subtitle {
 }
 
 .no-character .mensaje {
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 8px;
+    margin-left: 10px;
 }
 
 
@@ -1523,4 +1528,61 @@ body.sfw .header-avatar img {
 
 body.sfw #page-header {
 	position: absolute;
+}
+
+/* Bloque Temas Recientes */
+
+#recenttopicstop {
+	position: relative;
+	float: right;
+}
+
+.no-character + #recenttopicstop {
+	position: static;
+}
+
+.recent-topics {
+	position: absolute;
+	top: 6px;
+	right: 0;
+	border-radius: 5px 0 0 5px;
+	background: #243f38;
+	padding: 5px 0;
+	width: 250px;
+}
+
+.no-character + #recenttopicstop .recent-topics {
+	top: 32px;
+}
+
+.recent-topics .header {
+	color: #fff;
+	font-family: "Roboto Condensed", Roboto, sans-serif;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 0 0 2px 5px;
+}
+
+.recent-topics-list {
+	list-style-type: none;
+	display: block;
+	overflow-y: auto;
+	height: 185px;
+}
+
+.recent-topics-list dl.row-item {
+	background-position: 5px 50%;
+	background-repeat: no-repeat;
+	background-size: 24px;
+}
+
+.recent-topics-list dl.row-item dt .list-inner {
+	padding-left: 32px;
+}
+
+@media (max-width: 1100px) {
+	.recent-topics {
+		display: none;
+	}
 }
