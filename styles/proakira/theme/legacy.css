@@ -1582,7 +1582,17 @@ body.sfw #page-header {
 }
 
 @media (max-width: 1100px) {
-	.recent-topics {
+	.character + #recenttopicstop {
+		position: static;
+	}
+	
+	.character + #recenttopicstop .recent-topics {
+		top: 32px;
+	}
+}
+
+@media (max-width: 700px) {
+	#recenttopicstop {
 		display: none;
 	}
 }
