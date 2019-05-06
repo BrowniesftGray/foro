@@ -656,8 +656,8 @@ function registrar_moderacion(array $fields, $user_id = 0){
 		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
 	}
 
-	if ($fields['ADD_PUNTOS_EXPERIENCIA'] > 0) {
-		registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS']);
+	if ($fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
+		registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']);
 		$fields['RAZON'] = $fields['RAZON']." +".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP +".$fields['ADD_PUNTOS_APRENDIZAJE']." PA +".$fields['ADD_RYOS']." RYOS";
 	}
 
@@ -739,7 +739,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 	return true;
 }
 
-function comprarTecnica ($user_id, $coste, &$msg_error){
+function comprarTecnica ($user_id, $coste){
 
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -773,7 +773,7 @@ function comprarTecnica ($user_id, $coste, &$msg_error){
 
 }
 
-function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$msg_error)
+function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_apen_negativos)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -794,6 +794,21 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 		$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
 	}
 
+	if ($puntos_apen_negativos > $puntos_apen) {
+		$puntos_apen = $puntos_apen_negativos - $puntos_apen;
+		$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
+	}
+	else{
+		if ($puntos_apen_negativos == $puntos_apen) {
+				$puntos_apen = 0;
+				$ptos_aprendizaje_total = $ptos_aprendizaje;
+		}
+		else{
+			$puntos_apen = $puntos_apen - $puntos_apen_negativos;
+			$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+		}
+	}
+
 	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
 		$ptos_ryos = 0;
 	}
@@ -802,7 +817,6 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 	}
 
 	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
-	$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
 	$ptos_ryos 							= $ptos_ryos + $ryos;
 
 
@@ -811,7 +825,7 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_experiencia = '$ptos_experiencia_total',
-									pf_puntos_apren = '$ptos_aprendizaje_restantes',
+									pf_puntos_apren = '$ptos_aprendizaje_total',
 									pf_ryos = '$ptos_ryos'
 							WHERE user_id = '$user_id'");
 
