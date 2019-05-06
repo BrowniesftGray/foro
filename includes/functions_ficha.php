@@ -657,24 +657,27 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	// }
 
 	if ($fields['PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
-		registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']);
-		$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
-		$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
-		if ($puntos_apen_negativos > $puntos_apen) {
-			$puntos_apen = $puntos_apen_negativos - $puntos_apen;
-			$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
-		}
-		else{
-			if ($puntos_apen_negativos == $puntos_apen) {
-					$puntos_apen = 0;
-					$ptos_aprendizaje_total = $ptos_aprendizaje;
+		if (registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']) == true) {
+			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
+			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
+
+			if ($puntos_apen_negativos > $puntos_apen) {
+				$puntos_apen = $puntos_apen_negativos - $puntos_apen;
+				$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
 			}
 			else{
-				$puntos_apen = $puntos_apen - $puntos_apen_negativos;
-				$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+				if ($puntos_apen_negativos == $puntos_apen) {
+						$puntos_apen = 0;
+						$ptos_aprendizaje_total = $ptos_aprendizaje;
+				}
+				else{
+					$puntos_apen = $puntos_apen - $puntos_apen_negativos;
+					$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+				}
 			}
+
+			$fields['RAZON'] = $fields['RAZON']." ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP,".$ptos_aprendizaje_total." PA, ".$fields['ADD_RYOS']." RYOS";
 		}
-		$fields['RAZON'] = $fields['RAZON']." ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP,".$ptos_aprendizaje_total." PA, ".$fields['ADD_RYOS']." RYOS";
 	}
 
 	$sql_array = array(
@@ -831,6 +834,13 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 	else{
 		$ptos_ryos = $user->profile_fields['pf_ryos'];
 	}
+
+	if ($ptos_aprendizaje_total < 0) {
+		$msg_error = 'No tienes suficientes Puntos de Aprendizaje para aprender la técnica.';
+		trigger_error($msg_error."<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.");
+		return false;
+	}
+
 
 	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
 	$ptos_ryos 							= $ptos_ryos + $ryos;
