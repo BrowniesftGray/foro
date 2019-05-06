@@ -651,14 +651,30 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	$mod = $user->data['username'];
 	$fecha = date('Y-m-d' );
 
-	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
-		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
-		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
-	}
+	// if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
+	// 	comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
+	// 	$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
+	// }
 
-	if ($fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
+	if ($fields['PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
 		registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']);
-		$fields['RAZON'] = $fields['RAZON']." +".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP +".$fields['ADD_PUNTOS_APRENDIZAJE']." PA +".$fields['ADD_RYOS']." RYOS";
+		$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
+		$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
+		if ($puntos_apen_negativos > $puntos_apen) {
+			$puntos_apen = $puntos_apen_negativos - $puntos_apen;
+			$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
+		}
+		else{
+			if ($puntos_apen_negativos == $puntos_apen) {
+					$puntos_apen = 0;
+					$ptos_aprendizaje_total = $ptos_aprendizaje;
+			}
+			else{
+				$puntos_apen = $puntos_apen - $puntos_apen_negativos;
+				$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+			}
+		}
+		$fields['RAZON'] = $fields['RAZON']." ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP,".$ptos_aprendizaje_total." PA, ".$fields['ADD_RYOS']." RYOS";
 	}
 
 	$sql_array = array(
