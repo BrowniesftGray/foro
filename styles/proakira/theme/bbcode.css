@@ -132,7 +132,8 @@ habilidad {
 	cursor: default;
 }
 
-.habilidades form:nth-child(3n+1) habilidad {
+.habilidades form:nth-child(3n+1) habilidad,
+.habilidades habilidad:nth-child(3n+1) {
     clear: left;
 }
 
