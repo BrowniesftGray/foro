@@ -38,15 +38,15 @@ function get_max_pj_id()
 	} else {
 		$pj_id = 0;
 	}
-	
+
 	if ($row = $db->sql_fetchrow($query2)) {
 		if ((int)$row['pj_id'] > $pj_id)
 			$pj_id = $row['pj_id'];
 	}
-	
+
 	$db->sql_freeresult($query);
 	$db->sql_freeresult($query2);
-	
+
 	return $pj_id;
 }
 
@@ -202,7 +202,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
 				WHERE p.pj_id = '$pj_id'");
-				
+
 		while ($row2 = $db->sql_fetchrow($queryCamino))
 		{
 			if ($str_camino) $str_camino .= ' &raquo; ';
@@ -314,7 +314,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$puede_elegir_rama4 = ((int)$row['rama_id4'] == 0 && (int)$row['nivel'] >= 15);
 		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
-		
+
 		$tiene_nivel_regalado = ((int)$row['nivel_inicial'] > (int)$row['nivel']);
 
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
@@ -581,10 +581,10 @@ function calcula_pc($datos_pj)
 	}
 
 	$pc = $pc + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$pc = $pc * 3;
-	
+
 	if((int)$datos_pj['rama_id_pri'] == 44)	//clan Uzumaki
 		$pc = $pc + ((int)$datos_pj['nivel'] * 5);
 
@@ -611,7 +611,7 @@ function calcula_pv($datos_pj)
 	}
 
 	$pv = $pv + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$pv = $pv * 3;
 
@@ -638,7 +638,7 @@ function calcula_sta($datos_pj)
 	}
 
 	$sta = $sta + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$sta = $sta * 3;
 
@@ -654,6 +654,11 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
 		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
+	}
+
+	if ($fields['ADD_PUNTOS_EXPERIENCIA'] > 0) {
+		registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS']);
+		$fields['RAZON'] = $fields['RAZON']." +".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP +".$fields['ADD_PUNTOS_APRENDIZAJE']." PA +".$fields['ADD_RYOS']." RYOS";
 	}
 
 	$sql_array = array(
