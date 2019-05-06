@@ -676,7 +676,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 				}
 			}
 
-			$fields['RAZON'] = $fields['RAZON']." ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP,".$ptos_aprendizaje_total." PA, ".$fields['ADD_RYOS']." RYOS";
+			$fields['RAZON'] = $fields['RAZON']." | ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP | ".$ptos_aprendizaje_total." PA | ".$fields['ADD_RYOS']." RYOS";
 		}
 	}
 
@@ -855,12 +855,12 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 									pf_ryos = '$ptos_ryos'
 							WHERE user_id = '$user_id'");
 
-		$enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
-		$moderacion = array(
-			'PJ_ID'	=> $pj_id,
-			'RAZON' => $enlace
-		);
-		registrar_moderacion($moderacion);
+		// $enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
+		// $moderacion = array(
+		// 	'PJ_ID'	=> $pj_id,
+		// 	'RAZON' => $enlace
+		// );
+		// registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
