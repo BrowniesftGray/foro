@@ -233,8 +233,8 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
-          					'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
-          					'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
+                    'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
+                    'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
                     'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
                     'RAMA1'			=> request_var('ramaSec1', 0, true),
                     'RAMA2'			=> request_var('ramaSec2', 0, true),
@@ -288,6 +288,9 @@ class main
 
 			if ((int)$fields['ES_BIJUU'] > -1)
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
+			
+			$nueva_edad = calcular_edad_personaje($fields['PJ_ID']);
+			if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
 
             $sql = "UPDATE personajes SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
@@ -398,7 +401,7 @@ class main
 				trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
 
 			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK'] || $lvlup_data['CCK'] > $attr_max)
-				trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
+				trigger_error("El Control de Chakra ingresado es incorrecto." . $this->get_return_link($user_id));
 
 			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON'] || $lvlup_data['CONCENTRACION'] > $attr_max)
 				trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
@@ -444,7 +447,10 @@ class main
 			}
 		}
 		$this->db->sql_freeresult($query);
-
+			
+		$nueva_edad = calcular_edad_personaje($pj_id);
+		if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
+		
 		try {
 			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET '
 									. $this->db->sql_build_array('UPDATE', $sql_array)

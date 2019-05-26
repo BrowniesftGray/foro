@@ -876,3 +876,34 @@ function borrar_personaje($pj) {
 	$db->sql_query("DELETE FROM ".PERSONAJES_TABLE." WHERE user_id = '$pj'");
 	//$db->sql_query("DELETE FROM ".MODERACIONES_TABLE." WHERE pj_moderado = '$pj'");	// Si se borra accidental y se recupera, se mantienen las moderaciones
 }
+
+function calcular_edad_personaje($pj_id) {
+	global $db;
+	
+	$nueva_edad = false;
+	$i = 0;
+	
+	$query = $db->sql_query("SELECT fecha_historico, edad " . 
+							" FROM " . PERSONAJES_HISTORICO_TABLE . 
+							" WHERE pj_id = $pj_id " . 
+							" ORDER BY fecha_historico ASC " .
+							" LIMIT 1");
+	
+	if ($row = $db->sql_fetchrow($query)) {
+		$edad = (int)$row['edad'];
+		$nueva_edad = $edad;
+		$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
+		$fecha_nac = strtotime($row['fecha_historico']);
+		
+		while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
+			$i++;
+		}
+		
+		$nueva_edad = $nueva_edad + floor($i / 4);
+	}
+	$db->sql_freeresult($query);
+	
+	if ($nueva_edad == $edad) $nueva_edad = false;
+	
+	return $nueva_edad;
+}
