@@ -140,7 +140,7 @@ class main
 		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
-        trigger_error("Personaje creado correctamente." . $this->get_return_link($user_id));
+        trigger_error("<div class='no-character' style='text-align:center'><span class='mensaje'>El personaje ha sido creado.</span><br/><a href='/reglas-y-guias-f4/01-primeros-pasos-t135'><img src='/images/comienzo.png' /><br/><span class='character-btn' style='float:none'>¿Cómo empezar?</span></a></div>");
     }
 
     function view($user_id)
