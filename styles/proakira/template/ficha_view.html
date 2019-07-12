@@ -45,12 +45,12 @@
 						<a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
 					  </li>
 					  <!-- ENDIF -->
+					  <!-- IF PERSONAJE_PROPIO -->
 					  <!-- IF TIENE_NIVEL_REGALADO -->
 					  <li class="nav-item">
 						<a class="nav-link btn-info" href="{FICHA_NEXT_LVL}"><h5>Subir de Nivel</h5></a>
 					  </li>
 					  <!-- ENDIF -->
-					  <!-- IF PUEDE_BORRAR -->
 					  <li class="nav-item">
 						<a class="nav-link btn-warning" onclick="return confirm('¿Deseas borrar tu personaje?');" href="{FICHA_BORRAR_2}"><h5>Borrar Personaje</h5></a>
 					  </li>
@@ -170,6 +170,12 @@
 							<!-- BEGIN categoria_item.items -->
 							<li class="item" data-tooltip="item-{categoria_item.items.ITEM_ID}">
 								<span class="qty">{categoria_item.items.CANTIDAD}</span>
+								<!-- IF PERSONAJE_PROPIO -->
+								<form action="{U_ACTION_SELL}" method="post">
+									<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+									<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
+								</form>
+								<!-- ENDIF -->
 								{categoria_item.items.IMAGEN}
 								<div style="display:none">
 									<div class="tooltip" id="item-{categoria_item.items.ITEM_ID}">

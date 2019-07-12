@@ -48,7 +48,7 @@ class phpbb_shop {
 			$shop_id = (int) $shop;
 		}
 		
-	    $item_id = (int) request_var('item_id', 0);
+		$item_id = (int) request_var('item_id', 0);
 		$quantity = (int) request_var('quantity', 0);
 		$user_id = $user->data['user_id'];
 		

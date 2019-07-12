@@ -101,6 +101,17 @@
 	font-size: 10px;
 }
 
+.inventory .item .sellItem {
+    position: absolute;
+    font-size: 10px !important;
+    margin: 1px;
+    display: none;
+}
+
+.inventory .item:hover .sellItem {
+	display: block;
+}
+
 .tooltip {
 	text-align: left;
 	max-width: 250px;

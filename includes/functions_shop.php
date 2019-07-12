@@ -88,5 +88,5 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 	}
 	$db->sql_freeresult($query);
 	
-	return $items;								
+	return $items;
 }

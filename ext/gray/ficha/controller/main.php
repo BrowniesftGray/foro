@@ -329,6 +329,12 @@ class main
 
 			if (confirm_box(true)){
 				if (comprar_habilidad($user_id, $hab_id, $hab_nombre, $hab_coste, $msg_error)) {
+					$moderacion = array(
+						'PJ_ID'	=> $pj_id,
+						'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
+					);
+					registrar_moderacion($moderacion);
+					
 					trigger_error("Habilidad aprendida exitosamente." . $this->get_return_link($user_id));
 				}
 				else {
@@ -486,7 +492,7 @@ class main
 	function nextLvl($user_id)
 	{
 		if ($user_id != $this->user->data['user_id']) {
-			trigger_error('No puedes modificar un personaje que no te pertenece.' . $this->get_return_link($user_id));
+			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
 		}
 
 		$pj_id = get_pj_id($user_id);
@@ -533,6 +539,65 @@ class main
 								Tu personaje podrá seguir subiendo hasta Nivel $nivel_inicial.", $s_hidden_fields);
 		}
 
+		return $this->view($user_id);
+	}
+	
+	function sellItem($user_id) {
+		$item_id = (int) request_var('item_id', 0);
+		$cantidad_venta = (int) request_var('cantidad_venta', 1);	// TODO: Vender más de uno
+		
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
+		
+		$sql = "SELECT i.nombre,
+					i.precio,
+					pi.cantidad
+				FROM " . ITEMS_TABLE . " i
+					INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
+						ON pi.item_id = i.item_id
+				WHERE pi.pj_id = '$pj_id'
+					AND i.item_id = '$item_id'
+					AND pi.cantidad >= $cantidad_venta";
+					
+		$query = $this->db->sql_query($sql);
+		
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$item_nombre = $row['nombre'];
+			$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
+		}
+		else {
+			trigger_error("No posees el item en tu inventario." . $this->get_return_link($user_id));
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true)) {
+			if (vender_item($user_id, $pj_id, $item_id, $cantidad_venta, $msg_error)) {
+				$moderacion = array(
+					'PJ_ID'	=> $pj_id,
+					'RAZON'	=> "Vende $cantidad_venta x '$item_nombre' por $precio_venta Ryos.",
+				);
+				registrar_moderacion($moderacion);
+				
+				trigger_error("Item vendido exitosamente." . $this->get_return_link($user_id));
+			}
+			else {
+				trigger_error($msg_error . $this->get_return_link($user_id));
+			}
+		}
+		else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit' 	=> true,
+				'item_id'	=> $item_id,
+				'cantidad_venta'	=> $cantidad_venta
+			));
+			
+			confirm_box(false, "¿Deseas vender $cantidad_venta x '$item_nombre' por $precio_venta Ryos? Esta acción no puede revertirse.", $s_hidden_fields);
+		}
+		
 		return $this->view($user_id);
 	}
 

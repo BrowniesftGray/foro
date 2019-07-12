@@ -322,7 +322,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
 			'NIVEL_INICIAL'			=> $row['nivel_inicial'],
-			'PUEDE_BORRAR'			=> $personajePropio,
+			'PERSONAJE_PROPIO'			=> $personajePropio,
 			'PUEDE_SUBIR'			=> $puede_subir_nivel,
 			'TIENE_NIVEL_REGALADO'	=> $tiene_nivel_regalado,
 			'EXPERIENCIA' 			=> $experiencia,
@@ -366,6 +366,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
+			'U_ACTION_SELL'			=> append_sid("/ficha/sellItem/" . $user_id),
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 		));
 
@@ -743,12 +744,6 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
-
-		$moderacion = array(
-			'PJ_ID'	=> $pj_id,
-			'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
-		);
-		registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
@@ -758,8 +753,64 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 	return true;
 }
 
-function comprarTecnica ($user_id, $coste){
+function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
+	global $db, $user;
+	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
+	
+	$sql = "SELECT i.nombre,
+				i.precio,
+				pi.cantidad
+			FROM " . ITEMS_TABLE . " i
+				INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
+					ON pi.item_id = i.item_id
+			WHERE pi.pj_id = '$pj_id'
+				AND i.item_id = '$item_id'
+				AND pi.cantidad >= $cantidad_venta";
+				
+	$query = $db->sql_query($sql);
+	
+	if ($row = $db->sql_fetchrow($query)) {
+		$item_nombre = $row['nombre'];
+		$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
+	}
+	else {
+		$msg_error = "No posees el item en tu inventario.";
+		return false;
+	}
+	$db->sql_freeresult($query);
+	
+	$user->get_profile_fields($user_id);
+	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
+		$pf_ryos = 0;
+	}
+	else{
+		$pf_ryos = $user->profile_fields['pf_ryos'];
+	}
+	
+	$pf_ryos = $pf_ryos + $precio_venta;
+	
+	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . "
+					SET cantidad = cantidad - $cantidad_venta
+					WHERE pj_id = '$pj_id'
+						AND item_id = '$item_id'
+						AND cantidad >= $cantidad_venta");
+	if ((int) $db->sql_affectedrows() < 1) {
+		$msg_error = 'Hubo un error vendiendo el item.';
+		return false;
+	}
+	
+	$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
+					SET pf_ryos = '$pf_ryos'
+					WHERE user_id = '$user_id'");
+	if ((int) $db->sql_affectedrows() < 1) {
+		$msg_error = 'Hubo un error actualizando tus Ryos.';
+		return false;
+	}
+	
+	return true;
+}
 
+function comprarTecnica ($user_id, $coste){
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
@@ -780,7 +831,6 @@ function comprarTecnica ($user_id, $coste){
 	$pj_id = get_pj_id($user_id);
 
 	if ($pj_id) {
-
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
@@ -789,8 +839,8 @@ function comprarTecnica ($user_id, $coste){
 		$msg_error = 'Hubo un error buscando tu personaje.';
 		return false;
 	}
-
 }
+
 
 function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_apen_negativos)
 {
