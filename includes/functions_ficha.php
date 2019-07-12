@@ -38,15 +38,15 @@ function get_max_pj_id()
 	} else {
 		$pj_id = 0;
 	}
-	
+
 	if ($row = $db->sql_fetchrow($query2)) {
 		if ((int)$row['pj_id'] > $pj_id)
 			$pj_id = $row['pj_id'];
 	}
-	
+
 	$db->sql_freeresult($query);
 	$db->sql_freeresult($query2);
-	
+
 	return $pj_id;
 }
 
@@ -202,7 +202,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
 				WHERE p.pj_id = '$pj_id'");
-				
+
 		while ($row2 = $db->sql_fetchrow($queryCamino))
 		{
 			if ($str_camino) $str_camino .= ' &raquo; ';
@@ -314,7 +314,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$puede_elegir_rama4 = ((int)$row['rama_id4'] == 0 && (int)$row['nivel'] >= 15);
 		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
-		
+
 		$tiene_nivel_regalado = ((int)$row['nivel_inicial'] > (int)$row['nivel']);
 
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
@@ -581,10 +581,10 @@ function calcula_pc($datos_pj)
 	}
 
 	$pc = $pc + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$pc = $pc * 3;
-	
+
 	if((int)$datos_pj['rama_id_pri'] == 44)	//clan Uzumaki
 		$pc = $pc + ((int)$datos_pj['nivel'] * 5);
 
@@ -611,7 +611,7 @@ function calcula_pv($datos_pj)
 	}
 
 	$pv = $pv + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$pv = $pv * 3;
 
@@ -638,7 +638,7 @@ function calcula_sta($datos_pj)
 	}
 
 	$sta = $sta + $bono;
-	
+
 	if((int)$datos_pj['es_bijuu'] == 1)
 		$sta = $sta * 3;
 
@@ -651,9 +651,33 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	$mod = $user->data['username'];
 	$fecha = date('Y-m-d' );
 
-	if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
-		comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
-		$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
+	// if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
+	// 	comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
+	// 	$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
+	// }
+
+	if ($fields['PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
+		if (registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']) == true) {
+			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
+			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
+
+			if ($puntos_apen_negativos > $puntos_apen) {
+				$puntos_apen = $puntos_apen_negativos - $puntos_apen;
+				$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
+			}
+			else{
+				if ($puntos_apen_negativos == $puntos_apen) {
+						$puntos_apen = 0;
+						$ptos_aprendizaje_total = $ptos_aprendizaje;
+				}
+				else{
+					$puntos_apen = $puntos_apen - $puntos_apen_negativos;
+					$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+				}
+			}
+
+			$fields['RAZON'] = $fields['RAZON']." | ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP | ".$ptos_aprendizaje_total." PA | ".$fields['ADD_RYOS']." RYOS";
+		}
 	}
 
 	$sql_array = array(
@@ -734,7 +758,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 	return true;
 }
 
-function comprarTecnica ($user_id, $coste, &$msg_error){
+function comprarTecnica ($user_id, $coste){
 
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -768,7 +792,7 @@ function comprarTecnica ($user_id, $coste, &$msg_error){
 
 }
 
-function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$msg_error)
+function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_apen_negativos)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -789,6 +813,21 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 		$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
 	}
 
+	if ($puntos_apen_negativos > $puntos_apen) {
+		$puntos_apen = $puntos_apen_negativos - $puntos_apen;
+		$ptos_aprendizaje_total = $ptos_aprendizaje - $puntos_apen;
+	}
+	else{
+		if ($puntos_apen_negativos == $puntos_apen) {
+				$puntos_apen = 0;
+				$ptos_aprendizaje_total = $ptos_aprendizaje;
+		}
+		else{
+			$puntos_apen = $puntos_apen - $puntos_apen_negativos;
+			$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
+		}
+	}
+
 	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
 		$ptos_ryos = 0;
 	}
@@ -796,8 +835,14 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 		$ptos_ryos = $user->profile_fields['pf_ryos'];
 	}
 
+	if ($ptos_aprendizaje_total < 0) {
+		$msg_error = 'No tienes suficientes Puntos de Aprendizaje para aprender la técnica.';
+		trigger_error($msg_error."<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.");
+		return false;
+	}
+
+
 	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
-	$ptos_aprendizaje_total = $ptos_aprendizaje + $puntos_apen;
 	$ptos_ryos 							= $ptos_ryos + $ryos;
 
 
@@ -806,16 +851,16 @@ function registrar_tema($user_id, $enlace, $experiencia, $puntos_apen, $ryos, &$
 
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_experiencia = '$ptos_experiencia_total',
-									pf_puntos_apren = '$ptos_aprendizaje_restantes',
+									pf_puntos_apren = '$ptos_aprendizaje_total',
 									pf_ryos = '$ptos_ryos'
 							WHERE user_id = '$user_id'");
 
-		$enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
-		$moderacion = array(
-			'PJ_ID'	=> $pj_id,
-			'RAZON' => $enlace
-		);
-		registrar_moderacion($moderacion);
+		// $enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
+		// $moderacion = array(
+		// 	'PJ_ID'	=> $pj_id,
+		// 	'RAZON' => $enlace
+		// );
+		// registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
@@ -830,4 +875,35 @@ function borrar_personaje($pj) {
 
 	$db->sql_query("DELETE FROM ".PERSONAJES_TABLE." WHERE user_id = '$pj'");
 	//$db->sql_query("DELETE FROM ".MODERACIONES_TABLE." WHERE pj_moderado = '$pj'");	// Si se borra accidental y se recupera, se mantienen las moderaciones
+}
+
+function calcular_edad_personaje($pj_id) {
+	global $db;
+	
+	$nueva_edad = false;
+	$i = 0;
+	
+	$query = $db->sql_query("SELECT fecha_historico, edad " . 
+							" FROM " . PERSONAJES_HISTORICO_TABLE . 
+							" WHERE pj_id = $pj_id " . 
+							" ORDER BY fecha_historico ASC " .
+							" LIMIT 1");
+	
+	if ($row = $db->sql_fetchrow($query)) {
+		$edad = (int)$row['edad'];
+		$nueva_edad = $edad;
+		$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
+		$fecha_nac = strtotime($row['fecha_historico']);
+		
+		while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
+			$i++;
+		}
+		
+		$nueva_edad = $nueva_edad + floor($i / 4);
+	}
+	$db->sql_freeresult($query);
+	
+	if ($nueva_edad == $edad) $nueva_edad = false;
+	
+	return $nueva_edad;
 }

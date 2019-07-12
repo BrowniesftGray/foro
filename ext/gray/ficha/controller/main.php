@@ -64,10 +64,10 @@ class main
     {
         $user_id = $this->user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
-		
+
 		if($pj_id)
 			trigger_error('Ya posees un personaje; no puedes crear otro.' . $this->get_return_link($user_id));
-		
+
         $atrs = array(
             'FUERZA'            => (int) request_var('atrFuerza', 1),
             'RESISTENCIA'       => (int) request_var('atrVit', 1),
@@ -91,7 +91,7 @@ class main
         $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
         $fields['FISICO'] = addslashes($fields['FISICO']);
         $fields['CARACTER'] = addslashes($fields['CARACTER']);
-		
+
 		$pj_id = get_max_pj_id() + 1;
 
 		$sql_array = array(
@@ -225,7 +225,7 @@ class main
                 'CONCENTRACION'     => (int) request_var('atrCon', 1),
                 'VOLUNTAD'          => (int) request_var('atrVol', 1),
             );
-			
+
             //profile_fields_data -> Tabla donde se encuentra la experiencia
             $fields = array_merge(array(
                     'NOMBRE'		=> utf8_normalize_nfc(request_var('name', '', true)),
@@ -233,8 +233,8 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
-					'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
-					'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
+                    'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
+                    'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
                     'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
                     'RAMA1'			=> request_var('ramaSec1', 0, true),
                     'RAMA2'			=> request_var('ramaSec2', 0, true),
@@ -247,6 +247,9 @@ class main
                     'TEC_JUTSUS'	=> utf8_normalize_nfc(request_var('tecnicas', '', true)),
                     'RAZON'			=> utf8_normalize_nfc(request_var('razon', '', true)),
                     'PUNTOS_APRENDIZAJE' => utf8_normalize_nfc(request_var('puntos_aprendizaje', '', true)),
+                    'ADD_PUNTOS_EXPERIENCIA' => utf8_normalize_nfc(request_var('add_puntos_experiencia', '', true)),
+                    'ADD_PUNTOS_APRENDIZAJE' => utf8_normalize_nfc(request_var('add_puntos_aprendizaje', '', true)),
+                    'ADD_RYOS' => utf8_normalize_nfc(request_var('add_ryos', '', true)),
                 ), $atrs);
 
             $fields['HISTORIA'] = addslashes($fields['HISTORIA']);
@@ -279,12 +282,15 @@ class main
 			if ($fields['ARQUETIPO'] != '') {
                 $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
             }
-			
+
 			if ((int)$fields['NIVEL_INICIAL'] > 0)
 				$sql_array['nivel_inicial'] = $fields['NIVEL_INICIAL'];
-			
+
 			if ((int)$fields['ES_BIJUU'] > -1)
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
+			
+			$nueva_edad = calcular_edad_personaje($fields['PJ_ID']);
+			if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
 
             $sql = "UPDATE personajes SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
@@ -395,7 +401,7 @@ class main
 				trigger_error("La Vitalidad ingresada es incorrecta." . $this->get_return_link($user_id));
 
 			if ($lvlup_data['CCK'] < $pj_data['PJ_CCK'] || $lvlup_data['CCK'] > $attr_max)
-				trigger_error("El Control de Chakra ingresada es incorrecto." . $this->get_return_link($user_id));
+				trigger_error("El Control de Chakra ingresado es incorrecto." . $this->get_return_link($user_id));
 
 			if ($lvlup_data['CONCENTRACION'] < $pj_data['PJ_CON'] || $lvlup_data['CONCENTRACION'] > $attr_max)
 				trigger_error("La Concentración ingresada es incorrecta." . $this->get_return_link($user_id));
@@ -441,7 +447,10 @@ class main
 			}
 		}
 		$this->db->sql_freeresult($query);
-
+			
+		$nueva_edad = calcular_edad_personaje($pj_id);
+		if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
+		
 		try {
 			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET '
 									. $this->db->sql_build_array('UPDATE', $sql_array)
@@ -473,7 +482,7 @@ class main
 		}
 
 	}
-	
+
 	function nextLvl($user_id)
 	{
 		if ($user_id != $this->user->data['user_id']) {
@@ -485,25 +494,25 @@ class main
 
 		$pj_data = get_pj_data($pj_id, 0);
 		if (!$pj_data) trigger_error('Hubo un error obteniendo los datos de tu personaje.' . $this->get_return_link($user_id));
-		
+
 		$nivel = $pj_data['PJ_NIVEL'];
 		$nivel_inicial = $pj_data['PJ_NIVEL_INICIAL'];
 		$nivel_sig = $nivel + 1;
 		$exp_subir = $pj_data['PJ_EXPERIENCIA_SIG'] - $pj_data['PJ_EXPERIENCIA'];
 		$pa_subir = ($nivel_sig > 10 ? 5 : 3); // Si el próximo nivel es mayor a 10, gana 5 PA. Si no, 3 PA.
 		$ryos_subir = 1000;
-				
+
 		if ($nivel >= $nivel_inicial)
 			trigger_error('El personaje ya ha alcanzado su nivel inicial.' . $this->get_return_link($user_id));
-	
+
 		if (confirm_box(true)){
 			try {
-				$this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE." 
+				$this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
 										SET pf_experiencia = pf_experiencia + $exp_subir,
 											pf_puntos_apren = pf_puntos_apren + $pa_subir,
 											pf_ryos = pf_ryos + $ryos_subir
 										WHERE user_id = '$user_id'");
-										
+
 				$moderacion = array(
 						'PJ_ID'	=> $pj_id,
 						'RAZON'	=> "Subir de Nivel $nivel a Nivel $nivel_sig.",
@@ -523,7 +532,7 @@ class main
 			confirm_box(false, "¿Deseas subir de Nivel $nivel a Nivel $nivel_sig?<br/>
 								Tu personaje podrá seguir subiendo hasta Nivel $nivel_inicial.", $s_hidden_fields);
 		}
-		
+
 		return $this->view($user_id);
 	}
 
