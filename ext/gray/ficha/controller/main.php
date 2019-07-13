@@ -329,12 +329,6 @@ class main
 
 			if (confirm_box(true)){
 				if (comprar_habilidad($user_id, $hab_id, $hab_nombre, $hab_coste, $msg_error)) {
-					$moderacion = array(
-						'PJ_ID'	=> $pj_id,
-						'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
-					);
-					registrar_moderacion($moderacion);
-					
 					trigger_error("Habilidad aprendida exitosamente." . $this->get_return_link($user_id));
 				}
 				else {
