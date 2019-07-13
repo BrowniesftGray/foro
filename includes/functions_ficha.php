@@ -247,7 +247,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$db->sql_freeresult($queryHab);
 
 		$grupo = $user->data['group_id'];
-		$moderador = ($grupo == 5 || $grupo == 4);
+		$moderador = ($grupo == 5 || $grupo == 4 || $grupo == 18);
 		$admin = ($grupo == 5);
 		$personajePropio = ($user_id == $user->data['user_id']);
 
@@ -322,7 +322,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
 			'NIVEL_INICIAL'			=> $row['nivel_inicial'],
-			'PERSONAJE_PROPIO'			=> $personajePropio,
+			'PERSONAJE_PROPIO'		=> $personajePropio,
 			'PUEDE_SUBIR'			=> $puede_subir_nivel,
 			'TIENE_NIVEL_REGALADO'	=> $tiene_nivel_regalado,
 			'EXPERIENCIA' 			=> $experiencia,
