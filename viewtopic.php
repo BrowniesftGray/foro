@@ -2107,6 +2107,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	// mgomez // 27-12-2018
 	$pj_data = false;
 	$pj_id = get_pj_id($poster_id);
+	if (!$pj_id) $pj_id = get_pj_id_from_post($row['post_id']);
 	if ($pj_id) $pj_data = get_pj_data($pj_id, $row['post_id']);
 	if ($pj_data) $post_row = array_merge($post_row, $pj_data);
 

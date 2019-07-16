@@ -102,6 +102,12 @@ class phpbb_shop {
 			$new_ryos = $user_ryos - ($row['precio'] * $quantity);
 			$db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE." SET pf_ryos = '$new_ryos' WHERE user_id = '$user_id'");
 			
+			$moderacion = array(
+				'PJ_ID'	=> $pj_id,
+				'RAZON' => "Compra $quantity x '" . $row['nombre'] . "' por " . ($quantity * $row['precio']) . " Ryos"
+			);
+			registrar_moderacion($moderacion);
+			
 			trigger_error('Objeto comprado exitosamente.<br /><a href="'.get_shop_url($shops[$shop_id],$shop_id).'#item'.$item_id.'">Volver a la tienda</a>.');
 	    } else {
 	        $s_hidden_fields = build_hidden_fields(array(

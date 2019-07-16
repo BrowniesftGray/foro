@@ -28,6 +28,19 @@ function get_pj_id($user_id)
 	return $pj_id;
 }
 
+function get_pj_id_from_post($post_id)
+{
+	global $db;
+	$query = $db->sql_query("SELECT pj_id FROM ".PERSONAJES_POSTS_TABLE." WHERE post_id = $post_id");
+	if ($row = $db->sql_fetchrow($query)) {
+		$pj_id = $row['pj_id'];
+	} else {
+		$pj_id = false;
+	}
+	$db->sql_freeresult($query);
+	return $pj_id;
+}
+
 function get_max_pj_id()
 {
 	global $db;
@@ -73,14 +86,15 @@ function get_pj_data($pj_id, $post_id = 0) {
 					m.nombre as clan,
 					CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
 				FROM ".PERSONAJES_POSTS_TABLE." pj
-					INNER JOIN ".PERSONAJES_TABLE." p
+					INNER JOIN ".PERSONAJES_HISTORICO_TABLE." p
 						ON p.pj_id = pj.pj_id
 					INNER JOIN ".RAMAS_TABLE." m
 						ON m.rama_id = p.rama_id_pri
 					LEFT JOIN ".ARQUETIPOS_TABLE." a
-						ON a.arquetipo_id = p.arquetipo_id
+						ON a.arquetipo_id = pj.arquetipo_id
 				WHERE pj.pj_id = '$pj_id'
-					AND pj.post_id = '$post_id'";
+					AND pj.post_id = '$post_id'
+				LIMIT 1";
 
 		$query = $db->sql_query($sql);
 
@@ -123,7 +137,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 	}
 
 	if ($row = $db->sql_fetchrow($query)) {
-		$exp_avance = ($row['experiencia_porc'] ? (int)$row['experiencia_porc'] : -1);
+		$exp_avance = (isset($row['experiencia_porc']) ? (int)$row['experiencia_porc'] : -1);
 
 		if ($exp_avance == -1) {
 			$exp_req = (int)$row['experiencia_sig'] - (int)$row['experiencia_old'];
@@ -597,7 +611,7 @@ function calcula_pv($datos_pj)
 	global $db;
 	$pv = $bono = 0;
 
-	$pv = 10 + (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'];
+	$pv = 10 + (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)($datos_pj['vitalidad'] * 2);
 
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
