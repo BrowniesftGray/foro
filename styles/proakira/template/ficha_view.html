@@ -302,12 +302,16 @@
 							</div>
 						  </div>
 					  </div>
+					  <!-- IF PUEDE_MODERAR -->
 					  <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
 						<h3>Moderaciones</h3><br></h5>
+							<div style="overflow-y: auto; max-height: 600px;">
 							<!-- BEGIN moderaciones -->
 							  <div style="border-bottom:solid 1px #d9d9d9">{moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</div>
 							<!-- END moderaciones -->
+							</div>
 					  </div>
+					  <!-- ENDIF -->
 					  <!-- IF PUEDE_SUBIR -->
 					  <div class="tab-pane fade" id="levelup" role="tabpanel" aria-labelledby="levelup-tab">
 					  <form action="{U_ACTION_LVL}" method="post">
