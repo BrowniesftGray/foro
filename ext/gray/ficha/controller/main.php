@@ -216,7 +216,7 @@ class main
     {
         $grupo = $this->user->data['group_id'];
 
-        if ($grupo == 5 || $grupo == 4) {
+        if ($grupo == 5 || $grupo == 4 || $grupo == 18) {
             $atrs = array(
                 'FUERZA'            => (int) request_var('atrFuerza', 1),
                 'RESISTENCIA'       => (int) request_var('atrVit', 1),
