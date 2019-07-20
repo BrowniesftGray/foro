@@ -1466,26 +1466,31 @@ class acp_users
 					$tiers = get_tiers();
 					$tiers_options = '<option value="'.PATREON_TIER_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
 					$tiers_options .= '<option value="'.PATREON_TIER_ACTION_RESET.'">-- Quitar todo --</option>';
-					$tiers_options .= '<option value="'.PATREON_TIER_ACTION_UPDATE.'">-- Renovar Tier --</option>';
-					foreach ($tiers as $tier) {
-						$tiers_options .= '<option value='.$tier['ID'].'>'.$tier['NOMBRE'].'</option>';
-					}
 					
 					$user_tier = get_user_tier($user_id);
 					if ($user_tier) {
 						$tier_actual = $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+						$tiers_options .= '<option value="'.PATREON_TIER_ACTION_UPDATE.'">-- Renovar Tier --</option>';
+					}
+					
+					foreach ($tiers as $tier) {
+						$tiers_options .= '<option value='.$tier['ID'].'>'.$tier['NOMBRE'].'</option>';
 					}
 					
 					$beneficios_add = get_beneficios();
 					$beneficios_add_options = '<option value="'.PATREON_BENEFICIO_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
-					foreach ($beneficios_add as $beneficio) {
-						$beneficios_add_options .= '<option value='.$beneficio['beneficio_id'].'>'.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+					if ($beneficios_add) {
+						foreach ($beneficios_add as $beneficio) {
+							$beneficios_add_options .= '<option value='.$beneficio['beneficio_id'].'>'.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+						}
 					}
 					
 					$beneficios_del = get_beneficios($user_id);
 					$beneficios_del_options = '<option value="'.PATREON_BENEFICIO_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
-					foreach ($beneficios_del as $beneficio) {
-						$beneficios_del_options .= '<option value='.$beneficio['beneficio_id'].'>'.'ELIMINAR - '.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+					if ($beneficios_del) {
+						foreach ($beneficios_del as $beneficio) {
+							$beneficios_del_options .= '<option value='.$beneficio['beneficio_id'].'>'.'ELIMINAR - '.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+						}
 					}
 					
 					$template->assign_vars(array(
@@ -1693,7 +1698,7 @@ class acp_users
 						
 						// Eliminar Beneficio
 						if ($data['patreon_beneficio_del'] != PATREON_BENEFICIO_ACTION_NO_ACTION) {
-							asignar_beneficio($user_id, $data['patreon_beneficio_del']);
+							eliminar_beneficio($user_id, $data['patreon_beneficio_del']);
 						}
 
 						trigger_error($user->lang['USER_PROFILE_UPDATED'] . adm_back_link($this->u_action . '&amp;u=' . $user_id));

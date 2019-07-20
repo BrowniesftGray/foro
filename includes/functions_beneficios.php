@@ -122,6 +122,7 @@ function limpiar_tier ($user_id) {
 									,moderador_del = '".$user->data['username']."'
 								WHERE fecha_fin >= NOW()
 									AND user_id = $user_id");
+	$db->sql_freeresult($query);
 	
 	return true;
 }
@@ -136,13 +137,72 @@ function asignar_tier ($user_id, $tier_id) {
 	
 	$beneficios = get_beneficios(false, $tier_id);
 	
+	foreach ($beneficios as $beneficio) {
+		asignar_beneficio($user_id, $beneficio['beneficio_id']);
+	}
+	
 	return true;
 }
 
 function asignar_beneficio ($user_id, $beneficio_id) {
-	return false;
+	global $db, $user;
+	$id_asignado = $fecha_fin = $permanente = false;
+	
+	$query = $db->sql_query("SELECT id, fecha_fin
+								FROM " . PATREON_USER_BENEFICIOS_TABLE . " 
+								WHERE user_id = $user_id
+									AND beneficio_id = $beneficio_id
+									AND (fecha_fin >= NOW()
+										OR fecha_fin IS NULL)");
+	if ($row = $db->sql_fetchrow($query)) {
+		$id_asignado = $row['id'];
+		$fecha_fin = ($row['fecha_fin'] ? $row['fecha_fin'] : false);
+	}
+	$db->sql_freeresult($query);
+	
+	$query = $db->sql_query("SELECT permanente 
+								FROM " . PATREON_BENEFICIOS_TABLE . " 
+								WHERE beneficio_id = $beneficio_id");
+	if ($row = $db->sql_fetchrow($query)) {
+		$permanente  = $row['permanente'];
+	}
+	$db->sql_freeresult($query);
+	
+	$now = date('Y-m-d');
+	$sql_array = array(
+			'user_id'		=> $user_id,
+			'beneficio_id'	=> $beneficio_id,
+			'moderador_add'	=> $user->data['username']
+	);
+	
+	if (!$permanente) {
+		$fecha_fin = date("Y-m-d", strtotime(date("Y-m-d", strtotime($fecha_fin ? $fecha_fin : $now)) . " +1 month"));
+		$sql_array['fecha_fin'] = $fecha_fin;
+	}
+	
+	if (!$id_asignado) {
+		$sql_array['fecha_inicio']	= $now;
+		$sql = 'INSERT INTO ' . PATREON_USER_BENEFICIOS_TABLE . $db->sql_build_array('INSERT', $sql_array);
+	} else {
+		$sql = 'UPDATE ' . PATREON_USER_BENEFICIOS_TABLE . ' SET ' . 
+					$db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE id = $id_asignado";
+	}
+	
+	$db->sql_query($sql);
+	
+	return true;
 }
 
 function eliminar_beneficio ($user_id, $beneficio_id) {
-	return false;
+	global $db, $user;
+	
+	$query = $db->sql_query('UPDATE ' . PATREON_USER_BENEFICIOS_TABLE . "
+								SET fecha_fin = NOW()
+									,moderador_del = '".$user->data['username']."'
+								WHERE fecha_fin >= NOW()
+									AND user_id = $user_id
+									AND beneficio_id = $beneficio_id");
+	
+	return true;
 }
