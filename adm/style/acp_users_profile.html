@@ -41,7 +41,67 @@
 				<dd><input min="-1000" max="1000" type="number" class="autowidth" name="item_cantidad" id="item_cantidad" size="10" value="0" /></dd>
 			</dl>
 		</fieldset>
-	<!-- ENDIF -->	
+	<!-- ENDIF -->
+	
+	<!-- IF ES_ADMIN -->
+		<fieldset>
+			<legend>Asignar Tier de Patreon</legend>
+			<dl>
+				<dt><label for="patreon_tier_add">Tier nuevo{L_COLON}</label><br />
+					<span>Asigna de manera automática todos los Beneficios relacionados al Tier elegido, y los de niveles más bajos. En caso de repetirse, se le suma un mes a la vigencia.</span>
+				</dt>
+				<dd><select id="patreon_tier_add" name="patreon_tier_add" class="autowidth">{S_PATREON_TIER_OPTIONS}</select></dd>
+			</dl>
+			<dl>
+				<dt><label>Tier actual{L_COLON}</label></dt>
+				<dd>{S_USER_PATREON_TIER}</dd>
+			</dl>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Asignar Beneficio de Patreon</legend>
+			<dl>
+				<dt><label for="patreon_beneficio_add">Beneficio{L_COLON}</label><br />
+					<span>Asignación manual de un único beneficio (ej: por compra con Puntos de Moderador).</span></dt>
+				<dd><select id="patreon_beneficio_add" name="patreon_beneficio_add" class="autowidth">{S_PATREON_BENEFICIOS_ADD_OPTIONS}</select></dd>
+			</dl>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Eliminar Beneficio de Patreon</legend>
+			<dl>
+				<dt><label for="patreon_beneficio_del">Beneficio{L_COLON}</label><br />
+					<span>Actualiza la fecha de fin de un beneficio para que caduque al instante.</span></dt>
+				<dd><select id="patreon_beneficio_del" name="patreon_beneficio_del" class="autowidth">{S_PATREON_BENEFICIOS_DEL_OPTIONS}</select></dd>
+			</dl>
+		</fieldset>
+	<!-- ENDIF -->
+	
+	<fieldset>
+		<legend>Historial de Beneficios de Patreon</legend>
+		<dl>
+			<!-- IF beneficios_historico -->
+			<table>
+				<tr>
+					<th>Beneficio</th>
+					<th>Fecha Inicio</th>
+					<th>Fecha Fin</th>
+					<th>Otorgado por</th>
+					<th>Estado</th>
+				</tr>
+				<!-- BEGIN beneficios_historico -->
+				<tr>
+					<td>{beneficios_historico.NOMBRE}</td>
+					<td>{beneficios_historico.FECHA_INICIO}</td>
+					<td>{beneficios_historico.FECHA_FIN}</td>
+					<td>{beneficios_historico.MODERADOR}</td>
+					<td><!-- IF beneficios_historico.ACTIVO -->Activo<!-- ELSE -->Vencido<!-- ENDIF --></td>
+				</tr>
+				<!-- END beneficios_historico -->
+			</table>
+			<!-- ENDIF -->
+		</dl>
+	</fieldset>
 	
 	<!-- EVENT acp_users_profile_custom_after -->
 	<fieldset class="quick">

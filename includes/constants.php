@@ -327,3 +327,12 @@ define('SHOPS_TABLE',					'categorias_items');
 define('NIVELES_TABLE',					'niveles');
 define('RAMAS_TABLE',					'ramas');
 define('REFERENTES_TABLE',				'referidos');
+define('PATREON_TIERS_TABLE',			'patreon_tiers');
+define('PATREON_BENEFICIOS_TABLE',		'patreon_beneficios');
+define('PATREON_USER_BENEFICIOS_TABLE',	'patreon_user_beneficios');
+
+// Akira constants
+define('PATREON_TIER_ACTION_NO_ACTION',	'-1');
+define('PATREON_TIER_ACTION_RESET',		'-2');
+define('PATREON_TIER_ACTION_UPDATE',	'0');
+define('PATREON_BENEFICIO_ACTION_NO_ACTION',	'-1');

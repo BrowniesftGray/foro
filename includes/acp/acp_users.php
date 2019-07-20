@@ -18,6 +18,7 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+include_once($phpbb_root_path . 'includes/functions_beneficios.' . $phpEx);
 
 class acp_users
 {
@@ -1423,6 +1424,8 @@ class acp_users
 				$cp = $phpbb_container->get('profilefields.manager');
 
 				$cp_data = $cp_error = array();
+				
+				$es_admin = ($user->data['group_id'] == 5);
 
 				$sql = 'SELECT lang_id
 					FROM ' . LANG_TABLE . "
@@ -1440,6 +1443,9 @@ class acp_users
 					'bday_year'		=> 0,
 					'item_nombre'	=> '',
 					'item_cantidad'	=> 0,
+					'patreon_tier_add'		=> PATREON_TIER_ACTION_NO_ACTION,
+					'patreon_beneficio_add'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
+					'patreon_beneficio_del'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
 				);
 				
 				$sql = 'SELECT pj_id
@@ -1448,9 +1454,62 @@ class acp_users
 				$result = $db->sql_query($sql);
 				$row = $db->sql_fetchrow($result);
 				$db->sql_freeresult($result);
+				
 				$template->assign_vars(array(
 					'TIENE_PERSONAJE'	=> $row['pj_id'],
+					'ES_ADMIN'			=> $es_admin,
 				));
+				
+				// Operar Beneficios Patreon
+				if ($es_admin)
+				{
+					$tiers = get_tiers();
+					$tiers_options = '<option value="'.PATREON_TIER_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
+					$tiers_options .= '<option value="'.PATREON_TIER_ACTION_RESET.'">-- Quitar todo --</option>';
+					$tiers_options .= '<option value="'.PATREON_TIER_ACTION_UPDATE.'">-- Renovar Tier --</option>';
+					foreach ($tiers as $tier) {
+						$tiers_options .= '<option value='.$tier['ID'].'>'.$tier['NOMBRE'].'</option>';
+					}
+					
+					$user_tier = get_user_tier($user_id);
+					if ($user_tier) {
+						$tier_actual = $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+					}
+					
+					$beneficios_add = get_beneficios();
+					$beneficios_add_options = '<option value="'.PATREON_BENEFICIO_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
+					foreach ($beneficios_add as $beneficio) {
+						$beneficios_add_options .= '<option value='.$beneficio['beneficio_id'].'>'.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+					}
+					
+					$beneficios_del = get_beneficios($user_id);
+					$beneficios_del_options = '<option value="'.PATREON_BENEFICIO_ACTION_NO_ACTION.'" selected="selected">Sin cambios</option>';
+					foreach ($beneficios_del as $beneficio) {
+						$beneficios_del_options .= '<option value='.$beneficio['beneficio_id'].'>'.'ELIMINAR - '.$beneficio['tier'].': '.$beneficio['nombre'].'</option>';
+					}
+					
+					$template->assign_vars(array(
+						'S_PATREON_TIER_OPTIONS'			=> $tiers_options,
+						'S_USER_PATREON_TIER'				=> $tier_actual,
+						'S_PATREON_BENEFICIOS_ADD_OPTIONS'	=> $beneficios_add_options,
+						'S_PATREON_BENEFICIOS_DEL_OPTIONS'	=> $beneficios_del_options,
+					));
+				}
+				
+				// Historial Patreon
+				$user_beneficios_historico = get_user_beneficios_historico($user_id);
+				
+				if ($user_beneficios_historico) {
+					foreach ($user_beneficios_historico as $beneficio) {
+						$template->assign_block_vars('beneficios_historico', array(
+							'NOMBRE'		=> $beneficio['nombre'],
+							'FECHA_INICIO'	=> $beneficio['fecha_inicio'],
+							'FECHA_FIN'		=> $beneficio['fecha_fin'],
+							'MODERADOR'		=> $beneficio['moderador_add'],
+							'ACTIVO'		=> ($beneficio['fecha_fin'] ? $beneficio['activo'] : true),
+						));
+					}
+				}
 
 				if ($user_row['user_birthday'])
 				{
@@ -1461,8 +1520,15 @@ class acp_users
 				$data['bday_month']		= $request->variable('bday_month', $data['bday_month']);
 				$data['bday_year']		= $request->variable('bday_year', $data['bday_year']);
 				$data['user_birthday']	= sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
+				
+				// Variables Inventario
 				$data['item_nombre']	= $request->variable('item_nombre', $data['item_nombre']);
 				$data['item_cantidad']	= $request->variable('item_cantidad', $data['item_cantidad']);
+				
+				// Variables Beneficios
+				$data['patreon_tier_add']	= $request->variable('patreon_tier_add', $data['patreon_tier_add']);
+				$data['patreon_beneficio_add']	= $request->variable('patreon_beneficio_add', $data['patreon_beneficio_add']);
+				$data['patreon_beneficio_del']	= $request->variable('patreon_beneficio_del', $data['patreon_beneficio_del']);
 				
 				/**
 				* Modify user data on editing profile in ACP
@@ -1544,6 +1610,7 @@ class acp_users
 						// Update Custom Fields
 						$cp->update_profile_field_data($user_id, $cp_data);
 						
+						// Actualizar Inventario
 						if ($data['item_nombre'] != '' && $data['item_cantidad'] != 0) {
 							$item_nombre = $data['item_nombre'];
 							$item_cantidad = (int) $data['item_cantidad'];
@@ -1600,6 +1667,33 @@ class acp_users
 								trigger_error("No se encontró ítem llamado '$item_nombre'." . adm_back_link($this->u_action . '&amp;u=' . $user_id));
 							}
 							
+						}
+						
+						// Actualizar Tier Patreon
+						if ($data['patreon_tier_add'] != PATREON_TIER_ACTION_NO_ACTION) {
+							switch ($data['patreon_tier_add']) {
+								case PATREON_TIER_ACTION_RESET:
+									limpiar_tier($user_id); 
+									break;
+								case PATREON_TIER_ACTION_UPDATE:
+									 renovar_tier($user_id);
+									break;
+								default:
+									if ($data['patreon_tier_add'] > 0) {
+										asignar_tier($user_id, $data['patreon_tier_add']);
+									}
+									break;
+							}
+						}
+						
+						// Asignar Beneficio
+						if ($data['patreon_beneficio_add'] != PATREON_BENEFICIO_ACTION_NO_ACTION) {
+							asignar_beneficio($user_id, $data['patreon_beneficio_add']);
+						}
+						
+						// Eliminar Beneficio
+						if ($data['patreon_beneficio_del'] != PATREON_BENEFICIO_ACTION_NO_ACTION) {
+							asignar_beneficio($user_id, $data['patreon_beneficio_del']);
 						}
 
 						trigger_error($user->lang['USER_PROFILE_UPDATED'] . adm_back_link($this->u_action . '&amp;u=' . $user_id));
