@@ -992,17 +992,27 @@ h4.topic-subtitle {
 	font-family: Roboto;
 }
 
-.character .avatar-container {
+.character .avatar-container,
+.tab-pane .avatar-container {
 	width: 176px;
     height: 176px;
     overflow: hidden;
     border-radius: 100px;
     position: relative;
     border: solid 2px;
+}
+
+.character .avatar-container {
 	float: left;
 }
 
-.character .avatar {
+.tab-pane .avatar-container {
+	position: absolute;
+	right: 0;
+}
+
+.character .avatar,
+.tab-pane .avatar {
     position: absolute;
     width: 180px;
     height: auto;
@@ -1309,6 +1319,10 @@ h4.topic-subtitle {
 		margin: 0 !important;
 		border-radius: 0 !important;
 		width: 100% !important;
+	}
+	
+	.tab-pane .avatar-container {
+		opacity: .2;
 	}
 }
 

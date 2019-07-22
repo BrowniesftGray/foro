@@ -582,6 +582,7 @@
 
 .tab-content > .tab-pane {
   display: none;
+  position: relative;
 }
 
 .tab-content > .active {

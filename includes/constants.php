@@ -332,7 +332,10 @@ define('PATREON_BENEFICIOS_TABLE',		'patreon_beneficios');
 define('PATREON_USER_BENEFICIOS_TABLE',	'patreon_user_beneficios');
 
 // Akira constants
-define('PATREON_TIER_ACTION_NO_ACTION',	'-1');
-define('PATREON_TIER_ACTION_RESET',		'-2');
-define('PATREON_TIER_ACTION_UPDATE',	'0');
+define('PATREON_TIER_ACTION_NO_ACTION',			'-1');
+define('PATREON_TIER_ACTION_RESET',				'-2');
+define('PATREON_TIER_ACTION_UPDATE',			'0');
 define('PATREON_BENEFICIO_ACTION_NO_ACTION',	'-1');
+define('BENEFICIO_AVATAR_FICHA',				'avatar_ficha');
+define('BENEFICIO_BANNER_FICHA',				'banner_ficha');
+define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');

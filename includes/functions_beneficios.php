@@ -1,6 +1,6 @@
 <?php
 
-include($phpbb_root_path . 'config.' . $phpEx);
+//include($phpbb_root_path . 'config.' . $phpEx);
 
 function get_tiers() {
 	global $db;
@@ -61,7 +61,7 @@ function get_beneficios($user_id = false, $tier_id = false) {
 							ON b.beneficio_id = ub.beneficio_id
 						INNER JOIN ' . PATREON_TIERS_TABLE . ' t
 							ON t.tier_id = b.tier_id
-					WHERE ub.user_id = '. $user_id . 
+					WHERE ub.user_id = ' . $user_id . 
 		  ($tier_id ? ' AND t.orden <= ' . $tier_orden : ' ') . ' 
 						AND (ub.fecha_fin IS NOT NULL
 						AND ub.fecha_fin >= NOW())

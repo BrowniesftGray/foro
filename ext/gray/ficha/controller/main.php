@@ -2,6 +2,7 @@
 
 namespace gray\ficha\controller;
 require_once('/home/shinobil/public_html/includes/functions_ficha.php');
+require_once('/home/shinobil/public_html/includes/functions_beneficios.php');
 
 class main
 {
@@ -145,9 +146,42 @@ class main
 
     function view($user_id)
     {
+		$b_avatar_ficha = $b_banner_ficha = $b_ubicacion_items = false;
+		
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
-
+		
+		$beneficios = get_beneficios($user_id);
+		if ($beneficios) {
+			foreach ($beneficios as $key => $val) {
+				if ($val['nombre_php'] == BENEFICIO_AVATAR_FICHA) {
+					$b_avatar_ficha = true;
+				}
+				
+				if ($val['nombre_php'] == BENEFICIO_BANNER_FICHA) {
+					$b_banner_ficha = true;
+				}
+				
+				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
+					$b_ubicacion_items = true;
+				}
+			}
+		}
+		
+		if ($b_avatar_ficha) {
+			$query = $this->db->sql_query('SELECT * FROM '.USERS_TABLE.' WHERE user_id = ' . $user_id);
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$avatar = phpbb_get_user_avatar($row);
+			}
+		}
+		
+		$this->template->assign_vars(array(
+			'B_AVATAR_FICHA'	=> $b_avatar_ficha,
+			'AVATAR_FICHA'		=> $avatar,
+			'B_BANNER_FICHA'	=> $b_banner_ficha,
+			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
+		));
+		
 		$categorias = get_full_shops();
 		foreach($categorias as $cat) {
 			$this->template->assign_block_vars('categoria_item', $cat);
