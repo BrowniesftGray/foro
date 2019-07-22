@@ -63,8 +63,8 @@ function get_beneficios($user_id = false, $tier_id = false) {
 							ON t.tier_id = b.tier_id
 					WHERE ub.user_id = ' . $user_id . 
 		  ($tier_id ? ' AND t.orden <= ' . $tier_orden : ' ') . ' 
-						AND (ub.fecha_fin IS NOT NULL
-						AND ub.fecha_fin >= NOW())
+						AND (ub.fecha_fin IS NULL
+							OR ub.fecha_fin >= NOW())
 					ORDER BY t.orden ASC, b.nombre ASC';
 	} else {
 		$sql = 'SELECT	b.beneficio_id, b.nombre, b.nombre_php, t.nombre as tier
