@@ -37,3 +37,7 @@ gray_ficha_nextLvl:
 gray_ficha_sellItem:
     path: /ficha/sellItem/{user_id}
     defaults: { _controller: gray.ficha.controller:sellItem }
+    
+gray_ficha_saveItem:
+    path: /ficha/saveItem/{user_id}
+    defaults: { _controller: gray.ficha.controller:saveItem }

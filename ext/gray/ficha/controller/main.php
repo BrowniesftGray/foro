@@ -628,6 +628,66 @@ class main
 		
 		return $this->view($user_id);
 	}
+	
+	function saveItem($user_id) {
+		$item_id = (int) request_var('item_id', 0);
+		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
+		$b_ubicacion_items = false;
+		
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
+		
+		$beneficios = get_beneficios($user_id);
+		if ($beneficios) {
+			foreach ($beneficios as $key => $val) {
+				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
+					$b_ubicacion_items = true;
+				}
+			}
+		}
+		
+		if (!$b_ubicacion_items) {
+			trigger_error('No tienes habilitada la ubicación de items en el inventario.' . $this->get_return_link($user_id));
+		}
+		
+		$sql = "SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = '$item_id'";
+		$query = $this->db->sql_query($sql);
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$item_nombre = $row['nombre'];
+		} else {
+			trigger_error("No se encontró el item." . $this->get_return_link($user_id));
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true)) {
+			if (actualizar_item($user_id, $pj_id, $item_id, $ubicacion, $msg_error)) {
+				$moderacion = array(
+					'PJ_ID'	=> $pj_id,
+					'RAZON'	=> "Actualizado '$item_nombre' a la ubicación '$ubicacion'.",
+				);
+				registrar_moderacion($moderacion);
+				
+				trigger_error("Item actualizado exitosamente." . $this->get_return_link($user_id));
+			}
+			else {
+				trigger_error($msg_error . $this->get_return_link($user_id));
+			}
+		} else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit' 	=> true,
+				'item_id'	=> $item_id,
+				'ubicacion'	=> $ubicacion
+			));
+			
+			confirm_box(false, "¿Actualizar la ubicación de '$item_nombre'?", $s_hidden_fields);
+		}
+		
+		return $this->view($user_id);
+	}
 
 	function get_return_link($user_id) {
 		return "<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.";

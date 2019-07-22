@@ -23,6 +23,7 @@ include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_ficha.' . $phpEx);
 include_once($phpbb_root_path . 'includes/functions_shop.' . $phpEx);
+include_once($phpbb_root_path . 'includes/functions_beneficios.' . $phpEx);
 
 // Start session management
 $user->session_begin();
@@ -1932,6 +1933,17 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		$u_pm = append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=pm&amp;mode=compose&amp;action=quotepost&amp;p=' . $row['post_id']);
 	}
 	
+	// Beneficios Patreon
+	$b_ubicacion_items = false;
+	$beneficios = get_beneficios($poster_id);
+	if ($beneficios) {
+		foreach ($beneficios as $key => $val) {
+			if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
+				$b_ubicacion_items = true;
+			}
+		}
+	}
+	
 	$is_rpg_forum = (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla()));
 	$stats_changed = ((int)$row['diff_pv'] != 0 || (int)$row['diff_pc'] != 0 || (int)$row['diff_sta'] != 0);
 	
@@ -1960,6 +1972,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'U_POST_AUTHOR'			=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_profile'] : get_username_string('profile', $poster_id, $row['username'], $row['user_colour'], $row['post_username']),
 		'POST_AUTHOR_ALIAS'		=> ($poster_id != ANONYMOUS) ? $user_cache[$poster_id]['author_alias'] : get_username_string('full', $poster_id, get_pj_name($poster_id), $row['user_colour'], $row['post_username']),
 		'U_POST_AUTHOR_ALIAS'	=> get_pj_name($poster_id),
+		'B_UBICACION_ITEMS'		=> $b_ubicacion_items,
 
 		'RANK_TITLE'		=> $user_cache[$poster_id]['rank_title'],
 		'RANK_IMG'			=> $user_cache[$poster_id]['rank_image'],

@@ -53,7 +53,8 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 				i.url_imagen, 
 				i.requisitos, 
 				i.efectos,
-				pi.cantidad
+				pi.cantidad,
+				pi.ubicacion
 			FROM " . ITEMS_TABLE . " i
 				INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
 					ON pi.item_id = i.item_id
@@ -83,6 +84,7 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 			'REQS'			=> $row['requisitos'],
 			'EFECTOS'		=> $row['efectos'],
 			'CANTIDAD'		=> $row['cantidad'],
+			'UBICACION'		=> $row['ubicacion'],
 			'tags'			=> $items_tipos,
 		);
 	}

@@ -97,21 +97,21 @@
 						<hr>
 						<div class="form-group row">
 							<label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>
-							<div class="col-6">
+							<div class="col-10">
 							   <div style="text-align: justify">{FICHA_FISICO_TXT}</div>
 							</div>
 						</div>
 						<hr>
 						<div class="form-group row">
 							<label for="descPsic" class="col-3 col-form-label text-md-left">Descripci&oacute;n Psicol&oacute;gica</label>
-							<div class="col-6">
+							<div class="col-10">
 								<div style="text-align: justify">{FICHA_PSICOLOGICO_TXT}</div>
 							</div>
 						</div>
 						<hr>
 						<div class="form-group row">
 							<label for="descHis" class="col-3 col-form-label text-md-left">Historia</label>
-							<div class="col-6">
+							<div class="col-10">
 								<div style="text-align: justify">{FICHA_HISTORIA_TXT}</div>
 							</div>
 						</div>
@@ -191,6 +191,21 @@
 										<!-- BEGIN categoria_item.items.tipos -->
 										<span class="item-tipo">{categoria_item.items.tipos.TAG}</span>
 										<!-- END categoria_item.items.tipos -->
+										<!-- IF PERSONAJE_PROPIO and B_UBICACION_ITEMS -->
+										<hr />
+										<form action="{U_ACTION_SELL}" method="post">
+											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+											<input type="number" name="cantidad_venta" class="sell-item-qty" value="1" min="1" max="{categoria_item.items.CANTIDAD}" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
+										</form>
+										<hr />
+										<form action="{U_ACTION_UBI}" method="post">
+											<span for="ubicacion{categoria_item.items.ITEM_ID}">Ubicaci&oacute;n:</span>
+											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+											<input type="text" id="ubicacion{categoria_item.items.ITEM_ID}" class="item-place" name="ubicacion" value="{categoria_item.items.UBICACION}" maxlength="50" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Guardar" />
+										</form>
+										<!-- ENDIF -->
 									</div>
 								</div>
 							</li>

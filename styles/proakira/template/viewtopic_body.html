@@ -288,6 +288,9 @@
 											<!-- IF postrow.items.REQS --><div class="reqs"><b>Requisitos:</b>&nbsp;{postrow.items.REQS}</div><!-- ENDIF -->
 											<!-- IF postrow.items.EFECTOS --><div class="efectos"><b>Efectos:</b>&nbsp;{postrow.items.EFECTOS}</div><!-- ENDIF -->
 											<div class="desc">{postrow.items.DESCRIPCION}</div>
+											<!-- IF postrow.B_UBICACION_ITEMS and postrow.items.UBICACION -->
+											<div class="ubi"><b>Ubicaci&oacute;n:</b>&nbsp;{postrow.items.UBICACION}</div>
+											<!-- ENDIF -->
 											<!-- BEGIN postrow.items.tipos -->
 											<span class="item-tipo">{postrow.items.tipos.TAG}</span>
 											<!-- END postrow.items.tipos -->

@@ -101,10 +101,22 @@
 	font-size: 10px;
 }
 
-.inventory .item .sellItem {
-    position: absolute;
+.sellItem, .sell-item-qty, .item-place {
     font-size: 10px !important;
     margin: 1px;
+}
+
+.sell-item-qty {
+	color: #222;
+}
+
+.item-place {
+	color: #222;
+	width: 100px;
+}
+
+.inventory .item .sellItem {
+    position: absolute;
     display: none;
 }
 
@@ -128,6 +140,11 @@
 
 .tooltip .efectos, .tooltip .reqs {
 	border-bottom: solid 1px #636363;
+}
+
+.tooltip .ubi {
+	border-top: solid 1px #636363;
+	margin-bottom: 4px;
 }
 
 .tooltip .desc {

@@ -381,6 +381,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
 			'U_ACTION_SELL'			=> append_sid("/ficha/sellItem/" . $user_id),
+			'U_ACTION_UBI'			=> append_sid("/ficha/saveItem/" . $user_id),
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 		));
 
@@ -824,6 +825,49 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 					WHERE user_id = '$user_id'");
 	if ((int) $db->sql_affectedrows() < 1) {
 		$msg_error = 'Hubo un error actualizando tus Ryos.';
+		return false;
+	}
+	
+	return true;
+}
+
+function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
+	global $db, $user;
+	$b_ubicacion_items = false;
+	
+	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
+	
+	$beneficios = get_beneficios($user_id);
+	if ($beneficios) {
+		foreach ($beneficios as $key => $val) {
+			if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
+				$b_ubicacion_items = true;
+			}
+		}
+	}
+	
+	if (!$b_ubicacion_items) {
+		$msg_error = 'No tienes habilitada la ubicación de items en el inventario.';
+		return false;
+	}
+	
+	$sql = "SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = '$item_id'";
+	$query = $db->sql_query($sql);
+	if ($row = $db->sql_fetchrow($query)) {
+		$item_nombre = $row['nombre'];
+	} else {
+		$msg_error = "No se encontró el item.";
+		return false;
+	}
+	$db->sql_freeresult($query);
+	
+	$sql_array = array('ubicacion'	=> $ubicacion);
+	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . ' SET ' .
+					$db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE pj_id = '$pj_id'
+						AND item_id = '$item_id'");
+	if ((int) $db->sql_affectedrows() < 1) {
+		$msg_error = 'Hubo un error actualizando el item.';
 		return false;
 	}
 	
