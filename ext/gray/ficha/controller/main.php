@@ -146,7 +146,7 @@ class main
 
     function view($user_id)
     {
-		$b_avatar_ficha = $b_banner_ficha = $b_ubicacion_items = false;
+		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = true; //false; //TRIAL
 		
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
@@ -159,7 +159,7 @@ class main
 				}
 				
 				if ($val['nombre_php'] == BENEFICIO_BANNER_FICHA) {
-					$b_banner_ficha = true;
+					$b_ficha_premium = true;
 				}
 				
 				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
@@ -178,7 +178,7 @@ class main
 		$this->template->assign_vars(array(
 			'B_AVATAR_FICHA'	=> $b_avatar_ficha,
 			'AVATAR_FICHA'		=> $avatar,
-			'B_BANNER_FICHA'	=> $b_banner_ficha,
+			'B_FICHA_PREMIUM'	=> $b_ficha_premium,
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
 		));
 		
@@ -632,7 +632,7 @@ class main
 	function saveItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
-		$b_ubicacion_items = false;
+		$b_ubicacion_items = true; //false;	// TRIAL
 		
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
