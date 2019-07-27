@@ -423,36 +423,73 @@ function get_ficha($user_id, $return = false, $ver = false)
 }
 
 function get_arquetipos_disponibles($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$data = false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerArquetiposDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query(
+		"SELECT	a.arquetipo_id,
+				a.nombre_jp,
+				a.nombre_es,
+				a.bono_pv,
+				a.bono_sta,
+				a.bono_pc,
+				a.bono_es_porcentaje
+			FROM ".ARQUETIPOS_TABLE." a, ".PERSONAJES_TABLE." p
+			WHERE p.pj_id = '$pj_id'
+				AND a.nivel <= p.nivel
+				AND a.arquetipo_id != p.arquetipo_id
+				AND ((a.arquetipo_id_padre1 = p.arquetipo_id
+						OR a.arquetipo_id_padre2 = p.arquetipo_id)
+					OR ((p.arquetipo_id = 0 OR p.arquetipo_id IS NULL) 
+						AND a.arquetipo_id_padre1 IS NULL 
+						AND a.arquetipo_id_padre2 IS NULL)
+					OR (p.nivel >= 5 AND p.cambio_arquetipo = -1
+						AND a.arquetipo_id_padre1 IS NULL 
+						AND a.arquetipo_id_padre2 IS NULL))");
 
-	while ($row = mysqli_fetch_array($query)){
+	while ($row = $db->sql_fetchrow($query)){
 		$data[] = array(
 			'id'		=> $row['arquetipo_id'],
 			'nombre'	=> $row['nombre_es'],
 		);
 	}
+	$db->sql_freeresult($query);
 
 	return $data;
 }
 
 function get_habilidades_disponibles($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$data = false;
 
 	// Si tiene arquetipos disponibles, no puede aprender habilidades
-	if (get_arquetipos_disponibles($pj_id) !== false)
+	if (get_arquetipos_disponibles($pj_id) != false)
 		return false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerHabilidadesDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query("SELECT arquetipo_id FROM ".PERSONAJES_TABLE." WHERE pj_id = '$pj_id'");
+	if ($row = $db->sql_fetchrow($query)) {
+		$arquetipo_id = $row['arquetipo_id'];
+	}
+	$db->sql_freeresult($query);
+	
+	$query = $db->sql_query(
+		"SELECT	h.habilidad_id,
+				h.nombre,
+				h.requisitos,
+				h.efecto,
+				h.coste,
+				h.url_imagen
+			FROM ".HABILIDADES_TABLE." h
+				LEFT JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
+					ON ph.habilidad_id = h.habilidad_id
+					AND ph.pj_id = '$pj_id'
+			WHERE ph.pj_id IS NULL
+				AND h.visible = 1
+				AND (h.arquetipo_id1 = '$arquetipo_id' 
+					 OR h.arquetipo_id2 = '$arquetipo_id')
+			ORDER BY coste");
 
-	while ($row = mysqli_fetch_array($query)){
+	while ($row = $db->sql_fetchrow($query)){
 		$data[] = array(
 			'habilidad_id'	=> $row['habilidad_id'],
 			'nombre'		=> $row['nombre'],
@@ -462,19 +499,32 @@ function get_habilidades_disponibles($pj_id) {
 			'url_imagen'	=> $row['url_imagen'],
 		);
 	}
+	$db->sql_freeresult($query);
+	
 	return $data;
 }
 
 function get_atributos_disponibles ($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$cantidad = false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerCantidadAtributosDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query(
+		"SELECT n.atributos 
+					- (p.fuerza 
+						+ p.agilidad 
+						+ p.vitalidad 
+						+ p.cck 
+						+ p.concentracion 
+						+ p.voluntad) AS atributos
+			FROM ".PERSONAJES_TABLE." p
+				INNER JOIN ".NIVELES_TABLE." n
+					ON n.nivel = p.nivel
+			WHERE p.pj_id = '$pj_id'");
 
-	if ($row = mysqli_fetch_array($query))
+	if ($row = $db->sql_fetchrow($query)) {
 		$cantidad = ((int)$row['atributos'] > 0 ? (int)$row['atributos'] : false);
+	}
+	$db->sql_freeresult($query);
 
 	return $cantidad;
 }
@@ -874,7 +924,7 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	return true;
 }
 
-function comprarTecnica ($user_id, $coste){
+function comprarTecnica ($user_id, $coste, &$msg_error){
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
