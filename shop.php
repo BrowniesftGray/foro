@@ -148,6 +148,7 @@ class phpbb_shop {
 										i.precio, 
 										i.cantidad_max,
 										i.comprable,
+										i.pj_id_invencion,
 										pi.cantidad
 									FROM ' . ITEMS_TABLE . ' i
 										LEFT JOIN ' . PERSONAJE_ITEMS_TABLE . " pi
@@ -158,8 +159,22 @@ class phpbb_shop {
 									
 		while ($row = $db->sql_fetchrow($result)) {
 			
+			$cantidad_comprada = (int)$row['cantidad'];
 			$cantidad_max = ($row['cantidad_max'] == 0 ? '∞' : $row['cantidad_max']);
-			$str_max = ((int)$row['cantidad'] > 0) ? $row['cantidad'] . '/' . $cantidad_max : $cantidad_max;
+			$comprable = $row['comprable'];
+			
+			if ($row['pj_id_invencion']) {
+				$comprable = ($pj_id == $row['pj_id_invencion']);
+				$query_inv = $db->sql_query('SELECT cantidad 
+												FROM '. PERSONAJE_ITEMS_TABLE . ' 
+												WHERE pj_id = ' . $row['pj_id_invencion'] . ' 
+													AND item_id = '. $row['item_id']);
+				if ($row_inv = $db->sql_fetchrow($query_inv)) {
+					$cantidad_comprada = (int)$row_inv['cantidad'];
+				}
+			}
+			
+			$str_max = ($cantidad_comprada > 0) ? $cantidad_comprada . '/' . $cantidad_max : $cantidad_max;
 			
 			$template->assign_block_vars('items', array(
 				'ID'					=> $row['item_id'],
@@ -170,7 +185,7 @@ class phpbb_shop {
 				'EFECTOS'				=> $row['efectos'],
 				'PRECIO'				=> $row['precio'],
 				'MAX'					=> $str_max,
-				'COMPRABLE'				=> ($row['comprable'] == 1 ? true : false),
+				'COMPRABLE'				=> $comprable,
 				'U_BUY'					=> append_sid("/shop.php", 'mode=buy&amp;item_id=' . $row['item_id'] . '&amp;shop_id=' . $shop_id),
 			));
 			
