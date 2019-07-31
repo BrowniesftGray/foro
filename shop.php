@@ -165,10 +165,9 @@ class phpbb_shop {
 			
 			if ($row['pj_id_invencion']) {
 				$comprable = ($pj_id == $row['pj_id_invencion']);
-				$query_inv = $db->sql_query('SELECT cantidad 
+				$query_inv = $db->sql_query('SELECT SUM(cantidad) AS cantidad
 												FROM '. PERSONAJE_ITEMS_TABLE . ' 
-												WHERE pj_id = ' . $row['pj_id_invencion'] . ' 
-													AND item_id = '. $row['item_id']);
+												WHERE item_id = '. $row['item_id']);
 				if ($row_inv = $db->sql_fetchrow($query_inv)) {
 					$cantidad_comprada = (int)$row_inv['cantidad'];
 				}
