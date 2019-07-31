@@ -171,6 +171,7 @@ class phpbb_shop {
 				if ($row_inv = $db->sql_fetchrow($query_inv)) {
 					$cantidad_comprada = (int)$row_inv['cantidad'];
 				}
+				$db->sql_freeresult($query_inv);
 			}
 			
 			$str_max = ($cantidad_comprada > 0) ? $cantidad_comprada . '/' . $cantidad_max : $cantidad_max;
@@ -203,6 +204,7 @@ class phpbb_shop {
 			
 			$template->assign_block_vars_array('items.tipos', $items_tipos);
 		}
+		$db->sql_freeresult($query);
 		
 		$user->get_profile_fields($user_id);
 		$template->assign_vars(array(
