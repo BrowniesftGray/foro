@@ -175,6 +175,10 @@ class phpbb_shop {
 			
 			$str_max = ($cantidad_comprada > 0) ? $cantidad_comprada . '/' . $cantidad_max : $cantidad_max;
 			
+			if ((int)$row['cantidad_max'] > 0 && $cantidad_comprada >= $row['cantidad_max']) {
+				$comprable = false;
+			}
+			
 			$template->assign_block_vars('items', array(
 				'ID'					=> $row['item_id'],
 				'ITEM_NAME'				=> $row['nombre'],

@@ -883,7 +883,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 
 function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	global $db, $user;
-	$b_ubicacion_items = true; //false;	// TRIAL
+	$b_ubicacion_items = false;
 	
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 	

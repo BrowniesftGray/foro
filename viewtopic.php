@@ -1934,7 +1934,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	}
 	
 	// Beneficios Patreon
-	$b_ubicacion_items = true; //false;	// TRIAL
+	$b_ubicacion_items = false;
 	$beneficios = get_beneficios($poster_id);
 	if ($beneficios) {
 		foreach ($beneficios as $key => $val) {

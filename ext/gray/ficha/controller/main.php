@@ -146,7 +146,7 @@ class main
 
     function view($user_id)
     {
-		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = true; //false; //TRIAL
+		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = false;
 		
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
@@ -632,7 +632,7 @@ class main
 	function saveItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
-		$b_ubicacion_items = true; //false;	// TRIAL
+		$b_ubicacion_items = false;
 		
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
