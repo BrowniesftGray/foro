@@ -204,8 +204,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
-		//$puede_ver = ($auth->acl_get('m_modera_ficha') || $user->data['user_id'] == $pj) ? true : false;
-
+		
 		$queryCamino = $db->sql_query("
 			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
 				FROM ".PERSONAJES_HISTORICO_TABLE." ph

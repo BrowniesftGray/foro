@@ -37,6 +37,11 @@
 						<a class="nav-link" id="inventario-tab" data-toggle="tab" href="#inventario" role="tab" aria-controls="inventario" aria-selected="false"><h5>Inventario</h5></a>
 					  </li>
 					  <!-- ENDIF -->
+					  <!-- IF beneficios_historico -->
+					  <li class="nav-item">
+						<a class="nav-link" id="beneficios-tab" data-toggle="tab" href="#beneficios" role="tab" aria-controls="beneficios" aria-selected="false"><h5>Beneficios</h5></a>
+					  </li>
+					  <!-- ENDIF -->
 					  <!-- IF PUEDE_MODERAR -->
 					  <li class="nav-item">
 						<a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
@@ -335,6 +340,37 @@
 							</div>
 						  </div>
 					  </div>
+					  <!-- IF beneficios_historico -->
+					  <div class="tab-pane fade" id="beneficios" role="tabpanel" aria-labelledby="beneficios-tab">
+						<!-- IF PATREON_TIER -->
+						<div class="form-group row">
+							<label for="arquetipo" class="col-2 col-form-label text-md-left">Tier de Patreon</label>
+							<div class="col-7">
+							  <div>{PATREON_TIER}</div>
+							</div>
+						</div>
+						<!-- ENDIF -->
+						<h3>Beneficios</h3><br></h5>
+							<div style="overflow-y: auto; max-height: 600px;">
+							<table>
+								<tr>
+									<th>Beneficio</th>
+									<th>Desde</th>
+									<th>Hasta</th>
+									<th>Estado</th>
+								</tr>
+								<!-- BEGIN beneficios_historico -->
+								<tr>
+									<td>{beneficios_historico.NOMBRE}</td>
+									<td>{beneficios_historico.FECHA_INICIO}</td>
+									<td>{beneficios_historico.FECHA_FIN}</td>
+									<td><!-- IF beneficios_historico.ACTIVO -->Activo<!-- ELSE -->Vencido<!-- ENDIF --></td>
+								</tr>
+								<!-- END beneficios_historico -->
+							</table>
+							</div>
+					  </div>
+					  <!-- ENDIF -->
 					  <!-- IF PUEDE_MODERAR -->
 					  <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
 						<h3>Moderaciones</h3><br></h5>

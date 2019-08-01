@@ -1469,7 +1469,7 @@ class acp_users
 					
 					$user_tier = get_user_tier($user_id);
 					if ($user_tier) {
-						$tier_actual = $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+						$tier_actual = get_user_tier_string($user_tier);
 						$tiers_options .= '<option value="'.PATREON_TIER_ACTION_UPDATE.'">-- Renovar Tier --</option>';
 					}
 					

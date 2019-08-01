@@ -42,6 +42,10 @@ function get_user_tier($user_id) {
 	return $user_tier;
 }
 
+function get_user_tier_string($user_tier) {
+	return $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+}
+
 function get_beneficios($user_id = false, $tier_id = false) {
 	global $db;
 	$beneficios = false;

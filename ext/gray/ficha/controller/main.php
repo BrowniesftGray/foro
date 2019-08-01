@@ -192,6 +192,27 @@ class main
 					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
 				}
 		}
+		
+		$user_beneficios_historico = get_user_beneficios_historico($user_id);
+		if ($user_beneficios_historico) {
+			foreach ($user_beneficios_historico as $beneficio) {
+				$this->template->assign_block_vars('beneficios_historico', array(
+					'NOMBRE'		=> $beneficio['nombre'],
+					'FECHA_INICIO'	=> $beneficio['fecha_inicio'],
+					'FECHA_FIN'		=> $beneficio['fecha_fin'],
+					'MODERADOR'		=> $beneficio['moderador_add'],
+					'ACTIVO'		=> ($beneficio['fecha_fin'] ? $beneficio['activo'] : true),
+				));
+			}
+			
+			$user_tier = get_user_tier($user_id);
+			if ($user_tier) {
+				$tier_actual = get_user_tier_string($user_tier);
+				$this->template->assign_vars(array(
+					'PATREON_TIER'	=> $tier_actual
+				));
+			}
+		}
 
         return $this->helper->render('ficha_view.html');
     }
