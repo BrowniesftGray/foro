@@ -204,7 +204,7 @@ function eliminar_beneficio ($user_id, $beneficio_id) {
 	$query = $db->sql_query('UPDATE ' . PATREON_USER_BENEFICIOS_TABLE . "
 								SET fecha_fin = NOW()
 									,moderador_del = '".$user->data['username']."'
-								WHERE fecha_fin >= NOW()
+								WHERE (fecha_fin >= NOW() OR fecha_fin IS NULL)
 									AND user_id = $user_id
 									AND beneficio_id = $beneficio_id");
 	
