@@ -1527,7 +1527,7 @@ class acp_users
 				$data['user_birthday']	= sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
 				
 				// Variables Inventario
-				$data['item_nombre']	= $request->variable('item_nombre', $data['item_nombre']);
+				$data['item_nombre']	= utf8_normalize_nfc($request->variable('item_nombre', $data['item_nombre']));
 				$data['item_cantidad']	= $request->variable('item_cantidad', $data['item_cantidad']);
 				
 				// Variables Beneficios
@@ -1621,7 +1621,7 @@ class acp_users
 							$item_cantidad = (int) $data['item_cantidad'];
 							$item_id = false;
 							
-							$sql = "SELECT item_id FROM ".ITEMS_TABLE." WHERE nombre = '$item_nombre'";
+							$sql = "SELECT item_id FROM ".ITEMS_TABLE." WHERE nombre_busqueda = '$item_nombre'";
 							$result = $db->sql_query($sql);
 							if ($item_row = $db->sql_fetchrow($result)) {
 								$item_id = (int)$item_row['item_id'];
