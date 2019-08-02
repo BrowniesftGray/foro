@@ -355,17 +355,25 @@
 							<table>
 								<tr>
 									<th>Beneficio</th>
+									<th>Descripci&oacute;n</th>
+									<!-- IF PUEDE_MODERAR -->
 									<th>Desde</th>
 									<th>Hasta</th>
 									<th>Estado</th>
+									<!-- ENDIF -->
 								</tr>
 								<!-- BEGIN beneficios_historico -->
+								<!-- IF PUEDE_MODERAR or beneficios_historico.ACTIVO -->
 								<tr>
 									<td>{beneficios_historico.NOMBRE}</td>
+									<td>{beneficios_historico.DESCRIPCION}</td>
+									<!-- IF PUEDE_MODERAR -->
 									<td>{beneficios_historico.FECHA_INICIO}</td>
 									<td>{beneficios_historico.FECHA_FIN}</td>
 									<td><!-- IF beneficios_historico.ACTIVO -->Activo<!-- ELSE -->Vencido<!-- ENDIF --></td>
+									<!-- ENDIF -->
 								</tr>
+								<!-- ENDIF -->
 								<!-- END beneficios_historico -->
 							</table>
 							</div>

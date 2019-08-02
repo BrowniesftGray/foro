@@ -198,6 +198,7 @@ class main
 			foreach ($user_beneficios_historico as $beneficio) {
 				$this->template->assign_block_vars('beneficios_historico', array(
 					'NOMBRE'		=> $beneficio['nombre'],
+					'DESCRIPCION'	=> $beneficio['descripcion'],
 					'FECHA_INICIO'	=> $beneficio['fecha_inicio'],
 					'FECHA_FIN'		=> $beneficio['fecha_fin'],
 					'MODERADOR'		=> $beneficio['moderador_add'],

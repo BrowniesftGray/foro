@@ -95,6 +95,7 @@ function get_user_beneficios_historico($user_id) {
 	$query = $db->sql_query(
 		'SELECT	b.beneficio_id,
 				b.nombre,
+				b.descripcion,
 				ub.fecha_inicio,
 				ub.fecha_fin,
 				ub.moderador_add,
