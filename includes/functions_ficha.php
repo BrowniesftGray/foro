@@ -186,6 +186,8 @@ function get_pj_data($pj_id, $post_id = 0) {
 			'PJ_PV_PORC'			=> ($pv_porc > 100 ? 100 : $pv_porc),
 			'PJ_PC_PORC'			=> ($pc_porc > 100 ? 100 : $pc_porc),
 			'PJ_STA_PORC'			=> ($sta_porc > 100 ? 100 : $sta_porc),
+			'PJ_GOLPE'				=> calcula_golpe($row),
+			'PJ_BLOQUEO'			=> calcula_bloqueo($row)
 		);
 	}
 	$db->sql_freeresult($query);
@@ -202,8 +204,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
-		//$puede_ver = ($auth->acl_get('m_modera_ficha') || $user->data['user_id'] == $pj) ? true : false;
-
+		
 		$queryCamino = $db->sql_query("
 			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
 				FROM ".PERSONAJES_HISTORICO_TABLE." ph
@@ -376,6 +377,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_PC'				=> calcula_pc($row),
 			'FICHA_PV'				=> calcula_pv($row),
 			'FICHA_STA'				=> calcula_sta($row),
+			'FICHA_GOLPE'			=> calcula_golpe($row),
+			'FICHA_BLOQUEO'			=> calcula_bloqueo($row),
 			'FICHA_URL'				=> append_sid("/ficha/". $user_id),
 			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
@@ -711,6 +714,16 @@ function calcula_sta($datos_pj)
 	return $sta;
 }
 
+function calcula_golpe($datos_pj) {
+	$fue = (int)$datos_pj['fuerza'];
+	return floor($fue * 0.20);
+}
+
+function calcula_bloqueo($datos_pj) {
+	$vit = (int)$datos_pj['vitalidad'];
+	return floor($vit * 0.15);
+}
+
 function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
@@ -883,7 +896,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 
 function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	global $db, $user;
-	$b_ubicacion_items = true; //false;	// TRIAL
+	$b_ubicacion_items = false;
 	
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 	

@@ -42,6 +42,10 @@ function get_user_tier($user_id) {
 	return $user_tier;
 }
 
+function get_user_tier_string($user_tier) {
+	return $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+}
+
 function get_beneficios($user_id = false, $tier_id = false) {
 	global $db;
 	$beneficios = false;
@@ -200,7 +204,7 @@ function eliminar_beneficio ($user_id, $beneficio_id) {
 	$query = $db->sql_query('UPDATE ' . PATREON_USER_BENEFICIOS_TABLE . "
 								SET fecha_fin = NOW()
 									,moderador_del = '".$user->data['username']."'
-								WHERE fecha_fin >= NOW()
+								WHERE (fecha_fin >= NOW() OR fecha_fin IS NULL)
 									AND user_id = $user_id
 									AND beneficio_id = $beneficio_id");
 	

@@ -146,7 +146,7 @@ class main
 
     function view($user_id)
     {
-		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = true; //false; //TRIAL
+		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = false;
 		
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
@@ -191,6 +191,27 @@ class main
 					$this->template->assign_block_vars('categoria_item.items', $item);
 					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
 				}
+		}
+		
+		$user_beneficios_historico = get_user_beneficios_historico($user_id);
+		if ($user_beneficios_historico) {
+			foreach ($user_beneficios_historico as $beneficio) {
+				$this->template->assign_block_vars('beneficios_historico', array(
+					'NOMBRE'		=> $beneficio['nombre'],
+					'FECHA_INICIO'	=> $beneficio['fecha_inicio'],
+					'FECHA_FIN'		=> $beneficio['fecha_fin'],
+					'MODERADOR'		=> $beneficio['moderador_add'],
+					'ACTIVO'		=> ($beneficio['fecha_fin'] ? $beneficio['activo'] : true),
+				));
+			}
+			
+			$user_tier = get_user_tier($user_id);
+			if ($user_tier) {
+				$tier_actual = get_user_tier_string($user_tier);
+				$this->template->assign_vars(array(
+					'PATREON_TIER'	=> $tier_actual
+				));
+			}
 		}
 
         return $this->helper->render('ficha_view.html');
@@ -632,7 +653,7 @@ class main
 	function saveItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
-		$b_ubicacion_items = true; //false;	// TRIAL
+		$b_ubicacion_items = false;
 		
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
