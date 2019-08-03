@@ -46,7 +46,7 @@ function get_user_tier_string($user_tier) {
 	return $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
 }
 
-function get_beneficios($user_id = false, $tier_id = false) {
+function get_beneficios($user_id = false, $tier_id = false, $secundaria = false) {
 	global $db;
 	$beneficios = false;
 	
@@ -74,9 +74,11 @@ function get_beneficios($user_id = false, $tier_id = false) {
 		$sql = 'SELECT	b.beneficio_id, b.nombre, b.nombre_php, t.nombre as tier
 					FROM ' . PATREON_BENEFICIOS_TABLE . ' b
 						INNER JOIN ' . PATREON_TIERS_TABLE . ' t
-							ON t.tier_id = b.tier_id' .
-	  ($tier_id ? ' WHERE t.orden <= ' . $tier_orden : ' ') . ' 
-					ORDER BY t.orden ASC, b.nombre ASC';
+							ON t.tier_id = b.tier_id
+					WHERE 1 = 1 ' .
+			($tier_id ? ' AND t.orden <= ' . $tier_orden : ' ') . 
+		 ($secundaria ? ' AND b.solo_principal = 0 ' : ' ') .
+				'	ORDER BY t.orden ASC, b.nombre ASC';
 	}
 	
 	$query = $db->sql_query($sql);
@@ -132,15 +134,15 @@ function limpiar_tier ($user_id) {
 	return true;
 }
 
-function renovar_tier ($user_id) {
+function renovar_tier ($user_id, $secundaria) {
 	$user_tier = get_user_tier($user_id);
-	return asignar_tier($user_id, $user_tier['tier_id']);
+	return asignar_tier($user_id, $user_tier['tier_id'], $secundaria);
 }
 
-function asignar_tier ($user_id, $tier_id) {
+function asignar_tier ($user_id, $tier_id, $secundaria) {
 	if ($tier_id <= 0) return false;
 	
-	$beneficios = get_beneficios(false, $tier_id);
+	$beneficios = get_beneficios(false, $tier_id, $secundaria);
 	
 	foreach ($beneficios as $beneficio) {
 		asignar_beneficio($user_id, $beneficio['beneficio_id']);

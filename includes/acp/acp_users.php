@@ -1446,6 +1446,7 @@ class acp_users
 					'patreon_tier_add'		=> PATREON_TIER_ACTION_NO_ACTION,
 					'patreon_beneficio_add'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
 					'patreon_beneficio_del'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
+					'patreon_cuenta_principal'	=> false,
 				);
 				
 				$sql = 'SELECT pj_id
@@ -1534,6 +1535,7 @@ class acp_users
 				$data['patreon_tier_add']	= $request->variable('patreon_tier_add', $data['patreon_tier_add']);
 				$data['patreon_beneficio_add']	= $request->variable('patreon_beneficio_add', $data['patreon_beneficio_add']);
 				$data['patreon_beneficio_del']	= $request->variable('patreon_beneficio_del', $data['patreon_beneficio_del']);
+				$data['patreon_cuenta_principal']	= $request->variable('patreon_cuenta_principal', $data['patreon_cuenta_principal']);
 				
 				/**
 				* Modify user data on editing profile in ACP
@@ -1681,11 +1683,11 @@ class acp_users
 									limpiar_tier($user_id); 
 									break;
 								case PATREON_TIER_ACTION_UPDATE:
-									 renovar_tier($user_id);
+									 renovar_tier($user_id, !$data['patreon_cuenta_principal']);
 									break;
 								default:
 									if ($data['patreon_tier_add'] > 0) {
-										asignar_tier($user_id, $data['patreon_tier_add']);
+										asignar_tier($user_id, $data['patreon_tier_add'], !$data['patreon_cuenta_principal']);
 									}
 									break;
 							}
