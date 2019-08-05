@@ -33,7 +33,8 @@
 		<fieldset>
 			<legend>Agregar &iacute;tem a inventario</legend>
 			<dl>
-				<dt><label for="item_nombre">Nombre del &iacute;tem{L_COLON}</label></dt>
+				<dt><label for="item_nombre">Nombre del &iacute;tem{L_COLON}</label><br/>
+				<span>Sin tildes ni may&uacute;sculas</span></dt>
 				<dd><input type="text" class="autowidth" name="item_nombre" id="item_nombre" size="10" maxlength="50" value="" /></dd>
 			</dl>
 			<dl>
@@ -51,6 +52,12 @@
 					<span>Asigna de manera automática todos los Beneficios relacionados al Tier elegido, y los de niveles más bajos. En caso de repetirse, se le suma un mes a la vigencia.</span>
 				</dt>
 				<dd><select id="patreon_tier_add" name="patreon_tier_add" class="autowidth">{S_PATREON_TIER_OPTIONS}</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="patreon_cuenta_principal">Cuenta principal{L_COLON}</label><br />
+					<span>Seleccionar s&oacute;lo si la persona declaró esta cuenta como principal.</span>
+				</dt>
+				<dd><input type="checkbox" id="patreon_cuenta_principal" name="patreon_cuenta_principal" /></dd>
 			</dl>
 			<dl>
 				<dt><label>Tier actual{L_COLON}</label></dt>

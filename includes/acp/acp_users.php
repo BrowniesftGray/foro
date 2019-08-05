@@ -1446,6 +1446,7 @@ class acp_users
 					'patreon_tier_add'		=> PATREON_TIER_ACTION_NO_ACTION,
 					'patreon_beneficio_add'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
 					'patreon_beneficio_del'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
+					'patreon_cuenta_principal'	=> false,
 				);
 				
 				$sql = 'SELECT pj_id
@@ -1469,7 +1470,7 @@ class acp_users
 					
 					$user_tier = get_user_tier($user_id);
 					if ($user_tier) {
-						$tier_actual = $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
+						$tier_actual = get_user_tier_string($user_tier);
 						$tiers_options .= '<option value="'.PATREON_TIER_ACTION_UPDATE.'">-- Renovar Tier --</option>';
 					}
 					
@@ -1527,13 +1528,14 @@ class acp_users
 				$data['user_birthday']	= sprintf('%2d-%2d-%4d', $data['bday_day'], $data['bday_month'], $data['bday_year']);
 				
 				// Variables Inventario
-				$data['item_nombre']	= $request->variable('item_nombre', $data['item_nombre']);
+				$data['item_nombre']	= utf8_normalize_nfc($request->variable('item_nombre', $data['item_nombre']));
 				$data['item_cantidad']	= $request->variable('item_cantidad', $data['item_cantidad']);
 				
 				// Variables Beneficios
 				$data['patreon_tier_add']	= $request->variable('patreon_tier_add', $data['patreon_tier_add']);
 				$data['patreon_beneficio_add']	= $request->variable('patreon_beneficio_add', $data['patreon_beneficio_add']);
 				$data['patreon_beneficio_del']	= $request->variable('patreon_beneficio_del', $data['patreon_beneficio_del']);
+				$data['patreon_cuenta_principal']	= $request->variable('patreon_cuenta_principal', $data['patreon_cuenta_principal']);
 				
 				/**
 				* Modify user data on editing profile in ACP
@@ -1621,7 +1623,7 @@ class acp_users
 							$item_cantidad = (int) $data['item_cantidad'];
 							$item_id = false;
 							
-							$sql = "SELECT item_id FROM ".ITEMS_TABLE." WHERE nombre = '$item_nombre'";
+							$sql = "SELECT item_id FROM ".ITEMS_TABLE." WHERE nombre_busqueda = '$item_nombre'";
 							$result = $db->sql_query($sql);
 							if ($item_row = $db->sql_fetchrow($result)) {
 								$item_id = (int)$item_row['item_id'];
@@ -1681,11 +1683,11 @@ class acp_users
 									limpiar_tier($user_id); 
 									break;
 								case PATREON_TIER_ACTION_UPDATE:
-									 renovar_tier($user_id);
+									 renovar_tier($user_id, !$data['patreon_cuenta_principal']);
 									break;
 								default:
 									if ($data['patreon_tier_add'] > 0) {
-										asignar_tier($user_id, $data['patreon_tier_add']);
+										asignar_tier($user_id, $data['patreon_tier_add'], !$data['patreon_cuenta_principal']);
 									}
 									break;
 							}

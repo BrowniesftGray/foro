@@ -186,6 +186,8 @@ function get_pj_data($pj_id, $post_id = 0) {
 			'PJ_PV_PORC'			=> ($pv_porc > 100 ? 100 : $pv_porc),
 			'PJ_PC_PORC'			=> ($pc_porc > 100 ? 100 : $pc_porc),
 			'PJ_STA_PORC'			=> ($sta_porc > 100 ? 100 : $sta_porc),
+			'PJ_GOLPE'				=> calcula_golpe($row),
+			'PJ_BLOQUEO'			=> calcula_bloqueo($row)
 		);
 	}
 	$db->sql_freeresult($query);
@@ -202,8 +204,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
-		//$puede_ver = ($auth->acl_get('m_modera_ficha') || $user->data['user_id'] == $pj) ? true : false;
-
+		
 		$queryCamino = $db->sql_query("
 			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
 				FROM ".PERSONAJES_HISTORICO_TABLE." ph
@@ -376,6 +377,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_PC'				=> calcula_pc($row),
 			'FICHA_PV'				=> calcula_pv($row),
 			'FICHA_STA'				=> calcula_sta($row),
+			'FICHA_GOLPE'			=> calcula_golpe($row),
+			'FICHA_BLOQUEO'			=> calcula_bloqueo($row),
 			'FICHA_URL'				=> append_sid("/ficha/". $user_id),
 			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
@@ -423,36 +426,73 @@ function get_ficha($user_id, $return = false, $ver = false)
 }
 
 function get_arquetipos_disponibles($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$data = false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerArquetiposDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query(
+		"SELECT	a.arquetipo_id,
+				a.nombre_jp,
+				a.nombre_es,
+				a.bono_pv,
+				a.bono_sta,
+				a.bono_pc,
+				a.bono_es_porcentaje
+			FROM ".ARQUETIPOS_TABLE." a, ".PERSONAJES_TABLE." p
+			WHERE p.pj_id = '$pj_id'
+				AND a.nivel <= p.nivel
+				AND a.arquetipo_id != p.arquetipo_id
+				AND ((a.arquetipo_id_padre1 = p.arquetipo_id
+						OR a.arquetipo_id_padre2 = p.arquetipo_id)
+					OR ((p.arquetipo_id = 0 OR p.arquetipo_id IS NULL) 
+						AND a.arquetipo_id_padre1 IS NULL 
+						AND a.arquetipo_id_padre2 IS NULL)
+					OR (p.nivel >= 5 AND p.cambio_arquetipo = -1
+						AND a.arquetipo_id_padre1 IS NULL 
+						AND a.arquetipo_id_padre2 IS NULL))");
 
-	while ($row = mysqli_fetch_array($query)){
+	while ($row = $db->sql_fetchrow($query)){
 		$data[] = array(
 			'id'		=> $row['arquetipo_id'],
 			'nombre'	=> $row['nombre_es'],
 		);
 	}
+	$db->sql_freeresult($query);
 
 	return $data;
 }
 
 function get_habilidades_disponibles($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$data = false;
 
 	// Si tiene arquetipos disponibles, no puede aprender habilidades
-	if (get_arquetipos_disponibles($pj_id) !== false)
+	if (get_arquetipos_disponibles($pj_id) != false)
 		return false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerHabilidadesDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query("SELECT arquetipo_id FROM ".PERSONAJES_TABLE." WHERE pj_id = '$pj_id'");
+	if ($row = $db->sql_fetchrow($query)) {
+		$arquetipo_id = $row['arquetipo_id'];
+	}
+	$db->sql_freeresult($query);
+	
+	$query = $db->sql_query(
+		"SELECT	h.habilidad_id,
+				h.nombre,
+				h.requisitos,
+				h.efecto,
+				h.coste,
+				h.url_imagen
+			FROM ".HABILIDADES_TABLE." h
+				LEFT JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
+					ON ph.habilidad_id = h.habilidad_id
+					AND ph.pj_id = '$pj_id'
+			WHERE ph.pj_id IS NULL
+				AND h.visible = 1
+				AND (h.arquetipo_id1 = '$arquetipo_id' 
+					 OR h.arquetipo_id2 = '$arquetipo_id')
+			ORDER BY coste");
 
-	while ($row = mysqli_fetch_array($query)){
+	while ($row = $db->sql_fetchrow($query)){
 		$data[] = array(
 			'habilidad_id'	=> $row['habilidad_id'],
 			'nombre'		=> $row['nombre'],
@@ -462,19 +502,32 @@ function get_habilidades_disponibles($pj_id) {
 			'url_imagen'	=> $row['url_imagen'],
 		);
 	}
+	$db->sql_freeresult($query);
+	
 	return $data;
 }
 
 function get_atributos_disponibles ($pj_id) {
-	global $dbhost, $dbuser, $dbpasswd, $dbname, $dbport;
+	global $db;
 	$cantidad = false;
 
-	$connection = mysqli_connect($dbhost, $dbuser, $dbpasswd, $dbname);
-	$query = mysqli_query($connection,
-		"CALL ObtenerCantidadAtributosDisponibles ('$pj_id')") or die("Query fail: " . mysqli_error());
+	$query = $db->sql_query(
+		"SELECT n.atributos 
+					- (p.fuerza 
+						+ p.agilidad 
+						+ p.vitalidad 
+						+ p.cck 
+						+ p.concentracion 
+						+ p.voluntad) AS atributos
+			FROM ".PERSONAJES_TABLE." p
+				INNER JOIN ".NIVELES_TABLE." n
+					ON n.nivel = p.nivel
+			WHERE p.pj_id = '$pj_id'");
 
-	if ($row = mysqli_fetch_array($query))
+	if ($row = $db->sql_fetchrow($query)) {
 		$cantidad = ((int)$row['atributos'] > 0 ? (int)$row['atributos'] : false);
+	}
+	$db->sql_freeresult($query);
 
 	return $cantidad;
 }
@@ -661,6 +714,16 @@ function calcula_sta($datos_pj)
 	return $sta;
 }
 
+function calcula_golpe($datos_pj) {
+	$fue = (int)$datos_pj['fuerza'];
+	return floor($fue * 0.20);
+}
+
+function calcula_bloqueo($datos_pj) {
+	$vit = (int)$datos_pj['vitalidad'];
+	return floor($vit * 0.15);
+}
+
 function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
@@ -759,7 +822,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
-
+							
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
@@ -777,7 +840,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
-
+	
 	$sql = "SELECT i.nombre,
 				i.precio,
 				pi.cantidad
@@ -787,9 +850,9 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 			WHERE pi.pj_id = '$pj_id'
 				AND i.item_id = '$item_id'
 				AND pi.cantidad >= $cantidad_venta";
-
+				
 	$query = $db->sql_query($sql);
-
+	
 	if ($row = $db->sql_fetchrow($query)) {
 		$item_nombre = $row['nombre'];
 		$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
@@ -799,7 +862,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		return false;
 	}
 	$db->sql_freeresult($query);
-
+	
 	$user->get_profile_fields($user_id);
 	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
 		$pf_ryos = 0;
@@ -807,9 +870,9 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 	else{
 		$pf_ryos = $user->profile_fields['pf_ryos'];
 	}
-
+	
 	$pf_ryos = $pf_ryos + $precio_venta;
-
+	
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . "
 					SET cantidad = cantidad - $cantidad_venta
 					WHERE pj_id = '$pj_id'
@@ -819,7 +882,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		$msg_error = 'Hubo un error vendiendo el item.';
 		return false;
 	}
-
+	
 	$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 					SET pf_ryos = '$pf_ryos'
 					WHERE user_id = '$user_id'");
@@ -827,16 +890,16 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		$msg_error = 'Hubo un error actualizando tus Ryos.';
 		return false;
 	}
-
+	
 	return true;
 }
 
 function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	global $db, $user;
 	$b_ubicacion_items = false;
-
+	
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
-
+	
 	$beneficios = get_beneficios($user_id);
 	if ($beneficios) {
 		foreach ($beneficios as $key => $val) {
@@ -845,12 +908,12 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 			}
 		}
 	}
-
+	
 	if (!$b_ubicacion_items) {
 		$msg_error = 'No tienes habilitada la ubicación de items en el inventario.';
 		return false;
 	}
-
+	
 	$sql = "SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = '$item_id'";
 	$query = $db->sql_query($sql);
 	if ($row = $db->sql_fetchrow($query)) {
@@ -860,7 +923,7 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 		return false;
 	}
 	$db->sql_freeresult($query);
-
+	
 	$sql_array = array('ubicacion'	=> $ubicacion);
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . ' SET ' .
 					$db->sql_build_array('UPDATE', $sql_array) .
@@ -870,12 +933,11 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 		$msg_error = 'Hubo un error actualizando el item.';
 		return false;
 	}
-
+	
 	return true;
 }
 
-function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
-{
+function comprarTecnica ($user_id, $coste, &$msg_error){
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
@@ -894,51 +956,16 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 	$ptos_aprendizaje_restantes = $ptos_aprendizaje - $coste;
 
 	$pj_id = get_pj_id($user_id);
+
 	if ($pj_id) {
-		$db->sql_query('SELECT 1 FROM '.PERSONAJE_TECNICAS_TABLE."
-							WHERE pj_id = '$pj_id' AND tecnica_id = '$hab_id'");
-		if ((int) $db->sql_affectedrows() > 0) {
-			$msg_error = 'Tu personaje ya posee esa técnica.';
-			return false;
-		}
-
-		$disponible = false;
-		$hab_disp = get_tecnicas_disponibles($pj_id);
-		foreach ($hab_disp as $hab) {
-			if ((int) $hab['habilidad_id'] == $hab_id)
-				$disponible = true;
-		}
-		if (!$disponible) {
-			$msg_error = 'Esta técnica no está disponible para tu personaje.';
-			return false;
-		}
-
-		$sql_array = array(
-			'pj_id'			=> $pj_id,
-			'habilidad_id'	=> $hab_id,
-		);
-		$db->sql_query('INSERT INTO '.PERSONAJE_TECNICAS_TABLE. $db->sql_build_array('INSERT', $sql_array));
-		if ((int) $db->sql_affectedrows() < 1) {
-			$msg_error = 'Hubo un error agregando la técnica.';
-			return false;
-		}
-
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
-
-		$moderacion = array(
-			'PJ_ID'	=> $pj_id,
-			'RAZON' => "Compra técnica '$nombre' por $coste PA."
-		);
-		registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
 		return false;
 	}
-
-	return true;
 }
 
 
@@ -1029,31 +1056,31 @@ function borrar_personaje($pj) {
 
 function calcular_edad_personaje($pj_id) {
 	global $db;
-
+	
 	$nueva_edad = false;
 	$i = 0;
-
-	$query = $db->sql_query("SELECT fecha_historico, edad " .
-							" FROM " . PERSONAJES_HISTORICO_TABLE .
-							" WHERE pj_id = $pj_id " .
+	
+	$query = $db->sql_query("SELECT fecha_historico, edad " . 
+							" FROM " . PERSONAJES_HISTORICO_TABLE . 
+							" WHERE pj_id = $pj_id " . 
 							" ORDER BY fecha_historico ASC " .
 							" LIMIT 1");
-
+	
 	if ($row = $db->sql_fetchrow($query)) {
 		$edad = (int)$row['edad'];
 		$nueva_edad = $edad;
 		$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 		$fecha_nac = strtotime($row['fecha_historico']);
-
+		
 		while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
 			$i++;
 		}
-
+		
 		$nueva_edad = $nueva_edad + floor($i / 4);
 	}
 	$db->sql_freeresult($query);
-
+	
 	if ($nueva_edad == $edad) $nueva_edad = false;
-
+	
 	return $nueva_edad;
 }

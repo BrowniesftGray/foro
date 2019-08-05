@@ -146,7 +146,7 @@ class main
 
     function view($user_id)
     {
-		$b_avatar_ficha = $b_banner_ficha = $b_ubicacion_items = false;
+		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = false;
 		
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
@@ -159,7 +159,7 @@ class main
 				}
 				
 				if ($val['nombre_php'] == BENEFICIO_BANNER_FICHA) {
-					$b_banner_ficha = true;
+					$b_ficha_premium = true;
 				}
 				
 				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
@@ -178,7 +178,7 @@ class main
 		$this->template->assign_vars(array(
 			'B_AVATAR_FICHA'	=> $b_avatar_ficha,
 			'AVATAR_FICHA'		=> $avatar,
-			'B_BANNER_FICHA'	=> $b_banner_ficha,
+			'B_FICHA_PREMIUM'	=> $b_ficha_premium,
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
 		));
 		
@@ -191,6 +191,28 @@ class main
 					$this->template->assign_block_vars('categoria_item.items', $item);
 					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
 				}
+		}
+		
+		$user_beneficios_historico = get_user_beneficios_historico($user_id);
+		if ($user_beneficios_historico) {
+			foreach ($user_beneficios_historico as $beneficio) {
+				$this->template->assign_block_vars('beneficios_historico', array(
+					'NOMBRE'		=> $beneficio['nombre'],
+					'DESCRIPCION'	=> $beneficio['descripcion'],
+					'FECHA_INICIO'	=> $beneficio['fecha_inicio'],
+					'FECHA_FIN'		=> $beneficio['fecha_fin'],
+					'MODERADOR'		=> $beneficio['moderador_add'],
+					'ACTIVO'		=> ($beneficio['fecha_fin'] ? $beneficio['activo'] : true),
+				));
+			}
+			
+			$user_tier = get_user_tier($user_id);
+			if ($user_tier) {
+				$tier_actual = get_user_tier_string($user_tier);
+				$this->template->assign_vars(array(
+					'PATREON_TIER'	=> $tier_actual
+				));
+			}
 		}
 
         return $this->helper->render('ficha_view.html');
