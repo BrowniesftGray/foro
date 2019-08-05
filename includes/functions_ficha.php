@@ -759,7 +759,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
-							
+
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON' => "Compra Habilidad '$nombre' por $coste PA."
@@ -777,7 +777,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
-	
+
 	$sql = "SELECT i.nombre,
 				i.precio,
 				pi.cantidad
@@ -787,9 +787,9 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 			WHERE pi.pj_id = '$pj_id'
 				AND i.item_id = '$item_id'
 				AND pi.cantidad >= $cantidad_venta";
-				
+
 	$query = $db->sql_query($sql);
-	
+
 	if ($row = $db->sql_fetchrow($query)) {
 		$item_nombre = $row['nombre'];
 		$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
@@ -799,7 +799,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		return false;
 	}
 	$db->sql_freeresult($query);
-	
+
 	$user->get_profile_fields($user_id);
 	if (!array_key_exists('pf_ryos', $user->profile_fields)) {
 		$pf_ryos = 0;
@@ -807,9 +807,9 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 	else{
 		$pf_ryos = $user->profile_fields['pf_ryos'];
 	}
-	
+
 	$pf_ryos = $pf_ryos + $precio_venta;
-	
+
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . "
 					SET cantidad = cantidad - $cantidad_venta
 					WHERE pj_id = '$pj_id'
@@ -819,7 +819,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		$msg_error = 'Hubo un error vendiendo el item.';
 		return false;
 	}
-	
+
 	$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 					SET pf_ryos = '$pf_ryos'
 					WHERE user_id = '$user_id'");
@@ -827,16 +827,16 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		$msg_error = 'Hubo un error actualizando tus Ryos.';
 		return false;
 	}
-	
+
 	return true;
 }
 
 function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	global $db, $user;
 	$b_ubicacion_items = false;
-	
+
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
-	
+
 	$beneficios = get_beneficios($user_id);
 	if ($beneficios) {
 		foreach ($beneficios as $key => $val) {
@@ -845,12 +845,12 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 			}
 		}
 	}
-	
+
 	if (!$b_ubicacion_items) {
 		$msg_error = 'No tienes habilitada la ubicación de items en el inventario.';
 		return false;
 	}
-	
+
 	$sql = "SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = '$item_id'";
 	$query = $db->sql_query($sql);
 	if ($row = $db->sql_fetchrow($query)) {
@@ -860,7 +860,7 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 		return false;
 	}
 	$db->sql_freeresult($query);
-	
+
 	$sql_array = array('ubicacion'	=> $ubicacion);
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . ' SET ' .
 					$db->sql_build_array('UPDATE', $sql_array) .
@@ -870,11 +870,12 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 		$msg_error = 'Hubo un error actualizando el item.';
 		return false;
 	}
-	
+
 	return true;
 }
 
-function comprarTecnica ($user_id, $coste){
+function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
+{
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
@@ -893,16 +894,51 @@ function comprarTecnica ($user_id, $coste){
 	$ptos_aprendizaje_restantes = $ptos_aprendizaje - $coste;
 
 	$pj_id = get_pj_id($user_id);
-
 	if ($pj_id) {
+		$db->sql_query('SELECT 1 FROM '.PERSONAJE_TECNICAS_TABLE."
+							WHERE pj_id = '$pj_id' AND tecnica_id = '$hab_id'");
+		if ((int) $db->sql_affectedrows() > 0) {
+			$msg_error = 'Tu personaje ya posee esa técnica.';
+			return false;
+		}
+
+		$disponible = false;
+		$hab_disp = get_tecnicas_disponibles($pj_id);
+		foreach ($hab_disp as $hab) {
+			if ((int) $hab['habilidad_id'] == $hab_id)
+				$disponible = true;
+		}
+		if (!$disponible) {
+			$msg_error = 'Esta técnica no está disponible para tu personaje.';
+			return false;
+		}
+
+		$sql_array = array(
+			'pj_id'			=> $pj_id,
+			'habilidad_id'	=> $hab_id,
+		);
+		$db->sql_query('INSERT INTO '.PERSONAJE_TECNICAS_TABLE. $db->sql_build_array('INSERT', $sql_array));
+		if ((int) $db->sql_affectedrows() < 1) {
+			$msg_error = 'Hubo un error agregando la técnica.';
+			return false;
+		}
+
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
 							WHERE user_id = '$user_id'");
+
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON' => "Compra técnica '$nombre' por $coste PA."
+		);
+		registrar_moderacion($moderacion);
 	}
 	else {
 		$msg_error = 'Hubo un error buscando tu personaje.';
 		return false;
 	}
+
+	return true;
 }
 
 
@@ -993,31 +1029,31 @@ function borrar_personaje($pj) {
 
 function calcular_edad_personaje($pj_id) {
 	global $db;
-	
+
 	$nueva_edad = false;
 	$i = 0;
-	
-	$query = $db->sql_query("SELECT fecha_historico, edad " . 
-							" FROM " . PERSONAJES_HISTORICO_TABLE . 
-							" WHERE pj_id = $pj_id " . 
+
+	$query = $db->sql_query("SELECT fecha_historico, edad " .
+							" FROM " . PERSONAJES_HISTORICO_TABLE .
+							" WHERE pj_id = $pj_id " .
 							" ORDER BY fecha_historico ASC " .
 							" LIMIT 1");
-	
+
 	if ($row = $db->sql_fetchrow($query)) {
 		$edad = (int)$row['edad'];
 		$nueva_edad = $edad;
 		$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 		$fecha_nac = strtotime($row['fecha_historico']);
-		
+
 		while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
 			$i++;
 		}
-		
+
 		$nueva_edad = $nueva_edad + floor($i / 4);
 	}
 	$db->sql_freeresult($query);
-	
+
 	if ($nueva_edad == $edad) $nueva_edad = false;
-	
+
 	return $nueva_edad;
 }
