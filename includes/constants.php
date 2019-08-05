@@ -316,12 +316,14 @@ define('ZEBRA_TABLE',				$table_prefix . 'zebra');
 // Additional tables
 define('ARQUETIPOS_TABLE',				'arquetipos');
 define('HABILIDADES_TABLE',				'habilidades');
+define('TECNICAS_TABLE',				'tecnicas');
 define('ITEMS_TABLE',					'items');
 define('MODERACIONES_TABLE',			'moderaciones');
 define('PERSONAJES_TABLE',				'personajes');
 define('PERSONAJES_POSTS_TABLE',		'personajes_posts');
 define('PERSONAJES_HISTORICO_TABLE',	'personajes_historico');
 define('PERSONAJE_HABILIDADES_TABLE',	'personaje_habilidades');
+define('PERSONAJE_TECNICAS_TABLE',	'personaje_tecnicas');
 define('PERSONAJE_ITEMS_TABLE',			'personaje_items');
 define('SHOPS_TABLE',					'categorias_items');
 define('NIVELES_TABLE',					'niveles');
