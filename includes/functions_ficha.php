@@ -367,6 +367,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_CCK' 			=> $row['cck'],
 			'FICHA_CON' 			=> $row['concentracion'],
 			'FICHA_VOL' 			=> $row['voluntad'],
+			'FICHA_ESP'				=> (int)$row['cck'] + (int)$row['concentracion'] + (int)$row['voluntad'],
+			'FICHA_FIS'				=> (int)$row['fuerza'] + (int)$row['agilidad'] + (int)$row['vitalidad'],
 			'FICHA_FISICO'			=> stripslashes($row['fisico']),
 			'FICHA_PSICOLOGICO' 	=> stripslashes($row['psicologico']),
 			'FICHA_HISTORIA' 		=> stripslashes($row['historia']),
@@ -635,7 +637,7 @@ function calcula_pc($datos_pj)
 	global $db;
 	$pc = $bono = 0;
 
-	$pc = (int)$datos_pj['cck'] + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
+	$pc = floor((int)$datos_pj['cck'] * 1.5) + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
 
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
@@ -665,7 +667,7 @@ function calcula_pv($datos_pj)
 	global $db;
 	$pv = $bono = 0;
 
-	$pv = 10 + (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)($datos_pj['vitalidad'] * 2);
+	$pv = 10 + floor((int)$datos_pj['fuerza'] * 1.5) + floor((int)$datos_pj['agilidad'] * 0.5) + (int)($datos_pj['vitalidad'] * 2);
 
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
