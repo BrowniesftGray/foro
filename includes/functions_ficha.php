@@ -265,17 +265,24 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$moderador = ($grupo == 5 || $grupo == 4 || $grupo == 18);
 		$admin = ($grupo == 5);
 		$personajePropio = ($user_id == $user->data['user_id']);
+		
+		$user->get_profile_fields($user_id);
+		if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
+			$ptos_aprendizaje = 0;
+		}
+		else{
+			$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
+		}
+		
+		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
+			$experiencia = 0;
+		}
+		else{
+			$experiencia = $user->profile_fields['pf_experiencia'];
+		}
 
 		if ($personajePropio) $hab_disp = get_habilidades_disponibles($pj_id);
 		if ($hab_disp) {
-			$user->get_profile_fields($user_id);
-			if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
-				$ptos_aprendizaje = 0;
-			}
-			else{
-				$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
-			}
-
 			foreach($hab_disp as $hab) {
 				$template->assign_block_vars('habilidades_compra', array(
 					'ID'			=> $hab['habilidad_id'],
@@ -298,13 +305,21 @@ function get_ficha($user_id, $return = false, $ver = false)
 					$template->assign_block_vars_array('habilidades_compra.requisitos', $hab_disp_requisitos);
 			}
 		}
-
-		$user->get_profile_fields($user_id);
-		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
-			$experiencia = 0;
-		}
-		else{
-			$experiencia = $user->profile_fields['pf_experiencia'];
+		
+		if ($personajePropio) $tec_disp = get_tecnicas_disponibles($pj_id);
+		if ($tec_disp) {
+			foreach($tec_disp as $tec) {	
+				$template->assign_block_vars('tecnicas_compra', array(
+					'ID'			=> $hab['tecnica_id'],
+					'RAMA_ID'		=> $hab['rama_id'],
+					'RAMA_DESC'		=> $hab['rama_nombre'],
+					'INVENCION'		=> ($hab['pj_id_invencion'] == $pj_id),
+					'CONTENIDO'		=> $hab['contenido'],
+					'COSTE'			=> $hab['coste'],
+					'PUEDE_COMPRAR' => ($hab['coste'] <= $ptos_aprendizaje),
+					'U_ACTION'		=> append_sid("/ficha/tec/$user_id"),
+				));
+			}
 		}
 
 		if ($ver == true) {
@@ -502,6 +517,65 @@ function get_habilidades_disponibles($pj_id) {
 			'efecto'		=> $row['efecto'],
 			'coste'			=> $row['coste'],
 			'url_imagen'	=> $row['url_imagen'],
+		);
+	}
+	$db->sql_freeresult($query);
+
+	return $data;
+}
+
+function get_tecnicas_disponibles($pj_id) {
+	global $db;
+	$data = false;
+
+	$query = $db->sql_query("SELECT rama_id_pri, rama_id1, rama_id2, rama_id3, rama_id4, rama_id5 
+								FROM ".PERSONAJES_TABLE." 
+								WHERE pj_id = '$pj_id'");
+	if ($row = $db->sql_fetchrow($query)) {
+		$rama_prin = (int) $row['rama_id_pri'];
+		$rama_1 = (int) $row['rama_id1'];
+		$rama_2 = (int) $row['rama_id2'];
+		$rama_3 = (int) $row['rama_id3'];
+		$rama_4 = (int) $row['rama_id4'];
+		$rama_5 = (int) $row['rama_id5'];
+	}
+	$db->sql_freeresult($query);
+
+	$query = $db->sql_query(
+		"SELECT	t.tecnica_id,
+				t.rama_id,
+				r.nombre AS rama_nombre,
+				t.pj_id_invencion,
+				t.etiqueta,
+				t.coste,
+				b.bbcode_match
+			FROM ".TECNICAS_TABLE." t
+				INNER JOIN ".RAMAS_TABLE." r
+					ON r.rama_id = t.rama_id
+				INNER JOIN ".BBCODES_TABLE." b
+					ON b.bbcode_tag = t.etiqueta
+				LEFT JOIN ".PERSONAJE_TECNICAS_TABLE." pt
+					ON pt.tecnica_id = t.tecnica_id
+					AND pt.pj_id = '$pj_id'
+			WHERE pt.pj_id IS NULL
+				AND (t.rama_id IN($rama_prin, $rama_1, $rama_2, $rama_3, $rama_4, $rama_5)
+					OR t.pj_id_invencion = '$pj_id')
+			ORDER BY coste");
+
+	while ($row = $db->sql_fetchrow($query)){
+		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+		$allow_bbcode = $allow_urls = $allow_smilies = true;
+		generate_text_for_storage($row['bbcode_match'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+		$contenido = generate_text_for_display($row['bbcode_match'], $uid, $bitfield, $options);
+		
+		$data[] = array(
+			'tecnica_id'		=> $row['tecnica_id'],
+			'rama_id'			=> $row['rama_id'],
+			'rama_nombre'		=> $row['rama_nombre'],
+			'pj_id_invencion'	=> $row['pj_id_invencion'],
+			'contenido'			=> $contenido,
+			'coste'				=> $row['coste'],
+			'bbcode_match'		=> $row['bbcode_match'],
 		);
 	}
 	$db->sql_freeresult($query);
@@ -724,53 +798,6 @@ function calcula_golpe($datos_pj) {
 function calcula_bloqueo($datos_pj) {
 	$vit = (int)$datos_pj['vitalidad'];
 	return floor($vit * 0.15);
-}
-
-function get_tecnicas_disponibles($pj_id) {
-	global $db;
-	$data = false;
-
-	$query = $db->sql_query("SELECT rama_id_pri, rama_id1, rama_id2, rama_id3, rama_id4, rama_id5 FROM ".PERSONAJES_TABLE." WHERE pj_id = '$pj_id'");
-	if ($row = $db->sql_fetchrow($query)) {
-		$rama_prin = $row['rama_id_pri'];
-		$rama_1 = $row['rama_id1'];
-		$rama_2 = $row['rama_id2'];
-		$rama_3 = $row['rama_id3'];
-		$rama_4 = $row['rama_id4'];
-		$rama_5 = $row['rama_id5'];
-	}
-	$db->sql_freeresult($query);
-
-	$query = $db->sql_query(
-		"SELECT	h.habilidad_id,
-				h.nombre,
-				h.requisitos,
-				h.efecto,
-				h.coste,
-				h.url_imagen
-			FROM ".TECNICAS_TABLE." h
-				LEFT JOIN ".PERSONAJE_TECNICAS_TABLE." ph
-					ON ph.habilidad_id = h.habilidad_id
-					AND ph.pj_id = '$pj_id'
-			WHERE ph.pj_id IS NULL
-				AND h.visible = 1
-				AND (h.arquetipo_id1 = '$arquetipo_id'
-					 OR h.arquetipo_id2 = '$arquetipo_id')
-			ORDER BY coste");
-
-	while ($row = $db->sql_fetchrow($query)){
-		$data[] = array(
-			'habilidad_id'	=> $row['habilidad_id'],
-			'nombre'		=> $row['nombre'],
-			'requisitos'	=> explode('|', $row['requisitos']),
-			'efecto'		=> $row['efecto'],
-			'coste'			=> $row['coste'],
-			'url_imagen'	=> $row['url_imagen'],
-		);
-	}
-	$db->sql_freeresult($query);
-
-	return $data;
 }
 
 function registrar_moderacion(array $fields, $user_id = 0){
@@ -1016,9 +1043,11 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 
 		$disponible = false;
 		$tec_disp = get_tecnicas_disponibles($pj_id);
-		foreach ($tec_disp as $hab) {
-			if ((int) $hab['tecnica_id'] == $tec_id)
+		foreach ($tec_disp as $tec) {
+			if ((int) $tec['tecnica_id'] == $tec_id) {
 				$disponible = true;
+				break;
+			}
 		}
 		if (!$disponible) {
 			$msg_error = 'Esta técnica no está disponible para tu personaje.';
