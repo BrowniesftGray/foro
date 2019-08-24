@@ -1683,7 +1683,7 @@ function append_sid($url, $params = false, $is_amp = true, $session_id = false, 
 
 // mgomez // 2018-11-13
 function rewrite_url_with_title($url, &$params)
-{
+{	
 	global $db;
 	global $phpEx;
 	$f_id = $t_id = $p_id = $s = 0;
