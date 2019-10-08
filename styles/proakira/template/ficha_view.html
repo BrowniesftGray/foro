@@ -22,11 +22,9 @@
 					  <li class="nav-item">
 						<a class="nav-link" id="atributos-tab" data-toggle="tab" href="#atributos" role="tab" aria-controls="atributos" aria-selected="false"><h5>Atributos</h5></a>
 					  </li>
-					  <!-- IF FICHA_JUTSUS -->
 					  <li class="nav-item">
 						<a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
 					  </li>
-					  <!-- ENDIF -->
 					  <!-- IF habilidades or habilidades_compra -->
 					  <li class="nav-item">
 						<a class="nav-link" id="habilidades-tab" data-toggle="tab" href="#habilidades" role="tab" aria-controls="habilidades" aria-selected="false"><h5>Habilidades</h5></a>
@@ -166,121 +164,9 @@
 							</div>
 							<!-- ENDIF -->
 					  </div>
-					  <!-- IF FICHA_JUTSUS -->
-					  <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
-							<h3>Técnicas ninja</h3>
-							{FICHA_JUTSUS}
-					  </div>
-					  <!-- ENDIF -->
-					  <!-- IF categoria_item -->
-					  <div class="tab-pane fade" id="inventario" role="tabpanel" aria-labelledby="inventario-tab">
-						<!-- BEGIN categoria_item -->
-						<h3><i class="icon fa-fw {categoria_item.FA_ICON}"></i>{categoria_item.NOMBRE}</h3>
-						<ul class="inventory">
-							<!-- BEGIN categoria_item.items -->
-							<li class="item" data-tooltip="item-{categoria_item.items.ITEM_ID}">
-								<span class="qty">{categoria_item.items.CANTIDAD}</span>
-								<!-- IF PERSONAJE_PROPIO -->
-								<form action="{U_ACTION_SELL}" method="post">
-									<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
-									<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
-								</form>
-								<!-- ENDIF -->
-								{categoria_item.items.IMAGEN}
-								<div style="display:none">
-									<div class="tooltip" id="item-{categoria_item.items.ITEM_ID}">
-										<div class="nombre">{categoria_item.items.NOMBRE}</div>
-										<!-- IF categoria_item.items.REQS --><div class="reqs"><b>Requisitos:</b>&nbsp;{categoria_item.items.REQS}</div><!-- ENDIF -->
-										<!-- IF categoria_item.items.EFECTOS --><div class="efectos"><b>Efectos:</b>&nbsp;{categoria_item.items.EFECTOS}</div><!-- ENDIF -->
-										<div class="desc">{categoria_item.items.DESCRIPCION}</div>
-										<!-- BEGIN categoria_item.items.tipos -->
-										<span class="item-tipo">{categoria_item.items.tipos.TAG}</span>
-										<!-- END categoria_item.items.tipos -->
-										<!-- IF PERSONAJE_PROPIO and B_UBICACION_ITEMS -->
-										<hr />
-										<form action="{U_ACTION_SELL}" method="post">
-											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
-											<input type="number" name="cantidad_venta" class="sell-item-qty" value="1" min="1" max="{categoria_item.items.CANTIDAD}" />
-											<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
-										</form>
-										<hr />
-										<form action="{U_ACTION_UBI}" method="post">
-											<span for="ubicacion{categoria_item.items.ITEM_ID}">Ubicaci&oacute;n:</span>
-											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
-											<input type="text" id="ubicacion{categoria_item.items.ITEM_ID}" class="item-place" name="ubicacion" value="{categoria_item.items.UBICACION}" maxlength="50" />
-											<input type="submit" name="submit" class="button1 sellItem" value="Guardar" />
-										</form>
-										<!-- ENDIF -->
-									</div>
-								</div>
-							</li>
-							<!-- END categoria_item.items -->
-							<br class="clear" />
-						</ul>
-						<!-- END categoria_item -->
-					  </div>
-					  <!-- ENDIF -->
-					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
-					    <!-- IF FICHA_CAMINO -->
-						<div class="form-group row">
-							<label for="arquetipo" class="col-2 col-form-label text-md-left">Camino Ninja</label>
-							<div class="col-7">
-							  <div>{FICHA_CAMINO}</div>
-							</div>
-						</div>
-						<!-- ENDIF -->
-						<h3>Habilidades ninja</h3><br>
-						<!-- IF habilidades -->
-						<div class="habilidades">
-							<!-- BEGIN habilidades -->
-							<habilidad>
-								<nombre>{habilidades.NOMBRE}</nombre>
-								<!-- IF habilidades.requisitos -->
-								<requisitos>
-									<ul>
-										<!-- BEGIN habilidades.requisitos -->
-										<li>{habilidades.requisitos.REQUISITO}</li>
-										<!-- END habilidades.requisitos -->
-									</ul>
-								</requisitos>
-								<!-- ENDIF -->
-								<efecto>{habilidades.EFECTO}</efecto>
-							</habilidad>
-							<!-- END habilidades -->
-							<br class="clear" />
-						</div>
-						<!-- ENDIF -->
-
-						<!-- IF habilidades_compra -->
-						<h3>Habilidades disponibles para aprender</h3><br>
-						<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
-						<div class="habilidades">
-						<!-- BEGIN habilidades_compra -->
-							<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
-								<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
-								<habilidad>
-									<nombre>{habilidades_compra.NOMBRE}</nombre>
-									<!-- IF habilidades_compra.requisitos -->
-									<requisitos>
-										<ul>
-											<!-- BEGIN habilidades_compra.requisitos -->
-											<li>{habilidades_compra.requisitos.REQUISITO}</li>
-											<!-- END habilidades_compra.requisitos -->
-										</ul>
-									</requisitos>
-									<!-- ENDIF -->
-									<efecto>{habilidades_compra.EFECTO}</efecto>
-									<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
-									<!-- IF habilidades_compra.PUEDE_COMPRAR -->
-									<br/><input type="submit" style="float: right;" class="button1" name="submit" value="Aprender" />
-									<!-- ENDIF -->
-								</habilidad>
-							</form>
-						<!-- END habilidades_compra -->
-							<br class="clear" />
-						</div>
-						<!-- ENDIF -->
-					  </div>
+					  
+					  
+					  
 					  <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
 						<h3>Atributos</h3><br>
 						<div class="form-group row">
@@ -352,6 +238,171 @@
 							</div>
 						  </div>
 					  </div>
+					  
+					  
+					  
+					  <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
+						<h3>Técnicas ninja</h3>
+						<!-- IF PERSONAJE_PROPIO -->
+						<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
+						<!-- ENDIF -->
+						
+						<!-- IF ramas -->
+						<div class="ramas">
+							<!-- BEGIN ramas -->
+							<div class="spoiler">
+								<div class="spoiler-header spoiler-trigger">
+									<span class="spoiler-title">{ramas.NOMBRE}</span>
+									<span class="spoiler-status">Mostrar</span>
+								</div>
+								<div class="spoiler-body" style="text-align: center">
+									<!-- BEGIN ramas.tecnicas -->
+									{ramas.tecnicas.CONTENIDO}
+									<br />
+									<!-- END ramas.tecnicas -->
+									
+									<!-- IF ramas.tecnicas_compra -->
+									<h3 style="text-align: left">Técnicas disponibles para aprender</h3>
+									<br />
+									<!-- BEGIN ramas.tecnicas_compra -->
+									<form action="{ramas.tecnicas_compra.U_ACTION}" method="POST">
+										<input type="hidden" name="tecnica_id" value="{ramas.tecnicas_compra.ID}"></input>
+										{ramas.tecnicas_compra.CONTENIDO}
+										<!-- IF ramas.tecnicas_compra.PUEDE_COMPRAR -->
+										<input type="submit" style="font-size: 12px; margin-top: -52px" class="button1" name="submit" value="Aprender" />
+										<!-- ENDIF -->
+									</form>
+									<!-- END ramas.tecnicas_compra -->
+									<!-- ENDIF -->
+								</div>
+							</div>
+							<!-- END ramas -->
+						</div>
+						<!-- ENDIF -->
+						
+						<!-- IF FICHA_JUTSUS -->
+						<h3>Extra</h3>
+						{FICHA_JUTSUS}
+						<!-- ENDIF -->
+					  </div>
+					  
+					  
+					  
+					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
+					    <!-- IF FICHA_CAMINO -->
+						<div class="form-group row">
+							<label for="arquetipo" class="col-2 col-form-label text-md-left">Camino Ninja</label>
+							<div class="col-7">
+							  <div>{FICHA_CAMINO}</div>
+							</div>
+						</div>
+						<!-- ENDIF -->
+						<h3>Habilidades ninja</h3><br>
+						<!-- IF habilidades -->
+						<div class="habilidades">
+							<!-- BEGIN habilidades -->
+							<habilidad>
+								<nombre>{habilidades.NOMBRE}</nombre>
+								<!-- IF habilidades.requisitos -->
+								<requisitos>
+									<ul>
+										<!-- BEGIN habilidades.requisitos -->
+										<li>{habilidades.requisitos.REQUISITO}</li>
+										<!-- END habilidades.requisitos -->
+									</ul>
+								</requisitos>
+								<!-- ENDIF -->
+								<efecto>{habilidades.EFECTO}</efecto>
+							</habilidad>
+							<!-- END habilidades -->
+							<br class="clear" />
+						</div>
+						<!-- ENDIF -->
+						<!-- IF habilidades_compra -->
+						<h3>Habilidades disponibles para aprender</h3><br>
+						<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
+						<div class="habilidades">
+						<!-- BEGIN habilidades_compra -->
+							<form class="" action="{habilidades_compra.U_ACTION}" method="POST">
+								<input type="hidden" name="habilidad_id" value="{habilidades_compra.ID}"></input>
+								<habilidad>
+									<nombre>{habilidades_compra.NOMBRE}</nombre>
+									<!-- IF habilidades_compra.requisitos -->
+									<requisitos>
+										<ul>
+											<!-- BEGIN habilidades_compra.requisitos -->
+											<li>{habilidades_compra.requisitos.REQUISITO}</li>
+											<!-- END habilidades_compra.requisitos -->
+										</ul>
+									</requisitos>
+									<!-- ENDIF -->
+									<efecto>{habilidades_compra.EFECTO}</efecto>
+									<br/><b>Coste:</b> {habilidades_compra.COSTE} Puntos de Aprendizaje.
+									<!-- IF habilidades_compra.PUEDE_COMPRAR -->
+									<br/><input type="submit" style="float: right;" class="button1" name="submit" value="Aprender" />
+									<!-- ENDIF -->
+								</habilidad>
+							</form>
+						<!-- END habilidades_compra -->
+							<br class="clear" />
+						</div>
+						<!-- ENDIF -->
+					  </div>
+					  
+					  
+					  
+					  <!-- IF categoria_item -->
+					  <div class="tab-pane fade" id="inventario" role="tabpanel" aria-labelledby="inventario-tab">
+						<h3>Inventario</h3><br>
+						<!-- BEGIN categoria_item -->
+						<h3><i class="icon fa-fw {categoria_item.FA_ICON}"></i>{categoria_item.NOMBRE}</h3>
+						<ul class="inventory">
+							<!-- BEGIN categoria_item.items -->
+							<li class="item" data-tooltip="item-{categoria_item.items.ITEM_ID}">
+								<span class="qty">{categoria_item.items.CANTIDAD}</span>
+								<!-- IF PERSONAJE_PROPIO -->
+								<form action="{U_ACTION_SELL}" method="post">
+									<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+									<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
+								</form>
+								<!-- ENDIF -->
+								{categoria_item.items.IMAGEN}
+								<div style="display:none">
+									<div class="tooltip" id="item-{categoria_item.items.ITEM_ID}">
+										<div class="nombre">{categoria_item.items.NOMBRE}</div>
+										<!-- IF categoria_item.items.REQS --><div class="reqs"><b>Requisitos:</b>&nbsp;{categoria_item.items.REQS}</div><!-- ENDIF -->
+										<!-- IF categoria_item.items.EFECTOS --><div class="efectos"><b>Efectos:</b>&nbsp;{categoria_item.items.EFECTOS}</div><!-- ENDIF -->
+										<div class="desc">{categoria_item.items.DESCRIPCION}</div>
+										<!-- BEGIN categoria_item.items.tipos -->
+										<span class="item-tipo">{categoria_item.items.tipos.TAG}</span>
+										<!-- END categoria_item.items.tipos -->
+										<!-- IF PERSONAJE_PROPIO and B_UBICACION_ITEMS -->
+										<hr />
+										<form action="{U_ACTION_SELL}" method="post">
+											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+											<input type="number" name="cantidad_venta" class="sell-item-qty" value="1" min="1" max="{categoria_item.items.CANTIDAD}" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Vender" />
+										</form>
+										<hr />
+										<form action="{U_ACTION_UBI}" method="post">
+											<span for="ubicacion{categoria_item.items.ITEM_ID}">Ubicaci&oacute;n:</span>
+											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+											<input type="text" id="ubicacion{categoria_item.items.ITEM_ID}" class="item-place" name="ubicacion" value="{categoria_item.items.UBICACION}" maxlength="50" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Guardar" />
+										</form>
+										<!-- ENDIF -->
+									</div>
+								</div>
+							</li>
+							<!-- END categoria_item.items -->
+							<br class="clear" />
+						</ul>
+						<!-- END categoria_item -->
+					  </div>
+					  <!-- ENDIF -->
+					  
+					  
+					  
 					  <!-- IF beneficios_historico -->
 					  <div class="tab-pane fade" id="beneficios" role="tabpanel" aria-labelledby="beneficios-tab">
 						<!-- IF PATREON_TIER -->
@@ -362,7 +413,7 @@
 							</div>
 						</div>
 						<!-- ENDIF -->
-						<h3>Beneficios</h3><br></h5>
+						<h3>Beneficios</h3><br>
 							<div style="overflow-y: auto; max-height: 600px;">
 							<table>
 								<tr>
@@ -401,6 +452,9 @@
 							</div>
 					  </div>
 					  <!-- ENDIF -->
+					  
+					  
+					  
 					  <!-- IF PUEDE_SUBIR -->
 					  <div class="tab-pane fade" id="levelup" role="tabpanel" aria-labelledby="levelup-tab">
 					  <form action="{U_ACTION_LVL}" method="post">

@@ -204,7 +204,22 @@ function get_ficha($user_id, $return = false, $ver = false)
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
+		
+		// obtener ramas de técnicas
+		$ramas_array[] = array('ID' => $row['rama_id_pri'], 'NOMBRE' => get_nombre_rama($row['rama_id_pri']));
+		if ($row['rama_id1']) 
+			$ramas_array[] = array('ID' => $row['rama_id1'], 'NOMBRE' => get_nombre_rama($row['rama_id1']));
+		if ($row['rama_id2'])
+			$ramas_array[] = array('ID' => $row['rama_id2'], 'NOMBRE' => get_nombre_rama($row['rama_id2']));
+		if ($row['rama_id3'])
+			$ramas_array[] = array('ID' => $row['rama_id3'], 'NOMBRE' => get_nombre_rama($row['rama_id3']));
+		if ($row['rama_id4'])
+			$ramas_array[] = array('ID' => $row['rama_id4'], 'NOMBRE' => get_nombre_rama($row['rama_id4']));
+		if ($row['rama_id5'])
+			$ramas_array[] = array('ID' => $row['rama_id5'], 'NOMBRE' => get_nombre_rama($row['rama_id5']));
+		$ramas_array[] = array('ID' => -1, 'NOMBRE' => 'Técnicas Globales');
 
+		// obtener camino ninja
 		$queryCamino = $db->sql_query("
 			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
 				FROM ".PERSONAJES_HISTORICO_TABLE." ph
@@ -225,6 +240,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		}
 		$db->sql_freeresult($queryCamino);
 
+		// obtener moderaciones
 		$queryModeraciones = $db->sql_query("SELECT * FROM ".MODERACIONES_TABLE." WHERE pj_moderado='$pj_id'");
 
 		while ($row3 = $db->sql_fetchrow($queryModeraciones))
@@ -237,6 +253,31 @@ function get_ficha($user_id, $return = false, $ver = false)
 		}
 		$db->sql_freeresult($queryModeraciones);
 
+		// obtener grupo activo y permisos
+		$grupo = $user->data['group_id'];
+		$moderador = ($grupo == 5 || $grupo == 4 || $grupo == 18);
+		$admin = ($grupo == 5);
+		
+		// obtener si está viendo su propio personaje
+		$personajePropio = ($user_id == $user->data['user_id']);
+		
+		// obtener experiencia y PA
+		$user->get_profile_fields($user_id);
+		if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
+			$ptos_aprendizaje = 0;
+		}
+		else{
+			$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
+		}
+		
+		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
+			$experiencia = 0;
+		}
+		else{
+			$experiencia = $user->profile_fields['pf_experiencia'];
+		}
+
+		// obtener habilidades aprendidas
 		$queryHab = $db->sql_query("SELECT h.*
 										FROM ".HABILIDADES_TABLE." h
 											INNER JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
@@ -260,27 +301,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			}
 		}
 		$db->sql_freeresult($queryHab);
-
-		$grupo = $user->data['group_id'];
-		$moderador = ($grupo == 5 || $grupo == 4 || $grupo == 18);
-		$admin = ($grupo == 5);
-		$personajePropio = ($user_id == $user->data['user_id']);
 		
-		$user->get_profile_fields($user_id);
-		if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
-			$ptos_aprendizaje = 0;
-		}
-		else{
-			$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
-		}
-		
-		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
-			$experiencia = 0;
-		}
-		else{
-			$experiencia = $user->profile_fields['pf_experiencia'];
-		}
-
+		// obtener habilidades disponibles para aprender
 		if ($personajePropio) $hab_disp = get_habilidades_disponibles($pj_id);
 		if ($hab_disp) {
 			foreach($hab_disp as $hab) {
@@ -306,22 +328,43 @@ function get_ficha($user_id, $return = false, $ver = false)
 			}
 		}
 		
-		if ($personajePropio) $tec_disp = get_tecnicas_disponibles($pj_id);
-		if ($tec_disp) {
-			foreach($tec_disp as $tec) {	
-				$template->assign_block_vars('tecnicas_compra', array(
-					'ID'			=> $hab['tecnica_id'],
-					'RAMA_ID'		=> $hab['rama_id'],
-					'RAMA_DESC'		=> $hab['rama_nombre'],
-					'INVENCION'		=> ($hab['pj_id_invencion'] == $pj_id),
-					'CONTENIDO'		=> $hab['contenido'],
-					'COSTE'			=> $hab['coste'],
-					'PUEDE_COMPRAR' => ($hab['coste'] <= $ptos_aprendizaje),
-					'U_ACTION'		=> append_sid("/ficha/tec/$user_id"),
-				));
-			}
+		// obtener técnicas aprendidas y por aprender
+		if ($ramas_array) {
+			foreach ($ramas_array as $rama) {
+				$template->assign_block_vars('ramas', $rama);	// ID, NOMBRE
+				
+				// obtener técnicas aprendidas de la rama
+				$tec_apr = get_tecnicas_personaje($pj_id, $rama['ID'], false);
+				if ($tec_apr) {
+					foreach($tec_apr as $tec) {	
+						$template->assign_block_vars('ramas.tecnicas', array(
+							'ID'			=> $tec['tecnica_id'],
+							'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
+							'CONTENIDO'		=> $tec['contenido'],
+						));
+					}
+				}
+				
+				// obtener técnicas disponibles para aprender de la rama
+				if ($personajePropio && $user_id == 520) {							// TEST
+					$tec_disp = get_tecnicas_personaje($pj_id, $rama['ID'], true);
+					if ($tec_disp) {
+						foreach($tec_disp as $tec) {
+							$template->assign_block_vars('ramas.tecnicas_compra', array(
+								'ID'			=> $tec['tecnica_id'],
+								'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
+								'CONTENIDO'		=> $tec['contenido'],
+								'COSTE'			=> $tec['coste'],
+								'PUEDE_COMPRAR' => ($tec['coste'] <= $ptos_aprendizaje),
+								'U_ACTION'		=> append_sid("/ficha/tec/$user_id"),
+							));
+						}
+					}
+				}
+			}			
 		}
 
+		// obtener las técnicas extra
 		if ($ver == true) {
 			//Guarda el texto de tal forma que al usar generate_text_for_display muestre correctamente los bbcodes
 			$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
@@ -334,10 +377,16 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$jutsus = $row['tecnicas'];
 		}
 
+		// obtener atributos disponibles para aumentar
 		$attr_disp = get_atributos_disponibles($pj_id);
+		
+		// obtener atributos totales
 		$attr_tot = $attr_disp + $row['fuerza'] + $row['agilidad'] + $row['vitalidad'] + $row['cck'] + $row['concentracion'] + $row['voluntad'];
+		
+		// obtener combo de selección de arquetipo
 		$arquetipo_select = obtener_arquetipo_select($pj_id, $row['arquetipo_id']);
 
+		// obtener si tiene ramas para elegir
 		$puede_elegir_rama1 = ((int)$row['rama_id1'] == 0);
 		$puede_elegir_rama2 = ((int)$row['rama_id2'] == 0);
 		$puede_elegir_rama3 = ((int)$row['rama_id3'] == 0 && (int)$row['nivel'] >= 10);
@@ -345,10 +394,13 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$puede_elegir_rama5 = ((int)$row['rama_id5'] == 0 && (int)$row['nivel'] >= 25);
 		$puede_elegir_ramas = ($puede_elegir_rama1 || $puede_elegir_rama2 || $puede_elegir_rama3 || $puede_elegir_rama4 || $puede_elegir_rama5);
 
+		// obtener si tiene nivel regalado por reencarnación o NPC
 		$tiene_nivel_regalado = ((int)$row['nivel_inicial'] > (int)$row['nivel']);
 
+		// obtener su puede mejorar el personaje
 		$puede_subir_nivel = $personajePropio && ($attr_disp || $arquetipo_select || $puede_elegir_ramas);
 
+		// asignar variables
 		$template->assign_vars(array(
 			'NIVEL' 				=> $row['nivel'],
 			'NIVEL_INICIAL'			=> $row['nivel_inicial'],
@@ -405,6 +457,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 		));
 
+		// asignar variables de ramas
 		if (!$ver || $puede_elegir_ramas) {
 			$exluir_ramas[0] = (int)$row['rama_id_pri'];
 			$exluir_ramas[1] = (int)$row['rama_id1'];
@@ -524,7 +577,7 @@ function get_habilidades_disponibles($pj_id) {
 	return $data;
 }
 
-function get_tecnicas_disponibles($pj_id) {
+function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) {
 	global $db;
 	$data = false;
 
@@ -541,8 +594,9 @@ function get_tecnicas_disponibles($pj_id) {
 	}
 	$db->sql_freeresult($query);
 
-	$query = $db->sql_query(
-		"SELECT	t.tecnica_id,
+	$sql =
+		"SELECT	DISTINCT
+				t.tecnica_id,
 				t.rama_id,
 				r.nombre AS rama_nombre,
 				t.pj_id_invencion,
@@ -557,10 +611,25 @@ function get_tecnicas_disponibles($pj_id) {
 				LEFT JOIN ".PERSONAJE_TECNICAS_TABLE." pt
 					ON pt.tecnica_id = t.tecnica_id
 					AND pt.pj_id = '$pj_id'
-			WHERE pt.pj_id IS NULL
-				AND (t.rama_id IN($rama_prin, $rama_1, $rama_2, $rama_3, $rama_4, $rama_5)
-					OR t.pj_id_invencion = '$pj_id')
-			ORDER BY coste");
+			WHERE ";
+	
+	if ($rama_id == -1) {
+		if (!$disponibles) {
+			$sql .= " coste = 0 ";
+		} else {
+			// si intenta traer globales para aprender, no trae nada
+			$sql .= " 1 = 0 ";
+		}
+	} else {
+		$sql .= ($disponibles ? " pt.pj_id IS NULL " : " pt.pj_id IS NOT NULL ");
+		$sql .= ($rama_id ? " AND t.rama_id = $rama_id " : 
+				" AND (t.rama_id IN($rama_prin, $rama_1, $rama_2, $rama_3, $rama_4, $rama_5)
+					OR t.pj_id_invencion = '$pj_id')");
+	}
+	
+	$sql .= " ORDER BY coste, etiqueta";
+	
+	$query = $db->sql_query($sql);
 
 	while ($row = $db->sql_fetchrow($query)){
 		$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
@@ -1035,14 +1104,14 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 	$pj_id = get_pj_id($user_id);
 	if ($pj_id) {
 		$db->sql_query('SELECT 1 FROM '.PERSONAJE_TECNICAS_TABLE."
-							WHERE pj_id = '$pj_id' AND tecnica = '$tec_id'");
+							WHERE pj_id = '$pj_id' AND tecnica_id = '$tec_id'");
 		if ((int) $db->sql_affectedrows() > 0) {
 			$msg_error = 'Tu personaje ya posee esa técnica.';
 			return false;
 		}
 
 		$disponible = false;
-		$tec_disp = get_tecnicas_disponibles($pj_id);
+		$tec_disp = get_tecnicas_personaje($pj_id, false, true);
 		foreach ($tec_disp as $tec) {
 			if ((int) $tec['tecnica_id'] == $tec_id) {
 				$disponible = true;
