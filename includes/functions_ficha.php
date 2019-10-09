@@ -355,7 +355,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 								'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
 								'CONTENIDO'		=> $tec['contenido'],
 								'COSTE'			=> $tec['coste'],
-								'PUEDE_COMPRAR' => ($tec['coste'] <= $ptos_aprendizaje) && ($tec['coste'] > 0),
+								'PUEDE_COMPRAR' => ($tec['coste'] <= $ptos_aprendizaje),
 								'U_ACTION'		=> append_sid("/ficha/tec/$user_id"),
 							));
 						}
