@@ -406,6 +406,49 @@ class main
 
 		return $this->view($user_id);
 	}
+	
+	public function buyTec($user_id)
+	{
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes aprender técnicas para un personaje que no te pertenece.' . $this->get_return_link($user_id));
+		}
+
+		$tec_id = (int) request_var('tecnica_id', 0);
+
+		if ($tec_id > 0) {
+			$sql = "SELECT nombre, coste FROM tecnicas WHERE tecnica_id = '$tec_id'";
+			$query = $this->db->sql_query($sql);
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$tec_nombre = $row['nombre'];
+				$tec_coste = (int) $row['coste'];
+			}
+			else {
+				trigger_error('No se ha encontró la técnica.' . $this->get_return_link($user_id));
+			}
+
+			if (confirm_box(true)){
+				if (comprar_tecnica($user_id, $tec_id, $tec_nombre, $tec_coste, $msg_error)) {
+					trigger_error("Técnica aprendida exitosamente." . $this->get_return_link($user_id));
+				}
+				else {
+					trigger_error($msg_error . $this->get_return_link($user_id));
+				}
+			}
+			else {
+				$s_hidden_fields = build_hidden_fields(array(
+					'submit' 		=> true,
+					'tecnica_id'	=> $tec_id,
+				));
+
+				confirm_box(false, "¿Deseas aprender la técnica '$tec_nombre' por $tec_coste Puntos de Aprendizaje?", $s_hidden_fields);
+			}
+		}
+		else {
+			trigger_error('No se ha seleccionado una técnica.' . $this->get_return_link($user_id));
+		}
+
+		return $this->view($user_id);
+	}
 
 	function lvlUp($user_id)
 	{

@@ -346,7 +346,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 				}
 				
 				// obtener técnicas disponibles para aprender de la rama
-				if ($personajePropio && $user_id == 520) {							// TEST
+				if ($personajePropio) {
 					$tec_disp = get_tecnicas_personaje($pj_id, $rama['ID'], true);
 					if ($tec_disp) {
 						foreach($tec_disp as $tec) {
@@ -355,7 +355,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 								'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
 								'CONTENIDO'		=> $tec['contenido'],
 								'COSTE'			=> $tec['coste'],
-								'PUEDE_COMPRAR' => ($tec['coste'] <= $ptos_aprendizaje),
+								'PUEDE_COMPRAR' => ($tec['coste'] <= $ptos_aprendizaje) && ($tec['coste'] > 0),
 								'U_ACTION'		=> append_sid("/ficha/tec/$user_id"),
 							));
 						}
@@ -615,7 +615,7 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 	
 	if ($rama_id == -1) {
 		if (!$disponibles) {
-			$sql .= " coste = 0 ";
+			$sql .= " rango = 'Rango E' ";
 		} else {
 			// si intenta traer globales para aprender, no trae nada
 			$sql .= " 1 = 0 ";

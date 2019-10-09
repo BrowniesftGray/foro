@@ -41,3 +41,7 @@ gray_ficha_sellItem:
 gray_ficha_saveItem:
     path: /ficha/saveItem/{user_id}
     defaults: { _controller: gray.ficha.controller:saveItem }
+    
+gray_ficha_buyTec:
+    path: /ficha/tec/{user_id}
+    defaults: { _controller: gray.ficha.controller:buyTec }
