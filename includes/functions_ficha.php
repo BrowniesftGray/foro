@@ -1259,7 +1259,7 @@ function calcular_edad_personaje($pj_id) {
 			$i++;
 		}
 
-		$nueva_edad = $nueva_edad + floor($i / 4);
+		$nueva_edad = $nueva_edad + floor($i / 4) + 1;
 	}
 	$db->sql_freeresult($query);
 
