@@ -4785,7 +4785,7 @@ function getGameDate() {
 	// 1/9/2015 00:00
 	$then = 1441080000;
 	$now = time();
-	$initialYear = 133;
+	$initialYear = 134;
 	$seasons = [
 		"Invierno", //Jan
 		"Primavera",
