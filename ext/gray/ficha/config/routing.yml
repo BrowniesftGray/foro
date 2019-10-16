@@ -45,3 +45,7 @@ gray_ficha_saveItem:
 gray_ficha_buyTec:
     path: /ficha/tec/{user_id}
     defaults: { _controller: gray.ficha.controller:buyTec }
+    
+gray_ficha_removeTecMod:
+    path: /ficha/removeTec/{user_id}
+    defaults: { _controller: gray.ficha.controller:removeTecMod }
