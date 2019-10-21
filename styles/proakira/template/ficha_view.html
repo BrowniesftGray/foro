@@ -257,7 +257,13 @@
 								</div>
 								<div class="spoiler-body" style="text-align: center">
 									<!-- BEGIN ramas.tecnicas -->
-									{ramas.tecnicas.CONTENIDO}
+									<form action="{ramas.tecnicas.U_ACTION}" method="POST">
+										<input type="hidden" name="tecnica_id" value="{ramas.tecnicas.ID}"></input>
+										{ramas.tecnicas.CONTENIDO}
+										<!-- IF PUEDE_MODERAR -->
+										<input type="submit" style="font-size: 12px; margin-top: -52px" class="button1" name="submit" value="Quitar" />
+										<!-- ENDIF -->
+									</form>
 									<br />
 									<!-- END ramas.tecnicas -->
 									

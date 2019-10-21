@@ -255,7 +255,7 @@ class main
     public function viewMod($user_id)
     {
         $grupo = $this->user->data['group_id'];
-        if ($grupo == 5 || $grupo == 4) {
+        if ($grupo == 5 || $grupo == 4 || $grupo == 18) {
             get_ficha($user_id,$return = false, $ver = false);
             $this->template->assign_vars(array(
                 'U_ACTION'              => append_sid('/ficha/storeMod/' . $user_id),
@@ -402,49 +402,6 @@ class main
 		}
 		else {
 			trigger_error('No se ha seleccionado una habilidad.' . $this->get_return_link($user_id));
-		}
-
-		return $this->view($user_id);
-	}
-	
-	public function buyTec($user_id)
-	{
-		if ($user_id != $this->user->data['user_id']) {
-			trigger_error('No puedes aprender técnicas para un personaje que no te pertenece.' . $this->get_return_link($user_id));
-		}
-
-		$tec_id = (int) request_var('tecnica_id', 0);
-
-		if ($tec_id > 0) {
-			$sql = "SELECT nombre, coste FROM tecnicas WHERE tecnica_id = '$tec_id'";
-			$query = $this->db->sql_query($sql);
-			if ($row = $this->db->sql_fetchrow($query)) {
-				$tec_nombre = $row['nombre'];
-				$tec_coste = (int) $row['coste'];
-			}
-			else {
-				trigger_error('No se ha encontró la técnica.' . $this->get_return_link($user_id));
-			}
-
-			if (confirm_box(true)){
-				if (comprar_tecnica($user_id, $tec_id, $tec_nombre, $tec_coste, $msg_error)) {
-					trigger_error("Técnica aprendida exitosamente." . $this->get_return_link($user_id));
-				}
-				else {
-					trigger_error($msg_error . $this->get_return_link($user_id));
-				}
-			}
-			else {
-				$s_hidden_fields = build_hidden_fields(array(
-					'submit' 		=> true,
-					'tecnica_id'	=> $tec_id,
-				));
-
-				confirm_box(false, "¿Deseas aprender la técnica '$tec_nombre' por $tec_coste Puntos de Aprendizaje?", $s_hidden_fields);
-			}
-		}
-		else {
-			trigger_error('No se ha seleccionado una técnica.' . $this->get_return_link($user_id));
 		}
 
 		return $this->view($user_id);
@@ -637,7 +594,7 @@ class main
 	
 	function sellItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
-		$cantidad_venta = (int) request_var('cantidad_venta', 1);	// TODO: Vender más de uno
+		$cantidad_venta = (int) request_var('cantidad_venta', 1);
 		
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
@@ -749,6 +706,105 @@ class main
 			));
 			
 			confirm_box(false, "¿Actualizar la ubicación de '$item_nombre'?", $s_hidden_fields);
+		}
+		
+		return $this->view($user_id);
+	}
+	
+	public function buyTec($user_id)
+	{
+		if ($user_id != $this->user->data['user_id']) {
+			trigger_error('No puedes aprender técnicas para un personaje que no te pertenece.' . $this->get_return_link($user_id));
+		}
+
+		$tec_id = (int) request_var('tecnica_id', 0);
+
+		if ($tec_id > 0) {
+			$sql = "SELECT nombre, coste FROM tecnicas WHERE tecnica_id = '$tec_id'";
+			$query = $this->db->sql_query($sql);
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$tec_nombre = $row['nombre'];
+				$tec_coste = (int) $row['coste'];
+			}
+			else {
+				trigger_error('No se ha encontró la técnica.' . $this->get_return_link($user_id));
+			}
+
+			if (confirm_box(true)){
+				if (comprar_tecnica($user_id, $tec_id, $tec_nombre, $tec_coste, $msg_error)) {
+					trigger_error("Técnica aprendida exitosamente." . $this->get_return_link($user_id));
+				}
+				else {
+					trigger_error($msg_error . $this->get_return_link($user_id));
+				}
+			}
+			else {
+				$s_hidden_fields = build_hidden_fields(array(
+					'submit' 		=> true,
+					'tecnica_id'	=> $tec_id,
+				));
+
+				confirm_box(false, "¿Deseas aprender la técnica '$tec_nombre' por $tec_coste Puntos de Aprendizaje?", $s_hidden_fields);
+			}
+		}
+		else {
+			trigger_error('No se ha seleccionado una técnica.' . $this->get_return_link($user_id));
+		}
+
+		return $this->view($user_id);
+	}
+	
+	function removeTecMod($user_id) {
+		$tec_id = (int) request_var('tecnica_id', 0);
+		
+		$grupo = $this->user->data['group_id'];
+
+        if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
+		
+		$sql = "SELECT nombre, coste
+				FROM " . TECNICAS_TABLE . " t
+					INNER JOIN " . PERSONAJE_TECNICAS_TABLE . " pt
+						ON pt.tecnica_id = t.tecnica_id
+				WHERE pt.pj_id = '$pj_id'
+					AND t.tecnica_id = '$tec_id'";
+					
+		$query = $this->db->sql_query($sql);
+		
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$tec_nombre = $row['nombre'];
+			$tec_coste = (int)$row['coste'];
+		}
+		else {
+			trigger_error("El personaje no posee la técnica seleccionada." . $this->get_return_link($user_id));
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true)) {
+			if (quitar_tecnica($user_id, $pj_id, $tec_id, $tec_coste, $msg_error)) {
+				$moderacion = array(
+					'PJ_ID'	=> $pj_id,
+					'RAZON'	=> "Quitar '$tec_nombre' y devolver $tec_coste PA.",
+				);
+				registrar_moderacion($moderacion);
+				
+				trigger_error("Técnica quitada exitosamente." . $this->get_return_link($user_id));
+			}
+			else {
+				trigger_error($msg_error . $this->get_return_link($user_id));
+			}
+		}
+		else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit' 	=> true,
+				'tecnica_id'	=> $tec_id
+			));
+			
+			confirm_box(false, "¿Deseas quitar la técnica '$tec_nombre' y devolver $tec_coste PA a su personaje?", $s_hidden_fields);
 		}
 		
 		return $this->view($user_id);

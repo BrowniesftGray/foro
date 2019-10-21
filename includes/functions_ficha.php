@@ -341,6 +341,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 							'ID'			=> $tec['tecnica_id'],
 							'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
 							'CONTENIDO'		=> $tec['contenido'],
+							'U_ACTION'		=> append_sid("/ficha/removeTec/$user_id"),
 						));
 					}
 				}
@@ -1033,6 +1034,29 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 					WHERE user_id = '$user_id'");
 	if ((int) $db->sql_affectedrows() < 1) {
 		$msg_error = 'Hubo un error actualizando tus Ryos.';
+		return false;
+	}
+
+	return true;
+}
+
+function quitar_tecnica($user_id, $pj_id, $tec_id, $coste, &$msg_error) {
+	global $db, $user;
+	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
+
+	$db->sql_query('DELETE FROM ' . PERSONAJE_TECNICAS_TABLE . "
+					WHERE pj_id = '$pj_id'
+						AND tecnica_id = '$tec_id'");
+	if ((int) $db->sql_affectedrows() < 1) {
+		$msg_error = 'Hubo un error quitando la técnica.';
+		return false;
+	}
+
+	$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
+					SET pf_puntos_apren = pf_puntos_apren + $coste
+					WHERE user_id = '$user_id'");
+	if ((int) $db->sql_affectedrows() < 1) {
+		$msg_error = 'Hubo un error actualizando los PA.';
 		return false;
 	}
 
