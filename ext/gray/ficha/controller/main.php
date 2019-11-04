@@ -103,6 +103,7 @@ class main
 			'arquetipo_id'	=> 0,
 			'nombre'	=> $fields['NOMBRE'],
 			'edad'		=> $fields['EDAD'],
+			'edad_inicial'	=> $fields['EDAD'],
 			'rama_id_pri'	=> $fields['PRINCIPAL'],
 			'rama_id1'	=> $fields['RAMA1'],
 			'rama_id2'	=> $fields['RAMA2'],

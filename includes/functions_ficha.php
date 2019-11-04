@@ -456,6 +456,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'U_ACTION_SELL'			=> append_sid("/ficha/sellItem/" . $user_id),
 			'U_ACTION_UBI'			=> append_sid("/ficha/saveItem/" . $user_id),
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
+			'EDAD_CALC'				=> calcular_edad_personaje($pj_id),
 		));
 
 		// asignar variables de ramas
@@ -1267,27 +1268,33 @@ function calcular_edad_personaje($pj_id) {
 	$nueva_edad = false;
 	$i = 0;
 
-	$query = $db->sql_query("SELECT fecha_historico, edad " .
+	$query = $db->sql_query("SELECT fecha_historico " .
 							" FROM " . PERSONAJES_HISTORICO_TABLE .
 							" WHERE pj_id = $pj_id " .
 							" ORDER BY fecha_historico ASC " .
 							" LIMIT 1");
 
 	if ($row = $db->sql_fetchrow($query)) {
-		$edad = (int)$row['edad'];
-		$nueva_edad = $edad;
-		$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 		$fecha_nac = strtotime($row['fecha_historico']);
-
-		while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
-			$i++;
-		}
-
-		$nueva_edad = $nueva_edad + floor($i / 4) + 1;
 	}
 	$db->sql_freeresult($query);
+	
+	$query2 = $db->sql_query("SELECT edad_inicial " .
+							" FROM " . PERSONAJES_TABLE .
+							" WHERE pj_id = $pj_id");
+	if ($row2 = $db->sql_fetchrow($query2)) {
+		$edad = (int)$row2['edad_inicial'];
+	}
+	$db->sql_freeresult($query2);
+	
+	$nueva_edad = $edad;
+	$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 
-	if ($nueva_edad == $edad) $nueva_edad = false;
+	while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
+		$i++;
+	}
+
+	$nueva_edad = $nueva_edad + floor($i / 4);
 
 	return $nueva_edad;
 }
