@@ -1264,9 +1264,10 @@ function borrar_personaje($pj) {
 
 function calcular_edad_personaje($pj_id) {
 	global $db;
-
 	$nueva_edad = false;
 	$i = 0;
+	
+	$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 
 	$query = $db->sql_query("SELECT fecha_historico " .
 							" FROM " . PERSONAJES_HISTORICO_TABLE .
@@ -1276,6 +1277,8 @@ function calcular_edad_personaje($pj_id) {
 
 	if ($row = $db->sql_fetchrow($query)) {
 		$fecha_nac = strtotime($row['fecha_historico']);
+	} else {
+		$fecha_nac = $fecha_hoy;
 	}
 	$db->sql_freeresult($query);
 	
@@ -1288,7 +1291,6 @@ function calcular_edad_personaje($pj_id) {
 	$db->sql_freeresult($query2);
 	
 	$nueva_edad = $edad;
-	$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 
 	while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
 		$i++;
