@@ -12,7 +12,7 @@
 						<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5>Datos Personales</h5></a>
 						<div style="display:none" id="calc">{EDAD_CALC}</div>
 					  </li>
-					  <!-- IF PUEDE_SUBIR -->
+					  <!-- IF PUEDE_SUBIR and ACTIVO -->
 					  <li class="nav-item">
 						<a class="nav-link" id="levelup-tab" data-toggle="tab" href="#levelup" role="tab" aria-controls="levelup" aria-selected="false"><h5>Mejorar Personaje <i class="icon fa-arrow-circle-up fa-fw"></i></h5></a>
 					  </li>
@@ -46,15 +46,22 @@
 						<a class="nav-link" id="moderaciones-tab" data-toggle="tab" href="#moderaciones" role="tab" aria-controls="moderaciones" aria-selected="false"><h5>Moderaciones</h5></a>
 					  </li>
 					  <li class="nav-item">
-						<a class="nav-link" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
+						<a class="nav-link btn-info" href="{FICHA_MODERACIONES}"><h5>Moderar</h5></a>
+					  </li>
+					  <li class="nav-item">
+						<!-- IF ACTIVO -->
+						<a class="nav-link btn-warning" href="{FICHA_ACTIVAR}"><h5>Inactivar</h5></a>
+						<!-- ELSE -->
+						<a class="nav-link btn-success" href="{FICHA_ACTIVAR}"><h5>Activar</h5></a>
+						<!-- ENDIF -->
 					  </li>
 					  <!-- ENDIF -->
 					  <!-- IF PERSONAJE_PROPIO -->
-					  <!-- IF TIENE_NIVEL_REGALADO -->
-					  <li class="nav-item">
-						<a class="nav-link btn-info" href="{FICHA_NEXT_LVL}"><h5>Subir de Nivel</h5></a>
-					  </li>
-					  <!-- ENDIF -->
+						  <!-- IF TIENE_NIVEL_REGALADO and ACTIVO -->
+						  <li class="nav-item">
+							<a class="nav-link btn-info" href="{FICHA_NEXT_LVL}"><h5>Subir de Nivel</h5></a>
+						  </li>
+						  <!-- ENDIF -->
 					  <li class="nav-item">
 						<a class="nav-link btn-warning" onclick="return confirm('¿Deseas borrar tu personaje?');" href="{FICHA_BORRAR_2}"><h5>Borrar Personaje</h5></a>
 					  </li>
@@ -74,7 +81,7 @@
 							<label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
 
 							<div class="col-4">
-								<div>{FICHA_NOMBRE}</div>
+								<div>{FICHA_NOMBRE} <!-- IF not ACTIVO -->(Inactivo)<!-- ENDIF --></div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -82,6 +89,13 @@
 
 							<div class="col-4">
 								<div id="nivel">{NIVEL}</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="aldea" class="col-3 col-form-label text-md-left">Facci&oacute;n</label>
+
+							<div class="col-4">
+								<div id="aldea">{VISTA_ALDEA}</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -268,7 +282,7 @@
 									<br />
 									<!-- END ramas.tecnicas -->
 									
-									<!-- IF ramas.tecnicas_compra -->
+									<!-- IF ramas.tecnicas_compra and ACTIVO -->
 									<h3 style="text-align: left">Técnicas disponibles para aprender</h3>
 									<br />
 									<!-- BEGIN ramas.tecnicas_compra -->
@@ -325,7 +339,7 @@
 							<br class="clear" />
 						</div>
 						<!-- ENDIF -->
-						<!-- IF habilidades_compra -->
+						<!-- IF habilidades_compra and ACTIVO -->
 						<h3>Habilidades disponibles para aprender</h3><br>
 						<h5>Puntos de Aprendizaje: {PTOS_APRENDIZAJE}</h5>
 						<div class="habilidades">
@@ -383,7 +397,7 @@
 										<!-- BEGIN categoria_item.items.tipos -->
 										<span class="item-tipo">{categoria_item.items.tipos.TAG}</span>
 										<!-- END categoria_item.items.tipos -->
-										<!-- IF PERSONAJE_PROPIO and B_UBICACION_ITEMS -->
+										<!-- IF PERSONAJE_PROPIO and B_UBICACION_ITEMS and ACTIVO -->
 										<hr />
 										<form action="{U_ACTION_SELL}" method="post">
 											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
@@ -462,7 +476,7 @@
 					  
 					  
 					  
-					  <!-- IF PUEDE_SUBIR -->
+					  <!-- IF PUEDE_SUBIR and ACTIVO -->
 					  <div class="tab-pane fade" id="levelup" role="tabpanel" aria-labelledby="levelup-tab">
 					  <form action="{U_ACTION_LVL}" method="post">
 						<!-- IF PUEDE_ELEGIR_RAMAS -->

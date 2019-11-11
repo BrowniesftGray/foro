@@ -58,11 +58,15 @@ class main
         }
 
         $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null, false));
+		$this->template->assign_var('FICHA_ALDEAS', obtener_aldeas_select(false, false));
+		
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 
 	public function store()
     {
+		$group_id = false;
+		
         $user_id = $this->user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
 
@@ -82,6 +86,7 @@ class main
             'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'EDAD'              => utf8_normalize_nfc(request_var('edad', '', true)),
             'PRINCIPAL'         => request_var('ramaPrincipal', 0, true),
+			'ALDEA'				=> request_var('aldea', 0, true),
             'RAMA1'             => request_var('ramaSec1', 0, true),
             'RAMA2'             => request_var('ramaSec2', 0, true),
             'FISICO'            => utf8_normalize_nfc(request_var('descFis', '', true)),
@@ -102,6 +107,7 @@ class main
 			'rango'		=> 'Estudiante',
 			'arquetipo_id'	=> 0,
 			'nombre'	=> $fields['NOMBRE'],
+			'aldea_id'	=> $fields['ALDEA'],
 			'edad'		=> $fields['EDAD'],
 			'edad_inicial'	=> $fields['EDAD'],
 			'rama_id_pri'	=> $fields['PRINCIPAL'],
@@ -120,7 +126,23 @@ class main
 			'fisico'	=> $fields['FISICO'],
 			'psicologico'	=> $fields['CARACTER'],
 			'historia'	=> $fields['HISTORIA'],
+			'activo'	=> 0,
 		);
+		
+		if ((int)$fields['ALDEA'] > 0) {
+			$query = $this->db->sql_query("SELECT group_id, nivel_inicial 
+											FROM ".ALDEAS_TABLE." 
+											WHERE aldea_id = ".$fields['ALDEA']);
+											
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$group_id = (int)$row['group_id'];
+				
+				if ((int)$row['nivel_inicial'] > 1) {
+					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
+				}
+			}
+			$this->db->sql_freeresult($query);
+		}
 
         $sql = "INSERT INTO personajes " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
@@ -130,14 +152,37 @@ class main
 			'pf_experiencia'	=> '0',
 			'pf_puntos_apren'	=> '10',
 		);
-		$sql = 'UPDATE phpbby1_profile_fields_data SET ' .
+		$sql = 'UPDATE '.PROFILE_FIELDS_DATA_TABLE.' SET ' .
 					$this->db->sql_build_array('UPDATE', $sql_ary)
 					." WHERE user_id = $user_id";
 		$this->db->sql_query($sql);
 
 		if ((int) $this->db->sql_affectedrows() < 1) {
 			$sql_ary['user_id'] = $user_id;
-			$sql = 'INSERT INTO phpbby1_profile_fields_data' . $this->db->sql_build_array('INSERT', $sql_ary);
+			$sql = 'INSERT INTO ' . PROFILE_FIELDS_DATA_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
+			$this->db->sql_query($sql);
+		}
+		
+		if ($group_id) {
+			$sql_ary = array(
+				'user_id'		=> $user_id,
+				'group_id'		=> $group_id,
+				'group_leader'	=> 0,
+				'user_pending'	=> 0,
+			);
+			
+			$sql = 'UPDATE '.USER_GROUP_TABLE.' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_ary)
+					." WHERE user_id = $user_id
+						AND group_id = $group_id";
+			$this->db->sql_query($sql);
+			
+			if ((int)$this->db->sql_affectedrows() < 1) {
+				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
+				$this->db->sql_query($sql);
+			}
+			
+			$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
 			$this->db->sql_query($sql);
 		}
 
@@ -259,7 +304,7 @@ class main
         if ($grupo == 5 || $grupo == 4 || $grupo == 18) {
             get_ficha($user_id,$return = false, $ver = false);
             $this->template->assign_vars(array(
-                'U_ACTION'              => append_sid('/ficha/storeMod/' . $user_id),
+                'U_ACTION'	=> append_sid('/ficha/storeMod/' . $user_id),
             ));
             return $this->helper->render('ficha_edit.html');
         }
@@ -290,6 +335,7 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
+					'ALDEA'			=> request_var('aldea', 0, true),
                     'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
                     'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
                     'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
@@ -317,6 +363,7 @@ class main
 			$sql_array = array(
 				'rango'		=> $fields['RANGO'],
 				'nombre'	=> $fields['NOMBRE'],
+				'aldea_id'	=> $fields['ALDEA'],
 				'edad'		=> $fields['EDAD'],
 				'rama_id_pri'	=> $fields['PRINCIPAL'],
 				'rama_id1'	=> $fields['RAMA1'],
@@ -349,7 +396,7 @@ class main
 			$nueva_edad = calcular_edad_personaje($fields['PJ_ID']);
 			if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
 
-            $sql = "UPDATE personajes SET "
+            $sql = "UPDATE ".PERSONAJES_TABLE." SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
 						" WHERE user_id = $user_id";
             $this->db->sql_query($sql);

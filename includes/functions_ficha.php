@@ -414,8 +414,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'PUEDE_MODERAR'			=> $moderador,
 			'PUEDE_ADMINISTRAR'		=> $admin,
 			'FICHA_ARQUETIPO' 		=> $arquetipo_select,
-			'VISTA_ARQUETIPO' 		=> vista_arquetipo ($row['arquetipo_id']),
+			'VISTA_ARQUETIPO' 		=> vista_arquetipo($row['arquetipo_id']),
 			'ID_ARQUETIPO' 			=> $row['arquetipo_id'],
+			'FICHA_ALDEAS' 			=> obtener_aldeas_select($row['aldea_id'], ($moderador || $admin)),
+			'VISTA_ALDEA' 			=> vista_aldea($row['aldea_id']),
+			'ID_ALDEA'				=> $row['aldea_id'],
 			'FICHA_CAMINO'			=> $str_camino,
 			'FICHA_NOMBRE' 			=> stripslashes($row['nombre']),
 			'FICHA_ID' 				=> $pj_id,
@@ -694,6 +697,39 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 	return $select;
 }
 
+function obtener_aldeas_select($aldea_id, $mod) {
+	global $db;
+	$select = false;
+	
+	$sql = "SELECT a.*,
+				(SELECT COUNT(0)
+					FROM ".PERSONAJES_TABLE." p
+					WHERE p.aldea_id = a.aldea_id
+					AND p.activo = 1) AS pjs
+			FROM ".ALDEAS_TABLE." a 
+			WHERE activo = 1 " .
+	(!$mod ? "AND visible = 1 " : "") .
+			" ORDER BY orden";
+			
+	$query = $db->sql_query($sql);
+	while ($row = $db->sql_fetchrow) {
+		$descripcion = $row['nombre'];
+		
+		if ((int)$row['cupo'] > 0) {
+			$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
+		}
+		
+		if ((int)$row['nivel_inicial'] > 1) {
+			$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
+		}
+		
+		$select .= "<option " . ($row['aldea_id'] == $aldea_id ? "selected" : "") . " value='" . $row['aldea_id'] . "'>" . $descripcion . "</option>";
+	}
+	$db->sql_freeresult($query);
+	
+	return $select;
+}
+
 function get_nombre_rama($rama_id) {
 	global $db;
 	$nombre = '';
@@ -766,7 +802,7 @@ function get_ramas_select($principales, $selected, $exclude, $moderador = false)
 function vista_arquetipo ($arquetipo){
 	global $db;
 	if ($arquetipo != 0) {
-		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$arquetipo."");
+		$query = $db->sql_query("SELECT nombre_es FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id = $arquetipo");
 		$row = $db->sql_fetchrow($query);
 		$db->sql_freeresult($query);
 		$nombre = $row['nombre_es'];
@@ -775,6 +811,16 @@ function vista_arquetipo ($arquetipo){
 	}
 
 	return $nombre;
+}
+
+function vista_aldea($aldea_id) {
+	global $db;
+	
+	$query = $db->sql_query("SELECT nombre FROM ".ALDEAS_TABLE." WHERE aldea_id = $aldea_id");
+	$row = $db->sql_fetchrow($query);
+	$db->sql_freeresult($query);
+	
+	return $row['nombre'];
 }
 
 function calcula_pc($datos_pj)
@@ -882,7 +928,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	// 	$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
 	// }
 
-	if ($fields['PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_PUNTOS_EXPERIENCIA'] > 0 OR $fields['ADD_PUNTOS_APRENDIZAJE'] > 0 OR $fields['ADD_RYOS'] > 0) {
+	if ((int)$fields['PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_PUNTOS_EXPERIENCIA'] != 0 || (int)$fields['ADD_PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_RYOS'] != 0) {
 		if (registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']) == true) {
 			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
 			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
@@ -1228,7 +1274,7 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 
 
 	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
-	$ptos_ryos 							= $ptos_ryos + $ryos;
+	$ptos_ryos = $ptos_ryos + $ryos;
 
 
 	$pj_id = get_pj_id($user_id);
