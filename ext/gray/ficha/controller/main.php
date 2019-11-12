@@ -190,13 +190,13 @@ class main
       switch ($group_id) {
         // Ninjas Libres
         case 16:
-          $sql = "UPDATE".USERS_TABLE." SET user_rank = 13 WHERE user_id = $user_id";
+          $sql = "UPDATE ".USERS_TABLE." SET user_rank = 13 WHERE user_id = $user_id";
           $this->db->sql_query($sql);
           break;
 
         // Políticos
         case 24:
-          $sql = "UPDATE".USERS_TABLE." SET user_rank = 19 WHERE user_id = $user_id";
+          $sql = "UPDATE ".USERS_TABLE." SET user_rank = 19 WHERE user_id = $user_id";
           $this->db->sql_query($sql);
           break;
 
