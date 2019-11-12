@@ -66,7 +66,7 @@ class main
 	public function store()
     {
 		$group_id = false;
-		
+	
         $user_id = $this->user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
 
@@ -130,7 +130,7 @@ class main
 		);
 		
 		if ((int)$fields['ALDEA'] > 0) {
-			$query = $this->db->sql_query("SELECT group_id, nivel_inicial 
+			$query = $this->db->sql_query("SELECT group_id, nivel_inicial, rama_id_default
 											FROM ".ALDEAS_TABLE." 
 											WHERE aldea_id = ".$fields['ALDEA']);
 											
@@ -139,6 +139,10 @@ class main
 				
 				if ((int)$row['nivel_inicial'] > 1) {
 					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
+				}
+				
+				if ((int)$row['rama_id_default'] > 0) {
+					$sql_array['rama_id_pri'] = $row['rama_id_default'];
 				}
 			}
 			$this->db->sql_freeresult($query);
@@ -163,7 +167,7 @@ class main
 			$this->db->sql_query($sql);
 		}
 		
-		if ($group_id) {
+		if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
 			$sql_ary = array(
 				'user_id'		=> $user_id,
 				'group_id'		=> $group_id,
@@ -171,16 +175,14 @@ class main
 				'user_pending'	=> 0,
 			);
 			
-			$sql = 'UPDATE '.USER_GROUP_TABLE.' SET ' .
-					$this->db->sql_build_array('UPDATE', $sql_ary)
-					." WHERE user_id = $user_id
-						AND group_id = $group_id";
+			$sql = "DELETE FROM ".USER_GROUP_TABLE." 
+					WHERE user_id = '$user_id'
+						AND group_id IN(SELECT group_id
+										   FROM ".ALDEAS_TABLE.")";
 			$this->db->sql_query($sql);
 			
-			if ((int)$this->db->sql_affectedrows() < 1) {
-				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
-				$this->db->sql_query($sql);
-			}
+			$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
+			$this->db->sql_query($sql);
 			
 			$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
 			$this->db->sql_query($sql);
@@ -316,6 +318,9 @@ class main
 
     public function storeMod($user_id)
     {
+		$group_id = false;
+		$aldea_id_old = false;
+		
         $grupo = $this->user->data['group_id'];
 
         if ($grupo == 5 || $grupo == 4 || $grupo == 18) {
@@ -359,6 +364,7 @@ class main
             $fields['FISICO'] = addslashes($fields['FISICO']);
             $fields['CARACTER'] = addslashes($fields['CARACTER']);
             $idUsuario = $this->user->data['user_id'];
+			$pj_id = $fields['PJ_ID'];
 
 			$sql_array = array(
 				'rango'		=> $fields['RANGO'],
@@ -393,13 +399,51 @@ class main
 			if ((int)$fields['ES_BIJUU'] > -1)
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
 			
-			$nueva_edad = calcular_edad_personaje($fields['PJ_ID']);
+			if ((int)$fields['ALDEA'] > 0) {
+				$query = $this->db->sql_query("SELECT group_id 
+												FROM ".ALDEAS_TABLE." 
+												WHERE aldea_id = ".$fields['ALDEA']);
+												
+				if ($row = $this->db->sql_fetchrow($query)) {
+					$group_id = (int)$row['group_id'];
+				}
+				$this->db->sql_freeresult($query);
+				
+				$query = $this->db->sql_query("SELECT aldea_id FROM ".PERSONAJES_TABLE." WHERE pj_id = $pj_id");
+				if ($row = $this->db->sql_fetchrow($query)) { 
+					$aldea_id_old = (int)$row['aldea_id'];
+				}
+				$this->db->sql_freeresult($query);
+			}
+			
+			$nueva_edad = calcular_edad_personaje($pj_id);
 			if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
 
             $sql = "UPDATE ".PERSONAJES_TABLE." SET "
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
 						" WHERE user_id = $user_id";
             $this->db->sql_query($sql);
+			
+			if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
+				$sql_ary = array(
+					'user_id'		=> $user_id,
+					'group_id'		=> $group_id,
+					'group_leader'	=> 0,
+					'user_pending'	=> 0,
+				);
+				
+			$sql = "DELETE FROM ".USER_GROUP_TABLE." 
+					WHERE user_id = '$user_id'
+						AND group_id IN(SELECT group_id
+										   FROM ".ALDEAS_TABLE.")";
+				$this->db->sql_query($sql);
+				
+				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
+				$this->db->sql_query($sql);
+				
+				$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
+				$this->db->sql_query($sql);
+			}
 
             registrar_moderacion($fields, $user_id);
 
@@ -854,6 +898,48 @@ class main
 			
 			confirm_box(false, "¿Deseas quitar la técnica '$tec_nombre' y devolver $tec_coste PA a su personaje?", $s_hidden_fields);
 		}
+		
+		return $this->view($user_id);
+	}
+	
+	function enable ($user_id) {
+		$grupo = $this->user->data['group_id'];
+
+        if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
+		
+		$this->db->sql_query("UPDATE ".PERSONAJES_TABLE." SET activo = 1 WHERE pj_id = $pj_id");
+		
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON'	=> "Personaje Activo.",
+		);
+		registrar_moderacion($moderacion);
+		
+		return $this->view($user_id);
+	}
+	
+	function disable ($user_id) {
+		$grupo = $this->user->data['group_id'];
+
+        if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
+		}
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
+		
+		$this->db->sql_query("UPDATE ".PERSONAJES_TABLE." SET activo = 0 WHERE pj_id = $pj_id");
+		
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON'	=> "Personaje Inactivo.",
+		);
+		registrar_moderacion($moderacion);
 		
 		return $this->view($user_id);
 	}

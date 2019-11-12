@@ -454,12 +454,15 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'FICHA_BLOQUEO'			=> calcula_bloqueo($row),
 			'FICHA_URL'				=> append_sid("/ficha/". $user_id),
 			'FICHA_MODERACIONES'	=> append_sid("/ficha/mod/" . $user_id),
+			'FICHA_ACTIVAR'			=> append_sid("/ficha/enable/" . $user_id),
+			'FICHA_INACTIVAR'		=> append_sid("/ficha/disable/" . $user_id),
 			'FICHA_BORRAR_2'		=> append_sid("/ficha/delete/" . $user_id),
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
 			'U_ACTION_SELL'			=> append_sid("/ficha/sellItem/" . $user_id),
 			'U_ACTION_UBI'			=> append_sid("/ficha/saveItem/" . $user_id),
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 			'EDAD_CALC'				=> calcular_edad_personaje($pj_id),
+			'ACTIVO'				=> (bool) $row['activo'],
 		));
 
 		// asignar variables de ramas
@@ -712,18 +715,23 @@ function obtener_aldeas_select($aldea_id, $mod) {
 			" ORDER BY orden";
 			
 	$query = $db->sql_query($sql);
-	while ($row = $db->sql_fetchrow) {
+	while ($row = $db->sql_fetchrow($query)) {
+		$lleno = false;
 		$descripcion = $row['nombre'];
 		
-		if ((int)$row['cupo'] > 0) {
-			$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
+		if (!$mod) {
+			if ((int)$row['cupo'] > 0) {
+				$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
+				$lleno = (int)$row['pjs'] >= (int)$row['cupo'];
+			}
+			
+			if ((int)$row['nivel_inicial'] > 1) {
+				$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
+			}
 		}
 		
-		if ((int)$row['nivel_inicial'] > 1) {
-			$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
-		}
-		
-		$select .= "<option " . ($row['aldea_id'] == $aldea_id ? "selected" : "") . " value='" . $row['aldea_id'] . "'>" . $descripcion . "</option>";
+		if (!$lleno)
+			$select .= "<option " . ($row['aldea_id'] == $aldea_id ? "selected" : "") . " value='" . $row['aldea_id'] . "'>" . $descripcion . "</option>";
 	}
 	$db->sql_freeresult($query);
 	
