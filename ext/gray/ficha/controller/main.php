@@ -59,14 +59,14 @@ class main
 
         $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null, false));
 		$this->template->assign_var('FICHA_ALDEAS', obtener_aldeas_select(false, false));
-		
+
         return $this->helper->render('ficha_body.html', 'Creación de Ficha');
     }
 
 	public function store()
     {
 		$group_id = false;
-	
+
         $user_id = $this->user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
 
@@ -128,19 +128,19 @@ class main
 			'historia'	=> $fields['HISTORIA'],
 			'activo'	=> 0,
 		);
-		
+
 		if ((int)$fields['ALDEA'] > 0) {
 			$query = $this->db->sql_query("SELECT group_id, nivel_inicial, rama_id_default
-											FROM ".ALDEAS_TABLE." 
+											FROM ".ALDEAS_TABLE."
 											WHERE aldea_id = ".$fields['ALDEA']);
-											
+
 			if ($row = $this->db->sql_fetchrow($query)) {
 				$group_id = (int)$row['group_id'];
-				
+
 				if ((int)$row['nivel_inicial'] > 1) {
 					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
 				}
-				
+
 				if ((int)$row['rama_id_default'] > 0) {
 					$sql_array['rama_id_pri'] = $row['rama_id_default'];
 				}
@@ -166,7 +166,7 @@ class main
 			$sql = 'INSERT INTO ' . PROFILE_FIELDS_DATA_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
 			$this->db->sql_query($sql);
 		}
-		
+
 		if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
 			$sql_ary = array(
 				'user_id'		=> $user_id,
@@ -174,18 +174,35 @@ class main
 				'group_leader'	=> 0,
 				'user_pending'	=> 0,
 			);
-			
-			$sql = "DELETE FROM ".USER_GROUP_TABLE." 
+
+			$sql = "DELETE FROM ".USER_GROUP_TABLE."
 					WHERE user_id = '$user_id'
 						AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 			$this->db->sql_query($sql);
-			
+
 			$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
 			$this->db->sql_query($sql);
-			
+
 			$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
 			$this->db->sql_query($sql);
+
+      switch ($group_id) {
+        // Ninjas Libres
+        case 16:
+          $sql = "UPDATE".USERS_TABLE." SET user_rank = 13 WHERE user_id = $user_id";
+          $this->db->sql_query($sql);
+          break;
+
+        // Políticos
+        case 24:
+          $sql = "UPDATE".USERS_TABLE." SET user_rank = 19 WHERE user_id = $user_id";
+          $this->db->sql_query($sql);
+          break;
+
+        default:
+          break;
+      }
 		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
@@ -195,41 +212,41 @@ class main
     function view($user_id)
     {
 		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = false;
-		
+
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
-		
+
 		$beneficios = get_beneficios($user_id);
 		if ($beneficios) {
 			foreach ($beneficios as $key => $val) {
 				if ($val['nombre_php'] == BENEFICIO_AVATAR_FICHA) {
 					$b_avatar_ficha = true;
 				}
-				
+
 				if ($val['nombre_php'] == BENEFICIO_BANNER_FICHA) {
 					$b_ficha_premium = true;
 				}
-				
+
 				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
 					$b_ubicacion_items = true;
 				}
 			}
 		}
-		
+
 		if ($b_avatar_ficha) {
 			$query = $this->db->sql_query('SELECT * FROM '.USERS_TABLE.' WHERE user_id = ' . $user_id);
 			if ($row = $this->db->sql_fetchrow($query)) {
 				$avatar = phpbb_get_user_avatar($row);
 			}
 		}
-		
+
 		$this->template->assign_vars(array(
 			'B_AVATAR_FICHA'	=> $b_avatar_ficha,
 			'AVATAR_FICHA'		=> $avatar,
 			'B_FICHA_PREMIUM'	=> $b_ficha_premium,
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
 		));
-		
+
 		$categorias = get_full_shops();
 		foreach($categorias as $cat) {
 			$this->template->assign_block_vars('categoria_item', $cat);
@@ -240,7 +257,7 @@ class main
 					$this->template->assign_block_vars_array('categoria_item.items.tipos', $item['tags']);
 				}
 		}
-		
+
 		$user_beneficios_historico = get_user_beneficios_historico($user_id);
 		if ($user_beneficios_historico) {
 			foreach ($user_beneficios_historico as $beneficio) {
@@ -253,7 +270,7 @@ class main
 					'ACTIVO'		=> ($beneficio['fecha_fin'] ? $beneficio['activo'] : true),
 				));
 			}
-			
+
 			$user_tier = get_user_tier($user_id);
 			if ($user_tier) {
 				$tier_actual = get_user_tier_string($user_tier);
@@ -320,7 +337,7 @@ class main
     {
 		$group_id = false;
 		$aldea_id_old = false;
-		
+
         $grupo = $this->user->data['group_id'];
 
         if ($grupo == 5 || $grupo == 4 || $grupo == 18) {
@@ -398,24 +415,24 @@ class main
 
 			if ((int)$fields['ES_BIJUU'] > -1)
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
-			
+
 			if ((int)$fields['ALDEA'] > 0) {
-				$query = $this->db->sql_query("SELECT group_id 
-												FROM ".ALDEAS_TABLE." 
+				$query = $this->db->sql_query("SELECT group_id
+												FROM ".ALDEAS_TABLE."
 												WHERE aldea_id = ".$fields['ALDEA']);
-												
+
 				if ($row = $this->db->sql_fetchrow($query)) {
 					$group_id = (int)$row['group_id'];
 				}
 				$this->db->sql_freeresult($query);
-				
+
 				$query = $this->db->sql_query("SELECT aldea_id FROM ".PERSONAJES_TABLE." WHERE pj_id = $pj_id");
-				if ($row = $this->db->sql_fetchrow($query)) { 
+				if ($row = $this->db->sql_fetchrow($query)) {
 					$aldea_id_old = (int)$row['aldea_id'];
 				}
 				$this->db->sql_freeresult($query);
 			}
-			
+
 			$nueva_edad = calcular_edad_personaje($pj_id);
 			if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
 
@@ -423,7 +440,7 @@ class main
 						. $this->db->sql_build_array('UPDATE', $sql_array) .
 						" WHERE user_id = $user_id";
             $this->db->sql_query($sql);
-			
+
 			if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
 				$sql_ary = array(
 					'user_id'		=> $user_id,
@@ -431,16 +448,16 @@ class main
 					'group_leader'	=> 0,
 					'user_pending'	=> 0,
 				);
-				
-			$sql = "DELETE FROM ".USER_GROUP_TABLE." 
+
+			$sql = "DELETE FROM ".USER_GROUP_TABLE."
 					WHERE user_id = '$user_id'
 						AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 				$this->db->sql_query($sql);
-				
+
 				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
 				$this->db->sql_query($sql);
-				
+
 				$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
 				$this->db->sql_query($sql);
 			}
@@ -595,10 +612,10 @@ class main
 			}
 		}
 		$this->db->sql_freeresult($query);
-			
+
 		$nueva_edad = calcular_edad_personaje($pj_id);
 		if ($nueva_edad) $sql_array['edad'] = $nueva_edad;
-		
+
 		try {
 			$this->db->sql_query('UPDATE '.PERSONAJES_TABLE.' SET '
 									. $this->db->sql_build_array('UPDATE', $sql_array)
@@ -683,18 +700,18 @@ class main
 
 		return $this->view($user_id);
 	}
-	
+
 	function sellItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$cantidad_venta = (int) request_var('cantidad_venta', 1);
-		
+
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
-		
+
 		$sql = "SELECT i.nombre,
 					i.precio,
 					pi.cantidad
@@ -704,9 +721,9 @@ class main
 				WHERE pi.pj_id = '$pj_id'
 					AND i.item_id = '$item_id'
 					AND pi.cantidad >= $cantidad_venta";
-					
+
 		$query = $this->db->sql_query($sql);
-		
+
 		if ($row = $this->db->sql_fetchrow($query)) {
 			$item_nombre = $row['nombre'];
 			$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
@@ -715,7 +732,7 @@ class main
 			trigger_error("No posees el item en tu inventario." . $this->get_return_link($user_id));
 		}
 		$this->db->sql_freeresult($query);
-		
+
 		if (confirm_box(true)) {
 			if (vender_item($user_id, $pj_id, $item_id, $cantidad_venta, $msg_error)) {
 				$moderacion = array(
@@ -723,7 +740,7 @@ class main
 					'RAZON'	=> "Vende $cantidad_venta x '$item_nombre' por $precio_venta Ryos.",
 				);
 				registrar_moderacion($moderacion);
-				
+
 				trigger_error("Item vendido exitosamente." . $this->get_return_link($user_id));
 			}
 			else {
@@ -736,25 +753,25 @@ class main
 				'item_id'	=> $item_id,
 				'cantidad_venta'	=> $cantidad_venta
 			));
-			
+
 			confirm_box(false, "¿Deseas vender $cantidad_venta x '$item_nombre' por $precio_venta Ryos? Esta acción no puede revertirse.", $s_hidden_fields);
 		}
-		
+
 		return $this->view($user_id);
 	}
-	
+
 	function saveItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
 		$b_ubicacion_items = false;
-		
+
 		if ($user_id != $this->user->data['user_id']) {
 			trigger_error('No puedes modificar un personaje que no te pertenece, puerco.' . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró tu personaje.' . $this->get_return_link($user_id));
-		
+
 		$beneficios = get_beneficios($user_id);
 		if ($beneficios) {
 			foreach ($beneficios as $key => $val) {
@@ -763,11 +780,11 @@ class main
 				}
 			}
 		}
-		
+
 		if (!$b_ubicacion_items) {
 			trigger_error('No tienes habilitada la ubicación de items en el inventario.' . $this->get_return_link($user_id));
 		}
-		
+
 		$sql = "SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = '$item_id'";
 		$query = $this->db->sql_query($sql);
 		if ($row = $this->db->sql_fetchrow($query)) {
@@ -776,7 +793,7 @@ class main
 			trigger_error("No se encontró el item." . $this->get_return_link($user_id));
 		}
 		$this->db->sql_freeresult($query);
-		
+
 		if (confirm_box(true)) {
 			if (actualizar_item($user_id, $pj_id, $item_id, $ubicacion, $msg_error)) {
 				$moderacion = array(
@@ -784,7 +801,7 @@ class main
 					'RAZON'	=> "Actualizado '$item_nombre' a la ubicación '$ubicacion'.",
 				);
 				registrar_moderacion($moderacion);
-				
+
 				trigger_error("Item actualizado exitosamente." . $this->get_return_link($user_id));
 			}
 			else {
@@ -796,13 +813,13 @@ class main
 				'item_id'	=> $item_id,
 				'ubicacion'	=> $ubicacion
 			));
-			
+
 			confirm_box(false, "¿Actualizar la ubicación de '$item_nombre'?", $s_hidden_fields);
 		}
-		
+
 		return $this->view($user_id);
 	}
-	
+
 	public function buyTec($user_id)
 	{
 		if ($user_id != $this->user->data['user_id']) {
@@ -845,28 +862,28 @@ class main
 
 		return $this->view($user_id);
 	}
-	
+
 	function removeTecMod($user_id) {
 		$tec_id = (int) request_var('tecnica_id', 0);
-		
+
 		$grupo = $this->user->data['group_id'];
 
         if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
             trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
-		
+
 		$sql = "SELECT nombre, coste
 				FROM " . TECNICAS_TABLE . " t
 					INNER JOIN " . PERSONAJE_TECNICAS_TABLE . " pt
 						ON pt.tecnica_id = t.tecnica_id
 				WHERE pt.pj_id = '$pj_id'
 					AND t.tecnica_id = '$tec_id'";
-					
+
 		$query = $this->db->sql_query($sql);
-		
+
 		if ($row = $this->db->sql_fetchrow($query)) {
 			$tec_nombre = $row['nombre'];
 			$tec_coste = (int)$row['coste'];
@@ -875,7 +892,7 @@ class main
 			trigger_error("El personaje no posee la técnica seleccionada." . $this->get_return_link($user_id));
 		}
 		$this->db->sql_freeresult($query);
-		
+
 		if (confirm_box(true)) {
 			if (quitar_tecnica($user_id, $pj_id, $tec_id, $tec_coste, $msg_error)) {
 				$moderacion = array(
@@ -883,7 +900,7 @@ class main
 					'RAZON'	=> "Quitar '$tec_nombre' y devolver $tec_coste PA.",
 				);
 				registrar_moderacion($moderacion);
-				
+
 				trigger_error("Técnica quitada exitosamente." . $this->get_return_link($user_id));
 			}
 			else {
@@ -895,52 +912,52 @@ class main
 				'submit' 	=> true,
 				'tecnica_id'	=> $tec_id
 			));
-			
+
 			confirm_box(false, "¿Deseas quitar la técnica '$tec_nombre' y devolver $tec_coste PA a su personaje?", $s_hidden_fields);
 		}
-		
+
 		return $this->view($user_id);
 	}
-	
+
 	function enable ($user_id) {
 		$grupo = $this->user->data['group_id'];
 
         if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
             trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
-		
+
 		$this->db->sql_query("UPDATE ".PERSONAJES_TABLE." SET activo = 1 WHERE pj_id = $pj_id");
-		
+
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON'	=> "Personaje Activo.",
 		);
 		registrar_moderacion($moderacion);
-		
+
 		return $this->view($user_id);
 	}
-	
+
 	function disable ($user_id) {
 		$grupo = $this->user->data['group_id'];
 
         if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
             trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
 		}
-		
+
 		$pj_id = get_pj_id($user_id);
 		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
-		
+
 		$this->db->sql_query("UPDATE ".PERSONAJES_TABLE." SET activo = 0 WHERE pj_id = $pj_id");
-		
+
 		$moderacion = array(
 			'PJ_ID'	=> $pj_id,
 			'RAZON'	=> "Personaje Inactivo.",
 		);
 		registrar_moderacion($moderacion);
-		
+
 		return $this->view($user_id);
 	}
 
