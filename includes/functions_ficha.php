@@ -719,18 +719,16 @@ function obtener_aldeas_select($aldea_id, $mod) {
 		$lleno = false;
 		$descripcion = $row['nombre'];
 		
-		if (!$mod) {
-			if ((int)$row['cupo'] > 0) {
-				$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
-				$lleno = (int)$row['pjs'] >= (int)$row['cupo'];
-			}
-			
-			if ((int)$row['nivel_inicial'] > 1) {
-				$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
-			}
+		if ((int)$row['cupo'] > 0) {
+			$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
+			$lleno = (int)$row['pjs'] >= (int)$row['cupo'];
 		}
 		
-		if (!$lleno)
+		if ((int)$row['nivel_inicial'] > 1) {
+			$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
+		}
+		
+		if (!$lleno || $mod)
 			$select .= "<option " . ($row['aldea_id'] == $aldea_id ? "selected" : "") . " value='" . $row['aldea_id'] . "'>" . $descripcion . "</option>";
 	}
 	$db->sql_freeresult($query);
@@ -824,9 +822,11 @@ function vista_arquetipo ($arquetipo){
 function vista_aldea($aldea_id) {
 	global $db;
 	
-	$query = $db->sql_query("SELECT nombre FROM ".ALDEAS_TABLE." WHERE aldea_id = $aldea_id");
-	$row = $db->sql_fetchrow($query);
-	$db->sql_freeresult($query);
+	if ((int)$aldea_id > 0) {
+		$query = $db->sql_query("SELECT nombre FROM ".ALDEAS_TABLE." WHERE aldea_id = $aldea_id");
+		$row = $db->sql_fetchrow($query);
+		$db->sql_freeresult($query);
+	}
 	
 	return $row['nombre'];
 }
