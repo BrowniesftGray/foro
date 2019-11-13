@@ -65,7 +65,7 @@ class main
 
 	public function store()
     {
-		$group_id = false;
+		$group_id = $user_rank = false;
 
         $user_id = $this->user->data['user_id'];
 		$pj_id = get_pj_id($user_id);
@@ -130,12 +130,23 @@ class main
 		);
 
 		if ((int)$fields['ALDEA'] > 0) {
-			$query = $this->db->sql_query("SELECT group_id, nivel_inicial, rama_id_default
-											FROM ".ALDEAS_TABLE."
+			$query = $this->db->sql_query("SELECT	a.group_id, 
+													a.nivel_inicial, 
+													a.rama_id_default,
+													g.group_colour,
+													g.group_rank
+											FROM ".ALDEAS_TABLE." a
+												INNER JOIN ".GROUPS_TABLE." g
+													ON g.group_id = a.group_id
 											WHERE aldea_id = ".$fields['ALDEA']);
 
 			if ($row = $this->db->sql_fetchrow($query)) {
 				$group_id = (int)$row['group_id'];
+				$user_colour = $row['group_colour'];
+				
+				if ((int)$row['group_rank'] > 0) {
+					$user_rank = (int)$row['group_rank'];
+				}
 
 				if ((int)$row['nivel_inicial'] > 1) {
 					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
@@ -183,26 +194,13 @@ class main
 
 			$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
 			$this->db->sql_query($sql);
-
-			$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
+			
+			$sql = "UPDATE ".USERS_TABLE." 
+						SET group_id = $group_id,
+							user_colour = '$user_colour' " .
+			 ($user_rank ? ", user_rank = $user_rank" : "") .
+					" WHERE user_id = $user_id";
 			$this->db->sql_query($sql);
-
-      switch ($group_id) {
-        // Ninjas Libres
-        case 16:
-          $sql = "UPDATE ".USERS_TABLE." SET user_rank = 13 WHERE user_id = $user_id";
-          $this->db->sql_query($sql);
-          break;
-
-        // Políticos
-        case 24:
-          $sql = "UPDATE ".USERS_TABLE." SET user_rank = 19 WHERE user_id = $user_id";
-          $this->db->sql_query($sql);
-          break;
-
-        default:
-          break;
-      }
 		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
@@ -335,8 +333,7 @@ class main
 
     public function storeMod($user_id)
     {
-		$group_id = false;
-		$aldea_id_old = false;
+		$group_id = $aldea_id_old = $user_rank = false;
 
         $grupo = $this->user->data['group_id'];
 
@@ -417,12 +414,22 @@ class main
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
 
 			if ((int)$fields['ALDEA'] > 0) {
-				$query = $this->db->sql_query("SELECT group_id
-												FROM ".ALDEAS_TABLE."
-												WHERE aldea_id = ".$fields['ALDEA']);
+				
+			$query = $this->db->sql_query("SELECT	a.group_id, 
+													g.group_colour,
+													g.group_rank
+											FROM ".ALDEAS_TABLE." a
+												INNER JOIN ".GROUPS_TABLE." g
+													ON g.group_id = a.group_id
+											WHERE aldea_id = ".$fields['ALDEA']);
 
 				if ($row = $this->db->sql_fetchrow($query)) {
 					$group_id = (int)$row['group_id'];
+					$user_colour = $row['group_colour'];
+					
+					if ((int)$row['group_rank'] > 0) {
+						$user_rank = (int)$row['group_rank'];
+					}
 				}
 				$this->db->sql_freeresult($query);
 
@@ -458,7 +465,12 @@ class main
 				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
 				$this->db->sql_query($sql);
 
-				$sql = "UPDATE ".USERS_TABLE." SET group_id = $group_id WHERE user_id = $user_id";
+				$sql = "UPDATE ".USERS_TABLE." 
+						SET group_id = $group_id,
+							user_colour = '$user_colour' " .
+			 ($user_rank ? ",user_rank = $user_rank" : "") .
+					" WHERE user_id = $user_id";
+					
 				$this->db->sql_query($sql);
 			}
 
