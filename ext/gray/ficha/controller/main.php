@@ -1,6 +1,7 @@
 <?php
 
 namespace gray\ficha\controller;
+require_once('/home/shinobil/public_html/includes/functions_user.php');
 require_once('/home/shinobil/public_html/includes/functions_ficha.php');
 require_once('/home/shinobil/public_html/includes/functions_beneficios.php');
 
@@ -132,9 +133,7 @@ class main
 		if ((int)$fields['ALDEA'] > 0) {
 			$query = $this->db->sql_query("SELECT	a.group_id, 
 													a.nivel_inicial, 
-													a.rama_id_default,
-													g.group_colour,
-													g.group_rank
+													a.rama_id_default
 											FROM ".ALDEAS_TABLE." a
 												INNER JOIN ".GROUPS_TABLE." g
 													ON g.group_id = a.group_id
@@ -142,12 +141,7 @@ class main
 
 			if ($row = $this->db->sql_fetchrow($query)) {
 				$group_id = (int)$row['group_id'];
-				$user_colour = $row['group_colour'];
 				
-				if ((int)$row['group_rank'] > 0) {
-					$user_rank = (int)$row['group_rank'];
-				}
-
 				if ((int)$row['nivel_inicial'] > 1) {
 					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
 				}
@@ -178,29 +172,14 @@ class main
 			$this->db->sql_query($sql);
 		}
 
-		if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
-			$sql_ary = array(
-				'user_id'		=> $user_id,
-				'group_id'		=> $group_id,
-				'group_leader'	=> 0,
-				'user_pending'	=> 0,
-			);
-
+		if ($group_id) {
 			$sql = "DELETE FROM ".USER_GROUP_TABLE."
 					WHERE user_id = '$user_id'
 						AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 			$this->db->sql_query($sql);
-
-			$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
-			$this->db->sql_query($sql);
 			
-			$sql = "UPDATE ".USERS_TABLE." 
-						SET group_id = $group_id,
-							user_colour = '$user_colour' " .
-			 ($user_rank ? ", user_rank = $user_rank" : "") .
-					" WHERE user_id = $user_id";
-			$this->db->sql_query($sql);
+			group_user_add($group_id, $user_id, false, false, true);
 		}
 
         $this->template->assign_var('DEMO_MESSAGE', request_var('name', '', true));
@@ -415,9 +394,7 @@ class main
 
 			if ((int)$fields['ALDEA'] > 0) {
 				
-			$query = $this->db->sql_query("SELECT	a.group_id, 
-													g.group_colour,
-													g.group_rank
+			$query = $this->db->sql_query("SELECT	a.group_id
 											FROM ".ALDEAS_TABLE." a
 												INNER JOIN ".GROUPS_TABLE." g
 													ON g.group_id = a.group_id
@@ -425,11 +402,6 @@ class main
 
 				if ($row = $this->db->sql_fetchrow($query)) {
 					$group_id = (int)$row['group_id'];
-					$user_colour = $row['group_colour'];
-					
-					if ((int)$row['group_rank'] > 0) {
-						$user_rank = (int)$row['group_rank'];
-					}
 				}
 				$this->db->sql_freeresult($query);
 
@@ -449,29 +421,13 @@ class main
             $this->db->sql_query($sql);
 
 			if ($group_id && (int)$fields['ALDEA'] != $aldea_id_old) {
-				$sql_ary = array(
-					'user_id'		=> $user_id,
-					'group_id'		=> $group_id,
-					'group_leader'	=> 0,
-					'user_pending'	=> 0,
-				);
-
-			$sql = "DELETE FROM ".USER_GROUP_TABLE."
-					WHERE user_id = '$user_id'
-						AND group_id IN(SELECT group_id
+				$sql = "DELETE FROM ".USER_GROUP_TABLE."
+						WHERE user_id = '$user_id'
+							AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 				$this->db->sql_query($sql);
-
-				$sql = 'INSERT INTO ' . USER_GROUP_TABLE . $this->db->sql_build_array('INSERT', $sql_ary);
-				$this->db->sql_query($sql);
-
-				$sql = "UPDATE ".USERS_TABLE." 
-						SET group_id = $group_id,
-							user_colour = '$user_colour' " .
-			 ($user_rank ? ",user_rank = $user_rank" : "") .
-					" WHERE user_id = $user_id";
-					
-				$this->db->sql_query($sql);
+				
+				group_user_add($group_id, $user_id, false, false, true);
 			}
 
             registrar_moderacion($fields, $user_id);
