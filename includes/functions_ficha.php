@@ -217,7 +217,9 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$ramas_array[] = array('ID' => $row['rama_id4'], 'NOMBRE' => get_nombre_rama($row['rama_id4']));
 		if ($row['rama_id5'])
 			$ramas_array[] = array('ID' => $row['rama_id5'], 'NOMBRE' => get_nombre_rama($row['rama_id5']));
-		$ramas_array[] = array('ID' => -1, 'NOMBRE' => 'Técnicas Globales');
+		
+		if ((int) $row['tiene_globales'])
+			$ramas_array[] = array('ID' => -1, 'NOMBRE' => 'Técnicas Globales');
 
 		// obtener camino ninja
 		$queryCamino = $db->sql_query("
@@ -411,6 +413,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
 			'ES_BIJUU'				=> (int)$row['es_bijuu'],
+			'TIENE_GLOBALES'		=> (int)$row['tiene_globales'],
 			'PUEDE_MODERAR'			=> $moderador,
 			'PUEDE_ADMINISTRAR'		=> $admin,
 			'FICHA_ARQUETIPO' 		=> $arquetipo_select,
