@@ -1,0 +1,60 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.1.3" type="text/css" />
+
+<div class="sladmin">
+	<h2><a href="/sladmin/home">SL Admin</a></h2>
+	<h3>Niveles de Personaje</h3>
+	<table>
+		<tr>
+			<th>Nivel</th>
+			<th>Experiencia Requerida Total</th>
+			<th>Atributos Totales</th>
+			<th>Guardar</th>
+			<th>Eliminar</th>
+		</tr>
+		<!-- BEGIN niveles -->
+		<tr>
+			<form action="{niveles.U_ACTION_UPD}" method="post">
+			<td>
+				<input type="hidden" name="nivel" value="{niveles.NIVEL}" />
+				{niveles.NIVEL}
+			</td>
+			<td>
+				<input type="number" name="experiencia" min="0" value="{niveles.EXPERIENCIA}" />
+			</td>
+			<td>
+				<input type="number" name="atributos" min="0" value="{niveles.ATRIBUTOS}" />
+			</td>
+			<td>
+				<input type="submit" class="btn-upd" value="Guardar" />
+			</td>
+			</form>
+			<td>
+				<!-- IF niveles.ES_ULTIMO -->
+				<form action="{niveles.U_ACTION_DEL}" method="post">
+					<input type="hidden" name="nivel" value="{niveles.NIVEL}" />
+					<input type="submit" class="btn-del" value="Eliminar" />
+				</form>
+				<!-- ENDIF -->
+			</td>
+		</tr>
+		<!-- END niveles -->
+		<tr>
+			<form action="{U_ACTION_INS}" method="post">
+			<td>{PROX_NIVEL}</td>
+			<td>
+				<input type="number" name="experiencia" min="{MIN_EXPERIENCIA}" value="" />
+			</td>
+			<td>
+				<input type="number" name="atributos" min="{MIN_ATRIBUTOS}" value="" />
+			</td>
+			<td>
+				<input type="submit" class="btn-ins" value="Crear" />
+			</td>
+			</form>
+			<td></td>
+		</tr>
+	</table>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

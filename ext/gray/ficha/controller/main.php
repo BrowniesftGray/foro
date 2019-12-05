@@ -257,7 +257,7 @@ class main
 			}
 		}
 
-        return $this->helper->render('ficha_view.html');
+        return $this->helper->render('ficha_view.html', 'Ficha de Personaje');
     }
 
     function delete($user_id)
@@ -302,7 +302,7 @@ class main
             $this->template->assign_vars(array(
                 'U_ACTION'	=> append_sid('/ficha/storeMod/' . $user_id),
             ));
-            return $this->helper->render('ficha_edit.html');
+            return $this->helper->render('ficha_edit.html', 'Moderar Ficha de Personaje');
         }
         else
         {
