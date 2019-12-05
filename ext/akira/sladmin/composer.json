@@ -1,16 +1,16 @@
 {
-    "name": "gray/ficha",
+    "name": "akira/sladmin",
     "type": "phpbb-extension",
-    "description": "Extensión de ficha Naruto",
+    "description": "Extensión de administración para Shinobi Legacy",
     "homepage": "",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "time": "2018-12-01",
-    "keywords": ["phpbb", "extension", "gray", "ficha"],
+    "keywords": ["phpbb", "extension", "akira", "sladmin"],
     "license": "GPL-2.0",
     "authors": [
         {
-            "name": "gray",
-            "email": "gray@localhost",
+            "name": "akira",
+            "email": "akira@localhost",
             "homepage": "",
             "role": "Lead Developer"
         }
@@ -23,7 +23,7 @@
         "phpbb/epv": "dev-master"
     },
     "extra": {
-        "display-name": "Ficha",
+        "display-name": "SL Admin",
         "soft-require": {
             "phpbb/phpbb": "~3.2"
         }

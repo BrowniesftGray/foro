@@ -1370,3 +1370,25 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%;
 }
+
+/* --- BENEFICIOS --- */
+
+.beneficios th {
+    background: #e3e3e3;
+}
+
+.beneficios td {
+    font-size: 12px;
+}
+
+.beneficios td, .beneficios th {
+    padding: 1px;
+}
+
+.beneficios td:nth-child(1) {
+	width: 20%;
+}
+
+.beneficios td:nth-child(2) {
+	width: 60%;
+}

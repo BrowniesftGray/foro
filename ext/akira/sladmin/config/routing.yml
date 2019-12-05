@@ -1,0 +1,19 @@
+akira_sladmin_home:
+    path: /sladmin/home
+    defaults: { _controller: akira.sladmin.controller:handle }
+    
+akira_sladmin_aldeas:
+    path: /sladmin/aldeas
+    defaults: { _controller: akira.sladmin.controller:aldeas_view }
+    
+akira_sladmin_aldeas_ins:
+    path: /sladmin/aldeas/ins
+    defaults: { _controller: akira.sladmin.controller:aldeas_ins }
+    
+akira_sladmin_aldeas_upd:
+    path: /sladmin/aldeas/upd/{aldea_id}
+    defaults: { _controller: akira.sladmin.controller:aldeas_upd }
+    
+akira_sladmin_aldeas_del:
+    path: /sladmin/aldeas/del/{aldea_id}
+    defaults: { _controller: akira.sladmin.controller:aldeas_del }
