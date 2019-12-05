@@ -17,3 +17,19 @@ akira_sladmin_aldeas_upd:
 akira_sladmin_aldeas_del:
     path: /sladmin/aldeas/del/{aldea_id}
     defaults: { _controller: akira.sladmin.controller:aldeas_del }
+    
+akira_sladmin_niveles:
+    path: /sladmin/niveles
+    defaults: { _controller: akira.sladmin.controller:niveles_view }
+    
+akira_sladmin_niveles_ins:
+    path: /sladmin/niveles/ins
+    defaults: { _controller: akira.sladmin.controller:niveles_ins }
+    
+akira_sladmin_niveles_upd:
+    path: /sladmin/niveles/upd/{nivel}
+    defaults: { _controller: akira.sladmin.controller:niveles_upd }
+    
+akira_sladmin_niveles_del:
+    path: /sladmin/niveles/del/{nivel}
+    defaults: { _controller: akira.sladmin.controller:niveles_del }

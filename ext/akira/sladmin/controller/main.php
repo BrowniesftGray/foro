@@ -52,6 +52,10 @@ class main
 		return $this->helper->render('sladmin/home.html', 'Administrador de SL');
     }
 	
+	/*------------------------
+	--        ALDEAS        --
+	--------------------------*/
+	
 	function aldeas_view() 
 	{
 		$this->validate_access();
@@ -172,6 +176,122 @@ class main
 		
 		trigger_error('Acción cancelada.' . $this->get_return_link('aldeas'));
 	}
+	
+	/*------------------------
+	--        NIVELES       --
+	--------------------------*/
+	
+	function niveles_view() 
+	{
+		$this->validate_access();
+		
+		$query_max = $this->db->sql_query("SELECT 	max(nivel) AS nivel,
+													max(experiencia) AS experiencia,
+													max(atributos) AS atributos
+												FROM " . NIVELES_TABLE);
+		if ($row = $this->db->sql_fetchrow($query_max)) {
+			$max_nivel	= (int) $row['nivel'];
+			$max_exp	= (int) $row['experiencia'];
+			$max_attr	= (int) $row['atributos'];
+		}
+		$this->db->sql_freeresult($query_max);
+		
+		$query = $this->db->sql_query("SELECT * FROM ". NIVELES_TABLE);
+		while ($row = $this->db->sql_fetchrow($query)){
+			$niveles[] = array(
+				'NIVEL'	=> (int) $row['nivel'],
+				'EXPERIENCIA'	=> (int) $row['experiencia'],
+				'ATRIBUTOS'	=> (int) $row['atributos'],
+				'ES_ULTIMO'	=> ($row['nivel'] == $max_nivel),
+				'U_ACTION_UPD'	=> "/sladmin/niveles/upd/" . $row['nivel'],
+				'U_ACTION_DEL'	=> "/sladmin/niveles/del/" . $row['nivel'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		$this->template->assign_block_vars_array('niveles', $niveles);
+		$this->template->assign_vars(array(
+			'PROXIMO_NIVEL'	=> $max_nivel + 1,
+			'MIN_EXPERIENCIA'	=> $max_exp + 1,
+			'MIN_ATRIBUTOS'	=> $max_attr + 1,
+			'U_ACTION_INS'	=> "/sladmin/niveles/ins",
+		));
+		
+		return $this->helper->render('sladmin/niveles.html', 'Administrador de SL - Niveles');
+	}
+	
+	function niveles_ins()
+	{
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nivel'	=> request_var('nivel', 0),
+			'experiencia'	=> (int) request_var('experiencia', 0),
+			'atributos'		=> (int) request_var('atributos', 0),
+		);
+		
+		$this->db->sql_query('INSERT INTO ' . NIVELES_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando el nivel.' . $this->get_return_link('niveles'));
+		}
+		
+		trigger_error('Nivel agregado exitosamente.' . $this->get_return_link('niveles'));
+	}
+	
+	function niveles_upd($nivel) 
+	{
+		$this->validate_access();
+		
+		$sql_array = array(
+			'experiencia'	=> (int) request_var('experiencia', 0),
+			'atributos'		=> (int) request_var('atributos', 0),
+		);
+		
+		$this->db->sql_query('UPDATE ' . NIVELES_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE nivel = $nivel");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando el nivel.' . $this->get_return_link('niveles'));
+		}
+		
+		trigger_error('Nivel actualizado exitosamente.' . $this->get_return_link('niveles'));
+	}
+	
+	function niveles_del($nivel)
+	{
+		$this->validate_access();
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE nivel >= $nivel");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar el nivel porque existen $pjs personajes que lo han alcanzado.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . NIVELES_TABLE . " WHERE nivel = $nivel");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando el nivel.' . $this->get_return_link('niveles'));
+			}
+		
+			trigger_error('Nivel eliminado exitosamente.' . $this->get_return_link('niveles'));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar el nivel $nivel?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link('niveles'));
+	}
+	
+	/*------------------------
+	--      FUNCIONES       --
+	--------------------------*/
 	
 	function get_group_name($group_id = 0)
 	{
