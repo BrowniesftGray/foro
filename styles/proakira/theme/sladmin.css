@@ -35,3 +35,16 @@ div.sladmin input.free[type="number"] {
 div.sladmin select {
 	width: 120px;
 }
+
+div.sladmin textarea {
+	resize: none;
+	overflow: hidden;
+	width: 40px !important;
+	height: 40px !important;
+}
+
+div.sladmin textarea:focus {
+	width: 100px !important;
+	height: 100px !important;
+	overflow-y: auto;
+}

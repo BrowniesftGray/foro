@@ -411,6 +411,8 @@ class main
 		$this->validate_access();
 		
 		$rama_id = (int) request_var('rama_filtro', 0);
+		$rama_nombre = $this->get_rama_nombre($rama_id);
+		$rama_options = $this->get_rama_options($rama_id, true) . $this->get_rama_options($rama_id, false);
 		
 		$query = $this->db->sql_query("SELECT * FROM ". TECNICAS_TABLE . " WHERE rama_id = $rama_id");
 		while ($row = $this->db->sql_fetchrow($query)){
@@ -419,8 +421,8 @@ class main
 				'NOMBRE'	=> $row['nombre'],
 				'RANGO'	=> $row['rango'],
 				'RAMA_ID'	=> $row['rama_id'],
-				'RAMA_NOMBRE'	=> $this->get_rama_nombre($row['rama_id']),
-				'RAMA_OPTIONS'	=> $this->get_rama_options($row['rama_id'], true) . $this->get_rama_options($row['rama_id'], false),
+				'RAMA_NOMBRE'	=> $rama_nombre,
+				'RAMA_OPTIONS'	=> $rama_options,
 				'PJ_ID_INVENCION'	=> (int) $row['pj_id_invencion'],
 				'ETIQUETA'	=> $row['etiqueta'],
 				'COSTE'	=> (int) $row['coste'],
@@ -443,8 +445,8 @@ class main
 	
 		$this->template->assign_vars(array(
 			'RAMA_ID'		=> $rama_id,
-			'RAMA_NOMBRE'	=> $this->get_rama_nombre($rama_id),
-			'RAMA_OPTIONS'	=> $this->get_rama_options($rama_id, true) . $this->get_rama_options($rama_id, false),
+			'RAMA_NOMBRE'	=> $rama_nombre,
+			'RAMA_OPTIONS'	=> $rama_options,
 			'U_ACTION_INS'	=> "/sladmin/tecnicas/ins",
 			'U_ACTION_SEL'	=> "/sladmin/tecnicas",
 		));
@@ -554,6 +556,260 @@ class main
 	}
 	
 	/*------------------------
+	--        TIENDAS       --
+	--------------------------*/
+	
+	function tiendas_view() {
+		$this->validate_access();
+		
+		$query = $this->db->sql_query("SELECT * FROM ". SHOPS_TABLE);
+		while ($row = $this->db->sql_fetchrow($query)){
+			$tiendas[] = array(
+				'SHOP_ID'	=> (int) $row['shop_id'],
+				'NOMBRE'	=> $row['nombre'],
+				'FA_ICON'	=> $row['fa_icon'],
+				'DESCRIPCION'	=> $row['descripcion'],
+				'VISIBLE'	=> $row['visible'],
+				'U_ACTION_UPD'	=> "/sladmin/tiendas/upd/" . $row['shop_id'],
+				'U_ACTION_DEL'	=> "/sladmin/tiendas/del/" . $row['shop_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		$this->template->assign_block_vars_array('tiendas', $tiendas);
+		$this->template->assign_vars(array(
+			'U_ACTION_INS'	=> "/sladmin/tiendas/ins",
+		));
+		
+		return $this->helper->render('sladmin/tiendas.html', 'Administrador de SL - Tiendas');
+	}
+	
+	function tiendas_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'fa_icon'	=> utf8_normalize_nfc(request_var('fa_icon', '', true)),
+			'descripcion'	=> utf8_normalize_nfc(request_var('descripcion', '', true)),
+			'visible'	=> (bool) request_var('visible', false),
+		);
+		
+		$this->db->sql_query('INSERT INTO ' . SHOPS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la tienda.' . $this->get_return_link('tiendas'));
+		}
+		
+		trigger_error('Tienda agregada exitosamente.' . $this->get_return_link('tiendas'));
+	}
+	
+	function tiendas_upd($shop_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'fa_icon'	=> utf8_normalize_nfc(request_var('fa_icon', '', true)),
+			'descripcion'	=> utf8_normalize_nfc(request_var('descripcion', '', true)),
+			'visible'	=> (bool) request_var('visible', false),
+		);
+		
+		$this->db->sql_query('UPDATE ' . SHOPS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE shop_id = $shop_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la tienda.' . $this->get_return_link('tiendas'));
+		}
+		
+		trigger_error('Tienda actualizada exitosamente.' . $this->get_return_link('tienda'));
+	}
+	
+	function tiendas_del($shop_id) {
+		$this->validate_access();
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . ITEMS_TABLE . " WHERE shop_id = $shop_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$items = (int) $row['cantidad'];
+			if ($items > 0)
+				trigger_error("No se puede eliminar la tienda porque existen $items items en la misma.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . SHOPS_TABLE . " WHERE shop_id = $shop_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . SHOPS_TABLE . " WHERE shop_id = $shop_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la tienda.' . $this->get_return_link('tienda'));
+			}
+		
+			trigger_error('Tienda eliminada exitosamente.' . $this->get_return_link('tienda'));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar la tienda '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link('tienda'));
+	}
+	
+	/*------------------------
+	--         ITEMS        --
+	--------------------------*/
+	
+	function items_view() {		
+		$this->validate_access();
+		
+		$shop_id = (int) request_var('tienda_filtro', 0);
+		$shop_nombre = $this->get_tienda_nombre($shop_id);
+		$shop_options = $this->get_tienda_options($shop_id);
+		
+		$query = $this->db->sql_query("SELECT * FROM ". ITEMS_TABLE . " WHERE shop_id = $shop_id");
+		while ($row = $this->db->sql_fetchrow($query)) {			
+			$items[] = array(
+				'ITEM_ID'			=> (int) $row['item_id'],
+				'SHOP_ID'			=> (int) $row['shop_id'],
+				'SHOP_NOMBRE'		=> $shop_nombre,
+				'SHOP_OPTIONS'		=> $shop_options,
+				'NOMBRE'			=> $row['nombre'],
+				'NOMBRE_BUSQUEDA'	=> $row['nombre_busqueda'],
+				'TIPOS'				=> $row['tipos'],
+				'REQUISITOS'		=> $row['requisitos'],
+				'EFECTOS'			=> $row['efectos'],
+				'DESCRIPCION'		=> $row['descripcion'],
+				'URL_IMAGEN'		=> $row['url_imagen'],
+				'PRECIO'			=> (int) $row['precio'],
+				'CANTIDAD_MAX'		=> (int) $row['cantidad_max'],
+				'COMPRABLE'			=> (bool) $row['comprable'],
+				'PJ_ID_INVENCION'	=> (int) $row['pj_id_invencion'],
+				'ORDEN'				=> (int) $row['orden'],
+				'U_ACTION_UPD'		=> "/sladmin/items/upd/" . $row['item_id'],
+				'U_ACTION_DEL'		=> "/sladmin/items/del/" . $row['item_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (isset($items))
+			$this->template->assign_block_vars_array('items', $items);
+	
+		$this->template->assign_vars(array(
+			'SHOP_ID'		=> $shop_id,
+			'SHOP_NOMBRE'	=> $shop_nombre,
+			'SHOP_OPTIONS'	=> $shop_options,
+			'U_ACTION_INS'	=> "/sladmin/items/ins",
+			'U_ACTION_SEL'	=> "/sladmin/items",
+		));
+		
+		return $this->helper->render('sladmin/items.html', 'Administrador de SL - Items');
+	}
+	
+	function items_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'shop_id'			=> (int) request_var('shop_id', 0),
+			'nombre'			=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'nombre_busqueda'	=> utf8_normalize_nfc(request_var('nombre_busqueda', '', true)),
+			'tipos'				=> utf8_normalize_nfc(request_var('tipos', '', true)),
+			'requisitos'		=> html_entity_decode(utf8_normalize_nfc(request_var('requisitos', '', true))),
+			'efectos'			=> html_entity_decode(utf8_normalize_nfc(request_var('efectos', '', true))),
+			'descripcion'		=> html_entity_decode(utf8_normalize_nfc(request_var('descripcion', '', true))),
+			'url_imagen'		=> utf8_normalize_nfc(request_var('url_imagen', '', true)),
+			'precio'			=> (int) request_var('precio', 0),
+			'cantidad_max'		=> (int) request_var('cantidad_max', 0),
+			'comprable'			=> (bool) request_var('comprable', false),
+			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
+			'orden'				=> (int) request_var('orden', 0),
+		);
+		
+		$shop_id = $sql_array['shop_id'];
+		
+		$this->db->sql_query('INSERT INTO ' . ITEMS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando el item.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+		}
+		
+		trigger_error('Técnica agregada exitosamente.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+	}
+	
+	function items_upd($item_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'shop_id'			=> (int) request_var('shop_id', 0),
+			'nombre'			=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'nombre_busqueda'	=> utf8_normalize_nfc(request_var('nombre_busqueda', '', true)),
+			'tipos'				=> utf8_normalize_nfc(request_var('tipos', '', true)),
+			'requisitos'		=> html_entity_decode(utf8_normalize_nfc(request_var('requisitos', '', true))),
+			'efectos'			=> html_entity_decode(utf8_normalize_nfc(request_var('efectos', '', true))),
+			'descripcion'		=> html_entity_decode(utf8_normalize_nfc(request_var('descripcion', '', true))),
+			'url_imagen'		=> utf8_normalize_nfc(request_var('url_imagen', '', true)),
+			'precio'			=> (int) request_var('precio', 0),
+			'cantidad_max'		=> (int) request_var('cantidad_max', 0),
+			'comprable'			=> (bool) request_var('comprable', false),
+			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
+			'orden'				=> (int) request_var('orden', 0),
+		);
+		
+		$shop_id = $sql_array['shop_id'];
+		
+		$this->db->sql_query('UPDATE ' . ITEMS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE item_id = $item_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando el item.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+		}
+		
+		trigger_error('Item actualizado exitosamente.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+	}
+	
+	function items_del($item_id) {
+		$this->validate_access();
+		
+		$shop_id = (int) request_var('shop_id', 0);
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJE_ITEMS_TABLE . " WHERE item_id = $item_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar el item porque existen $pjs personajes que lo poseen.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = $item_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . ITEMS_TABLE . " WHERE item_id = $item_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando el item.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+			}
+		
+			trigger_error('Item eliminado exitosamente.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar el item '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+	}
+	
+	
+	/*------------------------
 	--      FUNCIONES       --
 	--------------------------*/
 	
@@ -607,6 +863,35 @@ class main
 		
 		while ($row = $this->db->sql_fetchrow($query)){
 			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
+		}
+		$this->db->sql_freeresult($query);
+		
+		return $options;
+	}
+	
+	function get_tienda_nombre($shop_id = 0)
+	{
+		if (!$shop_id) return false;
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . SHOPS_TABLE . " WHERE shop_id = $shop_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			return $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		return false;
+	}
+	
+	function get_tienda_options($shop_id = 0)
+	{
+		$options = "";
+		
+		$query = $this->db->sql_query("SELECT shop_id, nombre FROM " . SHOPS_TABLE . 
+						($shop_id ? " WHERE shop_id <> $shop_id" : "") .
+						" ORDER BY shop_id");
+		
+		while ($row = $this->db->sql_fetchrow($query)){
+			$options .= "<option value='" . $row['shop_id'] . "'>" . $row['nombre'] . "</option>";
 		}
 		$this->db->sql_freeresult($query);
 		

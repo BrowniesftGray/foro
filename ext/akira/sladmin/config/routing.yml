@@ -68,3 +68,37 @@ akira_sladmin_tecnicas_upd:
 akira_sladmin_tecnicas_del:
     path: /sladmin/tecnicas/del/{tecnica_id}
     defaults: { _controller: akira.sladmin.controller:tecnicas_del }
+    
+    
+akira_sladmin_tiendas:
+    path: /sladmin/tiendas
+    defaults: { _controller: akira.sladmin.controller:tiendas_view }
+    
+akira_sladmin_tiendas_ins:
+    path: /sladmin/tiendas/ins
+    defaults: { _controller: akira.sladmin.controller:tiendas_ins }
+    
+akira_sladmin_tiendas_upd:
+    path: /sladmin/tiendas/upd/{shop_id}
+    defaults: { _controller: akira.sladmin.controller:tiendas_upd }
+    
+akira_sladmin_tiendas_del:
+    path: /sladmin/tiendas/del/{shop_id}
+    defaults: { _controller: akira.sladmin.controller:tiendas_del }
+    
+    
+akira_sladmin_items:
+    path: /sladmin/items
+    defaults: { _controller: akira.sladmin.controller:items_view }
+    
+akira_sladmin_items_ins:
+    path: /sladmin/items/ins
+    defaults: { _controller: akira.sladmin.controller:items_ins }
+    
+akira_sladmin_items_upd:
+    path: /sladmin/items/upd/{item_id}
+    defaults: { _controller: akira.sladmin.controller:items_upd }
+    
+akira_sladmin_items_del:
+    path: /sladmin/items/del/{item_id}
+    defaults: { _controller: akira.sladmin.controller:items_del }

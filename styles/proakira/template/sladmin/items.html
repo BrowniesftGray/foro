@@ -1,0 +1,161 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.2.5" type="text/css" />
+
+<div class="sladmin">
+	<h2><a href="/sladmin/home">SL Admin</a></h2>
+	<h3>Items</h3>
+	<div>
+		<form action="{U_ACTION_SEL}" method="get">
+			<label for="tienda_filtro">Tienda:</label>
+			<select name="tienda_filtro" id="tienda_filtro">
+				<!-- IF SHOP_ID -->
+				<option selected="selected" value="{SHOP_ID}">{SHOP_NOMBRE}</option>
+				<!-- ELSE -->
+				<option selected="selected" value="0">-- Seleccionar --</option>
+				<!-- ENDIF -->
+				{SHOP_OPTIONS}
+			<select>
+			<input type="submit" class="btn-filter" value="Buscar" />
+		</form>
+	</div>
+	<br />
+	<!-- IF SHOP_ID -->
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Tienda</th>
+			<th>Nombre</th>
+			<th>Búsqueda</th>
+			<th>Tipos</th>
+			<th>Requisitos</th>
+			<th>Efectos</th>
+			<th>Descripción</th>
+			<th>Imagen</th>
+			<th>Precio</th>
+			<th>Máx.</th>
+			<th>Comprable</th>
+			<th>ID PJ</th>
+			<th>Orden</th>
+			<th>Guardar</th>
+			<th>Eliminar</th>
+		</tr>
+		<!-- BEGIN items -->
+		<tr>
+			<form action="{items.U_ACTION_UPD}" method="post">
+			<td>
+				<input type="hidden" name="item_id" value="{items.ITEM_ID}" />
+				{items.ITEM_ID}
+			</td>
+			<td>
+				<select name="shop_id">
+					<!-- IF items.SHOP_ID -->
+					<option selected="selected" value="{items.SHOP_ID}">{items.SHOP_NOMBRE}</option>
+					<!-- ELSE -->
+					<option selected="selected" value="0">-- Ninguna --</option>
+					<!-- ENDIF -->
+					{items.SHOP_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<input type="text" name="nombre" size="10" value="{items.NOMBRE}" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="nombre_busqueda" size="10" value="{items.NOMBRE_BUSQUEDA}" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="tipos" size="10" value="{items.TIPOS}" max-length="255" />
+			</td>
+			<td>
+				<textarea type="text" name="requisitos" rows="2" max-length="500">{items.REQUISITOS}</textarea>
+			</td>
+			<td>
+				<textarea type="text" name="efectos" rows="2" max-length="4000">{items.EFECTOS}</textarea>
+			</td>
+			<td>
+				<textarea type="text" name="descripcion" rows="2" max-length="4000">{items.DESCRIPCION}</textarea>
+			</td>
+			<td>
+				<input type="text" name="url_imagen" size="5" value="{items.URL_IMAGEN}" max-length="255" />
+			</td>
+			<td>
+				<input type="number" name="precio" min="0" value="{items.PRECIO}" />
+			</td>
+			<td>
+				<input type="number" name="cantidad_max" min="0" title="Cero (0) para ilimitado" value="{items.CANTIDAD_MAX}" />
+			</td>
+			<td>
+				<input type="checkbox" name="comprable" <!-- IF items.COMPRABLE -->checked="checked"<!-- ENDIF --> />
+			</td>
+			<td>
+				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" value="{items.PJ_ID_INVENCION}" />
+			</td>
+			<td>
+				<input type="number" name="orden" min="0" value="{items.ORDEN}" />
+			</td>
+			<td>
+				<input type="submit" class="btn-upd" value="Guardar" />
+			</td>
+			</form>
+			<td>
+				<form action="{items.U_ACTION_DEL}" method="post">
+					<input type="hidden" name="shop_id" value="{items.SHOP_ID}" />
+					<input type="hidden" name="item_id" value="{items.ITEM_ID}" />
+					<input type="submit" class="btn-del" value="Eliminar" />
+				</form>
+			</td>
+		</tr>
+		<!-- END items -->
+		<tr>
+			<form action="{U_ACTION_INS}" method="post">
+			<td></td>
+			<td>
+				<input type="hidden" name="shop_id" value="{SHOP_ID}" />
+				{SHOP_NOMBRE}
+			</td>
+			<td>
+				<input type="text" name="nombre" size="10" placeholder="Nombre" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="nombre_busqueda" size="10" placeholder="Búsqueda" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="tipos" size="10" placeholder="Tipos" max-length="255" />
+			</td>
+			<td>
+				<textarea name="requisitos" placeholder="Requisitos" rows="2" max-length="500"></textarea>
+			</td>
+			<td>
+				<textarea name="efectos" placeholder="Efectos" rows="2" max-length="4000"></textarea>
+			</td>
+			<td>
+				<textarea name="descripcion" placeholder="Descripción" rows="2" max-length="4000"></textarea>
+			</td>
+			<td>
+				<input type="text" name="url_imagen" size="5" placeholder="URL Imagen" max-length="255" />
+			</td>
+			<td>
+				<input type="number" name="precio" min="0" />
+			</td>
+			<td>
+				<input type="number" name="cantidad_max" min="0" title="Cero (0) para ilimitado" />
+			</td>
+			<td>
+				<input type="checkbox" name="comprable" />
+			</td>
+			<td>
+				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" />
+			</td>
+			<td>
+				<input type="number" name="orden" min="0" />
+			</td>
+			<td>
+				<input type="submit" class="btn-ins" value="Crear" />
+			</td>
+			</form>
+			<td></td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+</div>
+
+<!-- INCLUDE overall_footer.html -->
