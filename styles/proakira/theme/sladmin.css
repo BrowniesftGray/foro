@@ -23,3 +23,15 @@ div.sladmin table td, div.sladmin table th {
     border: #222 solid 1px;
 	padding: 1px;
 }
+
+div.sladmin input[type="number"] {
+	width: 40px;
+}
+
+div.sladmin input.free[type="number"] {
+	width: auto;
+}
+
+div.sladmin select {
+	width: 120px;
+}

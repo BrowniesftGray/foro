@@ -56,8 +56,7 @@ class main
 	--        ALDEAS        --
 	--------------------------*/
 	
-	function aldeas_view() 
-	{
+	function aldeas_view() {
 		$this->validate_access();
 		
 		$query = $this->db->sql_query("SELECT * FROM ". ALDEAS_TABLE);
@@ -92,8 +91,7 @@ class main
 		return $this->helper->render('sladmin/aldeas.html', 'Administrador de SL - Aldeas');
 	}
 	
-	function aldeas_ins()
-	{
+	function aldeas_ins() {
 		$this->validate_access();
 		
 		$sql_array = array(
@@ -115,8 +113,7 @@ class main
 		trigger_error('Aldea agregada exitosamente.' . $this->get_return_link('aldeas'));
 	}
 	
-	function aldeas_upd($aldea_id) 
-	{
+	function aldeas_upd($aldea_id) {
 		$this->validate_access();
 		
 		$sql_array = array(
@@ -141,8 +138,7 @@ class main
 		trigger_error('Aldea actualizada exitosamente.' . $this->get_return_link('aldeas'));
 	}
 	
-	function aldeas_del($aldea_id)
-	{
+	function aldeas_del($aldea_id) {
 		$this->validate_access();
 		
 		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE aldea_id = $aldea_id");
@@ -157,6 +153,7 @@ class main
 		if ($row = $this->db->sql_fetchrow($query)) {
 			$nombre = $row['nombre'];
 		}
+		$this->db->sql_freeresult($query);		
 		
 		if (confirm_box(true))
 		{
@@ -181,8 +178,7 @@ class main
 	--        NIVELES       --
 	--------------------------*/
 	
-	function niveles_view() 
-	{
+	function niveles_view() {
 		$this->validate_access();
 		
 		$query_max = $this->db->sql_query("SELECT 	max(nivel) AS nivel,
@@ -220,8 +216,7 @@ class main
 		return $this->helper->render('sladmin/niveles.html', 'Administrador de SL - Niveles');
 	}
 	
-	function niveles_ins()
-	{
+	function niveles_ins() {
 		$this->validate_access();
 		
 		$sql_array = array(
@@ -238,8 +233,7 @@ class main
 		trigger_error('Nivel agregado exitosamente.' . $this->get_return_link('niveles'));
 	}
 	
-	function niveles_upd($nivel) 
-	{
+	function niveles_upd($nivel) {
 		$this->validate_access();
 		
 		$sql_array = array(
@@ -258,8 +252,7 @@ class main
 		trigger_error('Nivel actualizado exitosamente.' . $this->get_return_link('niveles'));
 	}
 	
-	function niveles_del($nivel)
-	{
+	function niveles_del($nivel) {
 		$this->validate_access();
 		
 		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE nivel >= $nivel");
@@ -287,6 +280,277 @@ class main
 		}
 		
 		trigger_error('Acción cancelada.' . $this->get_return_link('niveles'));
+	}
+	
+	/*------------------------
+	--         RAMAS        --
+	--------------------------*/
+	
+	function ramas_view() {
+		$this->validate_access();
+		
+		$query = $this->db->sql_query("SELECT * FROM ". RAMAS_TABLE);
+		while ($row = $this->db->sql_fetchrow($query)){
+			$ramas[] = array(
+				'RAMA_ID'	=> (int) $row['rama_id'],
+				'NOMBRE'	=> $row['nombre'],
+				'ALDEA'	=> $row['aldea'],
+				'PRINCIPAL'	=> $row['principal'],
+				'PRIMERO'	=> $row['primero'],
+				'RAMA_ID_REQ1'	=> $row['rama_id_req1'],
+				'RAMA1_NOMBRE'	=> $this->get_rama_nombre($row['rama_id_req1']),
+				'RAMA1_OPTIONS'	=> $this->get_rama_options($row['rama_id_req1'], false),
+				'RAMA_ID_REQ2'	=> $row['rama_id_req2'],
+				'RAMA2_NOMBRE'	=> $this->get_rama_nombre($row['rama_id_req2']),
+				'RAMA2_OPTIONS'	=> $this->get_rama_options($row['rama_id_req2'], false),
+				'VISIBLE'	=> $row['visible'],
+				'PREFIJO'	=> $row['prefijo'],
+				'U_ACTION_UPD'	=> "/sladmin/ramas/upd/" . $row['rama_id'],
+				'U_ACTION_DEL'	=> "/sladmin/ramas/del/" . $row['rama_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		$this->template->assign_block_vars_array('ramas', $ramas);
+		$this->template->assign_vars(array(
+			'RAMA_OPTIONS'	=> $this->get_rama_options(0, false),
+			'U_ACTION_INS'	=> "/sladmin/ramas/ins",
+		));
+		
+		return $this->helper->render('sladmin/ramas.html', 'Administrador de SL - Ramas');
+	}
+	
+	function ramas_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'aldea'		=> utf8_normalize_nfc(request_var('aldea', '', true)),
+			'principal'	=> (bool) request_var('principal', false),
+			'primero'	=> (bool) request_var('primero', false),
+			'rama_id_req1'	=> (int) request_var('rama_id_req1', 0),
+			'rama_id_req2'	=> (int) request_var('rama_id_req2', 0),
+			'visible'	=> (bool) request_var('visible', false),
+			'prefijo'	=> utf8_normalize_nfc(request_var('prefijo', '', true)),
+		);
+		
+		$this->db->sql_query('INSERT INTO ' . RAMAS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la rama.' . $this->get_return_link('ramas'));
+		}
+		
+		trigger_error('Rama agregada exitosamente.' . $this->get_return_link('ramas'));
+	}
+	
+	function ramas_upd($rama_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'aldea'		=> utf8_normalize_nfc(request_var('aldea', '', true)),
+			'principal'	=> (bool) request_var('principal', false),
+			'primero'	=> (bool) request_var('primero', false),
+			'rama_id_req1'	=> (int) request_var('rama_id_req1', 0),
+			'rama_id_req2'	=> (int) request_var('rama_id_req2', 0),
+			'visible'	=> (bool) request_var('visible', false),
+			'prefijo'	=> utf8_normalize_nfc(request_var('prefijo', '', true)),
+		);
+		
+		$this->db->sql_query('UPDATE ' . RAMAS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE rama_id = $rama_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la rama.' . $this->get_return_link('ramas'));
+		}
+		
+		trigger_error('Rama actualizada exitosamente.' . $this->get_return_link('ramas'));
+	}
+	
+	function ramas_del($rama_id) {
+		$this->validate_access();
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE $rama_id IN (rama_id_pri, rama_id1, rama_id2, rama_id3, rama_id4, rama_id5)");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar la rama porque existen $pjs personajes que la poseen.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . RAMAS_TABLE . " WHERE rama_id = $rama_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . RAMAS_TABLE . " WHERE rama_id = $rama_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la rama.' . $this->get_return_link('ramas'));
+			}
+		
+			trigger_error('Rama eliminada exitosamente.' . $this->get_return_link('ramas'));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar la rama '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link('ramas'));
+	}
+	
+	/*------------------------
+	--       TECNICAS       --
+	--------------------------*/
+	
+	function tecnicas_view() {
+		$this->validate_access();
+		
+		$rama_id = (int) request_var('rama_filtro', 0);
+		
+		$query = $this->db->sql_query("SELECT * FROM ". TECNICAS_TABLE . " WHERE rama_id = $rama_id");
+		while ($row = $this->db->sql_fetchrow($query)){
+			$tecnicas[] = array(
+				'TECNICA_ID'	=> (int) $row['tecnica_id'],
+				'NOMBRE'	=> $row['nombre'],
+				'RANGO'	=> $row['rango'],
+				'RAMA_ID'	=> $row['rama_id'],
+				'RAMA_NOMBRE'	=> $this->get_rama_nombre($row['rama_id']),
+				'RAMA_OPTIONS'	=> $this->get_rama_options($row['rama_id'], true) . $this->get_rama_options($row['rama_id'], false),
+				'PJ_ID_INVENCION'	=> (int) $row['pj_id_invencion'],
+				'ETIQUETA'	=> $row['etiqueta'],
+				'COSTE'	=> (int) $row['coste'],
+				'ATTR_FIS'	=> (int) $row['attr_fis'],
+				'ATTR_ESP'	=> (int) $row['attr_esp'],
+				'FUERZA'	=> (int) $row['fuerza'],
+				'AGILIDAD'	=> (int) $row['agilidad'],
+				'VITALIDAD'	=> (int) $row['vitalidad'],
+				'CCK'	=> (int) $row['cck'],
+				'CONCENTRACION'	=> (int) $row['concentracion'],
+				'VOLUNTAD'	=> (int) $row['voluntad'],
+				'U_ACTION_UPD'	=> "/sladmin/tecnicas/upd/" . $row['tecnica_id'],
+				'U_ACTION_DEL'	=> "/sladmin/tecnicas/del/" . $row['tecnica_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (isset($tecnicas))
+			$this->template->assign_block_vars_array('tecnicas', $tecnicas);
+	
+		$this->template->assign_vars(array(
+			'RAMA_ID'		=> $rama_id,
+			'RAMA_NOMBRE'	=> $this->get_rama_nombre($rama_id),
+			'RAMA_OPTIONS'	=> $this->get_rama_options($rama_id, true) . $this->get_rama_options($rama_id, false),
+			'U_ACTION_INS'	=> "/sladmin/tecnicas/ins",
+			'U_ACTION_SEL'	=> "/sladmin/tecnicas",
+		));
+		
+		return $this->helper->render('sladmin/tecnicas.html', 'Administrador de SL - Técnicas');
+	}
+	
+	function tecnicas_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'rango'		=> utf8_normalize_nfc(request_var('rango', '', true)),
+			'rama_id'	=> (int) request_var('rama_id', 0),
+			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
+			'etiqueta'	=> utf8_normalize_nfc(request_var('etiqueta', '', true)),
+			'coste'	=> (int) request_var('coste', 0),
+			'attr_fis'	=> (int) request_var('attr_fis', 0),
+			'attr_esp'	=> (int) request_var('attr_esp', 0),
+			'fuerza'	=> (int) request_var('fuerza', 0),
+			'agilidad'	=> (int) request_var('agilidad', 0),
+			'vitalidad'	=> (int) request_var('vitalidad', 0),
+			'cck'	=> (int) request_var('cck', 0),
+			'concentracion'	=> (int) request_var('concentracion', 0),
+			'voluntad'	=> (int) request_var('voluntad', 0),
+		);
+		
+		$rama_id = $sql_array['rama_id'];
+		
+		$this->db->sql_query('INSERT INTO ' . TECNICAS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la técnica.' . $this->get_return_link('tecnicas'));
+		}
+		
+		trigger_error('Técnica agregada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+	}
+	
+	function tecnicas_upd($tecnica_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'	=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'rango'		=> utf8_normalize_nfc(request_var('rango', '', true)),
+			'rama_id'	=> (int) request_var('rama_id', 0),
+			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
+			'etiqueta'	=> utf8_normalize_nfc(request_var('etiqueta', '', true)),
+			'coste'	=> (int) request_var('coste', 0),
+			'attr_fis'	=> (int) request_var('attr_fis', 0),
+			'attr_esp'	=> (int) request_var('attr_esp', 0),
+			'fuerza'	=> (int) request_var('fuerza', 0),
+			'agilidad'	=> (int) request_var('agilidad', 0),
+			'vitalidad'	=> (int) request_var('vitalidad', 0),
+			'cck'	=> (int) request_var('cck', 0),
+			'concentracion'	=> (int) request_var('concentracion', 0),
+			'voluntad'	=> (int) request_var('voluntad', 0),
+		);
+		
+		$rama_id = $sql_array['rama_id'];
+		
+		$this->db->sql_query('UPDATE ' . TECNICAS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE tecnica_id = $tecnica_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la técnica.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+		}
+		
+		trigger_error('Técnica actualizada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+	}
+	
+	function tecnicas_del($tecnica_id) {
+		$this->validate_access();
+		
+		$rama_id = (int) request_var('rama_id', 0);
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar la técnica porque existen $pjs personajes que la poseen.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la técnica.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+			}
+		
+			trigger_error('Técnica eliminada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar la técnica '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
 	}
 	
 	/*------------------------
@@ -333,12 +597,12 @@ class main
 		return false;
 	}
 	
-	function get_rama_options($rama_id = 0)
+	function get_rama_options($rama_id = 0, $principal = true)
 	{
 		$options = "";
 		
 		$query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE . 
-										" WHERE principal = 1 " .
+										" WHERE principal = " . ($principal ? "1" : "0" ) .
 							($rama_id ? " AND rama_id <> $rama_id" : ""));
 		
 		while ($row = $this->db->sql_fetchrow($query)){

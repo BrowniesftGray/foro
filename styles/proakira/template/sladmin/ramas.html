@@ -1,0 +1,121 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.1.3" type="text/css" />
+
+<div class="sladmin">
+	<h2><a href="/sladmin/home">SL Admin</a></h2>
+	<h3>Ramas de Técnicas</h3>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Nombre</th>
+			<th>Aldea</th>
+			<th>Principal</th>
+			<th>Rama Requisito 1</th>
+			<th>Rama Requisito 2</th>
+			<th>Primera</th>
+			<th>Visible</th>
+			<th>Prefijo bbcode</th>
+			<th>Guardar</th>
+			<th>Eliminar</th>
+		</tr>
+		<!-- BEGIN ramas -->
+		<tr>
+			<form action="{ramas.U_ACTION_UPD}" method="post">
+			<td>
+				<input type="hidden" name="rama_id" value="{ramas.RAMA_ID}" />
+				{ramas.RAMA_ID}
+			</td>
+			<td>
+				<input type="text" name="nombre" value="{ramas.NOMBRE}" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="aldea" size="10" value="{ramas.ALDEA}" max-length="50" />
+			</td>
+			<td>
+				<input type="checkbox" name="principal" <!-- IF ramas.PRINCIPAL -->checked="checked"<!-- ENDIF --> />
+			</td>
+			<td>
+				<select name="rama_id_req1">
+					<!-- IF ramas.RAMA_ID_REQ1 -->
+					<option selected="selected" value="{ramas.RAMA_ID_REQ1}">{ramas.RAMA1_NOMBRE}</option>
+					<!-- ELSE -->
+					<option selected="selected" value="0">-- Ninguna --</option>
+					<!-- ENDIF -->
+					{ramas.RAMA1_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<select name="rama_id_req2">
+					<!-- IF ramas.RAMA_ID_REQ2 -->
+					<option selected="selected" value="{ramas.RAMA_ID_REQ2}">{ramas.RAMA2_NOMBRE}</option>
+					<!-- ELSE -->
+					<option selected="selected" value="0">-- Ninguna --</option>
+					<!-- ENDIF -->
+					{ramas.RAMA2_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<input type="checkbox" name="primero" title="Se muestra primera en el combo de la ficha" <!-- IF ramas.PRIMERO -->checked="checked"<!-- ENDIF --> />
+			</td>
+			<td>
+				<input type="checkbox" name="visible" title="Visible para todos (si no, sólo para Mods)" <!-- IF ramas.VISIBLE -->checked="checked"<!-- ENDIF --> />
+			</td>
+			<td>
+				<input type="text" size="5" name="prefijo" value="{ramas.PREFIJO}" max-length="16" />
+			</td>
+			<td>
+				<input type="submit" class="btn-upd" value="Guardar" />
+			</td>
+			</form>
+			<td>
+				<form action="{ramas.U_ACTION_DEL}" method="post">
+					<input type="hidden" name="rama_id" value="{ramas.RAMA_ID}" />
+					<input type="submit" class="btn-del" value="Eliminar" />
+				</form>
+			</td>
+		</tr>
+		<!-- END ramas -->
+		<tr>
+			<form action="{U_ACTION_INS}" method="post">
+			<td>
+			</td>
+			<td>
+				<input type="text" name="nombre" value="" placeholder="Nombre de rama" max-length="50" />
+			</td>
+			<td>
+				<input type="text" name="aldea" size="10" value="" max-length="50" />
+			</td>
+			<td>
+				<input type="checkbox" name="principal" />
+			</td>
+			<td>
+				<select name="rama_id_req1">
+					<option selected="selected" value="0">-- Ninguna --</option>
+					{RAMA_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<select name="rama_id_req2">
+					<option selected="selected" value="0">-- Ninguna --</option>
+					{RAMA_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<input type="checkbox" name="primero" title="Se muestra primera en el combo de la ficha" />
+			</td>
+			<td>
+				<input type="checkbox" name="visible" title="Visible para todos (si no, sólo para Mods)" />
+			</td>
+			<td>
+				<input type="text" size="5" name="prefijo" value="" placeholder="bbcode" max-length="16" />
+			</td>
+			<td>
+				<input type="submit" class="btn-ins" value="Crear" />
+			</td>
+			</form>
+			<td></td>
+		</tr>
+	</table>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

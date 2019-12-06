@@ -1,0 +1,168 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.1.5" type="text/css" />
+
+<div class="sladmin">
+	<h2><a href="/sladmin/home">SL Admin</a></h2>
+	<h3>Técnicas</h3>
+	<div>
+		<form action="{U_ACTION_SEL}" method="get">
+			<label for="rama_filtro">Rama:</label>
+			<select name="rama_filtro" id="rama_filtro">
+				<!-- IF RAMA_ID -->
+				<option selected="selected" value="{RAMA_ID}">{RAMA_NOMBRE}</option>
+				<!-- ELSE -->
+				<option selected="selected" value="0">-- Seleccionar --</option>
+				<!-- ENDIF -->
+				{RAMA_OPTIONS}
+			<select>
+			<input type="submit" class="btn-filter" value="Buscar" />
+		</form>
+	</div>
+	<br />
+	<!-- IF RAMA_ID -->
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Nombre</th>
+			<th>Rango</th>
+			<th>Rama</th>
+			<th>ID PJ</th>
+			<th>Bbcode</th>
+			<th>Coste</th>
+			<th>Atr. FIS</th>
+			<th>Atr. ESP</th>
+			<th>FUE</th>
+			<th>AGI</th>
+			<th>VIT</th>
+			<th>CCK</th>
+			<th>CON</th>
+			<th>VIT</th>
+			<th>Guardar</th>
+			<th>Eliminar</th>
+		</tr>
+		<!-- BEGIN tecnicas -->
+		<tr>
+			<form action="{tecnicas.U_ACTION_UPD}" method="post">
+			<td>
+				<input type="hidden" name="tecnica_id" value="{tecnicas.TECNICA_ID}" />
+				{tecnicas.TECNICA_ID}
+			</td>
+			<td>
+				<input type="text" name="nombre" value="{tecnicas.NOMBRE}" max-length="500" />
+			</td>
+			<td>
+				<input type="text" name="rango" size="5" title="Rango E va automáticamente a técnicas globales" value="{tecnicas.RANGO}" max-length="10" />
+			</td>
+			<td>
+				<select name="rama_id">
+					<!-- IF tecnicas.RAMA_ID -->
+					<option selected="selected" value="{tecnicas.RAMA_ID}">{tecnicas.RAMA_NOMBRE}</option>
+					<!-- ELSE -->
+					<option selected="selected" value="0">-- Ninguna --</option>
+					<!-- ENDIF -->
+					{tecnicas.RAMA_OPTIONS}
+				</select>
+			</td>
+			<td>
+				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" value="{tecnicas.PJ_ID_INVENCION}" />
+			</td>
+			<td>
+				<input type="text" name="etiqueta" size="5" value="{tecnicas.ETIQUETA}" max-length="20" />
+			</td>
+			<td>
+				<input type="number" name="coste" min="0" value="{tecnicas.COSTE}" />
+			</td>
+			<td>
+				<input type="number" name="attr_fis" min="0" value="{tecnicas.ATTR_FIS}" />
+			</td>
+			<td>
+				<input type="number" name="attr_esp" min="0" value="{tecnicas.ATTR_ESP}" />
+			</td>
+			<td>
+				<input type="number" name="fuerza" min="0" value="{tecnicas.FUERZA}" />
+			</td>
+			<td>
+				<input type="number" name="agilidad" min="0" value="{tecnicas.AGILIDAD}" />
+			</td>
+			<td>
+				<input type="number" name="vitalidad" min="0" value="{tecnicas.VITALIDAD}" />
+			</td>
+			<td>
+				<input type="number" name="cck" size="10" min="0" value="{tecnicas.CCK}" />
+			</td>
+			<td>
+				<input type="number" name="concentracion" min="0" value="{tecnicas.CONCENTRACION}" />
+			</td>
+			<td>
+				<input type="number" name="voluntad" min="0" value="{tecnicas.VOLUNTAD}" />
+			</td>
+			<td>
+				<input type="submit" class="btn-upd" value="Guardar" />
+			</td>
+			</form>
+			<td>
+				<form action="{tecnicas.U_ACTION_DEL}" method="post">
+					<input type="hidden" name="rama_id" value="{tecnicas.RAMA_ID}" />
+					<input type="hidden" name="tecnica_id" value="{tecnicas.TECNICA_ID}" />
+					<input type="submit" class="btn-del" value="Eliminar" />
+				</form>
+			</td>
+		</tr>
+		<!-- END tecnicas -->
+		<tr>
+			<form action="{U_ACTION_INS}" method="post">
+			<td></td>
+			<td>
+				<input type="text" name="nombre" placeholder="Nombre" max-length="500" />
+			</td>
+			<td>
+				<input type="text" name="rango" size="5" placeholder="Rango" title="Rango E va automáticamente a técnicas globales" max-length="10" />
+			</td>
+			<td>
+				<input type="hidden" name="rama_id" value="{RAMA_ID}" />
+				{RAMA_NOMBRE}
+			</td>
+			<td>
+				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" />
+			</td>
+			<td>
+				<input type="text" name="etiqueta" size="5" placeholder="bbcode" max-length="20" />
+			</td>
+			<td>
+				<input type="number" name="coste" title="Coste en PA" min="0" />
+			</td>
+			<td>
+				<input type="number" name="attr_fis" title="Atributos Físicos requeridos" min="0" />
+			</td>
+			<td>
+				<input type="number" name="attr_esp" title="Atributos Espirituales requeridos" min="0" />
+			</td>
+			<td>
+				<input type="number" name="fuerza" title="Fuerza requerida" min="0" />
+			</td>
+			<td>
+				<input type="number" name="agilidad" title="Agilidad requerida" min="0" />
+			</td>
+			<td>
+				<input type="number" name="vitalidad" title="Vitalidad requerida" min="0" />
+			</td>
+			<td>
+				<input type="number" name="cck" title="Control de chakra requerido" min="0" />
+			</td>
+			<td>
+				<input type="number" name="concentracion" title="Concentración requerida" min="0" />
+			</td>
+			<td>
+				<input type="number" name="voluntad" title="Voluntad requerida" min="0" />
+			</td>
+			<td>
+				<input type="submit" class="btn-ins" value="Crear" />
+			</td>
+			</form>
+			<td></td>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+</div>
+
+<!-- INCLUDE overall_footer.html -->

@@ -18,6 +18,7 @@ akira_sladmin_aldeas_del:
     path: /sladmin/aldeas/del/{aldea_id}
     defaults: { _controller: akira.sladmin.controller:aldeas_del }
     
+    
 akira_sladmin_niveles:
     path: /sladmin/niveles
     defaults: { _controller: akira.sladmin.controller:niveles_view }
@@ -33,3 +34,37 @@ akira_sladmin_niveles_upd:
 akira_sladmin_niveles_del:
     path: /sladmin/niveles/del/{nivel}
     defaults: { _controller: akira.sladmin.controller:niveles_del }
+    
+    
+akira_sladmin_ramas:
+    path: /sladmin/ramas
+    defaults: { _controller: akira.sladmin.controller:ramas_view }
+    
+akira_sladmin_ramas_ins:
+    path: /sladmin/ramas/ins
+    defaults: { _controller: akira.sladmin.controller:ramas_ins }
+    
+akira_sladmin_ramas_upd:
+    path: /sladmin/ramas/upd/{rama_id}
+    defaults: { _controller: akira.sladmin.controller:ramas_upd }
+    
+akira_sladmin_ramas_del:
+    path: /sladmin/ramas/del/{rama_id}
+    defaults: { _controller: akira.sladmin.controller:ramas_del }
+    
+    
+akira_sladmin_tecnicas:
+    path: /sladmin/tecnicas
+    defaults: { _controller: akira.sladmin.controller:tecnicas_view }
+    
+akira_sladmin_tecnicas_ins:
+    path: /sladmin/tecnicas/ins
+    defaults: { _controller: akira.sladmin.controller:tecnicas_ins }
+    
+akira_sladmin_tecnicas_upd:
+    path: /sladmin/tecnicas/upd/{tecnica_id}
+    defaults: { _controller: akira.sladmin.controller:tecnicas_upd }
+    
+akira_sladmin_tecnicas_del:
+    path: /sladmin/tecnicas/del/{tecnica_id}
+    defaults: { _controller: akira.sladmin.controller:tecnicas_del }
