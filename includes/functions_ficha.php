@@ -405,6 +405,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 
 		// asignar variables
 		$template->assign_vars(array(
+			'PJ_ID'					=> $row['pj_id'],
 			'NIVEL' 				=> $row['nivel'],
 			'NIVEL_INICIAL'			=> $row['nivel_inicial'],
 			'PERSONAJE_PROPIO'		=> $personajePropio,

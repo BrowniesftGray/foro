@@ -70,6 +70,40 @@ akira_sladmin_tecnicas_del:
     defaults: { _controller: akira.sladmin.controller:tecnicas_del }
     
     
+akira_sladmin_arquetipos:
+    path: /sladmin/arquetipos
+    defaults: { _controller: akira.sladmin.controller:arquetipos_view }
+    
+akira_sladmin_arquetipos_ins:
+    path: /sladmin/arquetipos/ins
+    defaults: { _controller: akira.sladmin.controller:arquetipos_ins }
+    
+akira_sladmin_arquetipos_upd:
+    path: /sladmin/arquetipos/upd/{arquetipo_id}
+    defaults: { _controller: akira.sladmin.controller:arquetipos_upd }
+    
+akira_sladmin_arquetipos_del:
+    path: /sladmin/arquetipos/del/{arquetipo_id}
+    defaults: { _controller: akira.sladmin.controller:arquetipos_del }
+    
+    
+akira_sladmin_habilidades:
+    path: /sladmin/habilidades
+    defaults: { _controller: akira.sladmin.controller:habilidades_view }
+    
+akira_sladmin_habilidades_ins:
+    path: /sladmin/habilidades/ins
+    defaults: { _controller: akira.sladmin.controller:habilidades_ins }
+    
+akira_sladmin_habilidades_upd:
+    path: /sladmin/habilidades/upd/{habilidad_id}
+    defaults: { _controller: akira.sladmin.controller:habilidades_upd }
+    
+akira_sladmin_habilidades_del:
+    path: /sladmin/habilidades/del/{habilidad_id}
+    defaults: { _controller: akira.sladmin.controller:habilidades_del }
+    
+    
 akira_sladmin_tiendas:
     path: /sladmin/tiendas
     defaults: { _controller: akira.sladmin.controller:tiendas_view }

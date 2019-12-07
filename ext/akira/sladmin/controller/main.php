@@ -808,6 +808,271 @@ class main
 		trigger_error('Acción cancelada.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
 	}
 	
+	/*------------------------
+	--      ARQUETIPOS      --
+	--------------------------*/
+	
+	function arquetipos_view() {
+		$this->validate_access();
+		
+		$query = $this->db->sql_query("SELECT * FROM ". ARQUETIPOS_TABLE);
+		while ($row = $this->db->sql_fetchrow($query)){
+			$arquetipos[] = array(
+				'ARQUETIPO_ID'			=> (int) $row['arquetipo_id'],
+				'NOMBRE_JP'				=> $row['nombre_jp'],
+				'NOMBRE_ES'				=> $row['nombre_es'],
+				'NIVEL'					=> (int) $row['nivel'],
+				'ARQUETIPO_ID_PADRE1'	=> (int) $row['arquetipo_id_padre1'],
+				'ARQUETIPO1_NOMBRE'		=> $this->get_arquetipo_nombre($row['arquetipo_id_padre1']),
+				'ARQUETIPO1_OPTIONS'	=> $this->get_arquetipo_options($row['arquetipo_id_padre1']),
+				'ARQUETIPO_ID_PADRE2'	=> (int) $row['arquetipo_id_padre2'],
+				'ARQUETIPO2_NOMBRE'		=> $this->get_arquetipo_nombre($row['arquetipo_id_padre2']),
+				'ARQUETIPO2_OPTIONS'	=> $this->get_arquetipo_options($row['arquetipo_id_padre2']),
+				'BONO_PV'				=> (int) $row['bono_pv'],
+				'BONO_STA'				=> (int) $row['bono_sta'],
+				'BONO_PC'				=> (int) $row['bono_pc'],
+				'BONO_ES_PORCENTAJE'	=> (bool) $row['bono_es_porcentaje'],
+				'U_ACTION_UPD'			=> "/sladmin/arquetipos/upd/" . $row['arquetipo_id'],
+				'U_ACTION_DEL'			=> "/sladmin/arquetipos/del/" . $row['arquetipo_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		$this->template->assign_block_vars_array('arquetipos', $arquetipos);
+		$this->template->assign_vars(array(
+			'ARQUETIPO_OPTIONS'	=> $this->get_arquetipo_options(),
+			'U_ACTION_INS'	=> "/sladmin/arquetipos/ins",
+		));
+		
+		return $this->helper->render('sladmin/arquetipos.html', 'Administrador de SL - Arquetipos');
+	}
+	
+	function arquetipos_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre_jp'				=> utf8_normalize_nfc(request_var('nombre_jp', '', true)),
+			'nombre_es'				=> utf8_normalize_nfc(request_var('nombre_es', '', true)),
+			'nivel'					=> (int) request_var('nivel', 0),
+			'arquetipo_id_padre1'	=> (int) request_var('arquetipo_id_padre1', null),
+			'arquetipo_id_padre2'	=> (int) request_var('arquetipo_id_padre2', null),
+			'bono_pv'				=> (int) request_var('bono_pv', 0),
+			'bono_sta'				=> (int) request_var('bono_sta', 0),
+			'bono_pc'				=> (int) request_var('bono_pc', 0),
+			'bono_es_porcentaje'	=> (bool) request_var('bono_es_porcentaje', false),
+		);
+		
+		$this->db->sql_query('INSERT INTO ' . ARQUETIPOS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando el arquetipo.' . $this->get_return_link('arquetipos'));
+		}
+		
+		trigger_error('Arquetipo agregado exitosamente.' . $this->get_return_link('arquetipos'));
+	}
+	
+	function arquetipos_upd($arquetipo_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre_jp'				=> utf8_normalize_nfc(request_var('nombre_jp', '', true)),
+			'nombre_es'				=> utf8_normalize_nfc(request_var('nombre_es', '', true)),
+			'nivel'					=> (int) request_var('nivel', 0),
+			'arquetipo_id_padre1'	=> request_var('arquetipo_id_padre1', null),
+			'arquetipo_id_padre2'	=> request_var('arquetipo_id_padre2', null),
+			'bono_pv'				=> (int) request_var('bono_pv', 0),
+			'bono_sta'				=> (int) request_var('bono_sta', 0),
+			'bono_pc'				=> (int) request_var('bono_pc', 0),
+			'bono_es_porcentaje'	=> (bool) request_var('bono_es_porcentaje', false),
+		);
+		
+		$this->db->sql_query('UPDATE ' . ARQUETIPOS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE arquetipo_id = $arquetipo_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando el arquetipo.' . $this->get_return_link('arquetipos'));
+		}
+		
+		trigger_error('Arquetipo actualizado exitosamente.' . $this->get_return_link('arquetipos'));
+	}
+	
+	function arquetipos_del($arquetipo_id) {
+		$this->validate_access();
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE arquetipo_id = $arquetipo_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar el arquetipo porque existen $pjs personajes con el mismo.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre_es FROM " . ARQUETIPOS_TABLE . " WHERE arquetipo_id = $arquetipo_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre_es'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . ARQUETIPOS_TABLE . " WHERE arquetipo_id = $arquetipo_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando el arquetipo.' . $this->get_return_link('arquetipos'));
+			}
+		
+			trigger_error('Arquetipo eliminado exitosamente.' . $this->get_return_link('arquetipos'));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar el arquetipo '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link('arquetipos'));
+	}
+
+	/*------------------------
+	--      HABILIDADES     --
+	--------------------------*/
+	
+	function habilidades_view() {		
+		$this->validate_access();
+		
+		$arquetipo_id = (int) request_var('arquetipo_filtro', 0);
+		$arquetipo_nombre = $this->get_arquetipo_nombre($arquetipo_id);
+		$arquetipo_options = $this->get_arquetipo_options($arquetipo_id);
+		
+		$query = $this->db->sql_query("SELECT * FROM ". HABILIDADES_TABLE . 
+										" WHERE $arquetipo_id IN (arquetipo_id1, arquetipo_id2)" .
+											" OR ($arquetipo_id = 0 AND inventada = 1)");
+		while ($row = $this->db->sql_fetchrow($query)) {
+			$habilidades[] = array(
+				'HABILIDAD_ID'		=> (int) $row['habilidad_id'],
+				'NOMBRE'			=> $row['nombre'],
+				'ARQUETIPO_ID1'		=> (int) $row['arquetipo_id1'],
+				'ARQUETIPO1_NOMBRE'	=> $this->get_arquetipo_nombre($row['arquetipo_id1']),
+				'ARQUETIPO1_OPTIONS'=> $this->get_arquetipo_options($row['arquetipo_id1']),
+				'ARQUETIPO_ID2'		=> (int) $row['arquetipo_id2'],
+				'ARQUETIPO2_NOMBRE'	=> $this->get_arquetipo_nombre($row['arquetipo_id2']),
+				'ARQUETIPO2_OPTIONS'=> $this->get_arquetipo_options($row['arquetipo_id2']),
+				'REQUISITOS'		=> $row['requisitos'],
+				'EFECTO'			=> $row['efecto'],
+				'COSTE'				=> (int) $row['coste'],
+				'URL_IMAGEN'		=> $row['url_imagen'],
+				'VISIBLE'			=> (bool) $row['visible'],
+				'INVENTADA'			=> (bool) $row['inventada'],
+				'U_ACTION_UPD'		=> "/sladmin/habilidades/upd/" . $row['habilidad_id'],
+				'U_ACTION_DEL'		=> "/sladmin/habilidades/del/" . $row['habilidad_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (isset($habilidades))
+			$this->template->assign_block_vars_array('habilidades', $habilidades);
+	
+		$this->template->assign_vars(array(
+			'ARQUETIPO_ID'		=> $arquetipo_id,
+			'ARQUETIPO_NOMBRE'	=> $arquetipo_nombre,
+			'ARQUETIPO_OPTIONS'	=> $arquetipo_options,
+			'U_ACTION_INS'	=> "/sladmin/habilidades/ins",
+			'U_ACTION_SEL'	=> "/sladmin/habilidades",
+		));
+		
+		return $this->helper->render('sladmin/habilidades.html', 'Administrador de SL - Habilidades');
+	}
+	
+	function habilidades_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'			=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'arquetipo_id1'		=> (int) request_var('arquetipo_id1', 0),
+			'arquetipo_id2'		=> (int) request_var('arquetipo_id2', 0),
+			'requisitos'		=> html_entity_decode(utf8_normalize_nfc(request_var('requisitos', '', true))),
+			'efecto'			=> html_entity_decode(utf8_normalize_nfc(request_var('efecto', '', true))),
+			'coste'				=> (int) request_var('coste', 0),
+			'url_imagen'		=> utf8_normalize_nfc(request_var('url_imagen', '', true)),
+			'visible'			=> (bool) request_var('visible', false),
+			'inventada'			=> (bool) request_var('inventada', false),
+		);
+		
+		$arquetipo_id = $sql_array['arquetipo_id1'];
+		
+		$this->db->sql_query('INSERT INTO ' . HABILIDADES_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la habilidad.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+		}
+		
+		trigger_error('Habilidad agregada exitosamente.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+	}
+	
+	function habilidades_upd($habilidad_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'nombre'			=> utf8_normalize_nfc(request_var('nombre', '', true)),
+			'arquetipo_id1'		=> (int) request_var('arquetipo_id1', 0),
+			'arquetipo_id2'		=> (int) request_var('arquetipo_id2', 0),
+			'requisitos'		=> utf8_normalize_nfc(request_var('requisitos', '', true)),
+			'efecto'			=> utf8_normalize_nfc(request_var('efecto', '', true)),
+			'coste'				=> (int) request_var('coste', 0),
+			'url_imagen'		=> utf8_normalize_nfc(request_var('url_imagen', '', true)),
+			'visible'			=> (bool) request_var('visible', false),
+			'inventada'			=> (bool) request_var('inventada', false),
+		);
+		
+		$arquetipo_id = $sql_array['arquetipo_id1'];
+		
+		$this->db->sql_query('UPDATE ' . HABILIDADES_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE habilidad_id = $habilidad_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la habilidad.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+		}
+		
+		trigger_error('Habilidad actualizada exitosamente.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+	}
+	
+	function habilidades_del($habilidad_id) {
+		$this->validate_access();
+		
+		$arquetipo_id = (int) request_var('arquetipo_id', 0);
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJE_HABILIDADES_TABLE . " WHERE habilidad_id = $habilidad_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar la habilidad porque existen $pjs personajes que la poseen.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT nombre FROM " . HABILIDADES_TABLE . " WHERE habilidad_id = $habilidad_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$nombre = $row['nombre'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . HABILIDADES_TABLE . " WHERE habilidad_id = $habilidad_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la habilidad.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+			}
+		
+			trigger_error('Habilidad eliminada exitosamente.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar la habilidad '$nombre'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
+	}
+	
 	
 	/*------------------------
 	--      FUNCIONES       --
@@ -863,6 +1128,34 @@ class main
 		
 		while ($row = $this->db->sql_fetchrow($query)){
 			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
+		}
+		$this->db->sql_freeresult($query);
+		
+		return $options;
+	}
+	
+	function get_arquetipo_nombre($arquetipo_id = 0)
+	{
+		if (!$arquetipo_id) return false;
+		
+		$query = $this->db->sql_query("SELECT nombre_es FROM " . ARQUETIPOS_TABLE . " WHERE arquetipo_id = $arquetipo_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			return $row['nombre_es'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		return false;
+	}
+	
+	function get_arquetipo_options($arquetipo_id = 0)
+	{
+		$options = "";
+		
+		$query = $this->db->sql_query("SELECT arquetipo_id, nombre_es FROM " . ARQUETIPOS_TABLE . 
+						($shop_id ? " WHERE arquetipo_id <> $arquetipo_id" : ""));
+		
+		while ($row = $this->db->sql_fetchrow($query)){
+			$options .= "<option value='" . $row['arquetipo_id'] . "'>" . $row['nombre_es'] . "</option>";
 		}
 		$this->db->sql_freeresult($query);
 		
