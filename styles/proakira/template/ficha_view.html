@@ -26,7 +26,7 @@
 					  <li class="nav-item">
 						<a class="nav-link" id="tecnicas-tab" data-toggle="tab" href="#tecnicas" role="tab" aria-controls="tecnicas" aria-selected="false"><h5>Técnicas</h5></a>
 					  </li>
-					  <!-- IF habilidades or habilidades_compra -->
+					  <!-- IF habilidades or habilidades_compra or PUEDE_MODERAR -->
 					  <li class="nav-item">
 						<a class="nav-link" id="habilidades-tab" data-toggle="tab" href="#habilidades" role="tab" aria-controls="habilidades" aria-selected="false"><h5>Habilidades</h5></a>
 					  </li>
@@ -70,6 +70,10 @@
 				</div>
 				<div class="card-body">
 					<div class="tab-content" id="myTabContent">
+					
+					
+					
+					
 					  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 					  <h3>Datos Personales</h3><br>
 						<!-- IF B_AVATAR_FICHA -->
@@ -134,6 +138,10 @@
 							</div>
 						</div>
 					  </div>
+					  
+					  
+					  
+					  
 					  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 						<h3>Ramas de Técnicas</h3><br>
 							<div class="form-group row">
@@ -272,13 +280,17 @@
 								</div>
 								<div class="spoiler-body" style="text-align: center">
 									<!-- BEGIN ramas.tecnicas -->
-									<form action="{ramas.tecnicas.U_ACTION}" method="POST">
-										<input type="hidden" name="tecnica_id" value="{ramas.tecnicas.ID}"></input>
 										{ramas.tecnicas.CONTENIDO}
 										<!-- IF PUEDE_MODERAR -->
-										<input type="submit" style="font-size: 12px; margin-top: -52px" class="button1" name="submit" value="Quitar" />
+										<form action="{ramas.tecnicas.U_ACTION_RES}" method="POST">
+											<input type="hidden" name="tecnica_id" value="{ramas.tecnicas.ID}"></input>
+											<input type="submit" title="Quitar la técnica y devolver los PA" style="font-size: 12px; float:right; margin-top: -26px; margin-right: 55px;" class="button1" name="submit" value="Reembolsar" />
+										</form>
+										<form action="{ramas.tecnicas.U_ACTION_DEL}" method="POST">
+											<input type="hidden" name="tecnica_id" value="{ramas.tecnicas.ID}"></input>
+											<input type="submit" title="Quitar la técnica SIN devolver los PA"  style="font-size: 12px; float:right; margin-top: -26px;" class="button1" name="submit" value="Quitar" />
+										</form>
 										<!-- ENDIF -->
-									</form>
 									<br />
 									<!-- END ramas.tecnicas -->
 									

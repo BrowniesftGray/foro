@@ -835,7 +835,7 @@ class main
 		return $this->view($user_id);
 	}
 
-	function removeTecMod($user_id) {
+	function removeTecMod($user_id, $devolver) {
 		$tec_id = (int) request_var('tecnica_id', 0);
 
 		$grupo = $this->user->data['group_id'];
@@ -866,10 +866,18 @@ class main
 		$this->db->sql_freeresult($query);
 
 		if (confirm_box(true)) {
+			
+			if ($devolver) {
+				$str_devolucion = " y devolver $tec_coste PA.";
+			} else {
+				$tec_coste = 0;
+				$str_devolucion = '.';
+			}
+			
 			if (quitar_tecnica($user_id, $pj_id, $tec_id, $tec_coste, $msg_error)) {
 				$moderacion = array(
 					'PJ_ID'	=> $pj_id,
-					'RAZON'	=> "Quitar '$tec_nombre' y devolver $tec_coste PA.",
+					'RAZON'	=> "Quitar '$tec_nombre'" . $str_devolucion,
 				);
 				registrar_moderacion($moderacion);
 
@@ -884,8 +892,14 @@ class main
 				'submit' 	=> true,
 				'tecnica_id'	=> $tec_id
 			));
+			
+			if ($devolver) {
+				$str_devolucion = "  y devolver $tec_coste PA al personaje";
+			} else {
+				$str_devolucion = '';
+			}
 
-			confirm_box(false, "¿Deseas quitar la técnica '$tec_nombre' y devolver $tec_coste PA a su personaje?", $s_hidden_fields);
+			confirm_box(false, "¿Deseas quitar la técnica '$tec_nombre'" . $str_devolucion . '?', $s_hidden_fields);
 		}
 
 		return $this->view($user_id);

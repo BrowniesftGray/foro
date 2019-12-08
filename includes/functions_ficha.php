@@ -343,7 +343,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 							'ID'			=> $tec['tecnica_id'],
 							'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
 							'CONTENIDO'		=> $tec['contenido'],
-							'U_ACTION'		=> append_sid("/ficha/removeTec/$user_id"),
+							'U_ACTION_RES'		=> append_sid("/ficha/removeTec/$user_id/1"),
+							'U_ACTION_DEL'		=> append_sid("/ficha/removeTec/$user_id/0"),
 						));
 					}
 				}

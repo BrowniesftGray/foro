@@ -47,7 +47,7 @@ gray_ficha_buyTec:
     defaults: { _controller: gray.ficha.controller:buyTec }
     
 gray_ficha_removeTecMod:
-    path: /ficha/removeTec/{user_id}
+    path: /ficha/removeTec/{user_id}/{devolver}
     defaults: { _controller: gray.ficha.controller:removeTecMod }
     
 gray_ficha_enable:
