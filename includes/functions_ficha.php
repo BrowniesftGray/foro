@@ -639,7 +639,7 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 					OR t.pj_id_invencion = '$pj_id')");
 	}
 	
-	$sql .= " ORDER BY coste, etiqueta";
+	$sql .= " ORDER BY etiqueta";
 	
 	$query = $db->sql_query($sql);
 
