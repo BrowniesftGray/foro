@@ -558,34 +558,36 @@ function get_habilidades_disponibles($pj_id) {
 	}
 	$db->sql_freeresult($query);
 
-	$query = $db->sql_query(
-		"SELECT	h.habilidad_id,
-				h.nombre,
-				h.requisitos,
-				h.efecto,
-				h.coste,
-				h.url_imagen
-			FROM ".HABILIDADES_TABLE." h
-				LEFT JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
-					ON ph.habilidad_id = h.habilidad_id
-					AND ph.pj_id = '$pj_id'
-			WHERE ph.pj_id IS NULL
-				AND h.visible = 1
-				AND (h.arquetipo_id1 = '$arquetipo_id'
-					 OR h.arquetipo_id2 = '$arquetipo_id')
-			ORDER BY coste");
+	if ($arquetipo_id) {
+		$query = $db->sql_query(
+			"SELECT	h.habilidad_id,
+					h.nombre,
+					h.requisitos,
+					h.efecto,
+					h.coste,
+					h.url_imagen
+				FROM ".HABILIDADES_TABLE." h
+					LEFT JOIN ".PERSONAJE_HABILIDADES_TABLE." ph
+						ON ph.habilidad_id = h.habilidad_id
+						AND ph.pj_id = '$pj_id'
+				WHERE ph.pj_id IS NULL
+					AND h.visible = 1
+					AND (h.arquetipo_id1 = '$arquetipo_id'
+						 OR h.arquetipo_id2 = '$arquetipo_id')
+				ORDER BY coste");
 
-	while ($row = $db->sql_fetchrow($query)){
-		$data[] = array(
-			'habilidad_id'	=> $row['habilidad_id'],
-			'nombre'		=> $row['nombre'],
-			'requisitos'	=> explode('|', $row['requisitos']),
-			'efecto'		=> $row['efecto'],
-			'coste'			=> $row['coste'],
-			'url_imagen'	=> $row['url_imagen'],
-		);
+		while ($row = $db->sql_fetchrow($query)){
+			$data[] = array(
+				'habilidad_id'	=> $row['habilidad_id'],
+				'nombre'		=> $row['nombre'],
+				'requisitos'	=> explode('|', $row['requisitos']),
+				'efecto'		=> $row['efecto'],
+				'coste'			=> $row['coste'],
+				'url_imagen'	=> $row['url_imagen'],
+			);
+		}
+		$db->sql_freeresult($query);
 	}
-	$db->sql_freeresult($query);
 
 	return $data;
 }
