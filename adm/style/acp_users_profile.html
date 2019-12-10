@@ -54,6 +54,12 @@
 				<dd><select id="patreon_tier_add" name="patreon_tier_add" class="autowidth">{S_PATREON_TIER_OPTIONS}</select></dd>
 			</dl>
 			<dl>
+				<dt><label for="patreon_tier_days">Vigencia (días){L_COLON}</label>
+					<span>Días tras los cuales vence el Tier. Por defecto es un mes.</span>
+				</dt>
+				<dd><input type="number" id="patreon_tier_days" name="patreon_tier_days" min="0" max="365" class="autowidth" /></dd>
+			</dl>
+			<dl>
 				<dt><label for="patreon_cuenta_principal">Cuenta principal{L_COLON}</label><br />
 					<span>Seleccionar s&oacute;lo si la persona declaró esta cuenta como principal.</span>
 				</dt>
@@ -69,8 +75,14 @@
 			<legend>Asignar Beneficio de Patreon</legend>
 			<dl>
 				<dt><label for="patreon_beneficio_add">Beneficio{L_COLON}</label><br />
-					<span>Asignación manual de un único beneficio (ej: por compra con Puntos de Moderador).</span></dt>
+					<span>Asignación manual de un único Beneficio (ej: por compra con Puntos de Moderador).</span></dt>
 				<dd><select id="patreon_beneficio_add" name="patreon_beneficio_add" class="autowidth">{S_PATREON_BENEFICIOS_ADD_OPTIONS}</select></dd>
+			</dl>
+			<dl>
+				<dt><label for="patreon_beneficio_days">Vigencia (días){L_COLON}</label>
+					<span>Días tras los cuales vence el Beneficio. Por defecto es un mes.</span>
+				</dt>
+				<dd><input type="number" id="patreon_beneficio_days" name="patreon_beneficio_days" min="0" max="365" class="autowidth" /></dd>
 			</dl>
 		</fieldset>
 		

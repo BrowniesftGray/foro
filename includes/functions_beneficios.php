@@ -134,24 +134,24 @@ function limpiar_tier ($user_id) {
 	return true;
 }
 
-function renovar_tier ($user_id, $secundaria) {
+function renovar_tier ($user_id, $dias, $secundaria) {
 	$user_tier = get_user_tier($user_id);
-	return asignar_tier($user_id, $user_tier['tier_id'], $secundaria);
+	return asignar_tier($user_id, $user_tier['tier_id'], $dias, $secundaria);
 }
 
-function asignar_tier ($user_id, $tier_id, $secundaria) {
+function asignar_tier ($user_id, $tier_id, $dias, $secundaria) {
 	if ($tier_id <= 0) return false;
 	
 	$beneficios = get_beneficios(false, $tier_id, $secundaria);
 	
 	foreach ($beneficios as $beneficio) {
-		asignar_beneficio($user_id, $beneficio['beneficio_id']);
+		asignar_beneficio($user_id, $beneficio['beneficio_id'], $dias);
 	}
 	
 	return true;
 }
 
-function asignar_beneficio ($user_id, $beneficio_id) {
+function asignar_beneficio ($user_id, $beneficio_id, $dias) {
 	global $db, $user;
 	$id_asignado = $fecha_fin = $permanente = false;
 	
@@ -183,7 +183,7 @@ function asignar_beneficio ($user_id, $beneficio_id) {
 	);
 	
 	if (!$permanente) {
-		$fecha_fin = date("Y-m-d", strtotime(date("Y-m-d", strtotime($fecha_fin ? $fecha_fin : $now)) . " +1 month"));
+		$fecha_fin = date("Y-m-d", strtotime(date("Y-m-d", strtotime($fecha_fin ? $fecha_fin : $now)) . ($dias ? "+$dias days" : " +1 month")));
 		$sql_array['fecha_fin'] = $fecha_fin;
 	}
 	

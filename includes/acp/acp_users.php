@@ -1444,9 +1444,11 @@ class acp_users
 					'item_nombre'	=> '',
 					'item_cantidad'	=> 0,
 					'patreon_tier_add'		=> PATREON_TIER_ACTION_NO_ACTION,
-					'patreon_beneficio_add'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
-					'patreon_beneficio_del'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
+					'patreon_tier_days'		=> 0,
 					'patreon_cuenta_principal'	=> false,
+					'patreon_beneficio_add'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
+					'patreon_beneficio_days'=> 0,
+					'patreon_beneficio_del'	=> PATREON_BENEFICIO_ACTION_NO_ACTION,
 				);
 				
 				$sql = 'SELECT pj_id
@@ -1533,9 +1535,11 @@ class acp_users
 				
 				// Variables Beneficios
 				$data['patreon_tier_add']	= $request->variable('patreon_tier_add', $data['patreon_tier_add']);
-				$data['patreon_beneficio_add']	= $request->variable('patreon_beneficio_add', $data['patreon_beneficio_add']);
-				$data['patreon_beneficio_del']	= $request->variable('patreon_beneficio_del', $data['patreon_beneficio_del']);
+				$data['patreon_tier_days']	= $request->variable('patreon_tier_days', $data['patreon_tier_days']);
 				$data['patreon_cuenta_principal']	= $request->variable('patreon_cuenta_principal', $data['patreon_cuenta_principal']);
+				$data['patreon_beneficio_add']	= $request->variable('patreon_beneficio_add', $data['patreon_beneficio_add']);
+				$data['patreon_beneficio_days']	= $request->variable('patreon_beneficio_days', $data['patreon_beneficio_days']);
+				$data['patreon_beneficio_del']	= $request->variable('patreon_beneficio_del', $data['patreon_beneficio_del']);
 				
 				/**
 				* Modify user data on editing profile in ACP
@@ -1683,11 +1687,11 @@ class acp_users
 									limpiar_tier($user_id); 
 									break;
 								case PATREON_TIER_ACTION_UPDATE:
-									 renovar_tier($user_id, !$data['patreon_cuenta_principal']);
+									 renovar_tier($user_id, $data['patreon_tier_days'], !$data['patreon_cuenta_principal']);
 									break;
 								default:
 									if ($data['patreon_tier_add'] > 0) {
-										asignar_tier($user_id, $data['patreon_tier_add'], !$data['patreon_cuenta_principal']);
+										asignar_tier($user_id, $data['patreon_tier_add'], $data['patreon_tier_days'], !$data['patreon_cuenta_principal']);
 									}
 									break;
 							}
@@ -1695,7 +1699,7 @@ class acp_users
 						
 						// Asignar Beneficio
 						if ($data['patreon_beneficio_add'] != PATREON_BENEFICIO_ACTION_NO_ACTION) {
-							asignar_beneficio($user_id, $data['patreon_beneficio_add']);
+							asignar_beneficio($user_id, $data['patreon_beneficio_add'], $data['patreon_beneficio_days']);
 						}
 						
 						// Eliminar Beneficio
