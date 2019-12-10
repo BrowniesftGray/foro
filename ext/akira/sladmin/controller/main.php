@@ -944,7 +944,7 @@ class main
 		$arquetipo_options = $this->get_arquetipo_options($arquetipo_id);
 		
 		$query = $this->db->sql_query("SELECT * FROM ". HABILIDADES_TABLE . 
-										" WHERE $arquetipo_id IN (arquetipo_id1, arquetipo_id2)" .
+										" WHERE ($arquetipo_id > 0 AND $arquetipo_id IN (arquetipo_id1, arquetipo_id2))" .
 											" OR ($arquetipo_id = 0 AND inventada = 1)");
 		while ($row = $this->db->sql_fetchrow($query)) {
 			$habilidades[] = array(
