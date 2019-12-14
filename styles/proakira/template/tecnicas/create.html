@@ -9,15 +9,21 @@
         <div class="card">
           <div class="card-body">
             <div class="form-group row">
+              <label for="etiqueta" class="col-3 col-form-label text-md-left">Etiqueta</label>
+              <div class="col-6">
+                <input id="etiqueta" type="text" class="form-control" name="etiqueta" value="" required>
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
               <div class="col-6">
                 <input id="name" type="text" class="form-control" name="name" value="" required>
               </div>
             </div>
             <div class="form-group row">
-              <label for="name" class="col-3 col-form-label text-md-left">Tipo</label>
+              <label for="tipo" class="col-3 col-form-label text-md-left">Tipo</label>
               <div class="col-6">
-                <select class="custom-select" multiple required>
+                <select name="tipo" class="custom-select" multiple required>
                   <option value="1">Ninjutsu</option>
                   <option value="2">Taijutsu</option>
                   <option value="3">Genjutsu</option>
@@ -29,7 +35,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="name" class="col-3 col-form-label text-md-left">Rango</label>
+              <label for="rango" class="col-3 col-form-label text-md-left">Rango</label>
               <div class="col-6">
                 <select class="form-control" id="rango" name="rango" required>
                   <option>E</option>
@@ -42,57 +48,72 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="name" class="col-3 col-form-label text-md-left">Sellos</label> <small>Usar →</small>
+              <label for="sellos" class="col-3 col-form-label text-md-left">Sellos <br><small>Usar →</small></label>
               <div class="col-6">
-                <input id="name" type="text" class="form-control" name="name" value="" required>
+                <input id="sellos" type="text" class="form-control" name="sellos" value="" required>
               </div>
             </div>
+            <h3>Requisitos</h3><br>
             <div class="form-group row">
-              <h3>Requisitos</h3><br>
-              <label for="name" class="col-3 col-form-label text-md-left">Atributos Espirituales</label>
+              <label for="requisitos" class="col-3 col-form-label text-md-left">Requisitos</label>
               <div class="col-6">
-                <input id="name" type="number" class="form-control" name="requisitosEsp" value="" required>
-              </div>
-              <label for="name" class="col-3 col-form-label text-md-left">Atributos Físicos</label>
-              <div class="col-6">
-                <input id="name" type="number" class="form-control" name="requisitosFis" value="" required>
-              </div>
-              <label for="name" class="col-3 col-form-label text-md-left">Técnica Aprendida</label>
-              <div class="col-6">
-                <input id="name" type="text" class="form-control" name="requisitosTec" value="" required>
-              </div>
-              <label for="name" class="col-3 col-form-label text-md-left">Otro</label>
-              <div class="col-6">
-                <input id="name" type="text" class="form-control" name="requisitosOtro" value="" required>
+                  <textarea class="form-control" name="efectos" id="requisitos" required="required" style="height:200px"></textarea>
               </div>
             </div>
+            <h3>Efectos</h3><br>
             <div class="form-group row">
-              <label for="name" class="col-3 col-form-label text-md-left">Efectos</label>
-              <ul>
-                <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
-                <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
-              </ul>
+              <label for="efectos" class="col-3 col-form-label text-md-left">
+                <ul>
+                  <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
+                  <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
+                </ul>
+              </label>
               <div class="col-6">
                   <textarea class="form-control" name="efectos" id="efectos" required="required" style="height:200px"></textarea>
               </div>
             </div>
+            <h3>Daño</h3><br>
             <div class="form-group row">
-              <h3>Costes</h3><br>
-              <label for="name" class="col-3 col-form-label text-md-left">PC</label>
+              <label for="pc_damage" class="col-3 col-form-label text-md-left">PC</label>
               <div class="col-6">
-                <input id="name" type="text" class="form-control" name="pc" value="" required>
-              </div>
-              <label for="name" class="col-3 col-form-label text-md-left">STA</label>
-              <div class="col-6">
-                <input id="name" type="text" class="form-control" name="sta" value="" required>
-              </div>
-              <label for="name" class="col-3 col-form-label text-md-left">PV</label>
-              <div class="col-6">
-                <input id="name" type="text" class="form-control" name="pv" value="" required>
+                <input id="pc_damage" type="text" class="form-control" name="pc_damage" value="" required>
               </div>
             </div>
+              <div class="form-group row">
+              <label for="sta_damage" class="col-3 col-form-label text-md-left">STA</label>
+              <div class="col-6">
+                <input id="sta_damage" type="number" class="form-control" name="sta_damage" value="" required>
+              </div>
+            </div>
+              <div class="form-group row">
+              <label for="pv_damage" class="col-3 col-form-label text-md-left">PV</label>
+              <div class="col-6">
+                <input id="pv_damage" type="number" class="form-control" name="pv_damage" value="" required>
+              </div>
+            </div>
+            <h3>Costes</h3><br>
             <div class="form-group row">
-              <label for="descFis" class="col-3 col-form-label text-md-left">Descripción</label>
+              <label for="pc" class="col-3 col-form-label text-md-left">PC</label>
+              <div class="col-6">
+                <input id="pc" type="number" class="form-control" name="pc" value="" required>
+              </div>
+            </div>
+              <div class="form-group row">
+              <label for="sta" class="col-3 col-form-label text-md-left">STA</label>
+              <div class="col-6">
+                <input id="sta" type="number" class="form-control" name="sta" value="" required>
+              </div>
+            </div>
+              <div class="form-group row">
+              <label for="pv" class="col-3 col-form-label text-md-left">PV</label>
+              <div class="col-6">
+                <input id="pv" type="number" class="form-control" name="pv" value="" required>
+              </div>
+            </div>
+            <h3>Descripción</h3><br>
+            <div class="form-group row">
+              <label for="descripcion" class="col-3 col-form-label text-md-left"></label>
+
               <div class="col-6">
                 <textarea class="form-control" name="descripcion" id="descripcion" required="required" style="height:200px"></textarea>
               </div>
@@ -101,9 +122,7 @@
               <input type="submit" class="btn btn-success" value="Crear técnica"></input>
             </div>
           </div>
-        <div>
       <form>
-    <div>
   </div>
 </div>
 

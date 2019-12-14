@@ -1,5 +1,5 @@
 services:
-    akira.sladmin.controller:
+    gray.tecnicas.controller:
         class: gray\tecnicas\controller\main
         arguments:
             - '@config'

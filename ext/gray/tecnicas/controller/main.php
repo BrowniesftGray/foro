@@ -49,7 +49,14 @@ class main
     {
         $this->validate_access();
 
-		return $this->helper->render('tecnicas/home.html', 'Administrador de SL');
+		      return $this->helper->render('tecnicas/home.html', 'Administrador de SL');
+    }
+
+    function createTecnicas()
+    {
+        $this->validate_access();
+
+		      return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
     }
 
 	function get_rama_nombre($rama_id = 0)

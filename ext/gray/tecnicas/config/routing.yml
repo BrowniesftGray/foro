@@ -1,3 +1,7 @@
-akira_sladmin_home:
+gray_tecnicas_home:
     path: /tecnicas/home
     defaults: { _controller: gray.tecnicas.controller:handle }
+
+gray_tecnicas_create:
+    path: /tecnicas/create
+    defaults: { _controller: gray.tecnicas.controller:createTecnicas }
