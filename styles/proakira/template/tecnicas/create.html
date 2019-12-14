@@ -1,0 +1,113 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.3" type="text/css">
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <form method="POST" action="{U_ACTION}" onsubmit="return checkTecnica();">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group row">
+              <label for="name" class="col-3 col-form-label text-md-left">Nombre</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="name" value="" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-3 col-form-label text-md-left">Tipo</label>
+              <div class="col-6">
+                <select class="custom-select" multiple required>
+                  <option value="1">Ninjutsu</option>
+                  <option value="2">Taijutsu</option>
+                  <option value="3">Genjutsu</option>
+                  <option value="4">Fuinjutsu</option>
+                  <option value="5">Senjutsu</option>
+                  <option value="6">Bijutsu</option>
+                  <option value="7">Kinjutsu</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-3 col-form-label text-md-left">Rango</label>
+              <div class="col-6">
+                <select class="form-control" id="rango" name="rango" required>
+                  <option>E</option>
+                  <option>D</option>
+                  <option>C</option>
+                  <option>B</option>
+                  <option>A</option>
+                  <option>S</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-3 col-form-label text-md-left">Sellos</label> <small>Usar →</small>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="name" value="" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <h3>Requisitos</h3><br>
+              <label for="name" class="col-3 col-form-label text-md-left">Atributos Espirituales</label>
+              <div class="col-6">
+                <input id="name" type="number" class="form-control" name="requisitosEsp" value="" required>
+              </div>
+              <label for="name" class="col-3 col-form-label text-md-left">Atributos Físicos</label>
+              <div class="col-6">
+                <input id="name" type="number" class="form-control" name="requisitosFis" value="" required>
+              </div>
+              <label for="name" class="col-3 col-form-label text-md-left">Técnica Aprendida</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="requisitosTec" value="" required>
+              </div>
+              <label for="name" class="col-3 col-form-label text-md-left">Otro</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="requisitosOtro" value="" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="name" class="col-3 col-form-label text-md-left">Efectos</label>
+              <ul>
+                <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
+                <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
+              </ul>
+              <div class="col-6">
+                  <textarea class="form-control" name="efectos" id="efectos" required="required" style="height:200px"></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <h3>Costes</h3><br>
+              <label for="name" class="col-3 col-form-label text-md-left">PC</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="pc" value="" required>
+              </div>
+              <label for="name" class="col-3 col-form-label text-md-left">STA</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="sta" value="" required>
+              </div>
+              <label for="name" class="col-3 col-form-label text-md-left">PV</label>
+              <div class="col-6">
+                <input id="name" type="text" class="form-control" name="pv" value="" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="descFis" class="col-3 col-form-label text-md-left">Descripción</label>
+              <div class="col-6">
+                <textarea class="form-control" name="descripcion" id="descripcion" required="required" style="height:200px"></textarea>
+              </div>
+            </div>
+            <div class="col-4 offset-md-3">
+              <input type="submit" class="btn btn-success" value="Crear técnica"></input>
+            </div>
+          </div>
+        <div>
+      <form>
+    <div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- INCLUDE overall_footer.html -->
