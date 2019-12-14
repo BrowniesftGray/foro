@@ -63,41 +63,27 @@ class main
     {
       /*
         Campos de la tabla
-          bbcode_tag: $etiqueta
-          bbcode_match: [$etiqueta][/$etiqueta]
-          bbcode_tpl: $codigo
-          first_pass_match: !\[$etiqueta\]\[/$etiqueta\]!i
-          first_pass_replace: [$etiqueta:$uid][/$etiqueta:$uid]
-          second_pass_replace: [$etiqueta:$uid][/$etiqueta:$uid]
+          'bbcode_tag': $etiqueta
+          'bbcode_match': [$etiqueta][/$etiqueta]
+          'bbcode_tpl': $codigo
+          'first_pass_match': !\[$etiqueta\]\[/$etiqueta\]!i
+          'first_pass_replace': [$etiqueta:$uid][/$etiqueta:$uid]
+          'second_pass_replace': [$etiqueta:$uid][/$etiqueta:$uid]
       */
+
+      $sql_array = array(
+        'bbcode_tag': $etiqueta
+        'bbcode_match': "[".$etiqueta."][/".$etiqueta"]",
+        'bbcode_tpl': $codigo,
+        'first_pass_match': "!\[".$etiqueta."\]\[/".$etiqueta."\]!i",
+        'first_pass_replace': "[".$etiqueta.":$uid][/".$etiqueta.":$uid]",
+        'second_pass_replace': "[".$etiqueta.":$uid][/".$etiqueta.":$uid]"
+      );
+
+      $sql = "INSERT INTO ". BBCODE_TECNICAS . $this->db->sql_build_array('INSERT', $sql_array);
+      $this->db->sql_query($sql);
+
     }
-  	function get_rama_nombre($rama_id = 0)
-  	{
-  		$query = $this->db->sql_query("SELECT nombre FROM " . RAMAS_TABLE .
-  							($rama_id ? " WHERE rama_id = $rama_id" : ""));
-  		if ($row = $this->db->sql_fetchrow($query)) {
-  			return $row['nombre'];
-  		}
-  		$this->db->sql_freeresult($query);
-
-  		return false;
-  	}
-
-  	function get_rama_options($rama_id = 0)
-  	{
-  		$options = "";
-
-  		$query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE .
-  										" WHERE principal = 1 " .
-  							($rama_id ? " AND rama_id <> $rama_id" : ""));
-
-  		while ($row = $this->db->sql_fetchrow($query)){
-  			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
-  		}
-  		$this->db->sql_freeresult($query);
-
-  		return $options;
-  	}
 
   	function validate_access()
   	{
