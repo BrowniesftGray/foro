@@ -1,11 +1,11 @@
 {
-    "name": "gray/ficha",
+    "name": "gray/tecnicas",
     "type": "phpbb-extension",
-    "description": "Extensión de ficha para Shinobi Legacy",
+    "description": "Extensión de Técnicas para Shinobi Legacy",
     "homepage": "",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "time": "2018-12-01",
-    "keywords": ["phpbb", "extension", "gray", "ficha"],
+    "keywords": ["phpbb", "extension", "gray", "tecnicas"],
     "license": "GPL-2.0",
     "authors": [
         {
@@ -23,7 +23,7 @@
         "phpbb/epv": "dev-master"
     },
     "extra": {
-        "display-name": "Ficha",
+        "display-name": "Tecnicas",
         "soft-require": {
             "phpbb/phpbb": "~3.2"
         }

@@ -1,0 +1,3 @@
+akira_sladmin_home:
+    path: /tecnicas/home
+    defaults: { _controller: gray.tecnicas.controller:handle }
