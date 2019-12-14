@@ -63,7 +63,7 @@
             <h3>Efectos</h3><br>
             <div class="form-group row">
               <label for="efectos" class="col-3 col-form-label text-md-left">
-                <ul>
+                <ul style="list-style-type:none;">
                   <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
                   <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
                 </ul>
@@ -79,17 +79,20 @@
                 <input id="pc_damage" type="text" class="form-control" name="pc_damage" value="" required>
               </div>
             </div>
-              <div class="form-group row">
+            <div class="form-group row">
               <label for="sta_damage" class="col-3 col-form-label text-md-left">STA</label>
               <div class="col-6">
                 <input id="sta_damage" type="number" class="form-control" name="sta_damage" value="" required>
               </div>
             </div>
-              <div class="form-group row">
+            <div class="form-group row">
               <label for="pv_damage" class="col-3 col-form-label text-md-left">PV</label>
               <div class="col-6">
                 <input id="pv_damage" type="number" class="form-control" name="pv_damage" value="" required>
               </div>
+            </div>
+            <div class="col-6 offset-md-1">
+              <input type="checkbox" name="por_turno_damage" class="form-check-input" value="">Por turno
             </div>
             <h3>Costes</h3><br>
             <div class="form-group row">
@@ -98,17 +101,20 @@
                 <input id="pc" type="number" class="form-control" name="pc" value="" required>
               </div>
             </div>
-              <div class="form-group row">
+            <div class="form-group row">
               <label for="sta" class="col-3 col-form-label text-md-left">STA</label>
               <div class="col-6">
                 <input id="sta" type="number" class="form-control" name="sta" value="" required>
               </div>
             </div>
-              <div class="form-group row">
+            <div class="form-group row">
               <label for="pv" class="col-3 col-form-label text-md-left">PV</label>
               <div class="col-6">
                 <input id="pv" type="number" class="form-control" name="pv" value="" required>
               </div>
+            </div>
+            <div class="col-6 offset-md-1">
+              <input type="checkbox" name="por_turno" class="form-check-input" value="">Por turno
             </div>
             <h3>Descripción</h3><br>
             <div class="form-group row">
