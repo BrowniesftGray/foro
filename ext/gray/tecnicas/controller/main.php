@@ -59,44 +59,56 @@ class main
 		      return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
     }
 
-	function get_rama_nombre($rama_id = 0)
-	{
-		$query = $this->db->sql_query("SELECT nombre FROM " . RAMAS_TABLE .
-							($rama_id ? " WHERE rama_id = $rama_id" : ""));
-		if ($row = $this->db->sql_fetchrow($query)) {
-			return $row['nombre'];
-		}
-		$this->db->sql_freeresult($query);
+    function crearBbcode($codigo, $etiqueta)
+    {
+      /*
+        Campos de la tabla
+          bbcode_tag: $etiqueta
+          bbcode_match: [$etiqueta][/$etiqueta]
+          bbcode_tpl: $codigo
+          first_pass_match: !\[$etiqueta\]\[/$etiqueta\]!i
+          first_pass_replace: [$etiqueta:$uid][/$etiqueta:$uid]
+          second_pass_replace: [$etiqueta:$uid][/$etiqueta:$uid]
+      */
+    }
+  	function get_rama_nombre($rama_id = 0)
+  	{
+  		$query = $this->db->sql_query("SELECT nombre FROM " . RAMAS_TABLE .
+  							($rama_id ? " WHERE rama_id = $rama_id" : ""));
+  		if ($row = $this->db->sql_fetchrow($query)) {
+  			return $row['nombre'];
+  		}
+  		$this->db->sql_freeresult($query);
 
-		return false;
-	}
+  		return false;
+  	}
 
-	function get_rama_options($rama_id = 0)
-	{
-		$options = "";
+  	function get_rama_options($rama_id = 0)
+  	{
+  		$options = "";
 
-		$query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE .
-										" WHERE principal = 1 " .
-							($rama_id ? " AND rama_id <> $rama_id" : ""));
+  		$query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE .
+  										" WHERE principal = 1 " .
+  							($rama_id ? " AND rama_id <> $rama_id" : ""));
 
-		while ($row = $this->db->sql_fetchrow($query)){
-			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
-		}
-		$this->db->sql_freeresult($query);
+  		while ($row = $this->db->sql_fetchrow($query)){
+  			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
+  		}
+  		$this->db->sql_freeresult($query);
 
-		return $options;
-	}
+  		return $options;
+  	}
 
-	function validate_access()
-	{
-		$grupo = $this->user->data['group_id'];
-        if ($grupo != 5) {
-            trigger_error("No puedes acceder a esta sección.");
-        }
-	}
+  	function validate_access()
+  	{
+  		$grupo = $this->user->data['group_id'];
+          if ($grupo != 5) {
+              trigger_error("No puedes acceder a esta sección.");
+          }
+  	}
 
-	function get_return_link($view)
-	{
-		return "<br /><a href='/tecnicas/$view'>Volver</a>.";
-	}
+  	function get_return_link($view)
+  	{
+  		return "<br /><a href='/tecnicas/$view'>Volver</a>.";
+  	}
 }
