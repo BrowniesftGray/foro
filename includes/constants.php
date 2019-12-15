@@ -316,6 +316,7 @@ define('ZEBRA_TABLE',				$table_prefix . 'zebra');
 // Additional tables
 define('ALDEAS_TABLE',					'aldeas');
 define('BBCODE_TECNICAS',					'phpbby1_bbcodes');
+define('TECNICAS_INFO',					'tecnicas_INFO');
 define('ARQUETIPOS_TABLE',				'arquetipos');
 define('HABILIDADES_TABLE',				'habilidades');
 define('TECNICAS_TABLE',				'tecnicas');

@@ -49,13 +49,17 @@ class main
     {
         $this->validate_access();
 
-		      return $this->helper->render('tecnicas/home.html', 'Administrador de SL');
+		    return $this->helper->render('tecnicas/home.html', 'Administrador de SL');
     }
 
     function createTecnicas()
     {
         $this->validate_access();
 
+        $this->template->assign_vars(array(
+    			'RAMA_OPTIONS'	=> $this->get_rama_options(),
+    		));
+        
 		    return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
     }
 
@@ -83,6 +87,7 @@ class main
         );
 
         $etiqueta = $tecnica['ETIQUETA'];
+        $etiqueta = "[".$etiqueta."][/".$etiqueta."]";
 
         $nombre = "<nombre>".$tecnica['NOMBRE']."</nombre>";
         $rango = "<rango>".$tecnica['rango']."</rango>";
@@ -117,7 +122,7 @@ class main
           }
         }
       if (isset($tecnica['DAMAGE_TURNO'])) {
-        $damage .= $damage." por turno."
+        $damage .= $damage." por turno.";
       }
 
 
@@ -148,39 +153,64 @@ class main
           $contador++;
         }
       }
-    if (isset($tecnica['COSTE_TURNO'])) {
-      $coste .= $coste." por turno."
+      if (isset($tecnica['COSTE_TURNO'])) {
+        $coste .= $coste." por turno.";
+      }
+
+      //Requisitos
+      $requisitos = explode("\n", $tecnica['REQUISITOS']);
+      $requisitos_texto = "<ul>";
+      foreach ($requisitos as $requisito) {
+        $requisitos_texto .= "<li>".$requisito."</li>";
+      }
+      $requisitos_texto .= "</ul>";
+
+      //Efectos
+      $efectos = $tecnica['EFECTOS'];
+      $efectos = str_replace("</ul>", "/#", $efectos);
+      $efectos = str_replace("</li>", "/$", $efectos);
+      $efectos = str_replace("<ul>", "#", $efectos);
+      $efectos = str_replace("<li>", "$", $efectos);
+
+      //Tipos
+      $tipos = $tecnica['TIPOS'];
+      $tipos_texto = "";
+      foreach ($tipos as $tipo) {
+        switch ($tipo) {
+          case 1:
+            $tipos_texto .= "<tipo nin>Ninjutsu</tipo>";
+            break;
+          case 2:
+            $tipos_texto .= "<tipo tai>Taijutsu</tipo>";
+            break;
+          case 3:
+            $tipos_texto .= "<tipo gen>Genjutsu</tipo>";
+            break;
+          case 4:
+            $tipos_texto .= "<tipo fuin>Fuinjutsu </tipo>";
+            break;
+          case 5:
+            $tipos_texto .= "<tipo nin>Senjutsu</tipo>";
+            break;
+          case 6:
+            $tipos_texto .= "<tipo biju>Bijūjutsu</tipo>";
+            break;
+          case 7:
+            $tipos_texto .= "<rango>Kinjutsu</rango>";
+            break;
+        }
+      }
+
+      $texto_tecnica = "<jutsu>".$nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos_texto."<b>Sellos:</b>".$sellos."</br><b>Efectos:</b>".$efectos;
+      if ($damage == "") {
+        $texto_tecnica .= "<b>Daño:</b>".$texto_tecnica.$damage."<br/>";
+      }
+      $texto_tecnica .= $texto_tecnica."<b>Coste:</b>".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c></jutsu>";
+
+      crearBbcode($texto_tecnica, $etiqueta, $tecnica);
     }
 
-//         <jutsu>
-// <nombre>Nombre Japonés (Nombre español)</nombre>
-// <tipo nin>Ninjutsu </tipo><tipo tai>Taijutsu </tipo> <tipo fuin>Fuinjutsu </tipo> <tipo gen>Genjutsu</tipo>
-// <rango>Rango [E, D, C, B, A, S]</rango>
-// <datos>
-// <b>Requisitos:</b>
-// <ul>
-// <li>X puntos en atributos Fisicos.</li>
-// <li>X puntos en atributos Espirituales.</li>
-// <li>Técnica aprendida.</li>
-// </ul>
-// <b>Sellos:</b> → → <br/>
-// <b>Efectos:</b>
-// <ul>
-// <li>EfectoA.</li>
-// <li>EfectoB.</li>
-// </ul>
-// <b>Daño:</b> <pv>X PV</pv>.<br/>
-// <b>Coste:</b> <pc>X PC</pc> <sta>X STA</sta>.
-// </datos>
-// <desc>
-// Descripción.
-// </desc>
-// <hr/>
-// <c><b onclick="selectCode(this)">Código:</b><code>[jutsu][/jutsu]</code></c>
-// </jutsu>
-    }
-
-    function crearBbcode($codigo, $etiqueta)
+    function crearBbcode($codigo, $etiqueta, $tecnica)
     {
       /*
         Campos de la tabla
@@ -193,17 +223,34 @@ class main
       */
 
       $sql_array = array(
-        'bbcode_tag': $etiqueta
-        'bbcode_match': "[".$etiqueta."][/".$etiqueta"]",
-        'bbcode_tpl': $codigo,
-        'first_pass_match': "!\[".$etiqueta."\]\[/".$etiqueta."\]!i",
-        'first_pass_replace': "[".$etiqueta.":$uid][/".$etiqueta.":$uid]",
-        'second_pass_replace': "[".$etiqueta.":$uid][/".$etiqueta.":$uid]"
+        'bbcode_tag'=> $etiqueta,
+        'bbcode_match'=> "[".$etiqueta."][/".$etiqueta."]",
+        'bbcode_tpl'=> $codigo,
+        'first_pass_match'=> "!\[".$etiqueta."\]\[/".$etiqueta."\]!i",
+        'first_pass_replace'=> "[".$etiqueta.":$uid][/".$etiqueta.":$uid]",
+        'second_pass_replace'=> "[".$etiqueta.":$uid][/".$etiqueta.":$uid]"
       );
 
       $sql = "INSERT INTO ". BBCODE_TECNICAS . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
 
+      $sql = "INSERT INTO ". TECNICAS_INFO . $this->db->sql_build_array('INSERT', $tecnica);
+      $this->db->sql_query($sql);
+
+    }
+
+    function get_rama_options()
+    {
+      $options = "";
+
+      $query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE);
+
+      while ($row = $this->db->sql_fetchrow($query)){
+        $options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
+      }
+      $this->db->sql_freeresult($query);
+
+      return $options;
     }
 
   	function validate_access()
