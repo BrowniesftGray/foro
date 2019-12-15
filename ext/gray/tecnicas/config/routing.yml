@@ -5,3 +5,7 @@ gray_tecnicas_home:
 gray_tecnicas_create:
     path: /tecnicas/create
     defaults: { _controller: gray.tecnicas.controller:createTecnicas }
+
+gray_tecnicas_store:
+    path: /tecnicas/store
+    defaults: { _controller: gray.tecnicas.controller:store }
