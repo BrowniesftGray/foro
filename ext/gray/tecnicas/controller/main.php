@@ -267,10 +267,10 @@ class main
         $sql = "INSERT INTO ". TECNICAS_INFO . $this->db->sql_build_array('INSERT', $tecnica);
         $this->db->sql_query($sql);
 
-        if ($rama['rama_id'] != 0) {
+        //if ($rama['rama_id'] != 0) {
           $sql = "INSERT INTO ". TECNICAS_TABLE . $this->db->sql_build_array('INSERT', $rama);
           $this->db->sql_query($sql);
-        }
+        //}
     }
 
     public function get_rama_options()
