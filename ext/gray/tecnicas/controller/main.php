@@ -56,7 +56,128 @@ class main
     {
         $this->validate_access();
 
-		      return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
+		    return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
+    }
+
+    function store()
+    {
+        $this->validate_access();
+
+        $tecnica = array(
+            'ETIQUETA'       => (int) request_var('etiqueta', 1),
+            'NOMBRE'            => (int) request_var('name', 1),
+            'TIPO'          => (int) request_var('tipo', 1),
+            'RANGO'          => (int) request_var('rango', 1),
+            'SELLOS'     => (int) request_var('sellos', 1),
+            'REQUISITOS'          => (int) request_var('requisitos', 1),
+            'EFECTOS'          => (int) request_var('efectos', 1),
+            'DAMAGE_PV'          => (int) request_var('pv_damage', 1),
+            'DAMAGE_PC'          => (int) request_var('pc_damage', 1),
+            'DAMAGE_STA'          => (int) request_var('sta_damage', 1),
+            'DAMAGE_TURNO'          => (int) request_var('por_turno_damage', 1),
+            'COSTE_PV'          => (int) request_var('pv', 1),
+            'COSTE_PC'          => (int) request_var('pc', 1),
+            'COSTE_STA'          => (int) request_var('sta', 1),
+            'COSTE_TURNO'          => (int) request_var('por_turno', 1),
+            'DESCRIPCION'          => (int) request_var('descripcion', 1),
+        );
+
+        $etiqueta = $tecnica['ETIQUETA'];
+
+        $nombre = "<nombre>".$tecnica['NOMBRE']."</nombre>";
+        $rango = "<rango>".$tecnica['rango']."</rango>";
+        $sellos = $tecnica['SELLOS'];
+        $descripcion = $tecnica['DESCRIPCION'];
+
+        //Daño
+        $damage = "";
+        $contador = 0;
+        if ($tecnica['DAMAGE_PV'] != "") {
+          $damage .= $tecnica['DAMAGE_PV'];
+          $contador++;
+        }
+        if ($tecnica['DAMAGE_STA'] != "" ) {
+          if ($contador != 0) {
+            $damage .= $damage.", ".$tecnica['DAMAGE_STA'];
+            $contador++;
+          }
+          else{
+            $damage .= $tecnica['DAMAGE_STA'];
+            $contador++;
+          }
+        }
+        if ($tecnica['DAMAGE_PC'] != "" ) {
+          if ($contador != 0) {
+            $damage .= $damage.", ".$tecnica['DAMAGE_PC'];
+            $contador++;
+          }
+          else{
+            $damage .= $tecnica['DAMAGE_PC'];
+            $contador++;
+          }
+        }
+      if (isset($tecnica['DAMAGE_TURNO'])) {
+        $damage .= $damage." por turno."
+      }
+
+
+      //Coste
+      $coste = "";
+      $contador = 0;
+      if ($tecnica['COSTE_PC '] != "") {
+        $coste .= $tecnica['COSTE_PC'];
+        $contador++;
+      }
+      if ($tecnica['COSTE_STA'] != "" ) {
+        if ($contador != 0) {
+          $coste .= $coste.", ".$tecnica['COSTE_STA'];
+          $contador++;
+        }
+        else{
+          $coste .= $tecnica['DAMAGE_STA'];
+          $contador++;
+        }
+      }
+      if ($tecnica['COSTE_PV'] != "" ) {
+        if ($contador != 0) {
+          $coste .= $coste.", ".$tecnica['COSTE_PV'];
+          $contador++;
+        }
+        else{
+          $coste .= $tecnica['COSTE_PV'];
+          $contador++;
+        }
+      }
+    if (isset($tecnica['COSTE_TURNO'])) {
+      $coste .= $coste." por turno."
+    }
+
+//         <jutsu>
+// <nombre>Nombre Japonés (Nombre español)</nombre>
+// <tipo nin>Ninjutsu </tipo><tipo tai>Taijutsu </tipo> <tipo fuin>Fuinjutsu </tipo> <tipo gen>Genjutsu</tipo>
+// <rango>Rango [E, D, C, B, A, S]</rango>
+// <datos>
+// <b>Requisitos:</b>
+// <ul>
+// <li>X puntos en atributos Fisicos.</li>
+// <li>X puntos en atributos Espirituales.</li>
+// <li>Técnica aprendida.</li>
+// </ul>
+// <b>Sellos:</b> → → <br/>
+// <b>Efectos:</b>
+// <ul>
+// <li>EfectoA.</li>
+// <li>EfectoB.</li>
+// </ul>
+// <b>Daño:</b> <pv>X PV</pv>.<br/>
+// <b>Coste:</b> <pc>X PC</pc> <sta>X STA</sta>.
+// </datos>
+// <desc>
+// Descripción.
+// </desc>
+// <hr/>
+// <c><b onclick="selectCode(this)">Código:</b><code>[jutsu][/jutsu]</code></c>
+// </jutsu>
     }
 
     function crearBbcode($codigo, $etiqueta)

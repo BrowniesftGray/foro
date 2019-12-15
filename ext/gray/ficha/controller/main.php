@@ -131,8 +131,8 @@ class main
 		);
 
 		if ((int)$fields['ALDEA'] > 0) {
-			$query = $this->db->sql_query("SELECT	a.group_id, 
-													a.nivel_inicial, 
+			$query = $this->db->sql_query("SELECT	a.group_id,
+													a.nivel_inicial,
 													a.rama_id_default
 											FROM ".ALDEAS_TABLE." a
 												INNER JOIN ".GROUPS_TABLE." g
@@ -141,7 +141,7 @@ class main
 
 			if ($row = $this->db->sql_fetchrow($query)) {
 				$group_id = (int)$row['group_id'];
-				
+
 				if ((int)$row['nivel_inicial'] > 1) {
 					$sql_array['nivel_inicial'] = $row['nivel_inicial'];
 				}
@@ -178,7 +178,7 @@ class main
 						AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 			$this->db->sql_query($sql);
-			
+
 			group_user_add($group_id, $user_id, false, false, true);
 		}
 
@@ -397,7 +397,7 @@ class main
 				$sql_array['tiene_globales'] = $fields['TIENE_GLOBALES'];
 
 			if ((int)$fields['ALDEA'] > 0) {
-				
+
 			$query = $this->db->sql_query("SELECT	a.group_id
 											FROM ".ALDEAS_TABLE." a
 												INNER JOIN ".GROUPS_TABLE." g
@@ -430,7 +430,7 @@ class main
 							AND group_id IN(SELECT group_id
 										   FROM ".ALDEAS_TABLE.")";
 				$this->db->sql_query($sql);
-				
+
 				group_user_add($group_id, $user_id, false, false, true);
 			}
 
@@ -866,14 +866,14 @@ class main
 		$this->db->sql_freeresult($query);
 
 		if (confirm_box(true)) {
-			
+
 			if ($devolver) {
 				$str_devolucion = " y devolver $tec_coste PA.";
 			} else {
 				$tec_coste = 0;
 				$str_devolucion = '.';
 			}
-			
+
 			if (quitar_tecnica($user_id, $pj_id, $tec_id, $tec_coste, $msg_error)) {
 				$moderacion = array(
 					'PJ_ID'	=> $pj_id,
@@ -892,7 +892,7 @@ class main
 				'submit' 	=> true,
 				'tecnica_id'	=> $tec_id
 			));
-			
+
 			if ($devolver) {
 				$str_devolucion = "  y devolver $tec_coste PA al personaje";
 			} else {
