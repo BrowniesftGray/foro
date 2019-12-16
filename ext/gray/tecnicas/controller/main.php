@@ -112,7 +112,7 @@ class main
         $rama = array(
             'nombre'    => utf8_normalize_nfc(request_var('name', '', true)),
             'RANGO'     => utf8_normalize_nfc(request_var('rango', '', true)),
-            'ETIQUETA'  => utf8_normalize_nfc(request_var('etiqueta', '', true)),
+            'etiqueta'  => utf8_normalize_nfc(request_var('etiqueta', '', true)),
             'coste'     => $coste_tecnica,
             'rama_id'   => utf8_normalize_nfc(request_var('rama', '', true)),
         );
@@ -120,6 +120,7 @@ class main
         $rama = utf8_normalize_nfc(request_var('rama', '', true));
         $etiqueta = $tecnica['ETIQUETA'];
         $etiqueta = "[".$etiqueta."][/".$etiqueta."]";
+        $etiqueta_envio = $tecnica['ETIQUETA'];
 
         $nombre = "<nombre>".$tecnica['NOMBRE']."</nombre>";
         $rango = "<rango>".$tecnica['rango']."</rango>";
@@ -206,17 +207,44 @@ class main
 
         //Efectos
         $efectos = $tecnica['EFECTOS'];
-        $efectos = str_replace("</ul>", "/#", $efectos);
-        $efectos = str_replace("</li>", "/$", $efectos);
-        $efectos = str_replace("<ul>", "#", $efectos);
-        $efectos = str_replace("<li>", "$", $efectos);
+        $efectos = str_replace("/#", "</ul>", $efectos);
+        $efectos = str_replace("/$","</li>", $efectos);
+        $efectos = str_replace("#","<ul>", $efectos);
+        $efectos = str_replace("$","<li>", $efectos);
 
         //Tipos
         $tipos = $tecnica['TIPOS'];
         $tipos_texto = "";
 
-        foreach ($tipos as $tipo) {
-            switch ($tipo) {
+        if (count($tipos) > 1) {
+          foreach ($tipos as $tipo) {
+              switch ($tipo) {
+              case 1:
+                $tipos_texto .= "<tipo nin>Ninjutsu</tipo>";
+                break;
+              case 2:
+                $tipos_texto .= "<tipo tai>Taijutsu</tipo>";
+                break;
+              case 3:
+                $tipos_texto .= "<tipo gen>Genjutsu</tipo>";
+                break;
+              case 4:
+                $tipos_texto .= "<tipo fuin>Fuinjutsu </tipo>";
+                break;
+              case 5:
+                $tipos_texto .= "<tipo nin>Senjutsu</tipo>";
+                break;
+              case 6:
+                $tipos_texto .= "<tipo biju>Bijūjutsu</tipo>";
+                break;
+              case 7:
+                $tipos_texto .= "<rango>Kinjutsu</rango>";
+                break;
+            }
+          }
+        }
+        else{
+          switch ($tipos) {
           case 1:
             $tipos_texto .= "<tipo nin>Ninjutsu</tipo>";
             break;
@@ -238,39 +266,50 @@ class main
           case 7:
             $tipos_texto .= "<rango>Kinjutsu</rango>";
             break;
-        }
+          }
         }
 
-        $texto_tecnica = "<jutsu>".$nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos_texto."<b>Sellos:</b>".$sellos."</br><b>Efectos:</b>".$efectos;
+        $texto_tecnica = "<jutsu>";
+        $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos_texto."<b>Sellos:</b>".$sellos."</br><b>Efectos:</b>".$efectos;
         if ($damage == "") {
-            $texto_tecnica .= "<b>Daño:</b>".$texto_tecnica.$damage."<br/>";
+            $texto_tecnica .= "<b>Daño:</b>".$damage."<br/>";
         }
-        $texto_tecnica .= $texto_tecnica."<b>Coste:</b>".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c></jutsu>";
+        $texto_tecnica .= $texto_tecnica."<b>Coste:</b>".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
+        $texto_tecnica .= $texto_tecnica."</jutsu>";
 
-        crearBbcode($texto_tecnica, $etiqueta, $tecnica, $rama);
+        $this->crearBbcode($texto_tecnica, $etiqueta_envio, $tecnica, $rama);
     }
 
     public function crearBbcode($codigo, $etiqueta, $tecnica, $rama)
     {
-        $sql_array = array(
-        'bbcode_tag'=> $etiqueta,
-        'bbcode_match'=> "[".$etiqueta."][/".$etiqueta."]",
-        'bbcode_tpl'=> $codigo,
-        'first_pass_match'=> "!\[".$etiqueta."\]\[/".$etiqueta."\]!i",
-        'first_pass_replace'=> "[".$etiqueta.":$uid][/".$etiqueta.":$uid]",
-        'second_pass_replace'=> "[".$etiqueta.":$uid][/".$etiqueta.":$uid]"
+      $query_max = $this->db->sql_query("SELECT MAX(bbcode_id)+1 FROM ". BBCODE_TECNICAS);
+      if ($row = $this->db->sql_fetchrow($query_max)) {
+        $max_id	= (int) $row['bbcode_id'];
+      }
+
+        $sql_array_bbcode = array(
+        'bbcode_id'           => $max_id,
+        'bbcode_tag'          => $etiqueta,
+        'bbcode_match'        => "[".$etiqueta."][/".$etiqueta."]",
+        'bbcode_tpl'          => $codigo,
+        'first_pass_match'    => "!\[".$etiqueta."\]\[/".$etiqueta."\]!i",
+        'first_pass_replace'  => "[".$etiqueta.":\$uid][/".$etiqueta.":\$uid]",
+        'second_pass_match'   => "[".$etiqueta.":\$uid][/".$etiqueta.":\$uid]",
+        'second_pass_replace' => "",
       );
 
-        $sql = "INSERT INTO ". BBCODE_TECNICAS . $this->db->sql_build_array('INSERT', $sql_array);
+    		$this->db->sql_freeresult($query_max);
+        $sql = "INSERT INTO ". BBCODE_TECNICAS . $this->db->sql_build_array('INSERT', $sql_array_bbcode);
         $this->db->sql_query($sql);
 
         $sql = "INSERT INTO ". TECNICAS_INFO . $this->db->sql_build_array('INSERT', $tecnica);
         $this->db->sql_query($sql);
 
-        //if ($rama['rama_id'] != 0) {
-          $sql = "INSERT INTO ". TECNICAS_TABLE . $this->db->sql_build_array('INSERT', $rama);
-          $this->db->sql_query($sql);
-        //}
+        print_r($rama);
+        // if ($rama['rama_id'] != 0) {
+        //   $sql = "INSERT INTO ". TECNICAS_TABLE . $this->db->sql_build_array('INSERT', $rama);
+        //   $this->db->sql_query($sql);
+        // }
     }
 
     public function get_rama_options()
