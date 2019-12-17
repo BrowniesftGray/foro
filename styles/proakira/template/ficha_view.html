@@ -89,6 +89,13 @@
 							</div>
 						</div>
 						<div class="form-group row">
+							<label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
+
+							<div class="col-4">
+							  <div>{FICHA_EDAD}</div>
+							</div>
+						</div>
+						<div class="form-group row">
 							<label for="nivel" class="col-3 col-form-label text-md-left">Nivel</label>
 
 							<div class="col-4">
@@ -109,13 +116,15 @@
 							  <div>{VISTA_ARQUETIPO}</div>
 							</div>
 						</div>
+						<!-- IF INVOCACION_PACTO -->
 						<div class="form-group row">
-							<label for="edad" class="col-3 col-form-label text-md-left">Edad</label>
+							<label class="col-3 col-form-label text-md-left">Pacto de Invocación</label>
 
 							<div class="col-4">
-							  <div>{FICHA_EDAD}</div>
+							  <div>{INVOCACION_PACTO}<!-- IF INVOCACION_ESPECIES -->: {INVOCACION_ESPECIES} <!-- ENDIF --></div>
 							</div>
 						</div>
+						<!-- ENDIF -->
 						<hr>
 						<div class="form-group row">
 							<label for="descFis" class="col-3 col-form-label text-md-left">Descripci&oacute;n F&iacute;sica</label>

@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="name" class="col-3 col-form-label text-md-left">Arquetipo</label>
+                                <label for="arquetipo" class="col-3 col-form-label text-md-left">Arquetipo</label>
                                 <div class="col-6">
                                 <input type="hidden" name="pj_id" value="{FICHA_ID}"/>
                             <!-- IF FICHA_ARQUETIPO -->
@@ -46,6 +46,15 @@
 							  <!-- ELSE -->
 							  <div>{VISTA_ARQUETIPO}</div>
 							  <!-- ENDIF -->
+							  </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="invocacion_id" class="col-3 col-form-label text-md-left">Pacto de Invocación</label>
+                                <div class="col-6">
+								<select id="invocacion_id" class="form-control" name="invocacion_id">
+									<option value="{INVOCACION_ID}">{INVOCACION_PACTO}</option>
+									{INVOCACIONES_OPTIONS}
+								</select>
 							  </div>
                             </div>
 							<!-- IF PUEDE_ADMINISTRAR -->
@@ -64,6 +73,16 @@
 									<label for="es_bijuu1">Si</label>
                                     <input id="es_bijuu0" style="width: auto; display: inline-block" type="radio" class="form-control" name="es_bijuu" <!-- IF not ES_BIJUU --> checked <!-- ENDIF --> value="0">
 									<label for="es_bijuu0">No</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="es_invocacion" class="col-3 col-form-label text-md-left">Es Invocación</label>
+
+                                <div class="col-6">
+                                    <input id="es_invocacion1" style="width: auto; display: inline-block" type="radio" class="form-control" name="es_invocacion" <!-- IF ES_INVOCACION --> checked <!-- ENDIF --> value="1">
+									<label for="es_invocacion1">Si</label>
+                                    <input id="es_invocacion0" style="width: auto; display: inline-block" type="radio" class="form-control" name="es_invocacion" <!-- IF not ES_INVOCACION --> checked <!-- ENDIF --> value="0">
+									<label for="es_invocacion0">No</label>
                                 </div>
                             </div>
                             <div class="form-group row">
