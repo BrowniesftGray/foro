@@ -195,12 +195,8 @@ class main
   		$this->db->sql_freeresult($result);
   		$bbcode_id += 1;
 
-      if ($this->get_coste_tecnica($tecnica['RANGO']) == 0) {
-        $coste = 0;
-      }
-      else{
-        $coste = $this->get_coste_tecnica($tecnica['RANGO']);
-      }
+      $coste = $this->get_coste_tecnica($tecnica['RANGO']);
+
       $rama = array(
           'nombre'    => $tecnica['NOMBRE'],
           'rango'     => $tecnica['RANGO'],
@@ -236,27 +232,27 @@ class main
     public function get_coste_tecnica($rango)
     {
       switch ($rango) {
-        case 'E':
+        case 'Rango E':
           $coste_tecnica = 0;
           return $coste_tecnica;
         break;
-        case 'D':
+        case 'Rango D':
           $coste_tecnica = 1;
           return $coste_tecnica;
         break;
-        case 'C':
+        case 'Rango C':
           $coste_tecnica = 2;
           return $coste_tecnica;
         break;
-        case 'B':
+        case 'Rango B':
           $coste_tecnica = 3;
           return $coste_tecnica;
         break;
-        case 'A':
+        case 'Rango A':
           $coste_tecnica = 5;
           return $coste_tecnica;
         break;
-        case 'S':
+        case 'Rango S':
           $coste_tecnica = 10;
           return $coste_tecnica;
         break;
