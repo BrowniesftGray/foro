@@ -87,7 +87,7 @@ class main
             'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'EDAD'              => utf8_normalize_nfc(request_var('edad', '', true)),
             'PRINCIPAL'         => request_var('ramaPrincipal', 0, true),
-			'ALDEA'				=> request_var('aldea', 0, true),
+      			'ALDEA'				      => request_var('aldea', 0, true),
             'RAMA1'             => request_var('ramaSec1', 0, true),
             'RAMA2'             => request_var('ramaSec2', 0, true),
             'FISICO'            => utf8_normalize_nfc(request_var('descFis', '', true)),

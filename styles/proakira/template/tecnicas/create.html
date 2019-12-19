@@ -32,7 +32,7 @@
             <div class="form-group row">
               <label for="tipo" class="col-3 col-form-label text-md-left">Tipo</label>
               <div class="col-6">
-                <select name="tipo[]" class="custom-select" multiple required>
+                <select id="tipo" name="tipo[]" class="custom-select" multiple="multiple" required>
                   <option value="1">Ninjutsu</option>
                   <option value="2">Taijutsu</option>
                   <option value="3">Genjutsu</option>
@@ -47,26 +47,34 @@
               <label for="rango" class="col-3 col-form-label text-md-left">Rango</label>
               <div class="col-6">
                 <select class="form-control" id="rango" name="rango" required>
-                  <option>E</option>
-                  <option>D</option>
-                  <option>C</option>
-                  <option>B</option>
-                  <option>A</option>
-                  <option>S</option>
+                  <option value="Rango E">E</option>
+                  <option value="Rango D">D</option>
+                  <option value="Rango C">C</option>
+                  <option value="Rango B">B</option>
+                  <option value="Rango A">A</option>
+                  <option value="Rango S">S</option>
                 </select>
               </div>
             </div>
             <div class="form-group row">
               <label for="sellos" class="col-3 col-form-label text-md-left">Sellos <br><small>Usar →</small></label>
               <div class="col-6">
-                <input id="sellos" type="text" class="form-control" name="sellos" value="" required>
+                <input id="sellos" type="text" class="form-control" name="sellos" value="">
               </div>
             </div>
             <h3>Requisitos</h3><br>
             <div class="form-group row">
-              <label for="requisitos" class="col-3 col-form-label text-md-left">Requisitos</label>
+              <label for="requisitos" class="col-3 col-form-label text-md-left">
+                <ul style="list-style-type:none;">
+                  <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
+                  <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
+                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
+                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
+                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                </ul>
+              </label>
               <div class="col-6">
-                  <textarea class="form-control" name="efectos" id="requisitos" required="required" style="height:200px"></textarea>
+                  <textarea class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></textarea>
               </div>
             </div>
             <h3>Efectos</h3><br>
@@ -75,6 +83,9 @@
                 <ul style="list-style-type:none;">
                   <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
                   <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
+                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
+                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
+                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
                 </ul>
               </label>
               <div class="col-6">
