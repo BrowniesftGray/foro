@@ -68,7 +68,7 @@ class main
     {
         $this->validate_access();
 
-        $tipo_array = request_var('tipo[]', array(0));
+        $tipo_array = request_var('tipo', array(0));
 
         //Tipos
         $tipos = $tipo_array;
@@ -104,7 +104,7 @@ class main
             'ETIQUETA'          => utf8_normalize_nfc(request_var('etiqueta', '', true)),
             'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'TIPO'              => $tipos_texto,
-            'RANGO'             => utf8_normalize_nfc(request_var('rango', '', true)),
+            'RANGO'             => request_var('rango', '', true),
             'SELLOS'            => utf8_normalize_nfc(request_var('sellos', '', true)),
             'REQUISITOS'        => utf8_normalize_nfc(request_var('requisitos', '', true)),
             'EFECTOS'           => utf8_normalize_nfc(request_var('efectos', '', true)),
@@ -119,84 +119,81 @@ class main
             'DESCRIPCION'       => utf8_normalize_nfc(request_var('descripcion', '', true)),
         );
 
-        // Coste en Puntos de Aprendizaje
-        $coste_tecnica = $this->get_coste_tecnica($tecnica['RANGO']);
-
         $rama = (int) request_var('rama', 1);
         $etiqueta = $tecnica['ETIQUETA'];
         $etiqueta = "[".$etiqueta."][/".$etiqueta."]";
         $etiqueta_envio = $tecnica['ETIQUETA'];
 
         $nombre = "<nombre>".$tecnica['NOMBRE']."</nombre>";
-        $rango = "<rango>RANGO ".$tecnica['rango']."</rango>";
+        $rango = "<rango>Rango ".$tecnica['RANGO']."</rango>";
         $sellos = $tecnica['SELLOS'];
         $descripcion = $tecnica['DESCRIPCION'];
 
         //Daño
-        $damage = "";
+        $damage = " ";
         $contador = 0;
         if ($tecnica['DAMAGE_PV'] != "") {
-            $damage .= $tecnica['DAMAGE_PV']." PV";
+            $damage .= "<pv>".$tecnica['DAMAGE_PV']." PV</pv>";
             $contador++;
         }
         if ($tecnica['DAMAGE_STA'] != "") {
             if ($contador != 0) {
-                $damage .= ", ".$tecnica['DAMAGE_STA']." STA";
+                $damage .= ", <sta>".$tecnica['DAMAGE_STA']." STA</sta>";
                 $contador++;
             } else {
-                $damage .= $tecnica['DAMAGE_STA']." STA";
+                $damage .= "<sta>".$tecnica['DAMAGE_STA']." STA</sta>";
                 $contador++;
             }
         }
         if ($tecnica['DAMAGE_PC'] != "") {
             if ($contador != 0) {
-                $damage .= ", ".$tecnica['DAMAGE_PC']." PC";
+                $damage .= ", <pc>".$tecnica['DAMAGE_PC']." PC</pc>";
                 $contador++;
             } else {
-                $damage .= $tecnica['DAMAGE_PC']." PC";
+                $damage .= "<pc>".$tecnica['DAMAGE_PC']." PC</pc>";
                 $contador++;
             }
         }
         if (isset($tecnica['DAMAGE_TURNO'])) {
             $tecnica['DAMAGE_TURNO'] = true;
-            $damage .= $damage." por turno.";
+            $damage .= " por turno.";
         } else {
             $tecnica['DAMAGE_TURNO'] = false;
         }
 
 
         //Coste
-        $coste = "";
+        $coste = " ";
         $contador = 0;
 
         if ($tecnica['COSTE_PC'] != "") {
-            $coste .= $tecnica['COSTE_PC']." PC";
+            $coste .= "<pc>".$tecnica['COSTE_PC']." PC</pc>";
             $contador++;
         }
 
         if ($tecnica['COSTE_STA'] != "") {
             if ($contador != 0) {
-                $coste .= ", ".$tecnica['COSTE_STA']." STA";
+                $coste .= ", <sta>".$tecnica['COSTE_STA']." STA</sta>";
                 $contador++;
             } else {
-                $coste .= $tecnica['COSTE_STA']." STA";
+                $coste .= "<sta>".$tecnica['COSTE_STA']." STA</sta>";
                 $contador++;
             }
         }
 
         if ($tecnica['COSTE_PV'] != "") {
             if ($contador != 0) {
-                $coste .= ", ".$tecnica['COSTE_PV']." PV";
+                $coste .= ", <pv>".$tecnica['COSTE_PV']." PV</pv>";
                 $contador++;
             } else {
-                $coste .= $tecnica['COSTE_PV']." PV";
+                $coste .= "<pv>".$tecnica['COSTE_PV']." PV</pv>";
                 $contador++;
             }
         }
 
         if (isset($tecnica['COSTE_TURNO'])) {
             $tecnica['COSTE_TURNO'] = true;
-            $coste .= $coste." por turno.";
+            $coste .= " por turno.";
         } else {
             $tecnica['COSTE_TURNO'] = false;
         }
@@ -205,12 +202,12 @@ class main
         $requisitos = $tecnica['REQUISITOS'];
         $requisitos = str_replace("/#", "</ul>", $requisitos);
         $requisitos = str_replace("/$","</li>", $requisitos);
-        $requisitos = str_replace("/&","</pv>", $requisitos);
+        $requisitos = str_replace("/!","</pv>", $requisitos);
         $requisitos = str_replace("/@","</pc>", $requisitos);
         $requisitos = str_replace("/|","</sta>", $requisitos);
         $requisitos = str_replace("#","<ul>", $requisitos);
         $requisitos = str_replace("$","<li>", $requisitos);
-        $requisitos = str_replace("&","<pv>", $requisitos);
+        $requisitos = str_replace("!","<pv>", $requisitos);
         $requisitos = str_replace("@","<pc>", $requisitos);
         $requisitos = str_replace("|","<sta>", $requisitos);
 
@@ -218,17 +215,17 @@ class main
         $efectos = $tecnica['EFECTOS'];
         $efectos = str_replace("/#", "</ul>", $efectos);
         $efectos = str_replace("/$","</li>", $efectos);
-        $efectos = str_replace("/&","</pv>", $efectos);
+        $efectos = str_replace("/!","</pv>", $efectos);
         $efectos = str_replace("/@","</pc>", $efectos);
         $efectos = str_replace("/|","</sta>", $efectos);
         $efectos = str_replace("#","<ul>", $efectos);
         $efectos = str_replace("$","<li>", $efectos);
-        $efectos = str_replace("&","<pv>", $efectos);
+        $efectos = str_replace("!","<pv>", $efectos);
         $efectos = str_replace("@","<pc>", $efectos);
         $efectos = str_replace("|","<sta>", $efectos);
 
         $texto_tecnica = "<jutsu>";
-        $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos." </br><b>Sellos:</b>".$sellos."<br/> <b>Efectos:</b>".$efectos;
+        $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos." </br><b>Sellos: </b>".$sellos."<br/> <b>Efectos:</b>".$efectos;
         if ($damage != "") {
             $texto_tecnica .= " <b>Daño:</b>".$damage."<br/>";
         }
@@ -236,6 +233,8 @@ class main
         $texto_tecnica .= "</jutsu>";
 
         $this->crearBbcode($texto_tecnica, $etiqueta_envio, $tecnica, $rama);
+
+        return $this->helper->render('tecnicas/create.html', 'Administrador de SL');
     }
 
     public function crearBbcode($codigo, $etiqueta, $tecnica, $ramaTec)
