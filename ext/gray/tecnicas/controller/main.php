@@ -174,9 +174,9 @@ class main
         }
         $texto_tecnica .= "<b>Efectos:</b>".$efectos;
         if ($damage != "") {
-            $texto_tecnica .= " <b>Daño:</b>".$damage."<br/>";
+            $texto_tecnica .= " <b>Daño:</b> ".$damage."<br/>";
         }
-        $texto_tecnica .= "<b>Coste:</b>".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
+        $texto_tecnica .= "<b>Coste:</b> ".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
         $texto_tecnica .= "</jutsu>";
 
         $this->crearBbcode($texto_tecnica, $etiqueta_envio, $tecnica, $rama);
