@@ -944,7 +944,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	// }
 
 	if ((int)$fields['PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_PUNTOS_EXPERIENCIA'] != 0 || (int)$fields['ADD_PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_RYOS'] != 0) {
-		if (registrar_tema($user_id, $fields['ADD_PUNTOS_EXPERIENCIA'], $fields['ADD_PUNTOS_APRENDIZAJE'], $fields['ADD_RYOS'], $fields['PUNTOS_APRENDIZAJE']) == true) {
+		if (registrar_tema($user_id, (int)$fields['ADD_PUNTOS_EXPERIENCIA'], (int)$fields['ADD_PUNTOS_APRENDIZAJE'], (int)$fields['ADD_RYOS'], (int)$fields['PUNTOS_APRENDIZAJE']) == true) {
 			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
 			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
 
