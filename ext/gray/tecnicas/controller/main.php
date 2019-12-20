@@ -131,6 +131,7 @@ class main
         $damage = str_replace("!","<pv>", $damage);
         $damage = str_replace("@","<pc>", $damage);
         $damage = str_replace("|","<sta>", $damage);
+        $damage = "&nbsp;".$coste;
 
         //Coste
         $coste = $tecnica['COSTE'];
@@ -140,6 +141,7 @@ class main
         $coste = str_replace("!","<pv>", $coste);
         $coste = str_replace("@","<pc>", $coste);
         $coste = str_replace("|","<sta>", $coste);
+        $coste = "&nbsp;".$coste;
 
         //Requisitos
         $requisitos = $tecnica['REQUISITOS'];
@@ -174,9 +176,9 @@ class main
         }
         $texto_tecnica .= "<b>Efectos:</b>".$efectos;
         if ($damage != "") {
-            $texto_tecnica .= " <b>Daño:</b> ".$damage."<br/>";
+            $texto_tecnica .= " <b>Daño:</b>&nbsp;".$damage."<br/>";
         }
-        $texto_tecnica .= "<b>Coste:</b> ".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
+        $texto_tecnica .= "<b>Coste:</b>&nbsp;".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
         $texto_tecnica .= "</jutsu>";
 
         $this->crearBbcode($texto_tecnica, $etiqueta_envio, $tecnica, $rama);
