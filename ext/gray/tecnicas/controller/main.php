@@ -131,7 +131,6 @@ class main
         $damage = str_replace("!","<pv>", $damage);
         $damage = str_replace("@","<pc>", $damage);
         $damage = str_replace("|","<sta>", $damage);
-        $damage = "&nbsp;".$coste;
 
         //Coste
         $coste = $tecnica['COSTE'];
@@ -141,7 +140,6 @@ class main
         $coste = str_replace("!","<pv>", $coste);
         $coste = str_replace("@","<pc>", $coste);
         $coste = str_replace("|","<sta>", $coste);
-        $coste = "&nbsp;".$coste;
 
         //Requisitos
         $requisitos = $tecnica['REQUISITOS'];
