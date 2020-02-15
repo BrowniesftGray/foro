@@ -52,8 +52,12 @@
                                 <label for="invocacion_id" class="col-3 col-form-label text-md-left">Pacto de Invocación</label>
                                 <div class="col-6">
 								<select id="invocacion_id" class="form-control" name="invocacion_id">
-									<option value="{INVOCACION_ID}">{INVOCACION_PACTO}</option>
-									{INVOCACIONES_OPTIONS}
+									<!-- IF INVOCACION_ID -->
+									<option value="{INVOCACION_ID}" selected>{INVOCACION_PACTO}</option>
+									<!-- ELSE -->
+									<option value="0" selected>-- Ninguno --</option>
+									<!-- ENDIF -->
+									{INVOCACION_OPTIONS}
 								</select>
 							  </div>
                             </div>
@@ -85,6 +89,14 @@
 									<label for="es_invocacion0">No</label>
                                 </div>
                             </div>
+							<div class="form-group row">
+								<label for="rango" class="col-3 col-form-label text-md-left">Rango Invocación:</label>
+								<div class="col-6">
+									<select class="form-control" name="rango">
+										{RANGO_OPTIONS}
+									</select>
+								</div>
+							</div>
                             <div class="form-group row">
                                 <label for="tiene_globales" class="col-3 col-form-label text-md-left">Tiene técnicas globales</label>
 

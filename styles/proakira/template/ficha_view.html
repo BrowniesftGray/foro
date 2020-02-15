@@ -72,8 +72,7 @@
 					<div class="tab-content" id="myTabContent">
 					
 					
-					
-					
+					<!-- DATOS -->
 					  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 					  <h3>Datos Personales</h3><br>
 						<!-- IF B_AVATAR_FICHA -->
@@ -95,6 +94,7 @@
 							  <div>{FICHA_EDAD}</div>
 							</div>
 						</div>
+						<!-- IF not ES_INVOCACION -->
 						<div class="form-group row">
 							<label for="nivel" class="col-3 col-form-label text-md-left">Nivel</label>
 
@@ -116,12 +116,22 @@
 							  <div>{VISTA_ARQUETIPO}</div>
 							</div>
 						</div>
+						<!-- ENDIF -->
 						<!-- IF INVOCACION_PACTO -->
 						<div class="form-group row">
 							<label class="col-3 col-form-label text-md-left">Pacto de Invocación</label>
 
 							<div class="col-4">
 							  <div>{INVOCACION_PACTO}<!-- IF INVOCACION_ESPECIES -->: {INVOCACION_ESPECIES} <!-- ENDIF --></div>
+							</div>
+						</div>
+						<!-- ENDIF -->
+						<!-- IF ES_INVOCACION -->
+						<div class="form-group row">
+							<label class="col-3 col-form-label text-md-left">Rango</label>
+
+							<div class="col-4">
+							  <div>{RANGO}</div>
 							</div>
 						</div>
 						<!-- ENDIF -->
@@ -149,8 +159,7 @@
 					  </div>
 					  
 					  
-					  
-					  
+					  <!-- RAMAS -->
 					  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 						<h3>Ramas de Técnicas</h3><br>
 							<div class="form-group row">
@@ -198,7 +207,7 @@
 					  </div>
 					  
 					  
-					  
+					  <!-- ATRIBUTOS -->
 					  <div class="tab-pane fade" id="atributos" role="tabpanel" aria-labelledby="atributos-tab">
 						<h3>Atributos</h3><br>
 						<div class="form-group row">
@@ -272,7 +281,7 @@
 					  </div>
 					  
 					  
-					  
+					  <!-- TECNICAS -->
 					  <div class="tab-pane fade" id="tecnicas" role="tabpanel" aria-labelledby="tecnicas-tab">
 						<h3>Técnicas ninja</h3>
 						<!-- IF PERSONAJE_PROPIO -->
@@ -326,10 +335,19 @@
 						<h3>Extra</h3>
 						{FICHA_JUTSUS}
 						<!-- ENDIF -->
+						
+						<!-- IF INVOCACION_PACTO -->
+						<h3>Invocaciones</h3>
+						<ul style="padding-left: 20px">
+							<!-- BEGIN invocaciones -->
+							<li><a href="/ficha/{invocaciones.ID}">{invocaciones.NOMBRE}</a> (Rango {invocaciones.RANGO})</li>
+							<!-- END invocaciones -->
+						</ul>
+						<!-- ENDIF -->
 					  </div>
 					  
 					  
-					  
+					  <!-- HABILIDADES -->
 					  <div class="tab-pane fade" id="habilidades" role="tabpanel" aria-labelledby="habilidades-tab">
 					    <!-- IF FICHA_CAMINO -->
 						<div class="form-group row">
@@ -392,7 +410,7 @@
 					  </div>
 					  
 					  
-					  
+					  <!-- INVENTARIO -->
 					  <!-- IF categoria_item -->
 					  <div class="tab-pane fade" id="inventario" role="tabpanel" aria-labelledby="inventario-tab">
 						<h3>Inventario</h3><br>
@@ -444,7 +462,7 @@
 					  <!-- ENDIF -->
 					  
 					  
-					  
+					  <!-- BENEFICIOS -->
 					  <!-- IF beneficios_historico -->
 					  <div class="tab-pane fade" id="beneficios" role="tabpanel" aria-labelledby="beneficios-tab">
 						<!-- IF PATREON_TIER -->
@@ -484,9 +502,11 @@
 							</div>
 					  </div>
 					  <!-- ENDIF -->
+					  
+					  
 					  <!-- IF PUEDE_MODERAR -->
 					  <div class="tab-pane fade" id="moderaciones" role="tabpanel" aria-labelledby="moderaciones-tab">
-						<h3>Moderaciones</h3><br></h5>
+						<h3>Moderaciones</h3><br/>
 							<div style="overflow-y: auto; max-height: 600px;">
 							<!-- BEGIN moderaciones -->
 							  <div style="border-bottom:solid 1px #d9d9d9">{moderaciones.RAZON_MODERACION} — {moderaciones.USER_MODERACION}, {moderaciones.FECHA_MODERACION}</div>
@@ -496,7 +516,7 @@
 					  <!-- ENDIF -->
 					  
 					  
-					  
+					  <!-- LEVEL UP -->
 					  <!-- IF PUEDE_SUBIR and ACTIVO -->
 					  <div class="tab-pane fade" id="levelup" role="tabpanel" aria-labelledby="levelup-tab">
 					  <form action="{U_ACTION_LVL}" method="post">

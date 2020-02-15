@@ -87,7 +87,7 @@ class main
             'NOMBRE'            => utf8_normalize_nfc(request_var('name', '', true)),
             'EDAD'              => utf8_normalize_nfc(request_var('edad', '', true)),
             'PRINCIPAL'         => request_var('ramaPrincipal', 0, true),
-      			'ALDEA'				      => request_var('aldea', 0, true),
+      		'ALDEA'				=> request_var('aldea', 0, true),
             'RAMA1'             => request_var('ramaSec1', 0, true),
             'RAMA2'             => request_var('ramaSec2', 0, true),
             'FISICO'            => utf8_normalize_nfc(request_var('descFis', '', true)),
@@ -105,7 +105,6 @@ class main
 			'pj_id'		=> $pj_id,
 			'user_id'	=> $user_id,
 			'nivel'		=> 1,
-			'rango'		=> 'Estudiante',
 			'arquetipo_id'	=> 0,
 			'nombre'	=> $fields['NOMBRE'],
 			'aldea_id'	=> $fields['ALDEA'],
@@ -333,8 +332,10 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
+					'INVOCACION_ID'	=> request_var('invocacion_id', 0, true),
 					'ALDEA'			=> request_var('aldea', 0, true),
                     'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
+                    'ES_INVOCACION'	=> request_var('es_invocacion', -1, true),
                     'ES_BIJUU'		=> request_var('es_bijuu', -1, true),
                     'TIENE_GLOBALES'=> request_var('tiene_globales', -1, true),
                     'PRINCIPAL'		=> request_var('ramaPrincipal', 0, true),
@@ -361,7 +362,6 @@ class main
 			$pj_id = $fields['PJ_ID'];
 
 			$sql_array = array(
-				'rango'		=> $fields['RANGO'],
 				'nombre'	=> $fields['NOMBRE'],
 				'aldea_id'	=> $fields['ALDEA'],
 				'edad'		=> $fields['EDAD'],
@@ -383,15 +383,24 @@ class main
 				'historia'	=> $fields['HISTORIA'],
 			);
 
-			if ($fields['ARQUETIPO'] != '') {
+			if ($fields['ARQUETIPO'] != '')
                 $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
-            }
 
+			if ((int)$fields['INVOCACION_ID'] > 0) {
+				$sql_array['invocacion_id'] = $fields['INVOCACION_ID'];
+			}
+	
 			if ((int)$fields['NIVEL_INICIAL'] > 0)
 				$sql_array['nivel_inicial'] = $fields['NIVEL_INICIAL'];
 
 			if ((int)$fields['ES_BIJUU'] > -1)
 				$sql_array['es_bijuu'] = $fields['ES_BIJUU'];
+
+			if ((int)$fields['ES_INVOCACION'] > -1)
+				$sql_array['es_invocacion'] = $fields['ES_INVOCACION'];
+			
+			if ((int)$fields['ES_INVOCACION'] == 1)
+				$sql_array['rango'] = $fields['RANGO'];
 
 			if ((int)$fields['TIENE_GLOBALES'] > -1)
 				$sql_array['tiene_globales'] = $fields['TIENE_GLOBALES'];

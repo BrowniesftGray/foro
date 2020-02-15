@@ -200,7 +200,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 	global $user, $db, $template, $phpbb_root_path, $auth;
 	$hab_disp = false;
 
-	$query = $db->sql_query("SELECT * FROM ".PERSONAJES_TABLE." WHERE user_id=$user_id");
+	$query = $db->sql_query("SELECT * FROM ".PERSONAJES_TABLE." WHERE user_id = '$user_id'");
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
@@ -380,6 +380,33 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$uid = $bitfield = $options = '';
 			$jutsus = $row['tecnicas'];
 		}
+		
+		// obtener datos del pacto de invocación
+		if ($row['invocacion_id']) {
+			$queryInvo = $db->sql_query("SELECT * FROM ".INVOCACIONES_TABLE." WHERE activo = 1 AND invocacion_id = " . $row['invocacion_id']);
+			if ($row5 = $db->sql_fetchrow($queryInvo)) {
+				$template->assign_vars(array(
+					'INVOCACION_PACTO'		=>	$row5['pacto'],
+					'INVOCACION_ESPECIES'	=>	$row5['especies'],
+				));
+			}
+			$db->sql_freeresult($queryInvo);
+			
+			// obtener invocaciones
+			if (!$row['es_invocacion']) {
+				$queryInvo = $db->sql_query("SELECT * FROM ".PERSONAJES_TABLE." 
+												WHERE activo = 1 AND es_invocacion = 1 
+												AND invocacion_id = " . $row['invocacion_id']);
+				while ($row5 = $db->sql_fetchrow($queryInvo)) {
+					$template->assign_block_vars('invocaciones', array(
+						'ID'			=> $row5['user_id'],
+						'NOMBRE'		=> $row5['nombre'],
+						'RANGO'			=> $row5['rango'],
+					));
+				}
+				$db->sql_freeresult($queryInvo);
+			}
+		}
 
 		// obtener atributos disponibles para aumentar
 		$attr_disp = get_atributos_disponibles($pj_id);
@@ -414,6 +441,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'TIENE_NIVEL_REGALADO'	=> $tiene_nivel_regalado,
 			'EXPERIENCIA' 			=> $experiencia,
 			'PTOS_APRENDIZAJE'		=> $ptos_aprendizaje,
+			'ES_INVOCACION'			=> (int)$row['es_invocacion'],
+			'INVOCACION_ID'			=> $row['invocacion_id'],
+			'INVOCACION_OPTIONS'	=> obtener_invocaciones_select($row['invocacion_id']),
+			'RANGO_OPTIONS'			=> obtener_rangos_invocacion_select($row['rango']),
+			'RANGO'					=> $row['rango'],
 			'ES_BIJUU'				=> (int)$row['es_bijuu'],
 			'TIENE_GLOBALES'		=> (int)$row['tiene_globales'],
 			'PUEDE_MODERAR'			=> $moderador,
@@ -704,6 +736,37 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 			$select .= "</option>";
 		}
 	}
+	return $select;
+}
+
+function obtener_invocaciones_select($invocacion_id) {
+	global $db;
+	$select = '';
+	
+	if(!$invocacion_id) $invocacion_id = 0;
+	
+	$query = $db->sql_query("SELECT * FROM ".INVOCACIONES_TABLE." WHERE activo = 1 AND invocacion_id <> $invocacion_id");
+	while ($row = $db->sql_fetchrow($query)) {
+		$select .= "<option value='".$row['invocacion_id']."'>";
+		$select .= $row['pacto'];
+		$select .= "</option>";
+	}
+	$db->sql_freeresult($query);
+	return $select;
+}
+
+function obtener_rangos_invocacion_select($rango) {
+	global $db;
+	$rangos = array('C', 'B', 'A', 'S');
+	$select = '';
+	
+	foreach($rangos as $r) {
+		$select .= "<option value='".$r."'";
+		if ($r == $rango) $select .= " selected";
+		$select .= ">" . $r;
+		$select .= "</option>";
+	}
+	
 	return $select;
 }
 

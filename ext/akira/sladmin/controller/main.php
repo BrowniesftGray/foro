@@ -1073,6 +1073,107 @@ class main
 		trigger_error('Acción cancelada.' . $this->get_return_link("habilidades?arquetipo_filtro=$arquetipo_id"));
 	}
 	
+	/*------------------------
+	--     INVOCACIONES     --
+	--------------------------*/
+	
+	function invocaciones_view() {
+		$this->validate_access();
+		
+		$query = $this->db->sql_query("SELECT * FROM ". INVOCACIONES_TABLE);
+		while ($row = $this->db->sql_fetchrow($query)){
+			$invocaciones[] = array(
+				'INVOCACION_ID'	=> (int) $row['invocacion_id'],
+				'PACTO'			=> $row['pacto'],
+				'ESPECIES'		=> $row['especies'],
+				'ACTIVO'		=> $row['activo'],
+				'U_ACTION_UPD'	=> "/sladmin/invocaciones/upd/" . $row['invocacion_id'],
+				'U_ACTION_DEL'	=> "/sladmin/invocaciones/del/" . $row['invocacion_id'],
+			);
+		}
+		$this->db->sql_freeresult($query);
+		
+		$this->template->assign_block_vars_array('invocaciones', $invocaciones);
+		$this->template->assign_vars(array(
+			'U_ACTION_INS'	=> "/sladmin/invocaciones/ins",
+		));
+		
+		return $this->helper->render('sladmin/invocaciones.html', 'Administrador de SL - Invocaciones');
+	}
+	
+	function invocaciones_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'pacto'	=> utf8_normalize_nfc(request_var('pacto', '', true)),
+			'especies'	=> utf8_normalize_nfc(request_var('especies', '', true)),
+			'activo'	=> (bool) request_var('activo', false),
+		);
+		
+		$this->db->sql_query('INSERT INTO ' . INVOCACIONES_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la invocación.' . $this->get_return_link('invocaciones'));
+		}
+		
+		trigger_error('Invocación agregada exitosamente.' . $this->get_return_link('invocaciones'));
+	}
+	
+	function invocaciones_upd($shop_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'pacto'	=> utf8_normalize_nfc(request_var('pacto', '', true)),
+			'especies'	=> utf8_normalize_nfc(request_var('especies', '', true)),
+			'activo'	=> (bool) request_var('activo', false),
+		);
+		
+		$this->db->sql_query('UPDATE ' . INVOCACIONES_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE invocacion_id = $invocacion_id");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la invocación.' . $this->get_return_link('invocaciones'));
+		}
+		
+		trigger_error('Invocación actualizada exitosamente.' . $this->get_return_link('invocaciones'));
+	}
+	
+	function invocaciones_del($shop_id) {
+		$this->validate_access();
+		
+		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE activo = 1 AND invocacion_id = $invocacion_id");
+		if ($row = $this->db->sql_fetchrow($val_query)) {
+			$pjs = (int) $row['cantidad'];
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar la invocación porque existen $pjs personajes con la misma.");
+		}
+		$this->db->sql_freeresult($val_query);
+		
+		$query = $this->db->sql_query("SELECT pacto FROM " . INVOCACIONES_TABLE . " WHERE invocacion_id = $invocacion_id");
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$pacto = $row['pacto'];
+		}
+		$this->db->sql_freeresult($query);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . INVOCACIONES_TABLE . " WHERE invocacion_id = $invocacion_id");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la invocación.' . $this->get_return_link('invocaciones'));
+			}
+		
+			trigger_error('Invocación eliminada exitosamente.' . $this->get_return_link('invocaciones'));
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea borrar la invocación '$pacto'?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link('invocaciones'));
+	}
+	
 	
 	/*------------------------
 	--      FUNCIONES       --

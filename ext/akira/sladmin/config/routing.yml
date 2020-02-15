@@ -136,3 +136,20 @@ akira_sladmin_items_upd:
 akira_sladmin_items_del:
     path: /sladmin/items/del/{item_id}
     defaults: { _controller: akira.sladmin.controller:items_del }
+    
+    
+akira_sladmin_invocaciones:
+    path: /sladmin/invocaciones
+    defaults: { _controller: akira.sladmin.controller:invocaciones_view }
+    
+akira_sladmin_invocaciones_ins:
+    path: /sladmin/invocaciones/ins
+    defaults: { _controller: akira.sladmin.controller:invocaciones_ins }
+    
+akira_sladmin_invocaciones_upd:
+    path: /sladmin/invocaciones/upd/{invocacion_id}
+    defaults: { _controller: akira.sladmin.controller:invocaciones_upd }
+    
+akira_sladmin_invocaciones_del:
+    path: /sladmin/invocaciones/del/{invocacion_id}
+    defaults: { _controller: akira.sladmin.controller:invocaciones_del }
