@@ -204,10 +204,10 @@ function get_ficha($user_id, $return = false, $ver = false)
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
 		$pj_id = $row['pj_id'];
-		
+
 		// obtener ramas de técnicas
 		$ramas_array[] = array('ID' => $row['rama_id_pri'], 'NOMBRE' => get_nombre_rama($row['rama_id_pri']));
-		if ($row['rama_id1']) 
+		if ($row['rama_id1'])
 			$ramas_array[] = array('ID' => $row['rama_id1'], 'NOMBRE' => get_nombre_rama($row['rama_id1']));
 		if ($row['rama_id2'])
 			$ramas_array[] = array('ID' => $row['rama_id2'], 'NOMBRE' => get_nombre_rama($row['rama_id2']));
@@ -217,7 +217,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$ramas_array[] = array('ID' => $row['rama_id4'], 'NOMBRE' => get_nombre_rama($row['rama_id4']));
 		if ($row['rama_id5'])
 			$ramas_array[] = array('ID' => $row['rama_id5'], 'NOMBRE' => get_nombre_rama($row['rama_id5']));
-		
+
 		if ((int) $row['tiene_globales'])
 			$ramas_array[] = array('ID' => -1, 'NOMBRE' => 'Técnicas Globales');
 
@@ -259,10 +259,10 @@ function get_ficha($user_id, $return = false, $ver = false)
 		$grupo = $user->data['group_id'];
 		$moderador = ($grupo == 5 || $grupo == 4 || $grupo == 18);
 		$admin = ($grupo == 5);
-		
+
 		// obtener si está viendo su propio personaje
 		$personajePropio = ($user_id == $user->data['user_id']);
-		
+
 		// obtener experiencia y PA
 		$user->get_profile_fields($user_id);
 		if (!array_key_exists('pf_puntos_apren', $user->profile_fields)) {
@@ -271,7 +271,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 		else{
 			$ptos_aprendizaje = $user->profile_fields['pf_puntos_apren'];
 		}
-		
+
 		if (!array_key_exists('pf_experiencia', $user->profile_fields)) {
 			$experiencia = 0;
 		}
@@ -303,7 +303,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			}
 		}
 		$db->sql_freeresult($queryHab);
-		
+
 		// obtener habilidades disponibles para aprender
 		if ($personajePropio) $hab_disp = get_habilidades_disponibles($pj_id);
 		if ($hab_disp) {
@@ -329,16 +329,16 @@ function get_ficha($user_id, $return = false, $ver = false)
 					$template->assign_block_vars_array('habilidades_compra.requisitos', $hab_disp_requisitos);
 			}
 		}
-		
+
 		// obtener técnicas aprendidas y por aprender
 		if ($ramas_array) {
 			foreach ($ramas_array as $rama) {
 				$template->assign_block_vars('ramas', $rama);	// ID, NOMBRE
-				
+
 				// obtener técnicas aprendidas de la rama
 				$tec_apr = get_tecnicas_personaje($pj_id, $rama['ID'], false);
 				if ($tec_apr) {
-					foreach($tec_apr as $tec) {	
+					foreach($tec_apr as $tec) {
 						$template->assign_block_vars('ramas.tecnicas', array(
 							'ID'			=> $tec['tecnica_id'],
 							'INVENCION'		=> ($tec['pj_id_invencion'] == $pj_id),
@@ -348,7 +348,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 						));
 					}
 				}
-				
+
 				// obtener técnicas disponibles para aprender de la rama
 				if ($personajePropio) {
 					$tec_disp = get_tecnicas_personaje($pj_id, $rama['ID'], true);
@@ -365,7 +365,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 						}
 					}
 				}
-			}			
+			}
 		}
 
 		// obtener las técnicas extra
@@ -380,7 +380,7 @@ function get_ficha($user_id, $return = false, $ver = false)
 			$uid = $bitfield = $options = '';
 			$jutsus = $row['tecnicas'];
 		}
-		
+
 		// obtener datos del pacto de invocación
 		if ($row['invocacion_id']) {
 			$queryInvo = $db->sql_query("SELECT * FROM ".INVOCACIONES_TABLE." WHERE activo = 1 AND invocacion_id = " . $row['invocacion_id']);
@@ -391,11 +391,11 @@ function get_ficha($user_id, $return = false, $ver = false)
 				));
 			}
 			$db->sql_freeresult($queryInvo);
-			
+
 			// obtener invocaciones
 			if (!$row['es_invocacion']) {
-				$queryInvo = $db->sql_query("SELECT * FROM ".PERSONAJES_TABLE." 
-												WHERE activo = 1 AND es_invocacion = 1 
+				$queryInvo = $db->sql_query("SELECT * FROM ".PERSONAJES_TABLE."
+												WHERE activo = 1 AND es_invocacion = 1
 												AND invocacion_id = " . $row['invocacion_id']);
 				while ($row5 = $db->sql_fetchrow($queryInvo)) {
 					$template->assign_block_vars('invocaciones', array(
@@ -410,10 +410,10 @@ function get_ficha($user_id, $return = false, $ver = false)
 
 		// obtener atributos disponibles para aumentar
 		$attr_disp = get_atributos_disponibles($pj_id);
-		
+
 		// obtener atributos totales
 		$attr_tot = $attr_disp + $row['fuerza'] + $row['agilidad'] + $row['vitalidad'] + $row['cck'] + $row['concentracion'] + $row['voluntad'];
-		
+
 		// obtener combo de selección de arquetipo
 		$arquetipo_select = obtener_arquetipo_select($pj_id, $row['arquetipo_id']);
 
@@ -628,8 +628,8 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 	global $db;
 	$data = false;
 
-	$query = $db->sql_query("SELECT rama_id_pri, rama_id1, rama_id2, rama_id3, rama_id4, rama_id5 
-								FROM ".PERSONAJES_TABLE." 
+	$query = $db->sql_query("SELECT rama_id_pri, rama_id1, rama_id2, rama_id3, rama_id4, rama_id5
+								FROM ".PERSONAJES_TABLE."
 								WHERE pj_id = '$pj_id'");
 	if ($row = $db->sql_fetchrow($query)) {
 		$rama_prin = (int) $row['rama_id_pri'];
@@ -659,7 +659,7 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 					ON pt.tecnica_id = t.tecnica_id
 					AND pt.pj_id = '$pj_id'
 			WHERE ";
-	
+
 	if ($rama_id == -1) {
 		if (!$disponibles) {
 			$sql .= " rango = 'Rango E' ";
@@ -669,13 +669,13 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 		}
 	} else {
 		$sql .= ($disponibles ? " pt.pj_id IS NULL " : " pt.pj_id IS NOT NULL ");
-		$sql .= ($rama_id ? " AND t.rama_id = $rama_id " : 
+		$sql .= ($rama_id ? " AND t.rama_id = $rama_id " :
 				" AND (t.rama_id IN($rama_prin, $rama_1, $rama_2, $rama_3, $rama_4, $rama_5)
 					OR t.pj_id_invencion = '$pj_id')");
 	}
-	
+
 	$sql .= " ORDER BY etiqueta";
-	
+
 	$query = $db->sql_query($sql);
 
 	while ($row = $db->sql_fetchrow($query)){
@@ -683,7 +683,7 @@ function get_tecnicas_personaje($pj_id, $rama_id = false, $disponibles = false) 
 		$allow_bbcode = $allow_urls = $allow_smilies = true;
 		generate_text_for_storage($row['bbcode_match'], $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 		$contenido = generate_text_for_display($row['bbcode_match'], $uid, $bitfield, $options);
-		
+
 		$data[] = array(
 			'tecnica_id'		=> $row['tecnica_id'],
 			'rama_id'			=> $row['rama_id'],
@@ -742,9 +742,9 @@ function obtener_arquetipo_select($pj_id, $arquetipo){
 function obtener_invocaciones_select($invocacion_id) {
 	global $db;
 	$select = '';
-	
+
 	if(!$invocacion_id) $invocacion_id = 0;
-	
+
 	$query = $db->sql_query("SELECT * FROM ".INVOCACIONES_TABLE." WHERE activo = 1 AND invocacion_id <> $invocacion_id");
 	while ($row = $db->sql_fetchrow($query)) {
 		$select .= "<option value='".$row['invocacion_id']."'>";
@@ -759,50 +759,50 @@ function obtener_rangos_invocacion_select($rango) {
 	global $db;
 	$rangos = array('C', 'B', 'A', 'S');
 	$select = '';
-	
+
 	foreach($rangos as $r) {
 		$select .= "<option value='".$r."'";
 		if ($r == $rango) $select .= " selected";
 		$select .= ">" . $r;
 		$select .= "</option>";
 	}
-	
+
 	return $select;
 }
 
 function obtener_aldeas_select($aldea_id, $mod) {
 	global $db;
 	$select = false;
-	
+
 	$sql = "SELECT a.*,
 				(SELECT COUNT(0)
 					FROM ".PERSONAJES_TABLE." p
 					WHERE p.aldea_id = a.aldea_id
 					AND p.activo = 1) AS pjs
-			FROM ".ALDEAS_TABLE." a 
+			FROM ".ALDEAS_TABLE." a
 			WHERE activo = 1 " .
 	(!$mod ? "AND visible = 1 " : "") .
 			" ORDER BY orden";
-			
+
 	$query = $db->sql_query($sql);
 	while ($row = $db->sql_fetchrow($query)) {
 		$lleno = false;
 		$descripcion = $row['nombre'];
-		
+
 		if ((int)$row['cupo'] > 0) {
 			$descripcion .= " (" . $row['pjs'] . " / " . $row['cupo'] . ")";
 			$lleno = (int)$row['pjs'] >= (int)$row['cupo'];
 		}
-		
+
 		if ((int)$row['nivel_inicial'] > 1) {
 			$descripcion .= " - Bono activo: Comienza en nivel " . $row['nivel_inicial'];
 		}
-		
+
 		if (!$lleno || $mod)
 			$select .= "<option " . ($row['aldea_id'] == $aldea_id ? "selected" : "") . " value='" . $row['aldea_id'] . "'>" . $descripcion . "</option>";
 	}
 	$db->sql_freeresult($query);
-	
+
 	return $select;
 }
 
@@ -891,13 +891,13 @@ function vista_arquetipo ($arquetipo){
 
 function vista_aldea($aldea_id) {
 	global $db;
-	
+
 	if ((int)$aldea_id > 0) {
 		$query = $db->sql_query("SELECT nombre FROM ".ALDEAS_TABLE." WHERE aldea_id = $aldea_id");
 		$row = $db->sql_fetchrow($query);
 		$db->sql_freeresult($query);
 	}
-	
+
 	return $row['nombre'];
 }
 
@@ -1390,7 +1390,7 @@ function calcular_edad_personaje($pj_id) {
 	global $db;
 	$nueva_edad = false;
 	$i = 0;
-	
+
 	$fecha_hoy = strtotime(date('m/d/Y h:i:s a', time()));
 
 	$query = $db->sql_query("SELECT fecha_historico " .
@@ -1405,7 +1405,7 @@ function calcular_edad_personaje($pj_id) {
 		$fecha_nac = $fecha_hoy;
 	}
 	$db->sql_freeresult($query);
-	
+
 	$query2 = $db->sql_query("SELECT edad_inicial " .
 							" FROM " . PERSONAJES_TABLE .
 							" WHERE pj_id = $pj_id");
@@ -1413,7 +1413,7 @@ function calcular_edad_personaje($pj_id) {
 		$edad = (int)$row2['edad_inicial'];
 	}
 	$db->sql_freeresult($query2);
-	
+
 	$nueva_edad = $edad;
 
 	while (($fecha_nac = strtotime("+1 MONTH", $fecha_nac)) <= $fecha_hoy) {
@@ -1423,4 +1423,188 @@ function calcular_edad_personaje($pj_id) {
 	$nueva_edad = $nueva_edad + floor($i / 4);
 
 	return $nueva_edad;
+}
+
+function premio_exist($pj_id)
+{
+	global $db;
+
+	$query = $db->sql_query('SELECT pj_id FROM '.PREMIOS_TABLE.' WHERE pj_id='.$pj_id.'');
+	if ($row = $db->sql_fetchrow($query)) {
+		$db->sql_freeresult($query);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function registrar_premio_diario($user_id, $fecha)
+{
+  global $db, $user;
+
+  //El pj_id para cosas futuras (?????)
+  $pj_id = get_pj_id($user_id);
+
+//Montamos los diferentes array para sql de la función
+  //Montemos el array para hacer el INSERT
+  $sql_array_prem = array(
+    'fecha'		        => $fecha,
+    'cadena'	        => "",
+    'pj_id'	          => $pd_id,
+    'premios_totales' => "",
+  );
+
+  //Montemos el array para hacer el INSERT
+  $sql_array_prem_totales = array(
+    'premios_diarios_totales' => "",
+    'fecha'		        => $fecha,
+    'cadena'	        => "",
+    'pj_id'	          => $pd_id,
+  );
+
+  //El array para moderaciones, desde la función de registrar moderación se registrará el tema y se otorgará la experiencia.
+  $moderacion = array(
+    'RAZON'                   => ""
+    'PUNTOS_APRENDIZAJE'		  => "",
+    'ADD_PUNTOS_EXPERIENCIA'  => "",
+    'ADD_PUNTOS_APRENDIZAJE'	=> "",
+    'ADD_RYOS'	              => 0,
+  );
+
+  if (premio_exist($pj_id) == true) {
+    //Obtenemos un select con los resultados del usuario, ordenamos por ID descendente, así la posición 0 del array será el último.
+    $sql = "SELECT * FROM " . PREMIOS_TABLE . " WHERE pj_id = ". $pj_id ." ORDER BY premio_id DESC";
+    $query = $this->db->sql_query($sql);
+    $row = $db->sql_fetchrow($query);
+
+
+    //Ahora seleccionamos los datos de la tabla premios_totales
+    $sql = "SELECT * FROM " . TOTALES_TABLE . " WHERE pj_id = ". $pj_id ." ORDER BY totales_id DESC";
+    $query = $this->db->sql_query($sql);
+    $rowTotales = $db->sql_fetchrow($query);
+
+    //Asignamos a una variable el valor de cadena y de premios totales.
+    $cadena = $row[0]['cadena'];
+    $premios_totales = $row[0]['premios_totales'];
+    //Variables para usar en esta parte
+    $fecha_totales = $rowTotales[0]['fecha'];
+    $cadena_totales = $rowTotales[0]['cadena'];
+    $premios_diarios_totales = $rowTotales[0]['premios_diarios_totales'];
+
+    //Comparamos el campo fecha de la posición 0 del array con
+
+    if ($row[0]['fecha'] != $fecha) {
+      // Insertamos el premio diario y le asignamos el premio, asignamos los premios totales.
+      $sql_array_prem['premios_totales'] = $premios_totales+1;
+
+      //Primero vemos cual es la diferencia entre la fecha anterior y la actual.
+      $fecha1 = new DateTime($row[0]['fecha']);
+      $fecha2 = new DateTime("Y/m/d");
+      $intervalo = date_diff($fecha1, $fecha2);
+
+      if ($intervalo == 1) {
+        switch ($cadena) {
+          case '6':
+            // Si el anterior es 6 significa que recibe además los PA
+            $sql_array_prem['cadena'] = 7;
+
+            //Asignamos a las variables los valores que requiramos.
+            $moderacion['RAZON'] = "Premio diario, séptimo día. ";
+            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 10;
+            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 1;
+
+            //Insert Moderacion y premios diarios.
+            $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
+          	$db->sql_query($sql);
+            registrar_moderacion($moderacion, $user_id);
+
+            break;
+
+          default:
+            //Si la cadena es distinta de 6 significa que no recibe recompensa extra, atentos al 7 que significa que la cadena vuelve a 1.
+
+            if ($cadena == 7) {
+              $sql_array_prem['cadena'] = 1;
+              $moderacion['RAZON'] = "Premio diario, día 1. ";
+            } else{
+              $sql_array_prem['cadena'] = intval(strval($cadena+1));
+              $moderacion['RAZON'] = "Premio diario, día ".$sql_array_prem['cadena'].". ";
+            }
+
+            //Asignamos a las variables los valores que requiramos.
+            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
+            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
+
+            //Insert Moderacion y premios diarios
+            $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
+          	$db->sql_query($sql);
+            registrar_moderacion($moderacion, $user_id);
+            break;
+          }
+      }
+      else{
+        $sql_array_prem['cadena'] = 1;
+
+        //Asignamos a las variables los valores que requiramos.
+        $moderacion['RAZON'] = "Premio diario, día 1. ";
+        $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
+        $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
+
+        //Insert Moderacion y premios diarios
+        $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
+        $db->sql_query($sql);
+        registrar_moderacion($moderacion, $user_id);
+      }
+
+      /// PREMIOS TOTALES DE DIFERENTE DÍA
+        //No es en el mismo día, así que es el primero del día, se aumenta en 1 el premios totales y la cadena será de 0.
+        $sql_array_prem_totales['cadena'] = 1;
+        $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales+1;
+
+        //Insert premios totales
+        $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
+    }
+    else{
+      if ($fecha == $fecha_totales) {
+          if ($cadena_totales == 9 OR $cadena_totales == 19 OR $cadena_totales == 29) {
+            //Damos el premio extra, usando registrar moderación.
+            //Asignamos a las variables los valores que requiramos.
+            $moderacion['RAZON'] = "Premio diario en cadena, 10, 20 o 30 post seguidos. ";
+            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 15;
+            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 1;
+            $sql_array_prem_totales['cadena'] = $cadena_totales+1;
+            $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales;
+
+            //Insert Moderacion y premios totales
+            $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
+            $db->sql_query($sql);
+            registrar_moderacion($moderacion, $user_id);
+          }
+      } else{
+        //La cadena aún no es suficiente para premio especial
+        $sql_array_prem_totales['cadena'] = $cadena_totales+1;
+        $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales;
+
+        //Insert premios totales
+        $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
+      }
+    }
+  }
+  //No existen datos en las tablas por tanto, es el primer registro.
+  else{
+    //Primera vez que postea nunca, asignamos variables a los array
+    $sql_array_prem['premios_totales'] = 1;
+    $sql_array_prem['cadena'] = 1;
+    $sql_array_prem_totales['cadena'] = 1;
+    $sql_array_prem_totales['premios_darios_totales'] = 1;
+
+    $moderacion['RAZON'] = "Premio diario, primer post de rol.";
+    $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
+    $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
+
+    $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
+    $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
+    $db->sql_query($sql);
+    registrar_moderacion($moderacion, $user_id);
+  }
 }
