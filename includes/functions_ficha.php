@@ -1438,7 +1438,7 @@ function premio_exists($pj_id)
 	}
 }
 
-function registrar_premio_diario($user_id, &$mensaje = false)
+function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 {
 	global $db, $user;
 	$fecha_post = new DateTime('today');
@@ -1506,7 +1506,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 			$cadena = 1;
 		}
 		
-		$moderacion['RAZON'] = "Premio diario, $cadena día(s).";
+		$moderacion['RAZON'] = "Premio diario, $cadena día(s). [p$post_id]";
 		$mensaje = "¡Premio diario obtenido!";
 		
 		// dependiendo de la cadena, se suma el premio diario
@@ -1540,7 +1540,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 		}
 		
 		if ($premio_exp > 0) {
-			$moderacion['RAZON'] = "Premio por post base.";
+			$moderacion['RAZON'] = "Premio por post base. [p$post_id]";
 		}
 	}
 	
@@ -1557,7 +1557,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 	}
 	else {
 		//No existen datos en las tablas por tanto, es el primer registro.
-		$moderacion['RAZON'] = "Premio diario, primer post de rol ♥.";
+		$moderacion['RAZON'] = "Premio diario, primer post de rol ♥. [p$post_id]";
 		$sql = "INSERT INTO " . PREMIO_DIARIO_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_array_prem);
 		$db->sql_query($sql);
 	}

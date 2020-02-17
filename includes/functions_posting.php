@@ -1956,7 +1956,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				}
 				
 				// registra premio
-				registrar_premio_diario($user_id_premio, $mensaje);
+				registrar_premio_diario($user_id_premio, $data_ary['post_id'], $mensaje);
 				
 				// guarda cookie con mensaje del premio
 				if ($mensaje) {
