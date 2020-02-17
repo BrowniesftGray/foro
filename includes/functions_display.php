@@ -598,6 +598,9 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 				$u_viewforum = $row['forum_link'];
 			}
 		}
+		
+		// RPG forum
+		$forum_rol_data = get_forum_rol_data($row['forum_id']);
 
 		$forum_row = array(
 			'S_IS_CAT'			=> false,
@@ -610,10 +613,10 @@ function display_forums($root_data = '', $display_moderators = true, $return_mod
 			'S_SUBFORUMS'		=> (count($subforums_list)) ? true : false,
 			'S_DISPLAY_SUBJECT'	=>	($last_post_subject !== '' && $config['display_last_subject']) ? true : false,
 			'S_FEED_ENABLED'	=> ($config['feed_forum'] && !phpbb_optionget(FORUM_OPTION_FEED_EXCLUDE, $row['forum_options']) && $row['forum_type'] == FORUM_POST) ? true : false,
-			'S_IS_GENERAL'		=> in_array($row['forum_id'], get_foros_generales()),
-			'S_IS_PAIS_P'		=> in_array($row['forum_id'], get_foros_paises_principales()),
-			'S_IS_PAIS_N'		=> in_array($row['forum_id'], get_foros_paises_neutrales()),
-			'S_IS_TABLE'		=> in_array($row['forum_id'], get_foros_estilo_tabla()),
+			'S_IS_GENERAL'		=> $forum_rol_data['estilo'] == BANNER_FORO_OFFROL,
+			'S_IS_PAIS_P'		=> $forum_rol_data['estilo'] == BANNER_FORO_ONROL_GRANDE,
+			'S_IS_PAIS_N'		=> $forum_rol_data['estilo'] == BANNER_FORO_ONROL,
+			'S_IS_TABLE'		=> $forum_rol_data['estilo'] == BANNER_FORO_ESTANDAR,
 
 			'FORUM_ID'				=> $row['forum_id'],
 			'FORUM_NAME'			=> $row['forum_name'],

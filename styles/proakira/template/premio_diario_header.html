@@ -1,0 +1,31 @@
+<!-- IF PREMIO_CADENA_MAX -->
+<div class="premio-diario-container">
+	<div class="premi-diario-title">Premio Diario <span style="cursor: help" title="{PREMIO_HELP}">[?]</span></div>
+	<div class="premio-diario-cat">
+		<label>Cadena</label>
+		<span>{PREMIO_CADENA} / {PREMIO_CADENA_MAX}</span>
+		<!-- IF PREMIO_CADENA_OK -->
+		<div class="premio-diario-ok" title="¡Completado por hoy!"><i class="icon fa fa-check-circle" style="font-size: 12px;"></i></div>
+		<!-- ENDIF -->
+	</div>
+	<div class="premio-diario-cat">
+		<label>Posts de hoy</label>
+		<span>{PREMIO_POSTS_DIARIOS} / {PREMIO_POSTS_DIARIOS_MAX}</span>
+		<!-- IF PREMIO_POSTS_DIARIOS_OK -->
+		<div class="premio-diario-ok" title="¡Completado por hoy!"><i class="icon fa fa-check-circle" style="font-size: 12px;"></i></div>
+		<!-- ENDIF -->
+	</div> 
+	<div class="premio-diario-cat">
+		<label>Premios totales</label>
+		<span>{PREMIO_PREMIOS_TOTALES}</span>
+		<!-- IF PREMIO_CADENA_OK -->
+		<div class="premio-diario-ok" title="¡Completado por hoy!"><i class="icon fa fa-check-circle" style="font-size: 12px;"></i></div>
+		<!-- ENDIF -->
+	</div>
+	<div class="premio-diario-tiempo">
+		<label>Se reinicia en</label>
+		<span>{PREMIO_TIEMPO_FALTANTE} hs</span>
+	</div>
+	<div style="clear:both"></div>
+</div>
+<!-- ENDIF -->

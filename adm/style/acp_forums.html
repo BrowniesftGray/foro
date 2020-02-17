@@ -35,6 +35,7 @@
 
 			if (value == {FORUM_POST})
 			{
+				phpbb.toggleDisplay('forum_rol_options', 1);
 				phpbb.toggleDisplay('forum_post_options', 1);
 				phpbb.toggleDisplay('forum_link_options', -1);
 				phpbb.toggleDisplay('forum_rules_options', 1);
@@ -42,6 +43,7 @@
 			}
 			else if (value == {FORUM_LINK})
 			{
+				phpbb.toggleDisplay('forum_rol_options', -1);
 				phpbb.toggleDisplay('forum_post_options', -1);
 				phpbb.toggleDisplay('forum_link_options', 1);
 				phpbb.toggleDisplay('forum_rules_options', -1);
@@ -49,6 +51,7 @@
 			}
 			else if (value == {FORUM_CAT})
 			{
+				phpbb.toggleDisplay('forum_rol_options', 1);
 				phpbb.toggleDisplay('forum_post_options', -1);
 				phpbb.toggleDisplay('forum_link_options', -1);
 				phpbb.toggleDisplay('forum_rules_options', 1);
@@ -87,7 +90,8 @@
 			<!-- ENDIF -->
 
 			<!-- IF S_FORUM_LINK -->
-			phpbb.toggleDisplay('forum_rules_options', -1);
+				phpbb.toggleDisplay('forum_rules_options', -1);
+				phpbb.toggleDisplay('forum_rol_options', -1);
 			<!-- ENDIF -->
 		}
 
@@ -185,6 +189,21 @@
 	</dl>
 	<!-- EVENT acp_forums_main_settings_append -->
 	</fieldset>
+	
+	<div id="forum_rol_options">
+		<fieldset>
+			<legend>Configuración del Rol</legend>
+		<dl>
+			<dt><label for="rol_onrol">Foro de rol:</label><br /><span>Define si se muestran los datos del personaje en los posts dentro del foro. Afecta al Premio Diario.</span></dt>
+			<dd><label><input type="radio" class="radio" name="rol_onrol" value="1"<!-- IF ROL_ONROL --> id="rol_onrol" checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="rol_onrol" value="0"<!-- IF not ROL_ONROL --> id="rol_onrol" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+		</dl>
+		<dl>
+			<dt><label for="rol_estilo">Estilo de banner:</label></dt>
+			<dd><select id="rol_estilo" name="rol_estilo">{ROL_ESTILO_OPTIONS}</select></dd>
+		</dl>
+		</fieldset>
+	</div>
 
 	<div id="forum_cat_options">
 		<fieldset>

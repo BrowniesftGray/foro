@@ -336,8 +336,10 @@ define('REFERENTES_TABLE',				'referidos');
 define('PATREON_TIERS_TABLE',			'patreon_tiers');
 define('PATREON_BENEFICIOS_TABLE',		'patreon_beneficios');
 define('PATREON_USER_BENEFICIOS_TABLE',	'patreon_user_beneficios');
+define('PREMIO_DIARIO_TABLE',			'premio_diario');
+define('FORUMS_ROL_TABLE',			'forums_rol');
 
-// Akira constants
+// Patreon constants
 define('PATREON_TIER_ACTION_NO_ACTION',			'-1');
 define('PATREON_TIER_ACTION_RESET',				'-2');
 define('PATREON_TIER_ACTION_UPDATE',			'0');
@@ -345,3 +347,21 @@ define('PATREON_BENEFICIO_ACTION_NO_ACTION',	'-1');
 define('BENEFICIO_AVATAR_FICHA',				'avatar_ficha');
 define('BENEFICIO_BANNER_FICHA',				'banner_ficha');
 define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');
+
+// Premio diario constants
+define('PREMIO_POST_BASE_MAX',					10);
+define('PREMIO_POST_BASE_EXP',					1);
+define('PREMIO_CADENA_BASE_EXP',				5);
+define('PREMIO_CADENA_COMPLETA_CANTIDAD',		7);
+define('PREMIO_CADENA_COMPLETA_EXP',			10);
+define('PREMIO_CADENA_COMPLETA_PA',				1);
+define('PREMIO_TOTALES_INTERVALO',				50);
+define('PREMIO_TOTALES_EXP',					30);
+define('PREMIO_TOTALES_PA',						3);
+define('PREMIO_CARACTERES_MIN',					1000);
+
+// Banner foro constants
+define('BANNER_FORO_ONROL',						1);
+define('BANNER_FORO_ONROL_GRANDE',				2);
+define('BANNER_FORO_OFFROL',					3);
+define('BANNER_FORO_ESTANDAR',					4);

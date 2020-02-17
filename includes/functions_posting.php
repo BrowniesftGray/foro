@@ -19,6 +19,8 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+require_once('functions_ficha.php');
+
 /**
 * Fill smiley templates (or just the variables) with smilies, either in a window or inline
 */
@@ -1929,11 +1931,15 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 			$sql_data[FORUMS_TABLE]['stat'][] = "forum_last_poster_name = '" . $db->sql_escape((!$user->data['is_registered'] && $username) ? $username : (($user->data['user_id'] != ANONYMOUS) ? $user->data['username'] : '')) . "'";
 			$sql_data[FORUMS_TABLE]['stat'][] = "forum_last_poster_colour = '" . $db->sql_escape($user->data['user_colour']) . "'";
 		}
-
-		unset($sql_data[POSTS_TABLE]['sql']);
 		
 		// Datos del pj referentes al post // mgomez // 26-12-2018
 		store_pj_data($data_ary);
+		
+		if (strlen($sql_data[POSTS_TABLE]['post_text']) >= PREMIO_CARACTERES_MIN) {
+			registrar_premio_diario($user->data['user_id']);
+		}
+		
+		unset($sql_data[POSTS_TABLE]['sql']);
 	}
 
 	// Update the topics table
@@ -2764,9 +2770,9 @@ function store_pj_data($data_ary, $post_id = 0) {
 	global $db;
 	$pj_id = $es_primero = $pj_data = false;
 	
-	// RPG forum
-	if (in_array($data_ary['forum_id'], get_foros_generales()) || in_array($data_ary['forum_id'], get_foros_estilo_tabla()))
-		return false;
+	// RPG forum	
+	$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
+	if(!$forum_rol_data['onrol']) return false;
 	
 	$pj_id = get_pj_id($data_ary['poster_id']);
 	if (!$pj_id) return false;

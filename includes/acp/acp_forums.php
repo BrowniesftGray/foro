@@ -151,6 +151,9 @@ class acp_forums
 						'forum_password'		=> $request->variable('forum_password', '', true),
 						'forum_password_confirm'=> $request->variable('forum_password_confirm', '', true),
 						'forum_password_unset'	=> $request->variable('forum_password_unset', false),
+						
+						'rol_onrol'				=> $request->variable('rol_onrol', true),
+						'rol_estilo'			=> $request->variable('rol_estilo', 1),
 					);
 
 					/**
@@ -619,6 +622,10 @@ class acp_forums
 				{
 					$errors[] = $user->lang['FORUM_PASSWORD_OLD'];
 				}
+				
+				/* FORO DE ROL */
+				$forum_rol_data = $this->get_forum_rol_data($forum_id);
+				$estilo_options = $this->get_forum_estilo_options($forum_rol_data['estilo']);
 
 				$template_data = array(
 					'S_EDIT_FORUM'		=> true,
@@ -660,6 +667,9 @@ class acp_forums
 					'S_DESC_BBCODE_CHECKED'		=> ($forum_desc_data['allow_bbcode']) ? true : false,
 					'S_DESC_SMILIES_CHECKED'	=> ($forum_desc_data['allow_smilies']) ? true : false,
 					'S_DESC_URLS_CHECKED'		=> ($forum_desc_data['allow_urls']) ? true : false,
+					
+					'ROL_ONROL'					=> $forum_rol_data['onrol'],
+					'ROL_ESTILO_OPTIONS'		=> $estilo_options,
 
 					'S_FORUM_TYPE_OPTIONS'		=> $forum_type_options,
 					'S_STATUS_OPTIONS'			=> $statuslist,
@@ -936,6 +946,39 @@ class acp_forums
 	}
 
 	/**
+	* Get forum rol data
+	*/	
+	function get_forum_rol_data($forum_id) {
+		global $db;
+		
+		$sql = 'SELECT *
+			FROM ' . FORUMS_ROL_TABLE . "
+			WHERE forum_id = $forum_id";
+		$result = $db->sql_query($sql);
+		if ($row = $db->sql_fetchrow($result)) {
+			$data = $row;
+		}
+		else {
+			$data = array(
+				'estilo'	=> BANNER_FORO_ONROL,
+				'onrol'		=> true,
+			);
+		}
+		$db->sql_freeresult($result);
+		
+		return $data;
+	}
+	
+	function get_forum_estilo_options($estilo) {
+		$select = "<option value='" . BANNER_FORO_ONROL . ($estilo == BANNER_FORO_ONROL ? "' selected='selected" : "") . "'>Banner clásico on-rol</option>";
+		$select .= "<option value='" . BANNER_FORO_ONROL_GRANDE . ($estilo == BANNER_FORO_ONROL_GRANDE ? "' selected='selected" : "") . "'>Banner grande on-rol</option>";
+		$select .= "<option value='" . BANNER_FORO_OFFROL . ($estilo == BANNER_FORO_OFFROL ? "' selected='selected" : "") . "'>Banner off-rol</option>";
+		$select .= "<option value='" . BANNER_FORO_ESTANDAR . ($estilo == BANNER_FORO_ESTANDAR ? "' selected='selected" : "") . "'>Estándar phpbb</option>";
+		
+		return $select;
+	}
+
+	/**
 	* Get forum details
 	*/
 	function get_forum_info($forum_id)
@@ -965,6 +1008,14 @@ class acp_forums
 		global $db, $user, $cache, $phpbb_root_path, $phpbb_container, $phpbb_dispatcher, $phpbb_log, $request;
 
 		$errors = array();
+		
+		$forum_rol_sql = array(
+			'forum_id'	=> $forum_data_ary['forum_id'],
+			'estilo'	=> $forum_data_ary['rol_estilo'],
+			'onrol'		=> $forum_data_ary['rol_onrol'],
+		);
+		unset($forum_data_ary['rol_estilo']);
+		unset($forum_data_ary['rol_onrol']);
 
 		$forum_data = $forum_data_ary;
 		/**
@@ -1149,6 +1200,7 @@ class acp_forums
 			$db->sql_query($sql);
 
 			$forum_data_ary['forum_id'] = $db->sql_nextid();
+			$forum_rol_sql['forum_id'] = $forum_data_ary['forum_id'];
 
 			$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_FORUM_ADD', false, array($forum_data_ary['forum_name']));
 		}
@@ -1366,6 +1418,16 @@ class acp_forums
 			$forum_data_ary['forum_id'] = $forum_id;
 
 			$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_FORUM_EDIT', false, array($forum_data_ary['forum_name']));
+		}
+		
+		// Configuración del rol
+		$sqlRol = 'UPDATE ' . FORUMS_ROL_TABLE . '
+			SET ' . $db->sql_build_array('UPDATE', $forum_rol_sql) . '
+			WHERE forum_id = ' . $forum_rol_sql['forum_id'];
+		$db->sql_query($sqlRol);
+		if ($db->sql_affectedrows() < 1) {
+			$sqlRol = 'INSERT INTO ' . FORUMS_ROL_TABLE . ' ' . $db->sql_build_array('INSERT', $forum_rol_sql);
+			$db->sql_query($sqlRol);
 		}
 
 		$forum_data = $forum_data_ary;

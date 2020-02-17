@@ -960,6 +960,43 @@ h4.topic-subtitle {
 	}
 }
 
+/* Sub-Header Premio Diario
+-----------------------------------------*/
+.premio-diario-container {
+	background-color: rgba(133, 176, 193, .5);
+    float: left;
+    margin-top: 7px;
+    border-radius: 3px;
+}
+
+.premi-diario-title {
+	float: left;
+    padding-right: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px;
+    background: rgba(0, 0, 0, .1);
+    border-radius: 3px;
+}
+
+.premio-diario-cat {
+	float: left;
+    padding: 1px 5px;
+    border-right: solid 1px rgba(0,0,0,.1);
+    margin: 4px 0;
+}
+
+.premio-diario-tiempo {
+	float: left;
+    padding: 5px;
+}
+
+.premio-diario-ok {
+	float: right;
+    color: #28a745;
+    margin-left: 3px;
+}
+
 /* Sub-Header Personaje
 -----------------------------------------*/
 

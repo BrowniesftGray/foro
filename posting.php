@@ -1797,7 +1797,9 @@ add_form_key('posting');
 /** @var \phpbb\controller\helper $controller_helper */
 $controller_helper = $phpbb_container->get('controller.helper');
 
-$is_rpg_forum = (!in_array($post_data['forum_id'], get_foros_generales()) && !in_array($post_data['forum_id'], get_foros_estilo_tabla()));
+// RPG forum
+$forum_rol_data = get_forum_rol_data($post_data['forum_id']);
+$is_rpg_forum = $forum_rol_data['onrol'];
 
 if ($is_rpg_forum)
 {

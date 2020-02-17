@@ -1944,7 +1944,9 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		}
 	}
 	
-	$is_rpg_forum = (!in_array($forum_id, get_foros_generales()) && !in_array($forum_id, get_foros_estilo_tabla()));
+	// RPG forum
+	$forum_rol_data = get_forum_rol_data($forum_id);
+	$is_rpg_forum = $forum_rol_data['onrol'];
 	$stats_changed = ((int)$row['diff_pv'] != 0 || (int)$row['diff_pc'] != 0 || (int)$row['diff_sta'] != 0);
 	
 	if ($is_rpg_forum && $stats_changed) {

@@ -4731,8 +4731,14 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	
 	if ($ficha_exists) {
 		$pj_id = get_pj_id($user_id);
+		
 		$pj_data = get_pj_data($pj_id);
 		if ($pj_data) $template->assign_vars($pj_data);
+		
+		if ($user_id == 520) {	// TEST_MGO
+			$premio_status = get_premio_diario_status($pj_id);
+			if ($premio_status) $template->assign_vars($premio_status);
+		}
 	}
 
 	$http_headers = array();
@@ -5130,27 +5136,26 @@ function phpbb_get_board_contact_link(\phpbb\config\config $config, $phpbb_root_
 	}
 }
 
-
-
-/* Foros Generales */
-function get_foros_generales() {
-	return array(2, 4, 5, 11, 12, 13, 14, 30, 31, 32, 37, 91, 92, 98, 99, 100, 102, 103, 104, 105, 107);
-}
-		
-/* Países Principales - Contenedores de aldea - Estilo largo y ancho */
-function get_foros_paises_principales() {
-	$foros_paises_principales = array(16, 19); // 18 - Iwa
-	/* Aldeas - Se añaden a los países para compartir estilo */
-	array_push($foros_paises_principales, 41, 42, 43, 76);
-	return $foros_paises_principales;	
-}
-
-/* Resto de los Países - Estilo largo y angosto - Por defecto en todos los subforos*/		
-function get_foros_paises_neutrales() {
-	return array(17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36);
-}
-
-/* Foros que deben mostrarse con el estilo estándar de tabla */		
-function get_foros_estilo_tabla() {
-	return array(0);
+/**
+* Get forum rol data
+*/	
+function get_forum_rol_data($forum_id) {
+	global $db;
+	
+	$sql = 'SELECT *
+		FROM ' . FORUMS_ROL_TABLE . "
+		WHERE forum_id = $forum_id";
+	$result = $db->sql_query($sql);
+	if ($row = $db->sql_fetchrow($result)) {
+		$data = $row;
+	}
+	else {
+		$data = array(
+			'estilo'	=> BANNER_FORO_ONROL,
+			'onrol'		=> true,
+		);
+	}
+	$db->sql_freeresult($result);
+	
+	return $data;
 }

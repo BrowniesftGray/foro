@@ -756,7 +756,6 @@ function obtener_invocaciones_select($invocacion_id) {
 }
 
 function obtener_rangos_invocacion_select($rango) {
-	global $db;
 	$rangos = array('C', 'B', 'A', 'S');
 	$select = '';
 
@@ -1425,186 +1424,210 @@ function calcular_edad_personaje($pj_id) {
 	return $nueva_edad;
 }
 
-function premio_exist($pj_id)
+function premio_exists($pj_id)
 {
 	global $db;
 
-	$query = $db->sql_query('SELECT pj_id FROM '.PREMIOS_TABLE.' WHERE pj_id='.$pj_id.'');
+	$query = $db->sql_query("SELECT * FROM ".PREMIO_DIARIO_TABLE." WHERE pj_id = $pj_id");
 	if ($row = $db->sql_fetchrow($query)) {
 		$db->sql_freeresult($query);
-		return true;
-	} else {
+		return $row;
+	}
+	else {
 		return false;
 	}
 }
 
-function registrar_premio_diario($user_id, $fecha)
+function registrar_premio_diario($user_id, &$mensaje = false)
 {
-  global $db, $user;
+	global $db, $user;
+	$fecha_post = new DateTime('today');
+	
+	if ($user_id != 520) return false;	// TEST_MGO
+	
+	// RPG forum	
+	$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
+	if(!$forum_rol_data['onrol']) return false;
+	
+	$premio_pa = 0;
+	$premio_exp = 0;
 
-  //El pj_id para cosas futuras (?????)
-  $pj_id = get_pj_id($user_id);
+	//El pj_id para cosas futuras (?????)
+	$pj_id = get_pj_id($user_id);
+	if (!$pj_id) return false;
 
-//Montamos los diferentes array para sql de la función
-  //Montemos el array para hacer el INSERT
-  $sql_array_prem = array(
-    'fecha'		        => $fecha,
-    'cadena'	        => "",
-    'pj_id'	          => $pd_id,
-    'premios_totales' => "",
-  );
+	//Montemos el array para hacer el INSERT o UPDATE
+	$sql_array_prem = array(
+		'pj_id'				=> $pj_id,
+		'cadena'			=> 1,
+		'posts_diarios'		=> 1,
+		'premios_totales'	=> 1,
+		'fecha'		        => $fecha_post->format('Y-m-d'),
+	);
 
-  //Montemos el array para hacer el INSERT
-  $sql_array_prem_totales = array(
-    'premios_diarios_totales' => "",
-    'fecha'		        => $fecha,
-    'cadena'	        => "",
-    'pj_id'	          => $pd_id,
-  );
+	//El array para moderaciones, desde la función de registrar moderación se registrará el tema y se otorgará la experiencia.
+	$moderacion = array(
+		'PJ_ID'						=> $pj_id,
+		'RAZON'						=> "",
+		'PUNTOS_APRENDIZAJE'		=> "",
+		'ADD_PUNTOS_EXPERIENCIA'	=> "",
+		'ADD_PUNTOS_APRENDIZAJE'	=> "",
+		'ADD_RYOS'					=> 0,
+	);
 
-  //El array para moderaciones, desde la función de registrar moderación se registrará el tema y se otorgará la experiencia.
-  $moderacion = array(
-    'RAZON'                   => ""
-    'PUNTOS_APRENDIZAJE'		  => "",
-    'ADD_PUNTOS_EXPERIENCIA'  => "",
-    'ADD_PUNTOS_APRENDIZAJE'	=> "",
-    'ADD_RYOS'	              => 0,
-  );
+    //Obtenemos un select con los resultados del usuario.
+    $premio = premio_exists($pj_id);
+    if ($premio) {
+		$cadena = (int)$premio['cadena'];
+		$posts_diarios = (int)$premio['posts_diarios'];
+		$premios_totales = (int)$premio['premios_totales'];
+		$fecha_anterior = date_create($premio['fecha']);
+	}
+	else {
+		$cadena = 0;
+		$posts_diarios = 0;
+		$premios_totales = 0;
+		$fecha_anterior = new DateTime('yesterday');
+	}
 
-  if (premio_exist($pj_id) == true) {
-    //Obtenemos un select con los resultados del usuario, ordenamos por ID descendente, así la posición 0 del array será el último.
-    $sql = "SELECT * FROM " . PREMIOS_TABLE . " WHERE pj_id = ". $pj_id ." ORDER BY premio_id DESC";
-    $query = $this->db->sql_query($sql);
-    $row = $db->sql_fetchrow($query);
+    //Comparamos la fecha del último premio con la del post actual
+    if ($fecha_post != $fecha_anterior) {
+		
+		// Reiniciamos los posts diarios
+		$posts_diarios = 1;
 
+		// Primero vemos cual es la diferencia entre la fecha anterior y la actual.
+		$intervalo = date_diff($fecha_anterior, $fecha_post);
 
-    //Ahora seleccionamos los datos de la tabla premios_totales
-    $sql = "SELECT * FROM " . TOTALES_TABLE . " WHERE pj_id = ". $pj_id ." ORDER BY totales_id DESC";
-    $query = $this->db->sql_query($sql);
-    $rowTotales = $db->sql_fetchrow($query);
-
-    //Asignamos a una variable el valor de cadena y de premios totales.
-    $cadena = $row[0]['cadena'];
-    $premios_totales = $row[0]['premios_totales'];
-    //Variables para usar en esta parte
-    $fecha_totales = $rowTotales[0]['fecha'];
-    $cadena_totales = $rowTotales[0]['cadena'];
-    $premios_diarios_totales = $rowTotales[0]['premios_diarios_totales'];
-
-    //Comparamos el campo fecha de la posición 0 del array con
-
-    if ($row[0]['fecha'] != $fecha) {
-      // Insertamos el premio diario y le asignamos el premio, asignamos los premios totales.
-      $sql_array_prem['premios_totales'] = $premios_totales+1;
-
-      //Primero vemos cual es la diferencia entre la fecha anterior y la actual.
-      $fecha1 = new DateTime($row[0]['fecha']);
-      $fecha2 = new DateTime("Y/m/d");
-      $intervalo = date_diff($fecha1, $fecha2);
-
-      if ($intervalo == 1) {
-        switch ($cadena) {
-          case '6':
-            // Si el anterior es 6 significa que recibe además los PA
-            $sql_array_prem['cadena'] = 7;
-
-            //Asignamos a las variables los valores que requiramos.
-            $moderacion['RAZON'] = "Premio diario, séptimo día. ";
-            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 10;
-            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 1;
-
-            //Insert Moderacion y premios diarios.
-            $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
-          	$db->sql_query($sql);
-            registrar_moderacion($moderacion, $user_id);
-
-            break;
-
-          default:
-            //Si la cadena es distinta de 6 significa que no recibe recompensa extra, atentos al 7 que significa que la cadena vuelve a 1.
-
-            if ($cadena == 7) {
-              $sql_array_prem['cadena'] = 1;
-              $moderacion['RAZON'] = "Premio diario, día 1. ";
-            } else{
-              $sql_array_prem['cadena'] = intval(strval($cadena+1));
-              $moderacion['RAZON'] = "Premio diario, día ".$sql_array_prem['cadena'].". ";
-            }
-
-            //Asignamos a las variables los valores que requiramos.
-            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
-            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
-
-            //Insert Moderacion y premios diarios
-            $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
-          	$db->sql_query($sql);
-            registrar_moderacion($moderacion, $user_id);
-            break;
-          }
-      }
-      else{
-        $sql_array_prem['cadena'] = 1;
-
-        //Asignamos a las variables los valores que requiramos.
-        $moderacion['RAZON'] = "Premio diario, día 1. ";
-        $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
-        $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
-
-        //Insert Moderacion y premios diarios
-        $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
-        $db->sql_query($sql);
-        registrar_moderacion($moderacion, $user_id);
-      }
-
-      /// PREMIOS TOTALES DE DIFERENTE DÍA
-        //No es en el mismo día, así que es el primero del día, se aumenta en 1 el premios totales y la cadena será de 0.
-        $sql_array_prem_totales['cadena'] = 1;
-        $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales+1;
-
-        //Insert premios totales
-        $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
+		// Si es un día consecutivo, debe aumentarse la cadena
+		if ($intervalo->d == 1) {
+			$cadena += 1;
+			
+			// Si se superó la semana, se reinicia
+			if ($cadena > PREMIO_CADENA_COMPLETA_CANTIDAD)
+				$cadena = 1;
+		}
+		else {
+			// Si no fue día consecutivo, se reinicia
+			$cadena = 1;
+		}
+		
+		$moderacion['RAZON'] = "Premio diario, $cadena día(s).";
+		$mensaje = "Premio diario por $cadena día(s).";
+		
+		// dependiendo de la cadena, se suma el premio diario
+		if ($cadena == PREMIO_CADENA_COMPLETA_CANTIDAD) {
+			$premio_exp += PREMIO_CADENA_COMPLETA_EXP;
+			$premio_pa += PREMIO_CADENA_COMPLETA_PA;
+			$mensaje = "¡Premio extra por semana completa de rol! ¡Felicitaciones!";
+		}
+		else {
+			$premio_exp += PREMIO_CADENA_BASE_EXP;
+		}
+		
+		// Sumamos un premio diario al total acumulado
+		$premios_totales += 1;
+		
+		// cada 50 premios diarios totales, se da uno especial
+		if (fmod($premios_totales, PREMIO_TOTALES_INTERVALO) == 0) {
+			$premio_exp += PREMIO_TOTALES_EXP;
+			$premio_pa += PREMIO_TOTALES_PA;
+			
+			$moderacion['RAZON'] .= "Más $premios_totales premios totales.";
+			$mensaje .= "<br/>¡Premio extra por $premios_totales días totales!";
+		}
     }
-    else{
-      if ($fecha == $fecha_totales) {
-          if ($cadena_totales == 9 OR $cadena_totales == 19 OR $cadena_totales == 29) {
-            //Damos el premio extra, usando registrar moderación.
-            //Asignamos a las variables los valores que requiramos.
-            $moderacion['RAZON'] = "Premio diario en cadena, 10, 20 o 30 post seguidos. ";
-            $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 15;
-            $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 1;
-            $sql_array_prem_totales['cadena'] = $cadena_totales+1;
-            $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales;
+    else {
+		// Es un post en la misma fecha que el anterior
+		$posts_diarios += 1;
+		
+		if ($posts_diarios <= PREMIO_POST_BASE_MAX) {
+			$premio_exp += PREMIO_POST_BASE_EXP;
+		}
+		
+		if ($premio_exp > 0) {
+			$moderacion['RAZON'] = "Premio por post base.";
+		}
+	}
+	
+	// Buscamos si ya tenía registro de premio diario
+	if ($premio) {
+		$sql_array_prem['cadena'] = $cadena;
+		$sql_array_prem['posts_diarios'] = $posts_diarios;
+		$sql_array_prem['premios_totales'] = $premios_totales;
+		
+		$sql = "UPDATE " . PREMIO_DIARIO_TABLE . " SET " .
+				$db->sql_build_array('UPDATE', $sql_array_prem) .
+					" WHERE pj_id = '$pj_id'";
+		$db->sql_query($sql);
+	}
+	else {
+		//No existen datos en las tablas por tanto, es el primer registro.
+		$moderacion['RAZON'] = "Premio diario, primer post de rol ♥.";
+		$sql = "INSERT INTO " . PREMIO_DIARIO_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_array_prem);
+		$db->sql_query($sql);
+	}
+	
+	// Si hay premios, se registra una moderación
+	if ($premio_exp > 0 || $premio_pa > 0) {
+		$moderacion['ADD_PUNTOS_EXPERIENCIA'] = $premio_exp;
+		$moderacion['ADD_PUNTOS_APRENDIZAJE'] = $premio_pa;
+		registrar_moderacion($moderacion, $user_id);
+	}
+}
 
-            //Insert Moderacion y premios totales
-            $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
-            $db->sql_query($sql);
-            registrar_moderacion($moderacion, $user_id);
-          }
-      } else{
-        //La cadena aún no es suficiente para premio especial
-        $sql_array_prem_totales['cadena'] = $cadena_totales+1;
-        $sql_array_prem_totales['premios_darios_totales'] = $premios_diarios_totales;
-
-        //Insert premios totales
-        $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
-      }
-    }
-  }
-  //No existen datos en las tablas por tanto, es el primer registro.
-  else{
-    //Primera vez que postea nunca, asignamos variables a los array
-    $sql_array_prem['premios_totales'] = 1;
-    $sql_array_prem['cadena'] = 1;
-    $sql_array_prem_totales['cadena'] = 1;
-    $sql_array_prem_totales['premios_darios_totales'] = 1;
-
-    $moderacion['RAZON'] = "Premio diario, primer post de rol.";
-    $moderacion['ADD_PUNTOS_EXPERIENCIA'] = 5;
-    $moderacion['ADD_PUNTOS_APRENDIZAJE'] = 0;
-
-    $sql = "INSERT INTO ".PREMIOS_TABLE. $db->sql_build_array('INSERT', $sql_array_prem);
-    $sql = "INSERT INTO ".TOTALES_TABLE. $db->sql_build_array('INSERT', $sql_array_prem_totales);
-    $db->sql_query($sql);
-    registrar_moderacion($moderacion, $user_id);
-  }
+function get_premio_diario_status($pj_id) {
+	$fecha_hoy = new DateTime('today');
+	$fecha_ahora = new DateTime();
+	$fecha_ayer = new DateTime('yesterday');
+	$fecha_manana = new DateTime('tomorrow');
+	
+	$tiempo_faltante = date_diff($fecha_ahora, $fecha_manana);
+	$tiempo_faltante_str = str_pad($tiempo_faltante->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($tiempo_faltante->i, 2, '0', STR_PAD_LEFT);
+	
+	$cadena_ok = $posts_diarios_ok = false;
+	
+	// obtener los datos de premio diario del personaje
+	$premio = premio_exists($pj_id);
+	
+	// si nunca hizo un post de rol, llenar todo en 0 con fecha de ayer
+	if (!$premio) {
+		$premio = array(
+			'pj_id'				=> $pj_id,
+			'cadena'			=> 0,
+			'posts_diarios'		=> 0,
+			'premios_totales'	=> 0,
+			'fecha'				=> $fecha_ayer,
+		);
+	}
+	else {
+		// si su último post no es de hoy, no tiene posts diarios
+		if (date_create(date($premio['fecha'])) != $fecha_hoy) {
+			$premio['posts_diarios'] = 0;
+		}
+		else {
+			// si su último post es de hoy, ya cumplió la cadena del día
+			$cadena_ok = true;
+			if ($premio['posts_diarios'] >= PREMIO_POST_BASE_MAX) {
+				// si llegó a los 10 posts de hoy, cumplió los posts diarios
+				$posts_diarios_ok = true;
+			}
+		}
+	}
+	
+	$premio_help_str = "Tan solo postear en un tema de rol otorga una recompensa instantánea. El primer post de cada día otorga ".PREMIO_CADENA_BASE_EXP." Exp, y al acumular ".PREMIO_CADENA_COMPLETA_CANTIDAD." días consecutivos, ¡ganas ".PREMIO_CADENA_COMPLETA_EXP." Exp y ".PREMIO_CADENA_COMPLETA_PA." PA! Además, todos los posts después del primero, hasta un máximo de ".PREMIO_POST_BASE_MAX." por día, otorgan ".PREMIO_POST_BASE_EXP." Exp extra. Y por si fuera poco, cada vez que acumulas ".PREMIO_TOTALES_INTERVALO." premios diarios, ganas ".PREMIO_TOTALES_EXP." Exp y ".PREMIO_TOTALES_PA." PA. ¡No esperes más y ve a rolear!";
+	
+	$result = array(
+		'PREMIO_CADENA'				=> $premio['cadena'],
+		'PREMIO_POSTS_DIARIOS'		=> $premio['posts_diarios'],
+		'PREMIO_PREMIOS_TOTALES'	=> $premio['premios_totales'],
+		'PREMIO_CADENA_OK'			=> $cadena_ok,
+		'PREMIO_POSTS_DIARIOS_OK'	=> $posts_diarios_ok,
+		'PREMIO_CADENA_MAX'			=> PREMIO_CADENA_COMPLETA_CANTIDAD,
+		'PREMIO_POSTS_DIARIOS_MAX'	=> PREMIO_POST_BASE_MAX,
+		'PREMIO_TIEMPO_FALTANTE'	=> $tiempo_faltante_str,
+		'PREMIO_HELP'				=> $premio_help_str,
+	);
+	
+	return $result;
 }
