@@ -30,7 +30,7 @@ function getCookie(name) {
 }
 
 function eraseCookie(name) {   
-    document.cookie = name+'=; Max-Age=-99999999;';  
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 function toggleCookieExpandir(cat) {
@@ -1047,6 +1047,23 @@ jQuery(function($) {
 	if (getCookie('SFWmode') == 1) {
 		document.body.className += ' sfw'; 
 		document.title = document.title.replace('Shinobi Legacy', 'Wikipedia');
+	}
+	
+	//Mensaje Premio Diario
+	var premio_text = getCookie('premio_diario_msg');
+	if (premio_text != null) {
+		var pop_mensaje = $('#premio-diario-msg').first();
+		
+		premio_text = unescape(premio_text.split('+').join(' ')).split('Â').join('');
+		
+		pop_mensaje.html(premio_text);
+		pop_mensaje.fadeIn('fast');
+		
+		eraseCookie('premio_diario_msg');
+		
+		setTimeout(function(){
+			$('#premio-diario-msg').fadeOut('slow');
+		},5000);
 	}
 
 	parseDocument($('body'));

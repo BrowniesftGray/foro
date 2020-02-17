@@ -848,6 +848,7 @@ if ($submit || $preview || $refresh)
 	$post_data['diff_pv']			= $request->variable('diff_pv', 0, true);	
 	$post_data['diff_pc']			= $request->variable('diff_pc', 0, true);
 	$post_data['diff_sta']			= $request->variable('diff_sta', 0, true);
+	$post_data['user_id_premio']	= $request->variable('user_id_premio', 0, true);
 
 	$post_data['username']			= $request->variable('username', $post_data['username'], true);
 	$post_data['post_edit_reason']	= ($request->variable('edit_reason', false, false, \phpbb\request\request_interface::POST) && $mode == 'edit' && $auth->acl_get('m_edit', $forum_id)) ? $request->variable('edit_reason', '', true) : '';
@@ -1401,6 +1402,7 @@ if ($submit || $preview || $refresh)
 				'diff_pv'				=> (int)$post_data['diff_pv'],
 				'diff_pc'				=> (int)$post_data['diff_pc'],
 				'diff_sta'				=> (int)$post_data['diff_sta'],
+				'user_id_premio'		=> (int)$post_data['user_id_premio'],
 
 				'topic_visibility'			=> (isset($post_data['topic_visibility'])) ? $post_data['topic_visibility'] : false,
 				'post_visibility'			=> (isset($post_data['post_visibility'])) ? $post_data['post_visibility'] : false,
@@ -1840,6 +1842,26 @@ if ($is_rpg_forum)
 	}
 }
 
+// Cuentas enlazadas Staff
+$is_staff = in_array($user->data['group_id'], array(4, 5, 18));	// mod, admin o lider mod
+$linked_pjs_options = '';
+
+if ($is_staff && ($mode == 'post' || $mode == 'reply')) {
+	$sql_pjs = 'SELECT p.user_id, p.nombre
+				FROM phpbby1_flerex_linkedaccounts L
+					INNER JOIN '.PERSONAJES_TABLE.' p
+						ON p.user_id = L.linked_user_id
+				WHERE p.activo = 1 
+					AND L.user_id = '.$post_data['poster_id'].'
+				ORDER BY p.nombre';
+				
+	$query_pjs = $db->sql_query($sql_pjs);
+	while ($row_pjs = $db->sql_fetchrow($query_pjs)) {
+		$linked_pjs_options .= "<option value='" . $row_pjs['user_id'] . "'>" . $row_pjs['nombre'] . "</option>";
+	}
+	$db->sql_freeresult($query_pjs);
+}
+
 // Build array of variables for main posting page
 $page_data = array(
 	'L_POST_A'					=> $page_title,
@@ -1874,12 +1896,14 @@ $page_data = array(
 	
 	// mgomez // 27-12-2018
 	'S_ROLEPLAY_FORUM'		=> $is_rpg_forum,
+	'IS_STAFF'				=> $is_staff,
 	'PJ_DIFF_PV'			=> (int)$post_data['diff_pv'],
 	'PJ_DIFF_PC'			=> (int)$post_data['diff_pc'],
 	'PJ_DIFF_STA'			=> (int)$post_data['diff_sta'],
 	'PJ_PV_OLD'				=> (isset($row_stats) ? (int)$row_stats['pv'] : 0),
 	'PJ_PC_OLD'				=> (isset($row_stats) ? (int)$row_stats['pc'] : 0),
 	'PJ_STA_OLD'			=> (isset($row_stats) ? (int)$row_stats['sta'] : 0),
+	'LINKED_PJS_OPTIONS'	=> $linked_pjs_options,
 
 	'S_PRIVMSGS'				=> false,
 	'S_CLOSE_PROGRESS_WINDOW'	=> (isset($_POST['add_file'])) ? true : false,

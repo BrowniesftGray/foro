@@ -1443,12 +1443,6 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 	global $db, $user;
 	$fecha_post = new DateTime('today');
 	
-	if ($user_id != 520) return false;	// TEST_MGO
-	
-	// RPG forum	
-	$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
-	if(!$forum_rol_data['onrol']) return false;
-	
 	$premio_pa = 0;
 	$premio_exp = 0;
 
@@ -1513,7 +1507,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 		}
 		
 		$moderacion['RAZON'] = "Premio diario, $cadena día(s).";
-		$mensaje = "Premio diario por $cadena día(s).";
+		$mensaje = "¡Premio diario obtenido!";
 		
 		// dependiendo de la cadena, se suma el premio diario
 		if ($cadena == PREMIO_CADENA_COMPLETA_CANTIDAD) {
@@ -1534,7 +1528,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 			$premio_pa += PREMIO_TOTALES_PA;
 			
 			$moderacion['RAZON'] .= "Más $premios_totales premios totales.";
-			$mensaje .= "<br/>¡Premio extra por $premios_totales días totales!";
+			$mensaje .= "<br/>¡Bono extra por $premios_totales premios totales!";
 		}
     }
     else {
@@ -1601,9 +1595,14 @@ function get_premio_diario_status($pj_id) {
 		);
 	}
 	else {
+		$fecha_ultimo_premio = date_create(date($premio['fecha']));
 		// si su último post no es de hoy, no tiene posts diarios
-		if (date_create(date($premio['fecha'])) != $fecha_hoy) {
+		if ($fecha_ultimo_premio != $fecha_hoy) {
 			$premio['posts_diarios'] = 0;
+			
+			if ($fecha_ultimo_premio < $fecha_ayer) {
+				$premio['cadena'] = 0;
+			}
 		}
 		else {
 			// si su último post es de hoy, ya cumplió la cadena del día

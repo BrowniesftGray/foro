@@ -1623,6 +1623,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				'diff_pv'			=> $data_ary['diff_pv'],
 				'diff_pc'			=> $data_ary['diff_pc'],
 				'diff_sta'			=> $data_ary['diff_sta'],
+				'user_id_premio'	=> $data_ary['user_id_premio'],
 			);
 		break;
 
@@ -1698,7 +1699,8 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				// mgomez // 26-12-2018
 				'diff_pv'			=> $data_ary['diff_pv'],
 				'diff_pc'			=> $data_ary['diff_pc'],
-				'diff_sta'			=> $data_ary['diff_sta'])
+				'diff_sta'			=> $data_ary['diff_sta'],
+				)
 			);
 
 			if ($update_message)
@@ -1933,10 +1935,34 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 		}
 		
 		// Datos del pj referentes al post // mgomez // 26-12-2018
-		store_pj_data($data_ary);
 		
-		if (strlen($sql_data[POSTS_TABLE]['post_text']) >= PREMIO_CARACTERES_MIN) {
-			registrar_premio_diario($user->data['user_id']);
+	
+		// RPG forum
+		$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
+		
+		if($forum_rol_data['onrol']) {
+			// guardar stats del post
+			store_pj_data($data_ary);
+		
+			// si supera los caracteres mínimos para premio diario
+			if (strlen($data_ary['message']) >= PREMIO_CARACTERES_MIN) {
+				$mensaje = false;
+				// obtiene el usuario que postea
+				$user_id_premio = $user->data['user_id'];
+				
+				// si seleccionó cuenta enlazada, utiliza otro usuario
+				if ((int)$data_ary['user_id_premio'] > 0) {
+					$user_id_premio = (int)$data_ary['user_id_premio'];
+				}
+				
+				// registra premio
+				registrar_premio_diario($user_id_premio, $mensaje);
+				
+				// guarda cookie con mensaje del premio
+				if ($mensaje) {
+					setcookie('premio_diario_msg', $mensaje, time()+30);
+				}
+			}
 		}
 		
 		unset($sql_data[POSTS_TABLE]['sql']);
