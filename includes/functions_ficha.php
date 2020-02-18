@@ -998,7 +998,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
 	$mod = $user->data['username'];
-	$fecha = date('Y-m-d' );
+	$fecha = date('Y-m-d h:i:s');
 
 	// if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 	// 	comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
