@@ -1843,17 +1843,24 @@ if ($is_rpg_forum)
 }
 
 // Cuentas enlazadas Staff
-$is_staff = in_array($user->data['group_id'], array(4, 5, 18));	// mod, admin o lider mod
+$puede_asociar = in_array($user->data['group_id'], array(4, 5, 13, 18));	//NPC, mod, admin o lider mod
 $linked_pjs_options = '';
 
-if ($is_staff && ($mode == 'post' || $mode == 'reply')) {
+if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
 	$sql_pjs = 'SELECT p.user_id, p.nombre
 				FROM phpbby1_flerex_linkedaccounts L
 					INNER JOIN '.PERSONAJES_TABLE.' p
 						ON p.user_id = L.linked_user_id
 				WHERE p.activo = 1 
 					AND L.user_id = '.$post_data['poster_id'].'
-				ORDER BY p.nombre';
+				UNION
+				SELECT p.user_id, p.nombre
+					FROM phpbby1_flerex_linkedaccounts L
+						INNER JOIN '.PERSONAJES_TABLE.' p
+							ON p.user_id = L.user_id
+					WHERE p.activo = 1 
+						AND L.linked_user_id = '.$post_data['poster_id'].'
+				ORDER BY nombre';
 				
 	$query_pjs = $db->sql_query($sql_pjs);
 	while ($row_pjs = $db->sql_fetchrow($query_pjs)) {
@@ -1896,7 +1903,7 @@ $page_data = array(
 	
 	// mgomez // 27-12-2018
 	'S_ROLEPLAY_FORUM'		=> $is_rpg_forum,
-	'IS_STAFF'				=> $is_staff,
+	'PUEDE_ASOCIAR'			=> $puede_asociar,
 	'PJ_DIFF_PV'			=> (int)$post_data['diff_pv'],
 	'PJ_DIFF_PC'			=> (int)$post_data['diff_pc'],
 	'PJ_DIFF_STA'			=> (int)$post_data['diff_sta'],
