@@ -997,6 +997,25 @@ h4.topic-subtitle {
     margin-left: 3px;
 }
 
+div#premio-diario-msg {
+    background: #52c16c;
+    border-left: #28a745 solid 2px;
+    border-top: #28a745 solid 2px;
+    border-top-left-radius: 10px;
+    bottom: 0;
+    box-shadow: -3px -2px 7px rgba(0, 0, 0, .2);
+    color: #fff;
+	cursor: pointer;
+    font-size: 12px;
+    height: 40px;
+    padding: 10px;
+	position: fixed;
+    right: 0;
+    text-align: center;
+	width: 200px;
+    z-index: 999;
+}
+
 /* Sub-Header Personaje
 -----------------------------------------*/
 

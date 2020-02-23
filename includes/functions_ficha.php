@@ -998,7 +998,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
 	$mod = $user->data['username'];
-	$fecha = date('Y-m-d' );
+	$fecha = date('Y-m-d h:i:s');
 
 	// if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 	// 	comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
@@ -1438,16 +1438,10 @@ function premio_exists($pj_id)
 	}
 }
 
-function registrar_premio_diario($user_id, &$mensaje = false)
+function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 {
 	global $db, $user;
 	$fecha_post = new DateTime('today');
-	
-	if ($user_id != 520) return false;	// TEST_MGO
-	
-	// RPG forum	
-	$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
-	if(!$forum_rol_data['onrol']) return false;
 	
 	$premio_pa = 0;
 	$premio_exp = 0;
@@ -1512,8 +1506,8 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 			$cadena = 1;
 		}
 		
-		$moderacion['RAZON'] = "Premio diario, $cadena día(s).";
-		$mensaje = "Premio diario por $cadena día(s).";
+		$moderacion['RAZON'] = "Premio diario, $cadena día(s). [p$post_id]";
+		$mensaje = "¡Premio diario obtenido!";
 		
 		// dependiendo de la cadena, se suma el premio diario
 		if ($cadena == PREMIO_CADENA_COMPLETA_CANTIDAD) {
@@ -1534,7 +1528,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 			$premio_pa += PREMIO_TOTALES_PA;
 			
 			$moderacion['RAZON'] .= "Más $premios_totales premios totales.";
-			$mensaje .= "<br/>¡Premio extra por $premios_totales días totales!";
+			$mensaje .= "<br/>¡Bono extra por $premios_totales premios totales!";
 		}
     }
     else {
@@ -1546,7 +1540,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 		}
 		
 		if ($premio_exp > 0) {
-			$moderacion['RAZON'] = "Premio por post base.";
+			$moderacion['RAZON'] = "Premio por post base. [p$post_id]";
 		}
 	}
 	
@@ -1563,7 +1557,7 @@ function registrar_premio_diario($user_id, &$mensaje = false)
 	}
 	else {
 		//No existen datos en las tablas por tanto, es el primer registro.
-		$moderacion['RAZON'] = "Premio diario, primer post de rol ♥.";
+		$moderacion['RAZON'] = "Premio diario, primer post de rol ♥. [p$post_id]";
 		$sql = "INSERT INTO " . PREMIO_DIARIO_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_array_prem);
 		$db->sql_query($sql);
 	}
@@ -1582,6 +1576,7 @@ function get_premio_diario_status($pj_id) {
 	$fecha_ayer = new DateTime('yesterday');
 	$fecha_manana = new DateTime('tomorrow');
 	
+	// calcular el tiempo faltante para el reinicio
 	$tiempo_faltante = date_diff($fecha_ahora, $fecha_manana);
 	$tiempo_faltante_str = str_pad($tiempo_faltante->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($tiempo_faltante->i, 2, '0', STR_PAD_LEFT);
 	
@@ -1601,20 +1596,29 @@ function get_premio_diario_status($pj_id) {
 		);
 	}
 	else {
+		$fecha_ultimo_premio = date_create(date($premio['fecha']));
+		
 		// si su último post no es de hoy, no tiene posts diarios
-		if (date_create(date($premio['fecha'])) != $fecha_hoy) {
+		if ($fecha_ultimo_premio != $fecha_hoy) {
 			$premio['posts_diarios'] = 0;
+			
+			// si lleva más de un día sin postear, no tiene cadena
+			if ($fecha_ultimo_premio < $fecha_ayer) {
+				$premio['cadena'] = 0;
+			}
 		}
 		else {
 			// si su último post es de hoy, ya cumplió la cadena del día
 			$cadena_ok = true;
+			
+			// si llegó a los 10 posts de hoy, cumplió los posts diarios
 			if ($premio['posts_diarios'] >= PREMIO_POST_BASE_MAX) {
-				// si llegó a los 10 posts de hoy, cumplió los posts diarios
 				$posts_diarios_ok = true;
 			}
 		}
 	}
 	
+	// generar texto de ayuda
 	$premio_help_str = "Tan solo postear en un tema de rol otorga una recompensa instantánea. El primer post de cada día otorga ".PREMIO_CADENA_BASE_EXP." Exp, y al acumular ".PREMIO_CADENA_COMPLETA_CANTIDAD." días consecutivos, ¡ganas ".PREMIO_CADENA_COMPLETA_EXP." Exp y ".PREMIO_CADENA_COMPLETA_PA." PA! Además, todos los posts después del primero, hasta un máximo de ".PREMIO_POST_BASE_MAX." por día, otorgan ".PREMIO_POST_BASE_EXP." Exp extra. Y por si fuera poco, cada vez que acumulas ".PREMIO_TOTALES_INTERVALO." premios diarios, ganas ".PREMIO_TOTALES_EXP." Exp y ".PREMIO_TOTALES_PA." PA. ¡No esperes más y ve a rolear!";
 	
 	$result = array(

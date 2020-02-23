@@ -92,6 +92,18 @@
 			<li><label for="diff_sta">Puntos de Stamina:</label> <sta><span id="sta_old">{PJ_STA_OLD}</span></sta> + <input type="number" value="{PJ_DIFF_STA}" name="diff_sta" id="diff_sta" onchange="calcStat('sta')" onblur="calcStat('sta')" /> = <sta><span id="sta_new">{PJ_STA_OLD}</span></sta></li>
 		</ul>
 	</div>
+	
+		<!-- IF PUEDE_ASOCIAR and LINKED_PJS_OPTIONS -->
+		<div id="pjs-box" class="stats-box">
+			<h3>Asociar Premio Diario</h3>
+			<label for="user_id_premio">Personaje:</label>
+			<select id="user_id_premio" name="user_id_premio">
+				{LINKED_PJS_OPTIONS}
+				<option value="0">-- Ninguno --</option>
+			</select>
+		</div>
+		<!-- ENDIF -->
+		
 	<!-- ENDIF -->
 	
 	<!-- EVENT posting_editor_message_after -->

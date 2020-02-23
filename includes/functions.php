@@ -4735,10 +4735,8 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		$pj_data = get_pj_data($pj_id);
 		if ($pj_data) $template->assign_vars($pj_data);
 		
-		if ($user_id == 520) {	// TEST_MGO
-			$premio_status = get_premio_diario_status($pj_id);
-			if ($premio_status) $template->assign_vars($premio_status);
-		}
+		$premio_status = get_premio_diario_status($pj_id);
+		if ($premio_status) $template->assign_vars($premio_status);
 	}
 
 	$http_headers = array();
