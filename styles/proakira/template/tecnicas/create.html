@@ -66,7 +66,8 @@
             <div class="form-group row">
               <label for="requisitos" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
+                  <!-- <li><input type="button" onclick="insertHtmlBeforeSelection('#')" value='Funciona por favor'></input>  -->
+                    abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
                   <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
                   <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
                   <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
@@ -74,6 +75,7 @@
                 </ul>
               </label>
               <div class="col-6">
+                <!-- <div contenteditable="true" class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></div> -->
                   <textarea class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></textarea>
               </div>
             </div>
@@ -137,4 +139,43 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+var insertHtmlBeforeSelection, insertHtmlAfterSelection;
+
+(function() {
+    function createInserter(isBefore) {
+        return function(html) {
+            var sel, range, node;
+            if (window.getSelection) {
+                // IE9 and non-IE
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    range = window.getSelection().getRangeAt(0);
+                    
+                    range.collapse(isBefore);
+        
+                    // Range.createContextualFragment() would be useful here but is
+                    // non-standard and not supported in all browsers (IE9, for one)
+                    var el = document.createElement("div");
+                    el.innerHTML = html;
+                    var frag = document.createDocumentFragment(), node, lastNode;
+                    while ( (node = el.firstChild) ) {
+                        lastNode = frag.appendChild(node);
+                    }
+                    range.insertNode(frag);
+                }
+            } else if (document.selection && document.selection.createRange) {
+                // IE < 9
+                range = document.selection.createRange();
+                range.collapse(isBefore);
+                range.pasteHTML(html);
+            }
+        }
+    }
+    
+    insertHtmlBeforeSelection = createInserter(true);
+    insertHtmlAfterSelection = createInserter(false);
+})();
+</script>
 <!-- INCLUDE overall_footer.html -->
