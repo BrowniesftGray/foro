@@ -1884,9 +1884,6 @@ if ($is_rpg_forum)
 	if ($row = $db->sql_fetchrow($query)) {
 		$post_data['tipo_id'] = $row['tipo_id'];
 		$post_data['rango_id'] = $row['rango_id'];
-	} else {
-		$post_data['tipo_id'] = 0;
-		$post_data['rango_id'] = 0;		
 	}
 	$db->sql_freeresult($query);
 
