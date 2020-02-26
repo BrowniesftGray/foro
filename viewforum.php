@@ -912,6 +912,7 @@ if (count($topic_list))
 								ON tt.tipo_id = t.tipo_id
 							LEFT JOIN ".RANGOS_TABLE." r
 								ON r.rango_id = t.rango_id
+								AND tt.tiene_rango = 1
  						WHERE topic_id = $topic_id";
 		$query_tipo = $db->sql_query($sql_tipo);
 		$row_tipo = $db->sql_fetchrow($query_tipo);
