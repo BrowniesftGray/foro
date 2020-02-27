@@ -82,6 +82,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 	if ($post_id > 0) {
 		$sql = "SELECT
 					pj.*,
+					p.rama_id_pri,
 					p.nombre,
 					m.nombre as clan,
 					CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
