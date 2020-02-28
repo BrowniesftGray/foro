@@ -2,6 +2,8 @@
 
 namespace gray\moderacion\controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 require_once('/home/shinobil/public_html/includes/functions_user.php');
 
 class main
@@ -91,21 +93,75 @@ class main
         return "<br /><a href='/moderacion'>Volver</a>.";
     }
 
-    public function get_participantes($topic_id){
+    public function get_participantes($topic_id = 0){
       
-      $sql = "SELECT DISTINCT
-                u.user_id,
-                u.username
-              FROM phpbby1_posts AS p
-              INNER JOIN phpbby1_users AS u
-                ON u.user_id = p.poster_id
-              WHERE p.topic_id = $topic_id";
+      $es_post = false;
 
+      if ($topic_id == 0) {
+        $topic_id = request_var('topic_id', '0');
+        $topic_id = str_replace("#", "-", $topic_id);
+
+        //Comprobaciones, tema o post
+        $comprobacion = explode("-p", $topic_id);
+        if (count($comprobacion) > 1) {
+          $es_post = true;
+        }else{
+          $es_post = false;
+        }
+
+        if ($es_post == true) {
+          $topic_id = explode("-p", $topic_id);
+          $cuenta_topic = count($topic_id)-1;
+          $tema = $topic_id[$cuenta_topic];
+        }
+        else{
+          $topic_id = explode("-t", $topic_id);
+          $cuenta_topic = count($topic_id)-1;
+          $comprobacion = explode("/", $topic_id[$cuenta_topic]);
+          if (count($comprobacion) > 1) {
+            $tema = $comprobacion[0];
+          }else{
+            $tema = $topic_id[$cuenta_topic];
+          }
+        }
+      }
+
+      // echo "post id:".$tema."<br>";
+      if ($es_post == true) {
+        $sql = "SELECT topic_id 
+                FROM phpbby1_posts
+                WHERE post_id = $tema
+                LIMIT 1";
+
+        $query = $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($query);
+        $tema = $row['topic_id'];
+        
+      }
+
+      $sql = "SELECT DISTINCT
+              u.user_id,
+              u.username
+            FROM phpbby1_posts AS p
+            INNER JOIN phpbby1_users AS u
+              ON u.user_id = p.poster_id
+            WHERE p.topic_id = $tema";
       $query = $this->db->sql_query($sql);
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<option value='" . $row['user_id'] . "'>" . $row['username'] . "</option>";
       }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
 
     }
 
@@ -188,4 +244,5 @@ class main
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
     }
+
 }

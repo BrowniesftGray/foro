@@ -1,3 +1,7 @@
 gray_moderacion_home:
     path: /mod
     defaults: { _controller: gray.moderacion.controller:handle }
+
+gray_moderacion_participantes:
+    path: /moderacion/participantes
+    defaults: { _controller: gray.moderacion.controller:get_participantes }
