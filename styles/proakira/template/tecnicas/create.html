@@ -66,12 +66,26 @@
             <div class="form-group row">
               <label for="requisitos" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <!-- <li><input type="button" onclick="insertHtmlBeforeSelection('#')" value='Funciona por favor'></input>  -->
-                    abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
-                  <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
-                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" onclick="insertAtCaret('requisitos', '#/#');return false;" value='UL/UL'></input> 
+                    <input type="button" onclick="insertAtCaret('requisitos', '#');return false;" value='UL'></input> 
+                    <input type="button" onclick="insertAtCaret('requisitos', '/#');return false;" value='/UL'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('requisitos', '$/$');return false;" value='LI/LI'></input>
+                    <input type="button" onclick="insertAtCaret('requisitos', '$');return false;" value='LI'></input>
+                    <input type="button" onclick="insertAtCaret('requisitos', '/$');return false;" value='/LI'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('requisitos', '!/!');return false;" value='PV/PV'></input>
+                    <input type="button" onclick="insertAtCaret('requisitos', '!');return false;" value='PV'></input> 
+                    <input type="button" onclick="insertAtCaret('requisitos', '/!');return false;" value='/PV'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('requisitos', '@/@');return false;" value='PC/PC'></input>
+                    <input type="button" onclick="insertAtCaret('requisitos', '@');return false;" value='PC'></input> 
+                    <input type="button" onclick="insertAtCaret('requisitos', '/@');return false;" value='/PC'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('requisitos', '|/|');return false;" value='STA/STA'></input>
+                    <input type="button" onclick="insertAtCaret('requisitos', '|');return false;" value='STA'></input> 
+                    <input type="button" onclick="insertAtCaret('requisitos', '/|');return false;" value='/STA'></input> </li>
+                    <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
+                    <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
+                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
+                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
+                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
                 </ul>
               </label>
               <div class="col-6">
@@ -83,6 +97,21 @@
             <div class="form-group row">
               <label for="efectos" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
+                  <li><input type="button" onclick="insertAtCaret('efectos', '#/#');return false;" value='UL/UL'></input> 
+                  <input type="button" onclick="insertAtCaret('efectos', '#');return false;" value='UL'></input> 
+                  <input type="button" onclick="insertAtCaret('efectos', '/#');return false;" value='/UL'></input> </li>
+                  <li><input type="button" onclick="insertAtCaret('efectos', '$/$');return false;" value='LI/LI'></input>
+                  <input type="button" onclick="insertAtCaret('efectos', '$');return false;" value='LI'></input>
+                  <input type="button" onclick="insertAtCaret('efectos', '/$');return false;" value='/LI'></input> </li>
+                  <li><input type="button" onclick="insertAtCaret('efectos', '!/!');return false;" value='PV/PV'></input>
+                  <input type="button" onclick="insertAtCaret('efectos', '!');return false;" value='PV'></input> 
+                  <input type="button" onclick="insertAtCaret('efectos', '/!');return false;" value='/PV'></input> </li>
+                  <li><input type="button" onclick="insertAtCaret('efectos', '@/@');return false;" value='PC/PC'></input>
+                  <input type="button" onclick="insertAtCaret('efectos', '@');return false;" value='PC'></input> 
+                  <input type="button" onclick="insertAtCaret('efectos', '/@');return false;" value='/PC'></input> </li>
+                  <li><input type="button" onclick="insertAtCaret('efectos', '|/|');return false;" value='STA/STA'></input>
+                  <input type="button" onclick="insertAtCaret('efectos', '|');return false;" value='STA'></input> 
+                  <input type="button" onclick="insertAtCaret('efectos', '/|');return false;" value='/STA'></input> </li>
                   <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
                   <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
                   <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
@@ -98,9 +127,19 @@
             <div class="form-group row">
               <label for="damage" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" onclick="insertAtCaret('damage', '!/!');return false;" value='PV/PV'></input>
+                    <input type="button" onclick="insertAtCaret('damage', '!');return false;" value='PV'></input> 
+                    <input type="button" onclick="insertAtCaret('damage', '/!');return false;" value='/PV'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('damage', '@/@');return false;" value='PC/PC'></input>
+                    <input type="button" onclick="insertAtCaret('damage', '@');return false;" value='PC'></input> 
+                    <input type="button" onclick="insertAtCaret('damage', '/@');return false;" value='/PC'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('damage', '|/|');return false;" value='STA/STA'></input>
+                    <input type="button" onclick="insertAtCaret('damage', '|');return false;" value='STA'></input> 
+                    <input type="button" onclick="insertAtCaret('damage', '/|');return false;" value='/STA'></input> </li>
+                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
+                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
+                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  </ul>
                 </ul>
               </label>
               <div class="col-6">
@@ -111,9 +150,18 @@
             <div class="form-group row">
               <label for="coste" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" onclick="insertAtCaret('coste', '!/!');return false;" value='PV/PV'></input>
+                    <input type="button" onclick="insertAtCaret('coste', '!');return false;" value='PV'></input> 
+                    <input type="button" onclick="insertAtCaret('coste', '/!');return false;" value='/PV'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('coste', '@/@');return false;" value='PC/PC'></input>
+                    <input type="button" onclick="insertAtCaret('coste', '@');return false;" value='PC'></input> 
+                    <input type="button" onclick="insertAtCaret('coste', '/@');return false;" value='/PC'></input> </li>
+                    <li><input type="button" onclick="insertAtCaret('coste', '|/|');return false;" value='STA/STA'></input>
+                    <input type="button" onclick="insertAtCaret('coste', '|');return false;" value='STA'></input>
+                    <input type="button" onclick="insertAtCaret('coste', '/|');return false;" value='/STA'></input> </li>
+                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
+                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
+                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
                 </ul>
               </label>
               <div class="col-6">
@@ -141,41 +189,43 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script>
-var insertHtmlBeforeSelection, insertHtmlAfterSelection;
+function insertAtCaret(areaId, text) {
+  var txtarea = document.getElementById(areaId);
+  if (!txtarea) {
+    return;
+  }
 
-(function() {
-    function createInserter(isBefore) {
-        return function(html) {
-            var sel, range, node;
-            if (window.getSelection) {
-                // IE9 and non-IE
-                sel = window.getSelection();
-                if (sel.getRangeAt && sel.rangeCount) {
-                    range = window.getSelection().getRangeAt(0);
-                    
-                    range.collapse(isBefore);
-        
-                    // Range.createContextualFragment() would be useful here but is
-                    // non-standard and not supported in all browsers (IE9, for one)
-                    var el = document.createElement("div");
-                    el.innerHTML = html;
-                    var frag = document.createDocumentFragment(), node, lastNode;
-                    while ( (node = el.firstChild) ) {
-                        lastNode = frag.appendChild(node);
-                    }
-                    range.insertNode(frag);
-                }
-            } else if (document.selection && document.selection.createRange) {
-                // IE < 9
-                range = document.selection.createRange();
-                range.collapse(isBefore);
-                range.pasteHTML(html);
-            }
-        }
-    }
-    
-    insertHtmlBeforeSelection = createInserter(true);
-    insertHtmlAfterSelection = createInserter(false);
-})();
+  var scrollPos = txtarea.scrollTop;
+  var strPos = 0;
+  var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+    "ff" : (document.selection ? "ie" : false));
+  if (br == "ie") {
+    txtarea.focus();
+    var range = document.selection.createRange();
+    range.moveStart('character', -txtarea.value.length);
+    strPos = range.text.length;
+  } else if (br == "ff") {
+    strPos = txtarea.selectionStart;
+  }
+
+  var front = (txtarea.value).substring(0, strPos);
+  var back = (txtarea.value).substring(strPos, txtarea.value.length);
+  txtarea.value = front + text + back;
+  strPos = strPos + text.length;
+  if (br == "ie") {
+    txtarea.focus();
+    var ieRange = document.selection.createRange();
+    ieRange.moveStart('character', -txtarea.value.length);
+    ieRange.moveStart('character', strPos);
+    ieRange.moveEnd('character', 0);
+    ieRange.select();
+  } else if (br == "ff") {
+    txtarea.selectionStart = strPos;
+    txtarea.selectionEnd = strPos;
+    txtarea.focus();
+  }
+
+  txtarea.scrollTop = scrollPos;
+}
 </script>
 <!-- INCLUDE overall_footer.html -->

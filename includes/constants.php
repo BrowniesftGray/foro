@@ -368,3 +368,8 @@ define('BANNER_FORO_ONROL',						1);
 define('BANNER_FORO_ONROL_GRANDE',				2);
 define('BANNER_FORO_OFFROL',					3);
 define('BANNER_FORO_ESTANDAR',					4);
+
+// Revisiones constant
+define('REVISIONES',						'revisiones');
+define('TIPO_REVISIONES',					'tipo de revisiones');
+define('COMENTARIOS_REVISIONES',			'comentarios de revisiones');

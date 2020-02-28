@@ -1,0 +1,240 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
+ <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+<!--  -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="/styles/proakira/theme/w3.css?v=1.0.3" type="text/css"> -->
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.93" type="text/css">
+
+<div class="container">
+  <strong><ul class="nav nav-tabs mb-3">
+    <li>
+      <a class="nav-link" id="tabs-act-ficha" data-toggle="tab" href="#activacion_ficha" role="tab" aria-controls="activacion_ficha" aria-selected="false">Activación de Ficha</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-rev-ficha" data-toggle="tab" href="#revision_ficha" role="tab" aria-controls="revision_ficha" aria-selected="false">Revisión de Ficha</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-rev-tema" href="#revision_tema" data-toggle="tab" role="tab" aria-controls="revision_tema" aria-selected="false">Revisión de Temas</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-rev-misiones" data-toggle="tab" href="#revision_misiones" role="tab" aria-controls="revision_misiones" aria-selected="false">Revisión de Misiones</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-mod-combate" data-toggle="tab" href="#moderacion_combate" role="tab" aria-controls="moderacion_combate" aria-selected="false">Moderación de Combate</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-patreon" data-toggle="tab" href="#patreon" role="tab" aria-controls="patreon" aria-selected="false">Beneficios de Patreon</a>
+    </li>
+    <li>
+      <a class="nav-link" id="tabs-sol-encargo" data-toggle="tab" href="#solicitud_encargo" role="tab" aria-controls="solicitud_encargo" aria-selected="false">Petición de Encargos</a>
+    </li>
+  </ul></strong>
+
+  <div class="tab-content" id="tabs-tabContent">
+    <div class="col-md-12 card tab-pane fade" id="revision_ficha" role="tabpanel" aria-labelledby="tabs-rev-ficha-tab">
+      <h3>Revisión de Ficha</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label class="col-3 col-form-label text-md-left" for="asunto_rev_ficha">Asunto</label> 
+            <div class="col-5">
+              <input id="asunto_rev_ficha" name="asunto_rev_ficha" type="text" required="required" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="enlace_rev_ficha" class="col-3 col-form-label text-md-left">Enlaces de interés</label> 
+            <div class="col-5">
+              <input id="enlace_rev_ficha" name="enlace_rev_ficha" type="text" required="required" class="form-control">
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="revision_tema" role="tabpanel" aria-labelledby="tabs-rev-tema-tab">
+      <h3>Revisión de Tema</h3><br> 
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="rev_tema_tipo" class="col-3 col-form-label text-md-left">Tipo de Tema</label> 
+            <div class="col-5">
+              <select id="rev_tema_tipo" name="rev_tema_tipo" class="custom-select required="required">
+                <option value="Combate">Combate</option>
+                <option value="Social">Social</option>
+                <option value="Entrenamiento">Entrenamiento</option>
+                <option value="Crónica">Crónica</option>
+                <option value="Trabajo">Trabajo</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="rev_tema_enlace" class="col-3 col-form-label text-md-left">Enlace al Tema</label> 
+            <div class="col-5">
+              <input id="rev_tema_enlace" name="rev_tema_enlace" type="text" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="rev_tema_participantes" class="col-3 col-form-label text-md-left">Participantes</label> 
+            <div class="col-5">
+              <select multiple="multiple" id="rev_tema_participantes" name="rev_tema_participantes" class="custom-select" required="required"></select>
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="revision_misiones" role="tabpanel" aria-labelledby="tabs-rev-misiones-tab">
+      <h3>Revisión de Misiones</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="rev_mision_tipo" class="col-3 col-form-label text-md-left">Tipo de Tema</label> 
+            <div class="col-5">
+              <select id="rev_mision_tipo" name="rev_mision_tipo" required="required" class="custom-select">
+                <option value="Encargo">Misión</option>
+                <option value="Encargo">Encargo</option>
+                <option value="Trama">Trama</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="rev_mision_enlace" class="col-3 col-form-label text-md-left">Enlace al Tema</label> 
+            <div class="col-5">
+              <input id="rev_mision_enlace" name="rev_mision_enlace" type="text" required="required" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="rev_mision_gm" class="col-3 col-form-label text-md-left">Game Master</label> 
+            <div class="col-5">
+              <input id="rev_mision_gm" name="rev_mision_gm" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="rev_mision_participantes" class="col-3 col-form-label text-md-left">Participantes</label> 
+            <div class="col-5">
+              <select multiple="multiple" id="rev_mision_participantes" name="rev_mision_participantes" required="required" class="custom-select"></select>
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="moderacion_combate" role="tabpanel" aria-labelledby="tabs-mod-combate-tab">
+      <h3>Moderación de Combate</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="mod_combate_enlace" class="col-3 col-form-label text-md-left">Enlace al Tema</label> 
+            <div class="col-5">
+              <input id="mod_combate_enlace" name="mod_combate_enlace" type="text" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="mod_combate_asunto" class="col-3 col-form-label text-md-left">Argumentos</label> 
+            <div class="col-5">
+              <textarea id="mod_combate_asunto" name="mod_combate_asunto" cols="40" rows="5" class="form-control" required="required"></textarea>
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>    
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="tabs-patreon-tab">
+      <h3>Beneficios de Patreon</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="patreon_asunto" class="col-3 col-form-label text-md-left">Asunto</label> 
+            <div class="col-5">
+              <input id="patreon_asunto" name="patreon_asunto" type="text" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="patreon_enlace" class="col-3 col-form-label text-md-left">Enlaces de interés</label> 
+            <div class="col-5">
+              <input id="patreon_enlace" name="patreon_enlace" type="text" required="required" class="form-control">
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="activacion_ficha" role="tabpanel" aria-labelledby="tabs-activacion_ficha-tab">
+      <h3>Activación de Ficha</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="activacion_asunto" class="col-3 col-form-label text-md-left">Información</label> 
+            <div class="col-5">
+              <input id="activacion_asunto" name="activacion_asunto" type="text" required="required" class="form-control">
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-5">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="col-md-12 card tab-pane fade" id="solicitud_encargo" role="tabpanel" aria-labelledby="tabs-solicitud_encargo-tab">
+      <h3>Solicitud de Encargos o Trabajos</h3><br>
+      <div class="card-body">
+        <form method="POST" action="#">
+          <div class="form-group row">
+            <label for="solicitud_nombre" class="col-3 col-form-label text-md-left">Nombre Encargo/Trabajo</label> 
+            <div class="col-5">
+              <input id="solicitud_nombre" name="solicitud_nombre" type="text" required="required" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="solicitud_informacion" class="col-3 col-form-label text-md-left">Información Encargo/Trabajo</label> 
+            <div class="col-5">
+              <textarea id="solicitud_informacion" name="solicitud_informacion" cols="40" rows="5" class="form-control" required="required"></textarea>
+            </div>
+          </div> 
+          <div class="form-group row">
+            <div class="offset-4 col-8">
+              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </form>
+      </div>    
+    </div>
+  </div>
+</div>
+  <!-- jQuery CDN - Slim version (=without AJAX) -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- Popper.JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  
+  <!-- INCLUDE overall_footer.html -->
