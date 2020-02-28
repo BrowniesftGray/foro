@@ -1860,6 +1860,11 @@ if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
 							ON p.user_id = L.user_id
 					WHERE p.activo = 1 
 						AND L.linked_user_id = '.$post_data['poster_id'].'
+				UNION
+				SELECT p.user_id, p.nombre
+					FROM '.PERSONAJES_TABLE.' p
+					WHERE p.activo = 1
+						AND p.user_id = '.$post_data['poster_id'].'
 				ORDER BY nombre';
 				
 	$query_pjs = $db->sql_query($sql_pjs);
