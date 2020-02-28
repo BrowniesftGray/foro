@@ -24,7 +24,7 @@ jutsu nombre, mision titulo, bingo nombre {
 	margin-bottom: 5px;
 }
 
-jutsu tipo, jutsu rango, mision rango {
+tipo, rango {
 	display: inline-block;
 	color: #fff;
 	background: #2d986d;
@@ -37,29 +37,35 @@ jutsu tipo, jutsu rango, mision rango {
 	line-height: 11px;
 }
 
-jutsu rango, mision rango, bingo rango {
+rango, tipo[generico] {
 	background: #9e9e9e;
 	border-color: #4e4e4e;
 }
 
-jutsu tipo[tai] {
+tipo[tai], tipo[entrenamiento] {
 	background: #bf8000;
 	border-color: #715c31;
 }
 
-jutsu tipo[fuin] {
+tipo[fuin], tipo[trama] {
 	background: #6d84bf;
 	border-color: #374c82;
 }
 
-jutsu tipo[gen] {
+tipo[gen], tipo[social], tipo[cronica] {
 	background: #a58dc1;
 	border-color: #604382;
 }
 
-jutsu tipo[biju] {
+tipo[biju], tipo[combate] {
 	background: #982d2d;
 	border-color: #4e3030;
+}
+
+tipo[offrol] {
+	background: #fff;
+	border-color: #666;
+	color: #222;
 }
 
 jutsu datos {

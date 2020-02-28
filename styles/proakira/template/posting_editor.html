@@ -22,6 +22,18 @@
 
 	<!-- IF S_POST_ACTION or S_PRIVMSGS or S_EDIT_DRAFT -->
 	<dl style="clear: left;">
+		<!-- IF S_POST_ACTION and S_NEW_MESSAGE and TIPOS_TEMA_OPTIONS -->
+		<dt><label for="tipo_id">Tipo de Tema{L_COLON}</label></dt>
+		<dd>
+			<select id="tipo_id" name="tipo_id" tabindex="1">{TIPOS_TEMA_OPTIONS}</select>
+			<!-- IF RANGOS_OPTIONS -->
+			<label for="rango_id">Rango{L_COLON}</label>
+			<select id="rango_id" name="rango_id" tabindex="2">
+				{RANGOS_OPTIONS}
+			</select>
+			<!-- ENDIF -->
+		</dd>
+		<!-- ENDIF -->
 		<dt><label for="subject">{L_SUBJECT}{L_COLON}</label></dt>
 		<dd>
 			<!-- EVENT posting_editor_subject_prepend -->

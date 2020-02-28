@@ -1,0 +1,26 @@
+.habilidades {
+	background: #fff;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+	margin: 40px 20px;
+	border-radius: 5px;
+	padding: 0 10px;
+	font-size: 1.2em;
+}
+
+.habilidades-title {
+	font-size: 2.5em;
+	color: #333;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+.arquetipo-marker {
+	margin-top: -60px;
+	position: absolute;
+}
+
+.habilidades habilidad.fuera-rotacion {
+	opacity: 0.8;
+	box-shadow: none;
+}

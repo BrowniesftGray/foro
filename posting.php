@@ -849,6 +849,8 @@ if ($submit || $preview || $refresh)
 	$post_data['diff_pc']			= $request->variable('diff_pc', 0, true);
 	$post_data['diff_sta']			= $request->variable('diff_sta', 0, true);
 	$post_data['user_id_premio']	= $request->variable('user_id_premio', 0, true);
+	$post_data['tipo_id']			= $request->variable('tipo_id', 0, true);
+	$post_data['rango_id']			= $request->variable('rango_id', 0, true);
 
 	$post_data['username']			= $request->variable('username', $post_data['username'], true);
 	$post_data['post_edit_reason']	= ($request->variable('edit_reason', false, false, \phpbb\request\request_interface::POST) && $mode == 'edit' && $auth->acl_get('m_edit', $forum_id)) ? $request->variable('edit_reason', '', true) : '';
@@ -1403,6 +1405,8 @@ if ($submit || $preview || $refresh)
 				'diff_pc'				=> (int)$post_data['diff_pc'],
 				'diff_sta'				=> (int)$post_data['diff_sta'],
 				'user_id_premio'		=> (int)$post_data['user_id_premio'],
+				'tipo_id'				=> (int)$post_data['tipo_id'],
+				'rango_id'				=> (int)$post_data['rango_id'],
 
 				'topic_visibility'			=> (isset($post_data['topic_visibility'])) ? $post_data['topic_visibility'] : false,
 				'post_visibility'			=> (isset($post_data['post_visibility'])) ? $post_data['post_visibility'] : false,
@@ -1805,6 +1809,7 @@ $is_rpg_forum = $forum_rol_data['onrol'];
 
 if ($is_rpg_forum)
 {
+	// Si está respondiendo o editando un post que no es el primero del tema
 	if (in_array($mode, ['reply', 'edit']) && ($post_id != $post_data['topic_first_post_id']))
 	{
 		//Stats del post anterior
@@ -1824,6 +1829,7 @@ if ($is_rpg_forum)
 		$db->sql_freeresult($query);
 	}
 	
+	// Si está creando un tema, o editando el primer post, o posteando por primera vez en el tema
 	if ($mode == 'post' 
 		|| ($mode == 'edit' && $post_id == $post_data['topic_first_post_id'])
 		|| (in_array($mode, ['reply', 'edit']) && !isset($row_stats)))
@@ -1844,7 +1850,7 @@ if ($is_rpg_forum)
 
 // Cuentas enlazadas Staff
 $puede_asociar = in_array($user->data['group_id'], array(4, 5, 13, 18));	//NPC, mod, admin o lider mod
-$linked_pjs_options = '';
+$linked_pjs_options = $tipos_tema_options = $rangos_options = '';
 
 if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
 	$sql_pjs = 'SELECT p.user_id, p.nombre
@@ -1872,6 +1878,59 @@ if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
 		$linked_pjs_options .= "<option value='" . $row_pjs['user_id'] . "'>" . $row_pjs['nombre'] . "</option>";
 	}
 	$db->sql_freeresult($query_pjs);
+}
+
+// Tipo de tema y rango
+if ($is_rpg_forum)
+{
+	// Obtener si el tema ya tiene tipo y rango
+	$sql = 'SELECT * FROM '.TOPICS_ROL_TABLE.' WHERE topic_id = ' . (int)$post_data['topic_id'];
+	$query = $db->sql_query($sql);
+	if ($row = $db->sql_fetchrow($query)) {
+		$post_data['tipo_id'] = $row['tipo_id'];
+		$post_data['rango_id'] = $row['rango_id'];
+	}
+	$db->sql_freeresult($query);
+
+	// Si está creando un tema, o editando el primer post
+	if ($mode == 'post' 
+		|| ($mode == 'edit' && $post_id == $post_data['topic_first_post_id']))
+	{
+		// Obtener listado de tipos
+		$sql = 'SELECT tipo_id, nombre, tiene_rango
+					FROM '.TIPOS_TEMA_TABLE. ' ' .
+					(!$puede_asociar ? 'WHERE solo_mod = 0' : '');
+
+		$query = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($query)) {
+			// Obtener si es el tipo elegido (solo si estoy editando el primer post)
+			$tipo_elegido = ($post_data['tipo_id'] == $row['tipo_id']);
+			
+			// Si es el tipo elegido, guardar si tiene rango (ej: una misión)
+			if ($tipo_elegido) $tiene_rango = $row['tiene_rango'];
+			
+			// Llenar el string de los option
+			$tipos_tema_options .= "<option value='" . $row['tipo_id'] . ($tipo_elegido ? "' selected='selected" : "") . "'>" . $row['nombre'] . "</option>";
+		}
+		$db->sql_freeresult($query);
+		
+		// Si el tipo elegido tiene rango, o si el tema es nuevo
+		if ($tiene_rango || $post_data['tipo_id'] == 0)
+		{
+			// Obtener listado de rangos
+			$sql = 'SELECT rango_id, nombre
+						FROM '.RANGOS_TABLE.'
+						WHERE misiones = 1 '.
+						(!$puede_asociar ? 'AND solo_mod = 0' : '');
+						
+			$query = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($query)) {
+				// Llenar el string de los option
+				$rangos_options .= "<option value='" . $row['rango_id'] . ($post_data['rango_id'] == $row['rango_id'] ? "' selected='selected" : "") . "'>" . $row['nombre'] . "</option>";
+			}
+			$db->sql_freeresult($query);
+		}
+	}
 }
 
 // Build array of variables for main posting page
@@ -1916,6 +1975,8 @@ $page_data = array(
 	'PJ_PC_OLD'				=> (isset($row_stats) ? (int)$row_stats['pc'] : 0),
 	'PJ_STA_OLD'			=> (isset($row_stats) ? (int)$row_stats['sta'] : 0),
 	'LINKED_PJS_OPTIONS'	=> $linked_pjs_options,
+	'TIPOS_TEMA_OPTIONS'	=> $tipos_tema_options,
+	'RANGOS_OPTIONS'		=> $rangos_options,
 
 	'S_PRIVMSGS'				=> false,
 	'S_CLOSE_PROGRESS_WINDOW'	=> (isset($_POST['add_file'])) ? true : false,

@@ -1710,6 +1710,11 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 
 		break;
 	}
+	
+	$topic_rol_data = array(
+		'tipo_id'	=> $data_ary['tipo_id'],
+		'rango_id'	=> $data_ary['rango_id'],
+	);
 
 	// And the topic ladies and gentlemen
 	switch ($post_mode)
@@ -1941,6 +1946,16 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 		$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
 		
 		if($forum_rol_data['onrol']) {
+			
+			// guardar tipo y rango si corresponde
+			if ($topic_rol_data['tipo_id'] > 0) {
+				// Asignar el topic_id, que pudo ser recién creado
+				$topic_rol_data['topic_id'] = $data_ary['topic_id'];
+				
+				// Guardar datos
+				store_topic_rol_data($topic_rol_data);
+			}
+			
 			// guardar stats del post
 			store_pj_data($data_ary);
 		
@@ -1989,8 +2004,22 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 
 		unset($sql_data[POSTS_TABLE]['sql']);
 		
-		// Datos del pj referentes al post // mgomez // 26-12-2018
-		store_pj_data($data_ary, $data_ary['post_id']);
+		// RPG forum
+		$forum_rol_data = get_forum_rol_data($data_ary['forum_id']);
+		
+		if($forum_rol_data['onrol']) {
+			// guardar tipo y rango si corresponde
+			if ($topic_rol_data['tipo_id'] > 0) {
+				// Asignar el topic_id, que pudo ser recién creado
+				$topic_rol_data['topic_id'] = $data_ary['topic_id'];
+				
+				// Guardar datos
+				store_topic_rol_data($topic_rol_data);
+			}
+		
+			// Datos del pj referentes al post // mgomez // 26-12-2018
+			store_pj_data($data_ary, $data_ary['post_id']);
+		}
 	}
 
 	// Update Poll Tables
@@ -2879,4 +2908,18 @@ function store_pj_data($data_ary, $post_id = 0) {
 	);
 	
 	$db->sql_query('INSERT INTO ' . PERSONAJES_POSTS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+}
+
+function store_topic_rol_data($topic_rol_data) {
+	global $db;
+	
+	// Actualizar los datos de rol
+	$sql = 'UPDATE ' . TOPICS_ROL_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $topic_rol_data) . ' WHERE topic_id = ' . $topic_rol_data['topic_id'];
+	$db->sql_query($sql);
+
+	// Si no actualizó nada, insertar
+	if ($db->sql_affectedrows() < 1) {
+		$sql = 'INSERT INTO ' . TOPICS_ROL_TABLE . ' ' . $db->sql_build_array('INSERT', $topic_rol_data);
+		$db->sql_query($sql);
+	}
 }

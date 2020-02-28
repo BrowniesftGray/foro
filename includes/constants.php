@@ -337,7 +337,10 @@ define('PATREON_TIERS_TABLE',			'patreon_tiers');
 define('PATREON_BENEFICIOS_TABLE',		'patreon_beneficios');
 define('PATREON_USER_BENEFICIOS_TABLE',	'patreon_user_beneficios');
 define('PREMIO_DIARIO_TABLE',			'premio_diario');
-define('FORUMS_ROL_TABLE',			'forums_rol');
+define('TOPICS_ROL_TABLE',				'topics_rol');
+define('FORUMS_ROL_TABLE',				'forums_rol');
+define('TIPOS_TEMA_TABLE',				'tipos_tema');
+define('RANGOS_TABLE',					'rangos');
 
 // Patreon constants
 define('PATREON_TIER_ACTION_NO_ACTION',			'-1');

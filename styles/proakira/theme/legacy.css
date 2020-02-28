@@ -20,6 +20,11 @@
 	display: none;
 }
 
+.tipo-tema {
+    float: right;
+	margin-top: -3px;
+}
+
 /* Subforo General */
 .forabg li.header dd.topics,
 .forabg li.header dd.posts,

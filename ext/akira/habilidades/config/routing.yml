@@ -1,0 +1,7 @@
+akira_habilidades:
+    path: /habilidades
+    defaults: { _controller: akira.habilidades.controller:handle }
+    
+akira_habilidades_todas:
+    path: /habilidades/todas
+    defaults: { _controller: akira.habilidades.controller:ver_todas }

@@ -904,7 +904,20 @@ if (count($topic_list))
 
 		$u_mcp_queue = ($topic_unapproved || $posts_unapproved) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=queue&amp;mode=' . (($topic_unapproved) ? 'approve_details' : 'unapproved_posts') . "&amp;t=$topic_id", true, $user->session_id) : '';
 		$u_mcp_queue = (!$u_mcp_queue && $topic_deleted) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=queue&amp;mode=deleted_topics&amp;t=' . $topic_id, true, $user->session_id) : $u_mcp_queue;
-
+		
+		// Tipos de tema
+		$sql_tipo = "SELECT tt.nombre, tt.etiqueta, r.nombre as rango
+						FROM ".TOPICS_ROL_TABLE." t 
+							INNER JOIN ".TIPOS_TEMA_TABLE." tt
+								ON tt.tipo_id = t.tipo_id
+							LEFT JOIN ".RANGOS_TABLE." r
+								ON r.rango_id = t.rango_id
+								AND tt.tiene_rango = 1
+ 						WHERE topic_id = $topic_id";
+		$query_tipo = $db->sql_query($sql_tipo);
+		$row_tipo = $db->sql_fetchrow($query_tipo);
+		$db->sql_freeresult($query_tipo);
+		
 		// Send vars to template
 		$topic_row = array(
 			'FORUM_ID'					=> $row['forum_id'],
@@ -926,6 +939,10 @@ if (count($topic_list))
 			'TOPIC_SUBTITLE'	=> censor_text($row['topic_subtitle']),
 			'TOPIC_TYPE'		=> $topic_type,
 			'FORUM_NAME'		=> (isset($row['forum_name'])) ? $row['forum_name'] : $forum_data['forum_name'],
+			
+			'TIPO_TEMA_ETIQUETA'	=> $row_tipo['etiqueta'],
+			'TIPO_TEMA_NOMBRE'		=> $row_tipo['nombre'],
+			'TIPO_TEMA_RANGO'		=> $row_tipo['rango'],
 
 			'TOPIC_IMG_STYLE'		=> $folder_img,
 			'TOPIC_FOLDER_IMG'		=> $user->img($folder_img, $folder_alt),
