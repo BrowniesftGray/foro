@@ -182,13 +182,14 @@ class main
       $user_id = request_var('user_id', '0');
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE id_usuario = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Enlace</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
-        $options .= "<td>" . $row['información'] . "</td>";
-        $options .= "<td>" . $row['enlace'] . "</td>";
+        $options .= "<td>" . $row['informacion'] . "</td>";
+        $options .= "<td> <a href='" . $row['enlace'] . "'>Enlace</a></td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
       $options .= "</tbody></table>";
@@ -237,6 +238,7 @@ class main
       $sql_array = array(
         'id_usuario'	=> $user_id,
         'estado'		=> "registrada",
+        'fecha_creacion' => "now()",
       );
 
       switch ($tipo_revision) {
