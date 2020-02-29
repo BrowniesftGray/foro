@@ -244,12 +244,12 @@ class main
       switch ($tipo_revision) {
 
         case 'activacion_ficha':
-          $sql_array['tipo_revision'] = 'activacion_ficha';
+          $sql_array['tipo_revision'] = 'Activacion Ficha';
           $sql_array['informacion'] = request_var('activacion_asunto', '0');
           break;
 
         case 'revision_ficha':
-          $sql_array['tipo_revision'] = 'revision_ficha';
+          $sql_array['tipo_revision'] = 'Revision Ficha';
           $sql_array['informacion'] = request_var('asunto_rev_ficha', '0');
           $sql_array['enlace'] = request_var('enlace_rev_ficha', '0');
           break;
@@ -265,20 +265,20 @@ class main
           break;
           
         case 'solicitud_encargo':
-          $sql_array['tipo_revision'] = 'solicitud_encargo';
+          $sql_array['tipo_revision'] = 'Solicitud Encargo';
           $nombre_encargo = request_var('solicitud_nombre', '0');
           $info_encargo = request_var('solicitud_informacion', '0');
           $sql_array['informacion'] = "Nombre: ".$nombre_encargo." \n ".$info_encargo;
           break;
 
         case 'moderacion_combate':
-          $sql_array['tipo_revision'] = 'moderacion_combate';
+          $sql_array['tipo_revision'] = 'Moderacion Combate';
           $sql_array['informacion'] = request_var('mod_combate_asunto', '0');
           $sql_array['enlace'] = request_var('mod_combate_enlace', '0');
           break;
 
         case 'patreon':
-          $sql_array['tipo_revision'] = 'patreon';
+          $sql_array['tipo_revision'] = 'Patreon';
           $sql_array['informacion'] = request_var('patreon_asunto', '0');
           $sql_array['enlace'] = request_var('patreon_enlace', '0');
           break;
