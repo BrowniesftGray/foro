@@ -35,7 +35,7 @@
     <div class="col-md-12 card tab-pane fade" id="revision_ficha" role="tabpanel" aria-labelledby="tabs-rev-ficha-tab">
       <h3>Revisión de Ficha</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/revision_ficha">
           <div class="form-group row">
             <label class="col-3 col-form-label text-md-left" for="asunto_rev_ficha">Asunto</label> 
             <div class="col-5">
@@ -60,7 +60,7 @@
     <div class="col-md-12 card tab-pane fade" id="revision_tema" role="tabpanel" aria-labelledby="tabs-rev-tema-tab">
       <h3>Revisión de Tema</h3><br> 
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/revision_tema">
           <div class="form-group row">
             <label for="rev_tema_tipo" class="col-3 col-form-label text-md-left">Tipo de Tema</label> 
             <div class="col-5">
@@ -82,7 +82,7 @@
           <div class="form-group row">
             <label for="rev_tema_participantes" class="col-3 col-form-label text-md-left">Participantes</label> 
             <div class="col-5">
-              <select multiple="multiple" id="rev_tema_participantes" name="rev_tema_participantes" class="custom-select" required="required"></select>
+              <select multiple="multiple" id="rev_tema_participantes" name="rev_tema_participantes[]" class="custom-select" required="required"></select>
             </div>
           </div> 
           <div class="form-group row">
@@ -97,7 +97,7 @@
     <div class="col-md-12 card tab-pane fade" id="revision_misiones" role="tabpanel" aria-labelledby="tabs-rev-misiones-tab">
       <h3>Revisión de Misiones</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/revision_mision">
           <div class="form-group row">
             <label for="rev_mision_tipo" class="col-3 col-form-label text-md-left">Tipo de Tema</label> 
             <div class="col-5">
@@ -115,15 +115,9 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="rev_mision_gm" class="col-3 col-form-label text-md-left">Game Master</label> 
-            <div class="col-5">
-              <input id="rev_mision_gm" name="rev_mision_gm" type="text" class="form-control">
-            </div>
-          </div>
-          <div class="form-group row">
             <label for="rev_mision_participantes" class="col-3 col-form-label text-md-left">Participantes</label> 
             <div class="col-5">
-              <select multiple="multiple" id="rev_mision_participantes" name="rev_mision_participantes" required="required" class="custom-select"></select>
+              <select multiple="multiple" id="rev_mision_participantes" name="rev_mision_participantes[]" required="required" class="custom-select"></select>
             </div>
           </div> 
           <div class="form-group row">
@@ -138,7 +132,7 @@
     <div class="col-md-12 card tab-pane fade" id="moderacion_combate" role="tabpanel" aria-labelledby="tabs-mod-combate-tab">
       <h3>Moderación de Combate</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/moderacion_combate">
           <div class="form-group row">
             <label for="mod_combate_enlace" class="col-3 col-form-label text-md-left">Enlace al Tema</label> 
             <div class="col-5">
@@ -163,7 +157,7 @@
     <div class="col-md-12 card tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="tabs-patreon-tab">
       <h3>Beneficios de Patreon</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/patreon">
           <div class="form-group row">
             <label for="patreon_asunto" class="col-3 col-form-label text-md-left">Asunto</label> 
             <div class="col-5">
@@ -188,7 +182,7 @@
     <div class="col-md-12 card tab-pane fade" id="activacion_ficha" role="tabpanel" aria-labelledby="tabs-activacion_ficha-tab">
       <h3>Activación de Ficha</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/activacion_ficha">
           <div class="form-group row">
             <label for="activacion_asunto" class="col-3 col-form-label text-md-left">Información</label> 
             <div class="col-5">
@@ -207,7 +201,7 @@
     <div class="col-md-12 card tab-pane fade" id="solicitud_encargo" role="tabpanel" aria-labelledby="tabs-solicitud_encargo-tab">
       <h3>Solicitud de Encargos o Trabajos</h3><br>
       <div class="card-body">
-        <form method="POST" action="#">
+        <form method="POST" action="/mod/store/solicitud_encargo">
           <div class="form-group row">
             <label for="solicitud_nombre" class="col-3 col-form-label text-md-left">Nombre Encargo/Trabajo</label> 
             <div class="col-5">

@@ -5,3 +5,7 @@ gray_moderacion_home:
 gray_moderacion_participantes:
     path: /moderacion/participantes
     defaults: { _controller: gray.moderacion.controller:get_participantes }
+
+gray_moderacion_store:
+    path: /mod/store/{tipo_revision}
+    defaults: { _controller: gray.moderacion.controller:insert_revision }

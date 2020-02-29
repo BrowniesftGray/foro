@@ -52,7 +52,7 @@ class main
     {
       $this->validate_access();
 
-		  return $this->helper->render('moderacion/home.html', 'Administrador de SL');
+		  return $this->helper->render('moderacion/home.html', 'Revisiones');
     }
 
     public function validate_access(){
@@ -60,6 +60,10 @@ class main
         if ($grupo != 5 AND $grupo != 4 AND $grupo != 18) {
             trigger_error($grupo);
         }
+    }
+
+    public function store_revision(){
+
     }
 
     public function vista_staff(){
@@ -90,7 +94,7 @@ class main
 
     public function get_return_link()
     {
-        return "<br /><a href='/moderacion'>Volver</a>.";
+      return "<br /><a href='/mod'>Volver</a>.";
     }
 
     public function get_participantes($topic_id = 0){
@@ -177,6 +181,16 @@ class main
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
 
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
     }
 
     public function get_revisiones_mod($user_id){
@@ -192,57 +206,84 @@ class main
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
 
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
     }
 
-    public function insert_revision($array){
+    public function insert_revision($tipo_revision){
 
       $user_id = $this->user->data['user_id'];
 
       $sql_array = array(
-        'user_id'	=> $user_id,
-        'tipo_revision'		=> $array["tipo_revision"],
+        'id_usuario'	=> $user_id,
         'estado'		=> "registrada",
       );
 
-      switch ($array["tipo_revision"]) {
+      switch ($tipo_revision) {
+
         case 'activacion_ficha':
-          $sql_array['informacion'] = $array['informacion'];
+          $sql_array['tipo_revision'] = 'activacion_ficha';
+          $sql_array['informacion'] = request_var('activacion_asunto', '0');
           break;
+
         case 'revision_ficha':
-          $sql_array['informacion'] = $array['asunto'];
-          $sql_array['enlace'] = $array['enlace'];
-          $sql_array['participantes'] = $array['participantes'];
+          $sql_array['tipo_revision'] = 'revision_ficha';
+          $sql_array['informacion'] = request_var('asunto_rev_ficha', '0');
+          $sql_array['enlace'] = request_var('enlace_rev_ficha', '0');
           break;
           
         case 'revision_mision':
-          $sql_array['informacion'] = $array['informacion'];
-          $sql_array['enlace'] = $array['enlace'];
-          $sql_array['participantes'] = $array['participantes'];
+          $sql_array['tipo_revision'] = request_var('rev_mision_tipo', '0');
+          $sql_array['enlace'] = request_var('rev_mision_enlace', '0');
+          $participantes = request_var('rev_mision_participantes', array(0));
+          $sql_array['participantes'] = "";
+          foreach ($participantes as $key => $value) {
+            $sql_array['participantes'] .= $value."#";
+          }
           break;
           
         case 'solicitud_encargo':
-          $sql_array['informacion'] = $array['informacion'];
-          $sql_array['enlace'] = $array['enlace'];
+          $sql_array['tipo_revision'] = 'solicitud_encargo';
+          $nombre_encargo = request_var('solicitud_nombre', '0');
+          $info_encargo = request_var('solicitud_informacion', '0');
+          $sql_array['informacion'] = "Nombre: ".$nombre_encargo." \n ".$info_encargo;
           break;
 
         case 'moderacion_combate':
-          $sql_array['informacion'] = $array['informacion'];
-          $sql_array['enlace'] = $array['enlace'];
+          $sql_array['tipo_revision'] = 'moderacion_combate';
+          $sql_array['informacion'] = request_var('mod_combate_asunto', '0');
+          $sql_array['enlace'] = request_var('mod_combate_enlace', '0');
           break;
 
         case 'patreon':
-          $sql_array['informacion'] = $array['informacion'];
-          $sql_array['enlace'] = $array['enlace'];
+          $sql_array['tipo_revision'] = 'patreon';
+          $sql_array['informacion'] = request_var('patreon_asunto', '0');
+          $sql_array['enlace'] = request_var('patreon_enlace', '0');
           break;
 
         case 'revision_tema':
-          $sql_array['enlace'] = $array['enlace'];
-          $sql_array['participantes'] = $array['participantes'];
+          $sql_array['tipo_revision'] = request_var('rev_tema_tipo', '0');
+          $sql_array['enlace'] = request_var('rev_tema_enlace', '0');
+          $participantes = request_var('rev_tema_participantes', array(0));
+          $sql_array['participantes'] = "";
+          foreach ($participantes as $key => $value) {
+            $sql_array['participantes'] .= $value."#";
+          }
           break;
       }
 
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
+
+      trigger_error('Petción de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
     }
 
 }
