@@ -169,9 +169,20 @@ class main
 
     }
 
-    public function get_revisiones_user($user_id){
+    public function view_user($user_id){
 
-      $query = $this->db->sql_query('SELECT * FROM '.REVISIONES.' WHERE id_usuario = '.$user_id);
+      $this->template->assign_var('user_id', $user_id);
+      
+      return $this->helper->render('/moderacion/view.html', 'Vista Revisiones');
+
+    }
+
+    public function get_revisiones_user(){
+
+      $user_id = request_var('user_id', '0');
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE id_usuario = '.$user_id);
+
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Enlace</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
@@ -180,6 +191,7 @@ class main
         $options .= "<td>" . $row['enlace'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
+      $options .= "</tbody></table>";
 
       $response = new Response();
       

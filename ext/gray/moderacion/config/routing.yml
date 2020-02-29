@@ -9,3 +9,11 @@ gray_moderacion_participantes:
 gray_moderacion_store:
     path: /mod/store/{tipo_revision}
     defaults: { _controller: gray.moderacion.controller:insert_revision }
+
+gray_moderacion_view:
+    path: /mod/view/{user_id}
+    defaults: { _controller: gray.moderacion.controller:view_user }
+
+gray_moderacion_revisione_user:
+    path: /moderaciones/revisiones_user
+    defaults: { _controller: gray.moderacion.controller:get_revisiones_user }
