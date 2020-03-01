@@ -2,10 +2,6 @@ gray_moderacion_home:
     path: /mod
     defaults: { _controller: gray.moderacion.controller:handle }
 
-gray_moderacion_participantes:
-    path: /moderacion/participantes
-    defaults: { _controller: gray.moderacion.controller:get_participantes }
-
 gray_moderacion_store:
     path: /mod/store/{tipo_revision}
     defaults: { _controller: gray.moderacion.controller:insert_revision }
@@ -14,6 +10,26 @@ gray_moderacion_view:
     path: /mod/view/{user_id}
     defaults: { _controller: gray.moderacion.controller:view_user }
 
+gray_moderacion_view_mod:
+    path: /mod/viewMod/{user_id}
+    defaults: { _controller: gray.moderacion.controller:view_mod }
+
+gray_moderacion_view_admin:
+    path: /mod/viewAdmin
+    defaults: { _controller: gray.moderacion.controller:view_admin }
+
 gray_moderacion_revisione_user:
     path: /moderaciones/revisiones_user
     defaults: { _controller: gray.moderacion.controller:get_revisiones_user }
+
+gray_moderacion_revisione_mod:
+    path: /moderaciones/revisiones_mod
+    defaults: { _controller: gray.moderacion.controller:get_revisiones_mod }
+
+gray_moderacion_get_moderadores:
+    path: /moderaciones/moderadores
+    defaults: { _controller: gray.moderacion.controller:get_revisiones_no_asignadas }
+
+gray_moderacion_participantes:
+    path: /moderacion/participantes
+    defaults: { _controller: gray.moderacion.controller:get_participantes }

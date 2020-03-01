@@ -58,11 +58,39 @@ class main
     public function validate_access(){
         $grupo = $this->user->data['group_id'];
         if ($grupo != 5 AND $grupo != 4 AND $grupo != 18) {
-            trigger_error($grupo);
+            trigger_error('No tienes acceso a esta característica.');
         }
     }
 
-    public function store_revision(){
+    public function view_user($user_id){
+
+      $this->template->assign_var('user_id', $user_id);
+      
+      return $this->helper->render('/moderacion/view.html', 'Vista Revisiones');
+
+    }
+
+    public function view_mod($user_id){
+
+      if($this->vista_staff() != "user"){
+
+        $this->template->assign_var('user_id', $user_id);
+        
+        return $this->helper->render('/moderacion/viewMod.html', 'Vista Revisiones');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
+
+    }
+
+    public function view_admin(){
+
+      $vista = $this->vista_staff(); 
+      if($vista == "admin"){   
+        return $this->helper->render('/moderacion/viewAdmin.html', 'Vista Revisiones');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
 
     }
 
@@ -169,14 +197,6 @@ class main
 
     }
 
-    public function view_user($user_id){
-
-      $this->template->assign_var('user_id', $user_id);
-      
-      return $this->helper->render('/moderacion/view.html', 'Vista Revisiones');
-
-    }
-
     public function get_revisiones_user(){
 
       $user_id = request_var('user_id', '0');
@@ -206,16 +226,19 @@ class main
       return $response;
     }
 
-    public function get_revisiones_mod($user_id){
+    public function get_revisiones_mod(){
+      $user_id = request_var('user_id', '0');
 
-      $query = $this->db->sql_query('SELECT * FROM '.REVISIONES.' WHERE mod_asignado = '.$user_id);
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
+
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
-        $options .= "<tr><td>" . $row['moderador_asignado'] . "</td>";
-        $options .= "<td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td>" . $row['moderador_asignado'] . "</td>";
         $options .= "<td>" . $row['información'] . "</td>";
         $options .= "<td>" . $row['participantes'] . "</td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
 
@@ -231,6 +254,46 @@ class main
       return $response;
     }
 
+    public function get_revisiones_no_asignadas(){
+
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
+
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $row['información'] . "</td>";
+        $options .= "<td>" . $row['participantes'] . "</td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
+        $options .= "<td>" . $row['estado'] . "</td>";
+        $options .= "<td><select class='moderadores'>".$select."</select></td></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+    
+    public function get_moderadores(){
+      $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<option value='".$row['user_id']."'>" . $row['username'] . "</option>";
+      }
+
+      return $options;
+    }
+
     public function insert_revision($tipo_revision){
 
       $user_id = $this->user->data['user_id'];
@@ -238,6 +301,7 @@ class main
       $sql_array = array(
         'id_usuario'	=> $user_id,
         'estado'		=> "registrada",
+        'moderador_asignado'		=> 0,
         'fecha_creacion' => "now()",
       );
 
