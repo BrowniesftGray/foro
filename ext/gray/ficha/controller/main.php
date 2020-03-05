@@ -332,7 +332,7 @@ class main
                     'EDAD'			=> utf8_normalize_nfc(request_var('edad', '', true)),
                     'RANGO'			=> utf8_normalize_nfc(request_var('rango', '', true)),
                     'ARQUETIPO'		=> utf8_normalize_nfc(request_var('arquetipo', '', true)),
-					'INVOCACION_ID'	=> request_var('invocacion_id', 0, true),
+					'INVOCACION_ID'	=> request_var('invocacion_id', -1, true),
 					'ALDEA'			=> request_var('aldea', 0, true),
                     'NIVEL_INICIAL'	=> request_var('nivel_inicial', 0, true),
                     'ES_INVOCACION'	=> request_var('es_invocacion', -1, true),
@@ -386,7 +386,7 @@ class main
 			if ($fields['ARQUETIPO'] != '')
                 $sql_array['arquetipo_id'] = $fields['ARQUETIPO'];
 
-			if ((int)$fields['INVOCACION_ID'] > 0) {
+			if ((int)$fields['INVOCACION_ID'] > -1) {
 				$sql_array['invocacion_id'] = $fields['INVOCACION_ID'];
 			}
 	
