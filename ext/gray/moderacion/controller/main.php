@@ -281,7 +281,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th><th></th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -292,7 +292,8 @@ class main
         $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td><select class='moderadores'>".$select."</select></td></tr>";
+        $options .= "<td><form method='POST' action='/admin/asignar/".$row['id_revision']."' <select class='moderadores' name='moderadores'>".$select."</select></td>";
+        $options .= "<td><button type='submit' class='btn btn-primary'>Submit</button></td></tr>";
       }
 
       $response = new Response();
@@ -385,6 +386,53 @@ class main
       $this->db->sql_query($sql);
 
       trigger_error('Petción de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
+    }
+
+    public function insert_recompensa(){
+      
+      $topic_id = request_var('id_tema', '0');
+      $user_id  = request_var('id_participante', '0');
+      $entorno  = asignar_puntuacion(request_var('entorno', 'No'));
+      $acciones = asignar_puntuacion(request_var('acciones', 'No'));
+      $interes  = asignar_puntuacion(request_var('interes', 'No'));
+      $longitud = asignar_puntuacion(request_var('longitud', 'No'));
+      $tipo_tema = request_var('tipo_tema', '0');
+      $subtipo_tema = request_var('subtipo_tema', '0');
+      $compas   = request_var('compas', '0');
+      $porcentaje = calcular_porcentaje($compas, $tipo_tema, $suptipo_tema);
+      $bono = calcular_bono($tipo_tema, $subtipo_tema);
+      $total = $entorno+$acciones+$interes+$longitud;
+      
+      $sql = "SELECT	p.poster_id as user_id,
+                COUNT(0) as cantidad
+              FROM phpbby1_posts p
+              WHERE p.topic_id = $topic_id
+                  AND p.poster_id = $user_id
+              GROUP BY p.poster_id";
+
+      $this->db->sql_query($sql);
+      $row = $this->db->sql_fetchrow($query);
+      $numero_post = $row['cantidad'];
+      $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$porcentaje);
+      $ryos = $bono['ryos'];
+      $puntos_apen = ceil($experiencia/20);
+      ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
+    }
+
+    public function asignar_puntuacion($criterio){
+
+      switch ($criterio) {
+        case 'Si':
+            $criterio = 1;
+          break;
+        case 'A veces':
+            $criterio = 0.55;
+          break;
+        case 'No':
+            $criterio = 0.15;
+          break;        
+      }
+      return $criterio;
     }
 
 }

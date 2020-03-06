@@ -33,3 +33,7 @@ gray_moderacion_get_moderadores:
 gray_moderacion_participantes:
     path: /moderacion/participantes
     defaults: { _controller: gray.moderacion.controller:get_participantes }
+
+gray_moderacion_asignar:
+    path: /admin/asignar/{revision_id}
+    defaults: { _controller: gray.moderacion.controller:update_revision_mod }
