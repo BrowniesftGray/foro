@@ -202,12 +202,23 @@ class main
       $user_id = request_var('user_id', '0');
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE id_usuario = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Moderador Asignado</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
-        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        if ($row['estado'] == "registrada") {
+          $options .= "<tr class='table-active'>";
+        }
+        if ($row['estado'] == "aceptada") {
+          $options .= "<tr class='table-primary'>";
+        }
+        if ($row['estado'] == "completada") {
+          $options .= "<tr class='table-success'>";
+        }
+        if ($row['estado'] == "rechazada") {
+          $options .= "<tr class='table-warning'>";
+        }
+        $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
-        $options .= "<td>" . $row['informacion'] . "</td>";
         $options .= "<td> <a href='" . $row['enlace'] . "'>Enlace</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
@@ -234,7 +245,19 @@ class main
       $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
-        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        if ($row['estado'] == "registrada") {
+          $options .= "<tr class='table-active'>";
+        }
+        if ($row['estado'] == "aceptada") {
+          $options .= "<tr class='table-primary'>";
+        }
+        if ($row['estado'] == "completada") {
+          $options .= "<tr class='table-success'>";
+        }
+        if ($row['estado'] == "rechazada") {
+          $options .= "<tr class='table-warning'>";
+        }
+        $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
         $options .= "<td>" . $row['información'] . "</td>";
         $options .= "<td>" . $row['participantes'] . "</td>";
