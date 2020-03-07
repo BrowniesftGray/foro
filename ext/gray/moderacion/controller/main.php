@@ -402,7 +402,11 @@ class main
       else{
         $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$porcentaje);
         $ryos = $bono['ryos'];
-        $puntos_apen = ceil($experiencia/20);
+        if ($bono['experiencia'] == 3 || $bono['experiencia'] == 5 || $bono['experiencia'] == 7 || $bono['experiencia'] == 12) {
+          $puntos_apen = ceil($experiencia/30);
+        }else{
+          $puntos_apen = ceil($experiencia/20);
+        }
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
@@ -487,7 +491,7 @@ class main
     public function calcular_bono($tipo_tema){
       $bono = array(
         'experiencia' => 1,
-        'limite' => 1,
+        'limite' => 10,
         'ryos' => 1,
         'porcentaje' => 1
         );
@@ -571,23 +575,23 @@ class main
         break;
 
         case 'Trama B':
-          $bono['experiencia'] = 8;
-          $bono['limite'] = 20;
-          $bono['ryos'] = 6000;
+          $bono['experiencia'] = 5;
+          $bono['limite'] = 30;
+          $bono['ryos'] = 3000;
           $bono['porcentaje'] = 30;
           break;
 
         case 'Trama A':
-          $bono['experiencia'] = 12;
-          $bono['limite'] = 30;
-          $bono['ryos'] = 20000;
+          $bono['experiencia'] = 7;
+          $bono['limite'] = 45;
+          $bono['ryos'] = 10000;
           $bono['porcentaje'] = 30;
           break;
 
         case 'Trama S':
-          $bono['experiencia'] = 16;
-          $bono['limite'] = 50;
-          $bono['ryos'] = 50000;
+          $bono['experiencia'] = 9;
+          $bono['limite'] = 75;
+          $bono['ryos'] = 30000;
           $bono['porcentaje'] = 30;
           break;
       }
