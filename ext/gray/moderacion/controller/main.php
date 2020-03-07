@@ -83,6 +83,21 @@ class main
 
     }
 
+    public function get_vista_recompensa($rev_id, $user_id){
+
+      if($this->vista_staff() != "user"){
+
+        //Falta añadir 
+        $this->template->assign_var('id_revision', $rev_id);
+        $this->template->assign_var('id_participante', $user_id);
+        
+        return $this->helper->render('/moderacion/reward.html', 'Recompensas');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
+
+    }
+
     public function view_admin(){
 
       $vista = $this->vista_staff(); 
@@ -127,49 +142,9 @@ class main
 
     public function get_participantes($topic_id = 0){
       
-      $es_post = false;
+      $topic_id = request_var('topic_id', '0');
 
-      if ($topic_id == 0) {
-        $topic_id = request_var('topic_id', '0');
-        $topic_id = str_replace("#", "-", $topic_id);
-
-        //Comprobaciones, tema o post
-        $comprobacion = explode("-p", $topic_id);
-        if (count($comprobacion) > 1) {
-          $es_post = true;
-        }else{
-          $es_post = false;
-        }
-
-        if ($es_post == true) {
-          $topic_id = explode("-p", $topic_id);
-          $cuenta_topic = count($topic_id)-1;
-          $tema = $topic_id[$cuenta_topic];
-        }
-        else{
-          $topic_id = explode("-t", $topic_id);
-          $cuenta_topic = count($topic_id)-1;
-          $comprobacion = explode("/", $topic_id[$cuenta_topic]);
-          if (count($comprobacion) > 1) {
-            $tema = $comprobacion[0];
-          }else{
-            $tema = $topic_id[$cuenta_topic];
-          }
-        }
-      }
-
-      // echo "post id:".$tema."<br>";
-      if ($es_post == true) {
-        $sql = "SELECT topic_id 
-                FROM phpbby1_posts
-                WHERE post_id = $tema
-                LIMIT 1";
-
-        $query = $this->db->sql_query($sql);
-        $row = $this->db->sql_fetchrow($query);
-        $tema = $row['topic_id'];
-        
-      }
+      $tema = obtener_id_tema($topic_id);
 
       $sql = "SELECT DISTINCT
               u.user_id,
@@ -390,19 +365,25 @@ class main
 
     public function insert_recompensa(){
       
-      $topic_id = request_var('id_tema', '0');
+      $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
       $entorno  = asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = asignar_puntuacion(request_var('interes', 'No'));
       $longitud = asignar_puntuacion(request_var('longitud', 'No'));
-      $tipo_tema = request_var('tipo_tema', '0');
-      $subtipo_tema = request_var('subtipo_tema', '0');
-      $compas   = request_var('compas', '0');
-      $porcentaje = calcular_porcentaje($compas, $tipo_tema, $suptipo_tema);
-      $bono = calcular_bono($tipo_tema, $subtipo_tema);
+
+      //Estas hay que obtenerlas de otra función.
+      $info_rev = obtener_info_rev($revision);
+      $topic_id = obtener_id_tema($info_rev['enlace']);
+      $tipo_tema = $info_rev['tipo_tema'];
+      $compas   = $info_rev['compas'];
+      
+      //Calculamos cosas para la experiencia y tal.
+      $porcentaje = calcular_porcentaje($compas, $tipo_tema);
+      $bono = calcular_bono($tipo_tema);
       $total = $entorno+$acciones+$interes+$longitud;
       
+      //Obtenemos el número de post del usuario.
       $sql = "SELECT	p.poster_id as user_id,
                 COUNT(0) as cantidad
               FROM phpbby1_posts p
@@ -413,10 +394,18 @@ class main
       $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
-      $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$porcentaje);
-      $ryos = $bono['ryos'];
-      $puntos_apen = ceil($experiencia/20);
-      ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
+      if ($bono['experiencia'] == 0) {
+        $experiencia = (($numero_post * $total)+20);
+        $ryos = 750;
+        $puntos_apen = 2;
+      }
+      else{
+        $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$porcentaje);
+        $ryos = $bono['ryos'];
+        $puntos_apen = ceil($experiencia/20);
+        ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
+
+      }
     }
 
     public function asignar_puntuacion($criterio){
@@ -435,4 +424,172 @@ class main
       return $criterio;
     }
 
+    public function obtener_id_tema($topic_id){
+
+      $es_post = false;
+
+      if ($topic_id == 0) {
+        $topic_id = str_replace("#", "-", $topic_id);
+
+        //Comprobaciones, tema o post
+        $comprobacion = explode("-p", $topic_id);
+        if (count($comprobacion) > 1) {
+          $es_post = true;
+        }else{
+          $es_post = false;
+        }
+
+        if ($es_post == true) {
+          $topic_id = explode("-p", $topic_id);
+          $cuenta_topic = count($topic_id)-1;
+          $tema = $topic_id[$cuenta_topic];
+        }
+        else{
+          $topic_id = explode("-t", $topic_id);
+          $cuenta_topic = count($topic_id)-1;
+          $comprobacion = explode("/", $topic_id[$cuenta_topic]);
+          if (count($comprobacion) > 1) {
+            $tema = $comprobacion[0];
+          }else{
+            $tema = $topic_id[$cuenta_topic];
+          }
+        }
+      }
+
+      // echo "post id:".$tema."<br>";
+      if ($es_post == true) {
+        $sql = "SELECT topic_id 
+                FROM phpbby1_posts
+                WHERE post_id = $tema
+                LIMIT 1";
+
+        $query = $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($query);
+        $tema = $row['topic_id']; 
+      }
+
+      return $tema;
+    }
+
+    public function obtener_info_rev($revision){
+
+      $sql = "SELECT enlace, 
+                tipo_revision AS tipo_tema, 
+                participantes AS compas 
+              FROM revisiones
+              WHERE id_revision = $revision";
+        
+      $query = $this->db->sql_query($sql);
+      $row = $this->db->sql_fetchrow($query);
+      return $row;
+    }
+
+    public function calcular_bono($tipo_tema){
+      $bono = array(
+        'experiencia' => 1,
+        'limite' => 1,
+        'ryos' => 1,
+        'porcentaje' => 1
+        );
+
+      switch ($tipo_tema) {
+        case 'Mision D':
+           $bono['experiencia'] = 0;
+           $bono['limite'] = 0;
+           $bono['ryos'] = 0;
+           $bono['porcentaje'] = 0;
+          break;
+
+        case 'Mision C':
+          $bono['experiencia'] = 1.5;
+          $bono['limite'] = 4;
+          $bono['ryos'] = 1500;
+          $bono['porcentaje'] = 20;
+          break;
+
+        case 'Mision B':
+          $bono['experiencia'] = 4;
+          $bono['limite'] = 10;
+          $bono['ryos'] = 3000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Mision A':
+          $bono['experiencia'] = 6;
+          $bono['limite'] = 15;
+          $bono['ryos'] = 10000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Mision S':
+          $bono['experiencia'] = 8;
+          $bono['limite'] = 25;
+          $bono['ryos'] = 30000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Encargo D':
+          $bono['experiencia'] = 0;
+          $bono['limite'] = 0;
+          $bono['ryos'] = 0;
+          $bono['porcentaje'] = 0;
+          break;
+
+        case 'Encargo C':
+          $bono['experiencia'] = 1.5;
+          $bono['limite'] = 4;
+          $bono['ryos'] = 1500;
+          $bono['porcentaje'] = 20;
+          break;
+
+        case 'Encargo B':
+          $bono['experiencia'] = 4;
+          $bono['limite'] = 10;
+          $bono['ryos'] = 3000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Encargo A':
+          $bono['experiencia'] = 6;
+          $bono['limite'] = 15;
+          $bono['ryos'] = 10000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Encargo S':
+          $bono['experiencia'] = 8;
+          $bono['limite'] = 25;
+          $bono['ryos'] = 30000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Trama C':
+          $bono['experiencia'] = 3;
+          $bono['limite'] = 8;
+          $bono['ryos'] = 3000;
+          $bono['porcentaje'] = 20;
+        break;
+
+        case 'Trama B':
+          $bono['experiencia'] = 8;
+          $bono['limite'] = 20;
+          $bono['ryos'] = 6000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Trama A':
+          $bono['experiencia'] = 12;
+          $bono['limite'] = 30;
+          $bono['ryos'] = 20000;
+          $bono['porcentaje'] = 30;
+          break;
+
+        case 'Trama S':
+          $bono['experiencia'] = 16;
+          $bono['limite'] = 50;
+          $bono['ryos'] = 50000;
+          $bono['porcentaje'] = 30;
+          break;
+      }
+    }
 }

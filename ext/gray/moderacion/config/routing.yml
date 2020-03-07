@@ -34,6 +34,14 @@ gray_moderacion_participantes:
     path: /moderacion/participantes
     defaults: { _controller: gray.moderacion.controller:get_participantes }
 
+gray_moderacion_recompensa_usuario:
+    path: /mod/recompensa_usuario/{rev_id}/{user_id}
+    defaults: { _controller: gray.moderacion.controller:get_vista_recompensa }
+
+gray_moderacion_dar_recompensa_usuario:
+    path: /mod/otorga_recompensa/
+    defaults: { _controller: gray.moderacion.controller:insert_recompensa }
+
 gray_moderacion_asignar:
     path: /admin/asignar/{revision_id}
     defaults: { _controller: gray.moderacion.controller:update_revision_mod }
