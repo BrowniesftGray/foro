@@ -398,8 +398,8 @@ class main
         $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td><form method='POST' action='/admin/asignar/".$row['id_revision']."' <select class='moderadores' name='moderadores'>".$select."</select></td>";
-        $options .= "<td><button type='submit' class='btn btn-primary'>Submit</button></td></tr>";
+        $options .= "<td><form method='POST' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores' name='moderadores'>".$select."</select></td>";
+        $options .= "<td><button type='submit' class='btn btn-primary'>Asignar</button></td></form></tr>";
       }
 
       $response = new Response();
