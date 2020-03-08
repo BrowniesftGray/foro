@@ -320,13 +320,17 @@ class main
              <a href="'.$row['enlace'].'">Ir al tema</a> 
             </div>
           </div>
-          <div class="form-group row">
-            <label for="longitud" class="col-3 col-form-label text-md-left">Información:</label> 
-            <div class="col-6">
+          ';
+          if($row['informacion'] != ""){
+            $options .=  '<div class="form-group row">
+              <label for="longitud" class="col-3 col-form-label text-md-left">Información:</label> 
+              <div class="col-6">
               '.$row['informacion'].' 
-            </div>
-          </div>
-            <div class="form-group row">
+              </div>
+              </div>';
+          }
+
+          $options .= '<div class="form-group row">
             <label for="longitud" class="col-3 col-form-label text-md-left">Participantes:</label>
               <select id="id_participante" name="id_participante" class="col-6 form-control">
                 '.$participantes.'
