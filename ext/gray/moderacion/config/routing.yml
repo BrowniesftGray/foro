@@ -14,6 +14,10 @@ gray_moderacion_view_mod:
     path: /mod/viewMod/{user_id}
     defaults: { _controller: gray.moderacion.controller:view_mod }
 
+gray_moderacion_view_rev:
+    path: /mod/viewRev/{rev_id}
+    defaults: { _controller: gray.moderacion.controller:view_rev }
+
 gray_moderacion_view_admin:
     path: /mod/viewAdmin
     defaults: { _controller: gray.moderacion.controller:view_admin }
@@ -26,6 +30,10 @@ gray_moderacion_revisione_mod:
     path: /moderaciones/revisiones_mod
     defaults: { _controller: gray.moderacion.controller:get_revisiones_mod }
 
+gray_moderacion_revision_vista:
+    path: /moderaciones/revision_vista
+    defaults: { _controller: gray.moderacion.controller:get_revision_vista }
+
 gray_moderacion_get_moderadores:
     path: /moderaciones/moderadores
     defaults: { _controller: gray.moderacion.controller:get_revisiones_no_asignadas }
@@ -35,7 +43,7 @@ gray_moderacion_participantes:
     defaults: { _controller: gray.moderacion.controller:get_participantes }
 
 gray_moderacion_recompensa_usuario:
-    path: /mod/recompensa_usuario/{rev_id}/{user_id}
+    path: /mod/recompensa_usuario/{rev_id}
     defaults: { _controller: gray.moderacion.controller:get_vista_recompensa }
 
 gray_moderacion_dar_recompensa_usuario:

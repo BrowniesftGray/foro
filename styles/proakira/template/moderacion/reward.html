@@ -6,14 +6,23 @@
 <!-- <link rel="stylesheet" href="/styles/proakira/theme/w3.css?v=1.0.3" type="text/css"> -->
 <link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.93" type="text/css">
 
-<div class="col-md-12 card tab-pane fade" id="revision_misiones" role="tabpanel" aria-labelledby="tabs-rev-misiones-tab">
+<div class="container card" id="otorgar_recompensa">
     <h3>Otorgar recompensa</h3><br>
     <div class="card-body">
       <form method="POST" action="/mod/store/revision_mision">
-        <input type="hidden" id="id_participante" name="id_participante" value="{user_id}">
-        <input type="hidden" id="id_revision" name="id_revision" value="{user_id}">
+        <input type="hidden" id="id_participante" name="id_participante" value="{id_participante}">
+        <input type="hidden" id="id_revision" name="id_revision" value="{id_revision}">
         <div class="form-group row">
-          <label for="entorno" class="col-3 col-form-label text-md-left">¿Narra bien el entorno?</label> 
+          <label for="longitud" class="col-5 col-form-label text-md-left">¿Es Game Master? (No cuenta GM participante)</label> 
+          <div class="col-5">
+            <select id="longitud" name="longitud" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="entorno" class="col-5 col-form-label text-md-left">¿Narra bien el entorno?</label> 
           <div class="col-5">
             <select id="entorno" name="entorno" required="required" class="custom-select">
               <option value="Si">Si</option>
@@ -23,7 +32,7 @@
           </div>
         </div>
         <div class="form-group row">
-            <label for="acciones" class="col-3 col-form-label text-md-left">¿Narra bien sus acciones?</label> 
+            <label for="acciones" class="col-5 col-form-label text-md-left">¿Narra bien sus acciones?</label> 
             <div class="col-5">
               <select id="acciones" name="acciones" required="required" class="custom-select">
                 <option value="Si">Si</option>
@@ -32,26 +41,26 @@
               </select>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="interesante" class="col-3 col-form-label text-md-left">¿Te ha parecido interesante?</label> 
-            <div class="col-5">
-              <select id="interesante" name="interesante" required="required" class="custom-select">
-                <option value="Si">Si</option>
-                <option value="A veces">A veces</option>
-                <option value="No">No</option>
-              </select>
-            </div>
+        <div class="form-group row">
+          <label for="interesante" class="col-5 col-form-label text-md-left">¿Te ha parecido interesante?</label> 
+          <div class="col-5">
+            <select id="interesante" name="interesante" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
           </div>
-          <div class="form-group row">
-            <label for="longitud" class="col-3 col-form-label text-md-left">¿La cantidad de texto en sus posts suele superar el largo del perfil del usuario?</label> 
-            <div class="col-5">
-              <select id="longitud" name="longitud" required="required" class="custom-select">
-                <option value="Si">Si</option>
-                <option value="A veces">A veces</option>
-                <option value="No">No</option>
-              </select>
-            </div>
+        </div>
+        <div class="form-group row">
+          <label for="longitud" class="col-5 col-form-label text-md-left">¿La cantidad de texto en sus posts suele superar el largo del perfil del usuario?</label> 
+          <div class="col-5">
+            <select id="longitud" name="longitud" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
           </div>
+        </div>
         <div class="form-group row">
           <div class="offset-4 col-5">
             <button name="submit" type="submit" class="btn btn-primary">Enviar</button>

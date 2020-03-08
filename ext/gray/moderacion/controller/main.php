@@ -83,15 +83,13 @@ class main
 
     }
 
-    public function get_vista_recompensa($rev_id, $user_id){
+    public function view_rev($rev_id){
 
       if($this->vista_staff() != "user"){
 
-        //Falta añadir 
-        $this->template->assign_var('id_revision', $rev_id);
-        $this->template->assign_var('id_participante', $user_id);
+        $this->template->assign_var('rev_id', $rev_id);
         
-        return $this->helper->render('/moderacion/reward.html', 'Recompensas');
+        return $this->helper->render('/moderacion/viewRev.html', 'Recompensas');
       }else{
         trigger_error('No tienes acceso a esta característica.');
       }
@@ -108,6 +106,29 @@ class main
       }
 
     }
+
+    public function get_vista_recompensa($rev_id){
+
+      $participante = request_var('id_participante', '0');
+      if($this->vista_staff() != "user" || $participante == 0){
+
+        $this->template->assign_var('id_revision', $rev_id);
+        $this->template->assign_var('id_participante', $participante);
+        
+        return $this->helper->render('/moderacion/reward.html', 'Recompensas');
+      }else{
+        if ($participante == 0) {
+          trigger_error('Se ha perdido el id del usuario, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        }
+        else{
+          trigger_error('No tienes acceso a esta característica');
+        }
+      }
+
+    }
+
+    
+
 
     public function vista_staff(){
       $grupo = $this->user->data['group_id'];
@@ -144,8 +165,8 @@ class main
       
       $topic_id = request_var('topic_id', '0');
 
-      $tema = obtener_id_tema($topic_id);
-
+      $tema = $this->obtener_id_tema($topic_id);
+      
       $sql = "SELECT DISTINCT
               u.user_id,
               u.username
@@ -170,6 +191,24 @@ class main
       // prints the HTTP headers followed by the content
       return $response;
 
+    }
+
+    public function get_participantes_option($tema){
+
+      $sql = "SELECT DISTINCT
+              u.user_id,
+              u.username
+            FROM phpbby1_posts AS p
+            INNER JOIN phpbby1_users AS u
+              ON u.user_id = p.poster_id
+            WHERE p.topic_id = $tema";
+      $query = $this->db->sql_query($sql);
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<option value='" . $row['user_id'] . "'>" . $row['username'] . "</option>";
+      }
+      
+      return $options;
     }
 
     public function get_revisiones_user(){
@@ -239,6 +278,67 @@ class main
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
+    public function get_revision_vista(){
+
+      $rev_id = request_var('rev_id', '0');
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE id_revision = '.$rev_id);
+      $row = $this->db->sql_fetchrow($query);
+      $tema = $this->obtener_id_tema($row['enlace']);
+      $participantes = $this->get_participantes_option($tema);
+      $options = '<div class="card" id="vista_rev">
+        <h3>Vista Revision</h3><br>
+        <form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'">
+        <div class="card-body">
+          <div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Moderador Asignado:</label> 
+            <div class="col-6">
+              '.$row['moderador_asignado'].' 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Tipo de Tema:</label> 
+            <div class="col-6">
+              '.$row['tipo_revision'].' 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Enlace al Tema:</label> 
+            <div class="col-6">
+             <a href="'.$row['enlace'].'">Ir al tema</a> 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Información:</label> 
+            <div class="col-6">
+              '.$row['informacion'].' 
+            </div>
+          </div>
+            <div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Participantes:</label>
+              <select id="id_participante" name="id_participante" class="col-6 form-control">
+                '.$participantes.'
+              </select>
+            </div>
+            <div class="form-group row">
+              <div class="offset-4 col-5">
+                <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+              </div>
+            </div>
+          </form>
+        </div>';
 
       $response = new Response();
       
@@ -367,20 +467,20 @@ class main
       
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
-      $entorno  = asignar_puntuacion(request_var('entorno', 'No'));
-      $acciones = asignar_puntuacion(request_var('acciones', 'No'));
-      $interes  = asignar_puntuacion(request_var('interes', 'No'));
-      $longitud = asignar_puntuacion(request_var('longitud', 'No'));
+      $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
+      $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
+      $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
 
       //Estas hay que obtenerlas de otra función.
-      $info_rev = obtener_info_rev($revision);
-      $topic_id = obtener_id_tema($info_rev['enlace']);
+      $info_rev = $this->obtener_info_rev($revision);
+      $topic_id = $this->obtener_id_tema($info_rev['enlace']);
       $tipo_tema = $info_rev['tipo_tema'];
       $compas   = $info_rev['compas'];
       
       //Calculamos cosas para la experiencia y tal.
-      $porcentaje = calcular_porcentaje($compas, $tipo_tema);
-      $bono = calcular_bono($tipo_tema);
+      $bono = $this->calcular_bono($tipo_tema);
       $total = $entorno+$acciones+$interes+$longitud;
       
       //Obtenemos el número de post del usuario.
@@ -390,22 +490,34 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-
       $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
+
+
       if ($bono['experiencia'] == 0) {
         $experiencia = (($numero_post * $total)+20);
         $ryos = 750;
         $puntos_apen = 2;
       }
       else{
-        $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$porcentaje);
-        $ryos = $bono['ryos'];
+        $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
         if ($bono['experiencia'] == 3 || $bono['experiencia'] == 5 || $bono['experiencia'] == 7 || $bono['experiencia'] == 12) {
-          $puntos_apen = ceil($experiencia/30);
+          if ($gamemaster == "Si") {
+            $puntos_apen = ceil($experiencia/25);
+            $ryos = 0;
+          }else{
+            $puntos_apen = ceil($experiencia/30);
+            $ryos = $bono['ryos'];
+          }
         }else{
-          $puntos_apen = ceil($experiencia/20);
+          if ($gamemaster == "Si") {
+            $puntos_apen = ceil($experiencia/15);
+            $ryos = 0;
+          }else{
+            $puntos_apen = ceil($experiencia/20);
+            $ryos = $bono['ryos'];
+          }
         }
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
