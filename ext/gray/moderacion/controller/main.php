@@ -321,9 +321,14 @@ class main
       $tema = $this->obtener_id_tema($row['enlace']);
       $participantes = $this->get_participantes_option($tema);
       $options = '<div class="card" id="vista_rev">
-        <h3>Vista Revision</h3><br>
-        <form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'">
-        <div class="card-body">
+        <h3>Vista Revision</h3><br>';
+        if ($row['tipo_revision'] == "Combate") {
+          $options .= '<form method="POST" action="/mod/recompensa_combate/'.$rev_id.'">';
+        }
+        else{
+          $options .= '<form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'">';
+        }
+        $options .= '<div class="card-body">
           <div class="form-group row">
             <label for="longitud" class="col-3 col-form-label text-md-left">Moderador Asignado:</label> 
             <div class="col-6">

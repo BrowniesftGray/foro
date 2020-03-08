@@ -58,7 +58,6 @@ gray_moderacion_recompensa_combate:
     path: /mod/recompensa_combate/{rev_id}
     defaults: { _controller: gray.moderacion.controller:get_vista_recompensa_combate }
 
-
 gray_moderacion_asignar:
     path: /admin/asignar/{revision_id}
     defaults: { _controller: gray.moderacion.controller:update_revision_mod }
