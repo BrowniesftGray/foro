@@ -5,6 +5,7 @@ namespace gray\moderacion\controller;
 use Symfony\Component\HttpFoundation\Response;
 
 require_once('/home/shinobil/public_html/includes/functions_user.php');
+require_once('/home/shinobil/public_html/includes/functions_ficha.php');
 
 class main
 {
@@ -116,6 +117,26 @@ class main
         $this->template->assign_var('id_participante', $participante);
         
         return $this->helper->render('/moderacion/reward.html', 'Recompensas');
+      }else{
+        if ($participante == 0) {
+          trigger_error('Se ha perdido el id del usuario, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        }
+        else{
+          trigger_error('No tienes acceso a esta característica');
+        }
+      }
+
+    }
+
+    public function get_vista_recompensa_combate($rev_id){
+
+      $participante = request_var('id_participante', '0');
+      if($this->vista_staff() != "user" || $participante == 0){
+
+        $this->template->assign_var('id_revision', $rev_id);
+        $this->template->assign_var('id_participante', $participante);
+        
+        return $this->helper->render('/moderacion/rewardCombate.html', 'Recompensas');
       }else{
         if ($participante == 0) {
           trigger_error('Se ha perdido el id del usuario, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
@@ -256,7 +277,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         if ($row['estado'] == "registrada") {
@@ -273,6 +294,7 @@ class main
         }
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
+        $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
         $options .= "<td>" . $row['información'] . "</td>";
         $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
@@ -464,7 +486,7 @@ class main
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
 
-      trigger_error('Petción de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
+      trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
     }
 
     public function insert_recompensa(){
@@ -526,6 +548,87 @@ class main
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
+
+      $array = array();
+      $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+      $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+      $array['ADD_RYOS'] = $ryos;
+      $array['PUNTOS_APRENDIZAJE'] = 0;
+      $array['RAZON'] = "Revisión de tema";
+
+      registrar_moderacion($array, $user_id);
+
+      //Insert en la tabla revisiones_recompensas
+      $sql_array = array();
+      $sql_array['id_pj'] = $user_id;
+      $sql_array['id_revision'] = $revision;
+      $sql_array['experiencia'] = $experiencia;
+      $sql_array['pa'] = $puntos_apen;
+      $sql_array['ryos'] = $ryos;
+
+      //Insert en la tabla revisiones_recompensas
+      $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+      $this->db->sql_query($sql);
+
+      trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+    }
+
+    public function insert_recompensa_combate(){
+      
+      $revision = request_var('id_revision', '0');
+      $user_id  = request_var('id_participante', '0');
+      $nivel = request_var('nivel_adversario', '1');
+      $metarol  = $this->asignar_puntuacion_combate(request_var('metarol', 'No'));
+      $estrategia = $this->asignar_puntuacion_combate(request_var('estrategia', 'No'));
+      $longitud_combate  = $this->asignar_puntuacion_combate(request_var('longitud', 'No'));
+      $victoria = $this->asignar_puntuacion_combate(request_var('victoria', 'No'));
+      $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
+      $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
+      $info_rev = $this->obtener_info_rev($revision);
+      $topic_id = $this->obtener_id_tema($info_rev['enlace']);
+      
+      //Calculamos cosas para la experiencia y tal.
+      $total = $entorno+$acciones+$interes+$longitud;
+      $total_combate = $metarol+$estrategia+$longitud_combate+$victoria;
+      
+      //Obtenemos el número de post del usuario.
+      $sql = "SELECT	p.poster_id as user_id,
+                COUNT(0) as cantidad
+              FROM phpbby1_posts p
+              WHERE p.topic_id = $topic_id
+                  AND p.poster_id = $user_id
+              GROUP BY p.poster_id";
+      $this->db->sql_query($sql);
+      $row = $this->db->sql_fetchrow($query);
+      $numero_post = $row['cantidad'];
+
+      $experiencia = (($numero_post * $total)+(($nivel*10)*$total_combate));
+      $puntos_apen = (4/$total_combate);
+      $ryos = 0;
+
+      $array = array();
+      $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+      $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+      $array['ADD_RYOS'] = $ryos;
+      $array['PUNTOS_APRENDIZAJE'] = 0;
+      $array['RAZON'] = "Revisión de combate";
+
+      registrar_moderacion($array, $user_id);
+
+      $sql_array = array();
+      $sql_array['id_pj'] = $user_id;
+      $sql_array['id_revision'] = $revision;
+      $sql_array['experiencia'] = $experiencia;
+      $sql_array['pa'] = $puntos_apen;
+      $sql_array['ryos'] = $ryos;
+
+      //Insert en la tabla revisiones_recompensas
+      $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+      $this->db->sql_query($sql);
+
+      trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
     }
 
     public function asignar_puntuacion($criterio){
@@ -535,10 +638,23 @@ class main
             $criterio = 1;
           break;
         case 'A veces':
-            $criterio = 0.55;
+            $criterio = 0.60;
           break;
         case 'No':
             $criterio = 0.15;
+          break;        
+      }
+      return $criterio;
+    }
+
+    public function asignar_puntuacion_combate($criterio){
+
+      switch ($criterio) {
+        case 'Si':
+            $criterio = 0.25;
+          break;
+        case 'No':
+            $criterio = 0;
           break;        
       }
       return $criterio;

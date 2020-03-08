@@ -22,6 +22,14 @@ gray_moderacion_view_admin:
     path: /mod/viewAdmin
     defaults: { _controller: gray.moderacion.controller:view_admin }
 
+gray_moderacion_insert_recompensa_tema:
+    path: /mod/insert_recompensa_tema
+    defaults: { _controller: gray.moderacion.controller:insert_recompensa }
+
+gray_moderacion_insert_recompensa_combate:
+    path: /mod/insert_recompensa_combate
+    defaults: { _controller: gray.moderacion.controller:insert_recompensa_combate }
+
 gray_moderacion_revisione_user:
     path: /moderaciones/revisiones_user
     defaults: { _controller: gray.moderacion.controller:get_revisiones_user }
@@ -46,9 +54,10 @@ gray_moderacion_recompensa_usuario:
     path: /mod/recompensa_usuario/{rev_id}
     defaults: { _controller: gray.moderacion.controller:get_vista_recompensa }
 
-gray_moderacion_dar_recompensa_usuario:
-    path: /mod/otorga_recompensa/
-    defaults: { _controller: gray.moderacion.controller:insert_recompensa }
+gray_moderacion_recompensa_combate:
+    path: /mod/recompensa_combate/{rev_id}
+    defaults: { _controller: gray.moderacion.controller:get_vista_recompensa_combate }
+
 
 gray_moderacion_asignar:
     path: /admin/asignar/{revision_id}
