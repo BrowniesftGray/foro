@@ -9,6 +9,7 @@
 <input type="hidden" id="rev_id" name="rev_id" value="{rev_id}">
 <div class="container">
     <div id="tabla_vista"></div>
+    <span id="cerrar_revision" class="btn btn-warning">Cerrar Revisión</span>
 </div>
 <!-- jQuery CDN - Slim version (=without AJAX) -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -29,6 +30,22 @@
         success: function(result){
           $("#tabla_vista").html(result);
         }
+      });
+
+      $(document).off('click', '#cerrar_revision')
+        .on('click', '#cerrar_revision', function(){
+          var estado = "cerrada";
+          $.ajax({
+            data: {
+              'id_revision': rev_id,
+              'estado': estado,
+            }, 
+            url: "/mod/update_revision",  
+            type : 'POST', 
+            success: function(result){
+              alert("Se ha cerrado correctamente la revisión.");
+            }
+          });
         });
     });
   </script>

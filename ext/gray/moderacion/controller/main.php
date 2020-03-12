@@ -88,9 +88,15 @@ class main
 
       if($this->vista_staff() != "user"){
 
-        $this->template->assign_var('rev_id', $rev_id);
-        
-        return $this->helper->render('/moderacion/viewRev.html', 'Recompensas');
+        $user_id = $this->user->data['user_id'];
+        if (($this->obtener_mod_asignado($rev_id, $user_id)) == false || $this->vista_staff() == "admin") {
+
+          $this->template->assign_var('rev_id', $rev_id);
+          return $this->helper->render('/moderacion/viewRev.html', 'Recompensas');
+        }
+        else{
+          trigger_error('No tienes asignada esta revisión.');
+        }
       }else{
         trigger_error('No tienes acceso a esta característica.');
       }
@@ -180,6 +186,20 @@ class main
     public function get_return_link()
     {
       return "<br /><a href='/mod'>Volver</a>.";
+    }
+
+    public function obtener_mod_asignado($revision, $mod){
+      $sql = "SELECT id_revision
+              FROM revisiones
+              WHERE id_revision = $revision
+                AND moderador_asignado = $mod";
+
+      $query = $this->db->sql_query($sql);
+      $row = $this->db->sql_fetchrow($query);
+      if(!$row){
+          $row = false;
+        }
+      return $row;
     }
 
     public function get_participantes($topic_id = 0){
@@ -362,14 +382,16 @@ class main
               <select id="id_participante" name="id_participante" class="col-6 form-control">
                 '.$participantes.'
               </select>
-            </div>
-            <div class="form-group row">
-              <div class="offset-4 col-5">
+            </div>';
+          if ($row['estado'] != "cerrada") {
+            $options.='<div class="form-group row">
+                <div class="offset-4 col-5">
                 <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
-              </div>
-            </div>
-          </form>
-        </div>';
+                </div>
+                </div>
+                </form>
+                </div>';
+            }
 
       $response = new Response();
       
@@ -494,10 +516,11 @@ class main
       trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
     }
 
-    public function insert_recompensa(){
+    public function dar_recompensa(){
       
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
+      $alt_id   = request_var('id_alternativo', '0');
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
@@ -554,35 +577,51 @@ class main
 
       }
 
-      $array = array();
-      $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
-      $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
-      $array['ADD_RYOS'] = $ryos;
-      $array['PUNTOS_APRENDIZAJE'] = 0;
-      $array['RAZON'] = "Revisión de tema";
+      if($alt_id != ""){
 
-      registrar_moderacion($array, $user_id);
+        $pj_id = get_pj_id($alt_id);
+        $check = comprobar_recompensa($revision, $pj_id);
+      }else{
+        $pj_id = get_pj_id($user_id);
+        $check = comprobar_recompensa($revision, $pj_id);
+      }
 
-      //Insert en la tabla revisiones_recompensas
-      $sql_array = array();
-      $sql_array['id_pj'] = $user_id;
-      $sql_array['id_revision'] = $revision;
-      $sql_array['experiencia'] = $experiencia;
-      $sql_array['pa'] = $puntos_apen;
-      $sql_array['ryos'] = $ryos;
+      if(count($check) > 0){
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
+      else{
+          $array = array();
+          $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+          $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+          $array['ADD_RYOS'] = $ryos;
+          $array['PJ_ID'] = $pj_id;
+          $array['PUNTOS_APRENDIZAJE'] = 0;
+          $array['RAZON'] = "Revisión de tema";
 
-      //Insert en la tabla revisiones_recompensas
-      $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
-      $this->db->sql_query($sql);
+          registrar_moderacion($array, $user_id);
 
-      trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+          //Insert en la tabla revisiones_recompensas
+          $sql_array = array();
+          $sql_array['id_pj'] = $user_id;
+          $sql_array['id_revision'] = $revision;
+          $sql_array['experiencia'] = $experiencia;
+          $sql_array['pa'] = $puntos_apen;
+          $sql_array['ryos'] = $ryos;
+
+          //Insert en la tabla revisiones_recompensas
+          $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+          $this->db->sql_query($sql);
+
+          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
     }
 
-    public function insert_recompensa_combate(){
+    public function dar_recompensa_combate(){
       
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
       $nivel = request_var('nivel_adversario', '1');
+      $alt_id   = request_var('id_alternativo', '0');
       $metarol  = $this->asignar_puntuacion_combate(request_var('metarol', 'No'));
       $estrategia = $this->asignar_puntuacion_combate(request_var('estrategia', 'No'));
       $longitud_combate  = $this->asignar_puntuacion_combate(request_var('longitud', 'No'));
@@ -612,28 +651,43 @@ class main
       $experiencia = (($numero_post * $total)+(($nivel*10)*$total_combate));
       $puntos_apen = (4/$total_combate);
       $ryos = 0;
+      
+      if($alt_id != ""){
 
-      $array = array();
-      $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
-      $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
-      $array['ADD_RYOS'] = $ryos;
-      $array['PUNTOS_APRENDIZAJE'] = 0;
-      $array['RAZON'] = "Revisión de combate";
+        $pj_id = get_pj_id($alt_id);
+        $check = comprobar_recompensa($revision, $pj_id);
+      }else{
+        $pj_id = get_pj_id($user_id);
+        $check = comprobar_recompensa($revision, $pj_id);
+      }
 
-      registrar_moderacion($array, $user_id);
+      if(count($check) > 0){
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
+      else{
+        $array = array();
+        $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+        $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+        $array['ADD_RYOS'] = $ryos;
+        $array['PJ_ID'] = $pj_id;
+        $array['PUNTOS_APRENDIZAJE'] = 0;
+        $array['RAZON'] = "Revisión de combate";
 
-      $sql_array = array();
-      $sql_array['id_pj'] = $user_id;
-      $sql_array['id_revision'] = $revision;
-      $sql_array['experiencia'] = $experiencia;
-      $sql_array['pa'] = $puntos_apen;
-      $sql_array['ryos'] = $ryos;
-
-      //Insert en la tabla revisiones_recompensas
-      $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
-      $this->db->sql_query($sql);
-
-      trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        registrar_moderacion($array, $user_id);
+        
+        $sql_array = array();
+        $sql_array['id_pj'] = $user_id;
+        $sql_array['id_revision'] = $revision;
+        $sql_array['experiencia'] = $experiencia;
+        $sql_array['pa'] = $puntos_apen;
+        $sql_array['ryos'] = $ryos;
+        
+        //Insert en la tabla revisiones_recompensas
+        $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+        $this->db->sql_query($sql);
+        
+        trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
     }
 
     public function asignar_puntuacion($criterio){
@@ -832,5 +886,33 @@ class main
           $bono['porcentaje'] = 30;
           break;
       }
+    }
+
+    function update_revision(){
+      
+      $revision = request_var('id_revision', '0');
+      $estado  = request_var('estado', '0');
+
+      $sql = "  UPDATE revisiones
+                SET
+                  estado = '".$estado."'
+                WHERE id_revision = $revision";
+
+      $query = $this->db->sql_query($sql);
+
+      trigger_error('Revisión modificada correctamente al estado '.$estado.'. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>.');
+    }
+
+    function comprobar_recompensa($revision, $id_pj){
+
+      
+      $sql = "SELECT id_recompensa
+              FROM revisiones_recompensas
+              WHERE id_revision = $revision
+                AND id_pj = $id_pj";
+
+       $query = $this->db->sql_query($sql);
+       $row = $this->db->sql_fetchrow($query);
+       return $row;
     }
 }
