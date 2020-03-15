@@ -10,6 +10,7 @@
 <div class="container">
     <div id="tabla_vista"></div>
     <span id="cerrar_revision" class="btn btn-warning">Cerrar Revisión</span>
+    <span id="rechazar_revision" class="btn btn-warning">Rechazar Revisión</span>
 </div>
 <!-- jQuery CDN - Slim version (=without AJAX) -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -44,6 +45,22 @@
             type : 'POST', 
             success: function(result){
               alert("Se ha cerrado correctamente la revisión.");
+            }
+          });
+        });
+
+        $(document).off('click', '#rechazar_revision')
+        .on('click', '#rechazar_revision', function(){
+          var estado = "rechazada";
+          $.ajax({
+            data: {
+              'id_revision': rev_id,
+              'estado': estado,
+            }, 
+            url: "/mod/update_revision",  
+            type : 'POST', 
+            success: function(result){
+              alert("Se ha rechazado correctamente la revisión.");
             }
           });
         });

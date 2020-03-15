@@ -335,18 +335,22 @@ class main
 
     public function get_revision_vista(){
 
+      $compis = false;
       $rev_id = request_var('rev_id', '0');
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE id_revision = '.$rev_id);
       $row = $this->db->sql_fetchrow($query);
       $tema = $this->obtener_id_tema($row['enlace']);
-      $participantes = $this->get_participantes_option($tema);
       $options = '<div class="card" id="vista_rev">
-        <h3>Vista Revision</h3><br>';
-        if ($row['tipo_revision'] == "Combate") {
-          $options .= '<form method="POST" action="/mod/recompensa_combate/'.$rev_id.'">';
+      <h3>Vista Revision</h3><br>';
+      if ($row['tipo_revision'] == "Combate") {
+        $participantes = $this->get_participantes_option($tema);
+        $options .= '<form method="POST" action="/mod/recompensa_combate/'.$rev_id.'" target="_blank">';
+          $compis = true;
         }
-        else{
-          $options .= '<form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'">';
+        else if(strstr("Mision", $row['tipo_revision']) OR strstr("Encargo", $row['tipo_revision']) OR strstr("Trama", $row['tipo_revision'])){
+        $participantes = $this->get_participantes_option($tema);
+        $options .= '<form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'" target="_blank">';
+          $compis = true;
         }
         $options .= '<div class="card-body">
           <div class="form-group row">
@@ -364,7 +368,7 @@ class main
           <div class="form-group row">
             <label for="longitud" class="col-3 col-form-label text-md-left">Enlace al Tema:</label> 
             <div class="col-6">
-             <a href="'.$row['enlace'].'">Ir al tema</a> 
+             <a target="_blank" href="'.$row['enlace'].'">Ir al tema</a> 
             </div>
           </div>
           ';
@@ -377,13 +381,24 @@ class main
               </div>';
           }
 
-          $options .= '<div class="form-group row">
+          if ($compis == true) {
+            # code...
+            $options .= '<div class="form-group row">
             <label for="longitud" class="col-3 col-form-label text-md-left">Participantes:</label>
-              <select id="id_participante" name="id_participante" class="col-6 form-control">
-                '.$participantes.'
-              </select>
+            <select id="id_participante" name="id_participante" class="col-6 form-control">
+            '.$participantes.'
+            </select>
             </div>';
-          if ($row['estado'] != "cerrada") {
+          }
+          else{
+            $options .= '<div class="form-group row">
+            <label for="longitud" class="col-3 col-form-label text-md-left">Ficha Usuario:</label>
+            <div class="col-6">
+              <a target="_blank" href="/ficha/'.$row['id_usuario'].'"> Ficha del Usuario</a>
+            </div>
+            </div>';
+          }
+          if ($row['estado'] != "cerrada" || $compis == false) {
             $options.='<div class="form-group row">
                 <div class="offset-4 col-5">
                 <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
@@ -449,12 +464,12 @@ class main
     public function insert_revision($tipo_revision){
 
       $user_id = $this->user->data['user_id'];
-
+      $fecha = date("Y-m-d");
       $sql_array = array(
         'id_usuario'	=> $user_id,
         'estado'		=> "registrada",
         'moderador_asignado'		=> 0,
-        'fecha_creacion' => "now()",
+        'fecha_creacion' => $fecha,
       );
 
       switch ($tipo_revision) {
@@ -900,6 +915,45 @@ class main
 
       $query = $this->db->sql_query($sql);
 
+      if($estado == "cerrada"){
+
+        $tema = $this->obtener_info_rev($revision);
+        $tema = $tema['tipo_tema'];
+
+        $sql = "SELECT COUNT(0) as cantidad
+              FROM phpbby1_posts p
+              WHERE p.topic_id = $tema";
+
+        $this->db->sql_query($sql);
+        $row = $this->db->sql_fetchrow($query);
+        $numero_post = $row['cantidad'];
+        
+        $mod = $this->calcular_puntos_mod($tema);
+        $puntos_totales = "";
+        
+        if ($mod['post'] == 1) {
+          $puntos_totales = $mod['puntos'] * $numero_post;
+        }else if($mod['post'] == 0){
+          $puntos_totales = $mod['puntos'];
+        }
+
+        $mod_id = $this->user->data['user_id'];
+
+        $this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
+										SET pf_puntos_mod = pf_puntos_mod + $puntos_totales
+                    WHERE user_id = '$mod_id'");
+                    
+                
+        $sql_array = array();
+        $sql_array['mod_id'] = $mod_id;
+        $sql_array['puntos_mod'] = $puntos_totales;
+        $sql_array['rev_id'] = $revision;
+        
+        //Insert en la tabla revisiones_recompensas
+        $sql = "INSERT INTO revisiones_puntos_mod " . $this->db->sql_build_array('INSERT', $sql_array);
+        $this->db->sql_query($sql);
+      }
+      
       trigger_error('Revisión modificada correctamente al estado '.$estado.'. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>.');
     }
 
@@ -914,5 +968,51 @@ class main
        $query = $this->db->sql_query($sql);
        $row = $this->db->sql_fetchrow($query);
        return $row;
+    }
+
+    public function calcular_puntos_mod($tipo_tema){
+
+      $bono = array(
+        'puntos' => 0,
+        'post' => 0,
+        );
+
+      switch ($tipo_tema) {
+
+        case 'Crónica':
+          $bono['puntos'] = 6;
+          $bono['post'] = 0;
+        break;
+        
+        case 'Activacion Ficha':
+          $bono['puntos'] = 6;
+          $bono['post'] = 0;
+        break;
+        
+        case 'Revision Ficha':
+          $bono['puntos'] = 3;
+          $bono['post'] = 0;
+        break;
+        
+        case 'Solicitud Encargo':
+          $bono['puntos'] = 2;
+          $bono['post'] = 0;
+        break;
+        
+        case 'Moderacion Combate':
+          $bono['puntos'] = 30;
+          $bono['post'] = 0;
+        break;
+        
+        case 'Patreon':
+          $bono['puntos'] = 5;
+          $bono['post'] = 0;
+        break;
+        
+        default:
+           $bono['puntos'] = 1;
+           $bono['post'] = 1;
+          break;
+      }
     }
 }
