@@ -362,6 +362,7 @@ define('PREMIO_TOTALES_INTERVALO',				50);
 define('PREMIO_TOTALES_EXP',					30);
 define('PREMIO_TOTALES_PA',						3);
 define('PREMIO_CARACTERES_MIN',					1000);
+define('TIPO_TEMA_OFFROL',						10);
 
 // Banner foro constants
 define('BANNER_FORO_ONROL',						1);

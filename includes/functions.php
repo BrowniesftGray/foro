@@ -5137,7 +5137,7 @@ function phpbb_get_board_contact_link(\phpbb\config\config $config, $phpbb_root_
 /**
 * Get forum rol data
 */	
-function get_forum_rol_data($forum_id) {
+function get_forum_rol_data($forum_id, $topic_id = false) {
 	global $db;
 	
 	$sql = 'SELECT *
@@ -5154,6 +5154,16 @@ function get_forum_rol_data($forum_id) {
 		);
 	}
 	$db->sql_freeresult($result);
+	
+	if ($topic_id) {
+		$sql = 'SELECT tipo_id FROM '.TOPICS_ROL_TABLE." WHERE topic_id = $topic_id";
+		$result = $db->sql_query($sql);
+		if ($row = $db->sql_fetchrow($result)) {
+			if ($row['tipo_id'] == TIPO_TEMA_OFFROL)
+				$data['onrol'] = false;
+		}
+		$db->sql_freeresult($result);
+	}
 	
 	return $data;
 }

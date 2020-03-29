@@ -1957,7 +1957,8 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 			}
 			
 			// guardar stats del post
-			store_pj_data($data_ary);
+			if ($topic_rol_data['tipo_id'] != TIPO_TEMA_OFFROL)
+				store_pj_data($data_ary);
 		
 			// si supera los caracteres mínimos para premio diario
 			if (strlen($data_ary['message']) >= PREMIO_CARACTERES_MIN) {
