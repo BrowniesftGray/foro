@@ -2127,8 +2127,9 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 	if ($pj_data) $post_row = array_merge($post_row, $pj_data);
 	
 	// EVENTO PASCUA
+	$pj_id_view = get_pj_id($user->data['user_id']);
 	$huevos_data = get_huevos_data($row['post_id'], $user->data['user_id']);
-	if ($huevos_data && $pj_id) $post_row = array_merge($post_row, $huevos_data);
+	if ($huevos_data && $pj_id_view) $post_row = array_merge($post_row, $huevos_data);
 
 	// Dump vars into template
 	$template->assign_block_vars('postrow', $post_row);
