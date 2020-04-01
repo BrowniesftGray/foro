@@ -5176,6 +5176,17 @@ function get_huevos_data ($post_id, $user_id) {
 	global $db;
 	$data = false;
 	
+	$sql = "SELECT COUNT(0) as qty
+				FROM ".POSTS_HUEVOS_TABLE."
+				WHERE user_id = $user_id";
+	$result = $db->sql_query($sql);
+	$qty = (int) $db->sql_fetchfield('qty');
+	$db->sql_freeresult($result);
+	
+	if ($qty == HUEVO_MAX) {
+		return false;
+	}				
+	
 	$sql = "SELECT tipo_huevo, encontrado
 				FROM ".POSTS_HUEVOS_TABLE."
 				WHERE post_id = $post_id";
