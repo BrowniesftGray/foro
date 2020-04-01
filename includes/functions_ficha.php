@@ -1007,7 +1007,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	// }
 
 	if ((int)$fields['PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_PUNTOS_EXPERIENCIA'] != 0 || (int)$fields['ADD_PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_RYOS'] != 0) {
-		if (registrar_tema($user_id, (int)$fields['ADD_PUNTOS_EXPERIENCIA'], (int)$fields['ADD_PUNTOS_APRENDIZAJE'], (int)$fields['ADD_RYOS'], (int)$fields['PUNTOS_APRENDIZAJE']) == true) {
+		if (registrar_tema($user_id, (int)$fields['ADD_PUNTOS_EXPERIENCIA'], (int)$fields['ADD_PUNTOS_APRENDIZAJE'], (int)$fields['ADD_RYOS'], (int)$fields['PUNTOS_APRENDIZAJE'], (int)$fields['ADD_PUNTOS_EVENTO']) == true) {
 			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
 			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
 
@@ -1027,6 +1027,10 @@ function registrar_moderacion(array $fields, $user_id = 0){
 			}
 
 			$fields['RAZON'] = $fields['RAZON']." | ".$fields['ADD_PUNTOS_EXPERIENCIA']." EXP | ".$ptos_aprendizaje_total." PA | ".$fields['ADD_RYOS']." RYOS";
+			
+			if ((int)$fields['ADD_PUNTOS_EVENTO'] != 0) {
+				$fields['RAZON'] .= ' | ' . $fields['ADD_PUNTOS_EVENTO'] . ' PE';
+			}
 		}
 	}
 
@@ -1301,7 +1305,7 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 }
 
 
-function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_apen_negativos)
+function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_apen_negativos, $puntos_evento = 0)
 {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
@@ -1344,6 +1348,13 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 		$ptos_ryos = $user->profile_fields['pf_ryos'];
 	}
 
+	if (!array_key_exists('pf_puntos_evento', $user->profile_fields)) {
+		$ptos_evento = 0;
+	}
+	else{
+		$ptos_evento = $user->profile_fields['pf_puntos_evento'];
+	}
+
 	if ($ptos_aprendizaje_total < 0) {
 		$msg_error = 'No tienes suficientes Puntos de Aprendizaje para aprender la técnica.';
 		trigger_error($msg_error."<br /><a href='/ficha/$user_id'>Volver a la ficha</a>.");
@@ -1353,6 +1364,7 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 
 	$ptos_experiencia_total = $puntos_experiencia + $experiencia;
 	$ptos_ryos = $ptos_ryos + $ryos;
+	$ptos_evento = $ptos_evento + $puntos_evento;
 
 
 	$pj_id = get_pj_id($user_id);
@@ -1361,7 +1373,8 @@ function registrar_tema($user_id, $experiencia, $puntos_apen, $ryos, $puntos_ape
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
 							SET pf_experiencia = '$ptos_experiencia_total',
 									pf_puntos_apren = '$ptos_aprendizaje_total',
-									pf_ryos = '$ptos_ryos'
+									pf_ryos = '$ptos_ryos',
+									pf_puntos_evento = '$ptos_evento'
 							WHERE user_id = '$user_id'");
 
 		// $enlace = $enlace." Experiencia: +".$experiencia." | Puntos de aprendizaje: +".$puntos_apen." | Ryos: +".$ryos;
@@ -1446,6 +1459,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 	
 	$premio_pa = 0;
 	$premio_exp = 0;
+	$premio_pe = 0;
 
 	//El pj_id para cosas futuras (?????)
 	$pj_id = get_pj_id($user_id);
@@ -1518,6 +1532,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 		}
 		else {
 			$premio_exp += PREMIO_CADENA_BASE_EXP;
+			$premio_pe += PREMIO_CADENA_BASE_PE;
 		}
 		
 		// Sumamos un premio diario al total acumulado
@@ -1538,6 +1553,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 		
 		if ($posts_diarios <= PREMIO_POST_BASE_MAX) {
 			$premio_exp += PREMIO_POST_BASE_EXP;
+			$premio_pe += PREMIO_POST_BASE_PE;
 		}
 		
 		if ($premio_exp > 0) {
@@ -1564,9 +1580,12 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 	}
 	
 	// Si hay premios, se registra una moderación
-	if ($premio_exp > 0 || $premio_pa > 0) {
+	if ($premio_exp > 0 || $premio_pa > 0 || $premio_pe) {
+		
 		$moderacion['ADD_PUNTOS_EXPERIENCIA'] = $premio_exp;
 		$moderacion['ADD_PUNTOS_APRENDIZAJE'] = $premio_pa;
+		$moderacion['ADD_PUNTOS_EVENTO'] = $premio_pe;
+		
 		registrar_moderacion($moderacion, $user_id);
 	}
 }

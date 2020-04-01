@@ -88,7 +88,8 @@
 
 		<div class="content">
 			<h2 class="poll-title"><!-- EVENT viewtopic_body_poll_question_prepend -->{POLL_QUESTION}<!-- EVENT viewtopic_body_poll_question_append --></h2>
-			<p class="author">{L_POLL_LENGTH}<!-- IF S_CAN_VOTE and L_POLL_LENGTH --><br /><!-- ENDIF --><!-- IF S_CAN_VOTE --><span class="poll_max_votes">{L_MAX_VOTES}</span><!-- ENDIF --></p>
+			<p class="author">{L_POLL_LENGTH}<!-- IF S_CAN_VOTE and L_POLL_LENGTH --><br /><!-- ENDIF --><!-- IF S_CAN_VOTE --><span class="poll_max_votes">{L_MAX_VOTES}</span><!-- ENDIF -->
+			</p>
 
 			<fieldset class="polls">
 			<!-- BEGIN poll_option -->
@@ -463,6 +464,14 @@
 							<span class="responsive-hide"><strong>{postrow.POST_AUTHOR_FULL}</strong>,&nbsp;</span>{postrow.POST_DATE}
 						</p>
 						<!-- EVENT viewtopic_body_postrow_post_details_after -->
+						
+						<!-- IF postrow.HUEVO_TIPO and not postrow.HUEVO_ENCONTRADO -->
+						<form action="{postrow.HUEVO_ACTION}" method="post">
+							<input type="hidden" name="post_id" value="{postrow.POST_ID}" />
+							<input type="hidden" name="huevo" value="{postrow.HUEVO_FIRMA}" />
+							<input type="image" src="{postrow.HUEVO_IMAGEN}" alt="Tomar huevo" title="¡Tómalo!" />
+						</form>
+						<!-- ENDIF -->
 						
 						<!-- IF postrow.S_ROLEPLAY_FORUM and postrow.S_STATS_CHANGED -->
 						<div class="stats-box">

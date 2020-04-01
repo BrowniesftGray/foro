@@ -5167,3 +5167,52 @@ function get_forum_rol_data($forum_id, $topic_id = false) {
 	
 	return $data;
 }
+
+
+/**
+* EVENTO PASCUA
+*/	
+function get_huevos_data ($post_id, $user_id) {
+	global $db;
+	$data = false;
+	
+	$sql = "SELECT tipo_huevo, encontrado
+				FROM ".POSTS_HUEVOS_TABLE."
+				WHERE post_id = $post_id";
+	$result = $db->sql_query($sql);
+	
+	if ($row = $db->sql_fetchrow($result)) {
+		switch ((int)$row['tipo_huevo']) {
+			case 1: 
+				$imagen = HUEVO_TIPO_1_IMG; 
+				$nombre = HUEVO_TIPO_1_NOMBRE;
+				$item 	= HUEVO_TIPO_1_ITEM;
+				break;
+			case 2:
+				$imagen = HUEVO_TIPO_2_IMG; 
+				$nombre = HUEVO_TIPO_2_NOMBRE;
+				$item 	= HUEVO_TIPO_2_ITEM;
+				break;
+			case 3: 
+				$imagen = HUEVO_TIPO_3_IMG;
+				$nombre = HUEVO_TIPO_3_NOMBRE;
+				$item 	= HUEVO_TIPO_3_ITEM;
+				break;
+		}
+		
+		$firma = ((int)$post_id + (int)$row['tipo_huevo'] + (int)$user_id) * 48;
+		
+		$data = array(
+			'HUEVO_ACTION'		=> '/ficha/huevo/' . $user_id,
+			'HUEVO_FIRMA'		=> $firma,
+			'HUEVO_TIPO'		=> $row['tipo_huevo'],
+			'HUEVO_ENCONTRADO'	=> $row['encontrado'],
+			'HUEVO_IMAGEN'		=> $imagen,
+			'HUEVO_NOMBRE'		=> $nombre,
+			'HUEVO_ITEM'		=> $item,
+		);
+	}
+	$db->sql_freeresult($result);
+	
+	return $data;
+}

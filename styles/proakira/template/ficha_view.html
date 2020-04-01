@@ -415,6 +415,7 @@
 					  <div class="tab-pane fade" id="inventario" role="tabpanel" aria-labelledby="inventario-tab">
 						<h3>Inventario</h3><br>
 						<!-- BEGIN categoria_item -->
+						<!-- IF categoria_item.items -->
 						<h3><i class="icon fa-fw {categoria_item.FA_ICON}"></i>{categoria_item.NOMBRE}</h3>
 						<ul class="inventory">
 							<!-- BEGIN categoria_item.items -->
@@ -457,6 +458,7 @@
 							<!-- END categoria_item.items -->
 							<br class="clear" />
 						</ul>
+						<!-- ENDIF -->
 						<!-- END categoria_item -->
 					  </div>
 					  <!-- ENDIF -->

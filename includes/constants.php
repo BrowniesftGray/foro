@@ -341,6 +341,7 @@ define('TOPICS_ROL_TABLE',				'topics_rol');
 define('FORUMS_ROL_TABLE',				'forums_rol');
 define('TIPOS_TEMA_TABLE',				'tipos_tema');
 define('RANGOS_TABLE',					'rangos');
+define('POSTS_HUEVOS_TABLE',			'posts_huevos');
 
 // Patreon constants
 define('PATREON_TIER_ACTION_NO_ACTION',			'-1');
@@ -354,7 +355,9 @@ define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');
 // Premio diario constants
 define('PREMIO_POST_BASE_MAX',					10);
 define('PREMIO_POST_BASE_EXP',					1);
+define('PREMIO_POST_BASE_PE',					1);
 define('PREMIO_CADENA_BASE_EXP',				5);
+define('PREMIO_CADENA_BASE_PE',					2);
 define('PREMIO_CADENA_COMPLETA_CANTIDAD',		7);
 define('PREMIO_CADENA_COMPLETA_EXP',			10);
 define('PREMIO_CADENA_COMPLETA_PA',				1);
@@ -370,7 +373,18 @@ define('BANNER_FORO_ONROL_GRANDE',				2);
 define('BANNER_FORO_OFFROL',					3);
 define('BANNER_FORO_ESTANDAR',					4);
 
-// Revisiones constant
-define('REVISIONES',						'revisiones');
-define('TIPO_REVISIONES',					'tipo de revisiones');
-define('COMENTARIOS_REVISIONES',			'comentarios de revisiones');
+// Revisiones constants
+define('REVISIONES',					'revisiones');
+define('TIPO_REVISIONES',				'tipo de revisiones');
+define('COMENTARIOS_REVISIONES',		'comentarios de revisiones');
+
+// Eventos constants
+define('HUEVO_TIPO_1_NOMBRE',			'Exclusivo');
+define('HUEVO_TIPO_2_NOMBRE',			'Raro');
+define('HUEVO_TIPO_3_NOMBRE',			'Normal');
+define('HUEVO_TIPO_1_IMG',				'/images/pascua/huevOP.png');
+define('HUEVO_TIPO_2_IMG',				'/images/pascua/interhuevo.png');
+define('HUEVO_TIPO_3_IMG',				'/images/pascua/huevormal.png');
+define('HUEVO_TIPO_1_ITEM',				'139');
+define('HUEVO_TIPO_2_ITEM',				'138');
+define('HUEVO_TIPO_3_ITEM',				'137');

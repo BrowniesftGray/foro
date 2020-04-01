@@ -223,7 +223,7 @@ class main
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
 		));
 
-		$categorias = get_full_shops();
+		$categorias = get_full_shops(true);
 		foreach($categorias as $cat) {
 			$this->template->assign_block_vars('categoria_item', $cat);
 			$items = get_pj_inventory($pj_id, 0, $cat['ID']);
@@ -954,6 +954,59 @@ class main
 		registrar_moderacion($moderacion);
 
 		return $this->view($user_id);
+	}
+	
+	// EVENTO PASCUA
+	function huevo ($user_id) {
+		$post_id = request_var('post_id', 0);
+		$huevo = request_var('huevo', 0);
+		
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.<br /><a href="javascript:window.history.back(-1)">¡Oops!</a>');
+		
+		$data = get_huevos_data($post_id, $user_id);
+		
+		if (!$data || $huevo != $data['HUEVO_FIRMA']) {
+			trigger_error('¡Ese huevo no existe! ¿Habrá sido un error, o intentaste hacer trampa?<br /><a href="javascript:window.history.back(-1)">Mierda, me atraparon...</a>');
+		}
+		
+		if ($data['HUEVO_ENCONTRADO']) {
+			trigger_error('¡Diantres! Alguien agarró el huevo antes que tú...<br /><a href="javascript:window.history.back(-1)">Siga participando.</a>');
+		}
+		
+		$sql_array = array(
+			'tipo_huevo'	=> $data['HUEVO_TIPO'],
+			'encontrado'	=> true,
+			'fecha_encontrado'	=> date('Y-m-d h:i:s'),
+			'user_id'		=> $user_id,
+		);
+		
+		$sql = 'UPDATE ' . POSTS_HUEVOS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . " WHERE post_id = $post_id";
+		$this->db->sql_query($sql);
+		
+		$item_id = $data['HUEVO_ITEM'];
+		
+		$sql = 'UPDATE ' . PERSONAJE_ITEMS_TABLE .
+				" SET cantidad = cantidad + 1
+				WHERE pj_id = $pj_id
+					AND item_id = $item_id";
+		$this->db->sql_query($sql);
+		
+		if($this->db->sql_affectedrows() < 1) {
+			$sql = 'INSERT INTO ' . PERSONAJE_ITEMS_TABLE .
+					"(pj_id, item_id, cantidad)
+					VALUES($pj_id, $item_id, 1)";
+			$this->db->sql_query($sql);
+		}
+		
+		$moderacion = array(
+			'PJ_ID'	=> $pj_id,
+			'RAZON'	=> '¡Obtenido Huevo ' . $data['HUEVO_NOMBRE'] . '!',
+		);
+		registrar_moderacion($moderacion);
+		
+		trigger_error('<b>¡HUEVO OBTENIDO!</b> Podrás canjearlo en la tienda del evento.<br />
+						<a href="javascript:window.history.back(-1)">Volver al tema</a>.' . $this->get_return_link($user_id));
 	}
 
 	function get_return_link($user_id) {

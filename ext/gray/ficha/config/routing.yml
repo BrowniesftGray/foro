@@ -57,3 +57,7 @@ gray_ficha_enable:
 gray_ficha_disable:
     path: /ficha/disable/{user_id}
     defaults: { _controller: gray.ficha.controller:disable }
+    
+gray_ficha_huevo:
+    path: /ficha/huevo/{user_id}
+    defaults: { _controller: gray.ficha.controller:huevo }

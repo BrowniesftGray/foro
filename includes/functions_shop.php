@@ -14,12 +14,12 @@ function get_shops() {
 	return $shops;
 }
 
-function get_full_shops() {
+function get_full_shops($ocultas = false) {
 	global $db;
 	$shops = array();
 	
 	$query = $db->sql_query('SELECT shop_id, nombre, fa_icon, descripcion 
-								FROM ' . SHOPS_TABLE . " WHERE visible = 1");
+								FROM ' . SHOPS_TABLE . (!$ocultas ? " WHERE visible = 1" : ""));
 	while(($row = mysqli_fetch_assoc($query))) {
 		$shops[] = array(
 			'ID'			=>	$row['shop_id'],
