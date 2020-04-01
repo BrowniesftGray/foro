@@ -353,6 +353,7 @@ class main
                     'ADD_PUNTOS_EXPERIENCIA' => utf8_normalize_nfc(request_var('add_puntos_experiencia', '', true)),
                     'ADD_PUNTOS_APRENDIZAJE' => utf8_normalize_nfc(request_var('add_puntos_aprendizaje', '', true)),
                     'ADD_RYOS' => utf8_normalize_nfc(request_var('add_ryos', '', true)),
+					'ADD_PUNTOS_EVENTO'	=> utf8_normalize_nfc(request_var('add_puntos_evento', '', true)),
                 ), $atrs);
 
             $fields['HISTORIA'] = addslashes($fields['HISTORIA']);

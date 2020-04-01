@@ -1006,7 +1006,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	// 	$fields['RAZON'] = $fields['RAZON']." -".$fields['PUNTOS_APRENDIZAJE']." PA";
 	// }
 
-	if ((int)$fields['PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_PUNTOS_EXPERIENCIA'] != 0 || (int)$fields['ADD_PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_RYOS'] != 0) {
+	if ((int)$fields['PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_PUNTOS_EXPERIENCIA'] != 0 || (int)$fields['ADD_PUNTOS_APRENDIZAJE'] != 0 || (int)$fields['ADD_RYOS'] != 0 || (int)$fields['ADD_PUNTOS_EVENTO'] != 0) {
 		if (registrar_tema($user_id, (int)$fields['ADD_PUNTOS_EXPERIENCIA'], (int)$fields['ADD_PUNTOS_APRENDIZAJE'], (int)$fields['ADD_RYOS'], (int)$fields['PUNTOS_APRENDIZAJE'], (int)$fields['ADD_PUNTOS_EVENTO']) == true) {
 			$puntos_apen_negativos = $fields['PUNTOS_APRENDIZAJE'];
 			$puntos_apen = $fields['ADD_PUNTOS_APRENDIZAJE'];
