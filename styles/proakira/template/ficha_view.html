@@ -420,7 +420,9 @@
 						<ul class="inventory">
 							<!-- BEGIN categoria_item.items -->
 							<li class="item" data-tooltip="item-{categoria_item.items.ITEM_ID}">
+								<!-- IF categoria_item.items.CANTIDAD > 1 -->
 								<span class="qty">{categoria_item.items.CANTIDAD}</span>
+								<!-- ENDIF -->
 								<!-- IF PERSONAJE_PROPIO -->
 								<form action="{U_ACTION_SELL}" method="post">
 									<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
