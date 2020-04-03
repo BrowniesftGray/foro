@@ -284,7 +284,9 @@
 							<ul class="inventory">
 								<!-- BEGIN postrow.items -->
 								<li class="item" data-tooltip="item-{postrow.POST_ID}-{postrow.items.ITEM_ID}">
+									<!-- IF postrow.items.CANTIDAD > 1 -->
 									<span class="qty">{postrow.items.CANTIDAD}</span>
+									<!-- ENDIF -->
 									{postrow.items.IMAGEN}
 									<div style="display:none">
 										<div class="tooltip" id="item-{postrow.POST_ID}-{postrow.items.ITEM_ID}">
