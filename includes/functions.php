@@ -4658,7 +4658,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		'U_RESTORE_PERMISSIONS'	=> ($user->data['user_perm_from'] && $auth->acl_get('a_switchperm')) ? append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=restore_perm') : '',
 		'U_FEED'				=> $controller_helper->route('phpbb_feed_index'),
 
-		'S_GAME_DATE' 			=> getGameDate(),
+		'S_GAME_DATE' 			=> get_fecha_rol(),
 		'S_USER_LOGGED_IN'		=> ($user->data['user_id'] != ANONYMOUS) ? true : false,
 		'S_AUTOLOGIN_ENABLED'	=> ($config['allow_autologin']) ? true : false,
 		'S_BOARD_DISABLED'		=> ($config['board_disable']) ? true : false,
@@ -4785,11 +4785,12 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	return;
 }
 
-function getGameDate() {
-	// 1/9/2015 00:00
-	$then = 1441080000;
-	$now = time();
-	$initialYear = 134;
+function get_fecha_rol() {	
+	$initialDate = new DateTime('2019-01-01');
+	$initialYear = 144;
+
+	$now = new DateTime('now');
+	
 	$seasons = [
 		"Invierno", //Jan
 		"Primavera",
@@ -4804,19 +4805,21 @@ function getGameDate() {
 		"Verano",
 		"Otoño",
 	];
-
-	$season = $seasons[(int)date('m')-1];
-	$diff = $now - $then;
-	$year = $initialYear + floor($diff / 60 / 60 / 24 / 30 / 4);
-	$day = floor($diff / 60 / 60 / 24);
-
-	$day = (int) date('d') * 3;
-	$hour = (int) time('H');
+	
+	$season = $seasons[(int) $now->format('m') - 1];
+	$day = (int) $now->format('d') * 3;
+	$hour = (int) $now->format('H');
+	
 	if ($hour <= 8) {
 		$day = $day - 2;
 	} else if ($hour <= 16) {
-		$day = $day - 1;	
+		$day = $day - 1;
 	}
+	
+	$diff = date_diff($initialDate, $now);
+	$year = $initialYear + ((int) $diff->y * 3) + floor((int) $diff->m / 4);
+	
+	//return sprintf("diff_y %d - diff_m %d", (int)$diff->y, (int)$diff->m);
 	
 	return sprintf("%d de %s del año %d", $day, $season, $year);
 }
