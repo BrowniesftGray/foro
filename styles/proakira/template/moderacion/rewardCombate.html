@@ -12,20 +12,14 @@
       <form method="POST" action="/mod/dar_recompensa_combate">
         <input type="hidden" id="id_participante" name="id_participante" value="{id_participante}">
         <input type="hidden" id="id_revision" name="id_revision" value="{id_revision}">
+        <h3>Opciones de Cuenta</h3><br>
         <div class="form-group row">
           <label for="nivel_adversario" class="col-5 col-form-label text-md-left">Nivel del Contrincante</label> 
           <div class="col-5">
-            <select id="nivel_adversario" name="nivel_adversario" required="required" class="custom-select">
-              <!-- Ciclo for para rellenar el option -->
-            </select>
+            <input type="text" id="nivel_adversario" name="nivel_adversario" required="required" class="form-control">
           </div>
         </div>
-        <div class="form-group row">
-          <label for="id_alternativo" class="col-5 col-form-label text-md-left">¿La experiencia es para otra cuenta?</label> 
-          <div class="col-5">
-            <input type="text" id="id_alternativo" name="id_alternativo" required="required" class="form-control">
-          </div>
-        </div>
+        <h3>Criterios de Combate</h3><br>
         <div class="form-group row">
           <label for="metarol" class="col-5 col-form-label text-md-left">No metarolear, aplicar bien las guías de combate, especificar técnicas, y narrar comprensivamente.</label> 
           <div class="col-5">
@@ -62,6 +56,7 @@
             </select>
           </div>
         </div>
+        <h3>Criterios de Rol</h3><br>
         <div class="form-group row">
           <label for="entorno" class="col-5 col-form-label text-md-left">¿Narra bien el entorno?</label> 
           <div class="col-5">
@@ -117,11 +112,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-<script>
-    $( document ).ready(function(){
-        for (let index = 1; index < 31; index++) {
-            $("#nivel_adversario").append("<option value='"+index+"'>"+index+"</option>");
-        }
-    });
-</script>
+  <!-- INCLUDE overall_footer.html -->

@@ -137,7 +137,7 @@ class main
     public function get_vista_recompensa_combate($rev_id){
 
       $participante = request_var('id_participante', '0');
-      if($this->vista_staff() != "user" || $participante == 0){
+      if($this->vista_staff() != "user" || $participante != 0){
 
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
@@ -266,6 +266,9 @@ class main
         if ($row['estado'] == "aceptada") {
           $options .= "<tr class='table-primary'>";
         }
+        if ($row['estado'] == "revisando") {
+          $options .= "<tr class='table-primary'>";
+        }
         if ($row['estado'] == "completada") {
           $options .= "<tr class='table-success'>";
         }
@@ -297,13 +300,16 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         if ($row['estado'] == "registrada") {
           $options .= "<tr class='table-active'>";
         }
         if ($row['estado'] == "aceptada") {
+          $options .= "<tr class='table-primary'>";
+        }
+        if ($row['estado'] == "revisando") {
           $options .= "<tr class='table-primary'>";
         }
         if ($row['estado'] == "completada") {
@@ -315,8 +321,8 @@ class main
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
         $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
-        $options .= "<td>" . $row['información'] . "</td>";
-        $options .= "<td>" . $row['participantes'] . "</td>";
+        // $options .= "<td>" . $row['información'] . "</td>";
+        // $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
@@ -424,19 +430,17 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th><th></th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['id_usuario'] . "</td>";
-        $options .= "<td>" . $row['información'] . "</td>";
-        $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td><form method='POST' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores' name='moderadores'>".$select."</select></td>";
-        $options .= "<td><button type='submit' class='btn btn-primary'>Asignar</button></td></form></tr>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
+        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
       }
 
       $response = new Response();
@@ -450,7 +454,36 @@ class main
       // prints the HTTP headers followed by the content
       return $response;
     }
-    
+
+    public function get_revisiones_asignadas(){
+
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 ORDER BY fecha_creacion');
+
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
+        $options .= "<td>" . $row['estado'] . "</td>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
+        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
     public function get_moderadores(){
       $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
 
