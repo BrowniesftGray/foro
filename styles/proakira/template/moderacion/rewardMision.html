@@ -1,0 +1,155 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
+ <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+<!--  -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="/styles/proakira/theme/w3.css?v=1.0.3" type="text/css"> -->
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.93" type="text/css">
+
+<div class="container card" id="otorgar_recompensa">
+    <h3>Otorgar recompensa</h3>
+    <div class="card-body">
+      <form method="POST" action="/mod/dar_recompensa_tema">
+        <input type="hidden" id="id_participante" name="id_participante" value="{id_participante}">
+        <input type="hidden" id="id_revision" name="id_revision" value="{id_revision}">
+        <h3>Opciones de Cuenta</h3><br>
+        <div class="form-group row">
+          <label for="gamemaster" class="col-5 col-form-label text-md-left">¿Es Game Master? (No cuenta GM participante)</label> 
+          <div class="col-5">
+            <select id="gamemaster" name="gamemaster" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_alternativo" class="col-5 col-form-label text-md-left">¿La experiencia es para otra cuenta? Coloca el Perfil</label> 
+          <div class="col-5">
+            <input type="text" id="id_alternativo" name="id_alternativo" required="required" class="form-control">
+          </div>
+        </div>
+        <h3>Opciones de Bono</h3><br>
+        <div class="form-group row">
+          <label for="tipo_tema" class="col-5 col-form-label text-md-left">Tipo de Tema</label> 
+          <div class="col-5">
+            <select id="tipo_tema" name="tipo_tema" required="required" class="custom-select">
+              {OPCIONES_TIPO_TEMA}
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_mision" class="col-5 col-form-label text-md-left">Bono de misión</label> 
+          <div class="col-5">
+            <input type="text" id="bono_mision" name="bono_mision" required="required" class="form-control">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="ryos_mision" class="col-5 col-form-label text-md-left">Ryos de misión</label> 
+          <div class="col-5">
+            <input type="text" id="ryos_mision" name="ryos_mision" required="required" class="form-control">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_por_compa" class="col-5 col-form-label text-md-left">Porcentaje Compañero</label> 
+          <div class="col-5">
+            <select id="bono_por_compa" name="bono_por_compa" required="required" class="custom-select">
+              <option value="10">10%</option>
+              <option value="15">15%</option>
+              <option value="20">20%</option>
+              <option value="25">25%</option>
+              <option value="30">30%</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_compa" class="col-5 col-form-label text-md-left">Bono de Compañero</label> 
+          <div class="col-5">
+            <input type="text" id="bono_compa" name="bono_compa" required="required" class="form-control">
+          </div>
+        </div>
+        <h3>Criterios de Rol</h3><br>
+        <div class="form-group row">
+          <label for="entorno" class="col-5 col-form-label text-md-left">¿Narra bien el entorno?</label> 
+          <div class="col-5">
+            <select id="entorno" name="entorno" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+            <label for="acciones" class="col-5 col-form-label text-md-left">¿Narra bien sus acciones?</label> 
+            <div class="col-5">
+              <select id="acciones" name="acciones" required="required" class="custom-select">
+                <option value="Si">Si</option>
+                <option value="A veces">A veces</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+        <div class="form-group row">
+          <label for="interesante" class="col-5 col-form-label text-md-left">¿Te ha parecido interesante?</label> 
+          <div class="col-5">
+            <select id="interesante" name="interesante" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="longitud" class="col-5 col-form-label text-md-left">¿La cantidad de texto en sus posts suele superar el largo del perfil del usuario?</label> 
+          <div class="col-5">
+            <select id="longitud" name="longitud" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <h3>Criterios de Bono</h3><br>
+        <div class="form-group row">
+          <label for="bono_utilidad" class="col-5 col-form-label text-md-left">¿Ha sido útil en la misión?</label> 
+          <div class="col-5">
+            <select id="bono_utilidad" name="bono_utilidad" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_coherencia" class="col-5 col-form-label text-md-left">¿Ha sido coherente?</label> 
+          <div class="col-5">
+            <select id="bono_coherencia" name="bono_coherencia" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_sobrevivir" class="col-5 col-form-label text-md-left">¿Ha sobrevivido?</label> 
+          <div class="col-5">
+            <select id="bono_sobrevivir" name="bono_sobrevivir" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-4 col-5">
+            <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <!-- INCLUDE overall_footer.html -->
+
