@@ -26,6 +26,10 @@ gray_moderacion_dar_recompensa_tema:
     path: /mod/dar_recompensa_tema
     defaults: { _controller: gray.moderacion.controller:dar_recompensa }
 
+gray_moderacion_dar_recompensa_mision:
+    path: /mod/dar_recompensa_mision
+    defaults: { _controller: gray.moderacion.controller:dar_recompensa_mision }
+
 gray_moderacion_dar_recompensa_combate:
     path: /mod/dar_recompensa_combate
     defaults: { _controller: gray.moderacion.controller:dar_recompensa_combate }

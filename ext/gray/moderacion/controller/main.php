@@ -594,12 +594,15 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-      $this->db->sql_query($sql);
+              // echo $sql;
+      $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
-      $experiencia = ($numero_post * $total);
-
+      $experiencia = round(($numero_post * $total)*$bono_temporada);
+      // echo "experiencia =".$experiencia;
+      // echo "post =".$numero_post;
+      // echo "total =".$total;
       if ($gamemaster == "Si") {
         $puntos_apen = ceil($experiencia/15);
       }else{
@@ -609,13 +612,13 @@ class main
       if($alt_id != ""){
 
         $pj_id = get_pj_id($alt_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }
-
-      if(count($check) > 0){
+      echo $check;
+      if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
       else{
@@ -666,9 +669,9 @@ class main
 
       //Criterios bonos
       $bono_base = 0.25;
-      $bono_utilidad  = $this->asignar_puntuacion(request_var('bono_utilidad', 'No'));
-      $bono_coherencia = $this->asignar_puntuacion(request_var('bono_coherencia', 'No'));
-      $bono_sobrevivir  = $this->asignar_puntuacion(request_var('bono_sobrevivir', 'No'));
+      $bono_utilidad  = request_var('bono_utilidad', 'No');
+      $bono_coherencia = request_var('bono_coherencia', 'No');
+      $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
       
       //Estas hay que obtenerlas de otra función.
       $info_rev = $this->obtener_info_rev($revision);
@@ -687,15 +690,18 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-      $this->db->sql_query($sql);
+      $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
-      if($bono_utilidad == "Si"){ $bono_utilidad = 0.25;}
-      if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}
-      if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}
+      if($bono_utilidad == "Si"){ $bono_utilidad = 0.25;}else{$bono_utilidad = 0;}
+      if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}else{$bono_coherencia = 0;}
+      if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
 
-      $bono['experiencia'] = ($bono_base + $bono_utilidad + $bono_coherencia + $bono_sobrevivir) * $bono_rev;
+      $bono_total = $bono_base + $bono_utilidad + $bono_coherencia + $bono_sobrevivir;
+      $bono['experiencia'] = $bono_total * $bono_rev;
+
+      // echo $bono_base;
 
       if ($bono['experiencia'] == 0) {
         $experiencia = (($numero_post * $total)+20);
@@ -703,7 +709,7 @@ class main
         $puntos_apen = 2;
       }
       else{
-        $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
+        $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
         if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
           if ($gamemaster == "Si") {
             $puntos_apen = ceil($experiencia/25);
@@ -724,17 +730,18 @@ class main
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
-
+      // echo $experiencia;
       if($alt_id != ""){
 
         $pj_id = get_pj_id($alt_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }
 
-      if(count($check) > 0){
+      echo $check;
+      if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
       else{
@@ -792,11 +799,11 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-      $this->db->sql_query($sql);
+      $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
-      $experiencia = (($numero_post * $total)+(($nivel*10)*$total_combate));
+      $experiencia = round((($numero_post * $total)+(($nivel*10)*$total_combate)));
       $puntos_apen = (4/$total_combate);
       $ryos = 0;
       
@@ -809,7 +816,7 @@ class main
         $check = comprobar_recompensa($revision, $pj_id);
       }
 
-      if(count($check) > 0){
+      if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
       else{
@@ -940,7 +947,7 @@ class main
            $bono['experiencia'] = 0;
            $bono['limite'] = 0;
            $bono['ryos'] = 0;
-           $bono['porcentaje'] = 0;
+           $bono['porcentaje'] = 1;
           break;
 
         case 'Mision C':
@@ -975,7 +982,7 @@ class main
           $bono['experiencia'] = 0;
           $bono['limite'] = 0;
           $bono['ryos'] = 0;
-          $bono['porcentaje'] = 0;
+          $bono['porcentaje'] = 1;
           break;
 
         case 'Encargo C':
@@ -1034,7 +1041,8 @@ class main
           $bono['porcentaje'] = 30;
           break;
       }
-    }
+    return $bono;
+     }
 
     function update_revision(){
       
@@ -1090,17 +1098,34 @@ class main
       trigger_error('Revisión modificada correctamente al estado '.$estado.'. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>.');
     }
 
+    function update_revision_mod($revision_id){
+      
+      $revision = $revision_id;
+      $moderadores  = request_var('moderadores', '0');
+
+      $sql = "  UPDATE revisiones
+                SET
+                  moderador_asignado = '".$moderadores."'
+                WHERE id_revision = $revision";
+
+      $query = $this->db->sql_query($sql);
+      
+      trigger_error('Revisión asignada correctamente al moderador/a: '.$moderadores.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
+    }
+
     function comprobar_recompensa($revision, $id_pj){
 
-      
-      $sql = "SELECT id_recompensa
-              FROM revisiones_recompensas
-              WHERE id_revision = $revision
-                AND id_pj = $id_pj";
-
-       $query = $this->db->sql_query($sql);
-       $row = $this->db->sql_fetchrow($query);
-       return $row;
+       $query = $this->db->sql_query("SELECT id_recompensa
+                FROM revisiones_recompensas
+                WHERE id_revision = $revision
+                  AND id_pj = $id_pj");
+        if ($row = $this->db->sql_fetchrow($query)) {
+          $this->db->sql_freeresult($query);
+          return $row;
+        }
+        else {
+          return false;
+        }
     }
 
     public function calcular_puntos_mod($tipo_tema){
