@@ -54,14 +54,15 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 				i.requisitos, 
 				i.efectos,
 				pi.cantidad,
-				pi.ubicacion
+				pi.ubicacion,
+				pi.orden
 			FROM " . ITEMS_TABLE . " i
 				INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
 					ON pi.item_id = i.item_id
 			WHERE pi.pj_id = '$pj_id'
 				AND pi.cantidad > 0";
 	if ($shop_id > 0) $sql .= " AND i.shop_id = $shop_id ";	
-	$sql .=	" ORDER BY i.nombre";
+	$sql .=	" ORDER BY pi.orden, i.nombre";
 			
 	$query = $db->sql_query($sql);
 	
@@ -75,7 +76,7 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 				'TAG' => $tipos[$i],
 			);
 		}
-			
+		
 		$items[] = array(
 			'ITEM_ID'		=> $row['item_id'],
 			'NOMBRE'		=> $row['nombre'],
@@ -85,6 +86,7 @@ function get_pj_inventory($pj_id, $post_id = 0, $shop_id = 0) {
 			'EFECTOS'		=> $row['efectos'],
 			'CANTIDAD'		=> $row['cantidad'],
 			'UBICACION'		=> $row['ubicacion'],
+			'ORDEN'			=> $row['orden'],
 			'tags'			=> $items_tipos,
 		);
 	}
