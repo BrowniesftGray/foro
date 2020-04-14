@@ -26,6 +26,10 @@ gray_moderacion_dar_recompensa_tema:
     path: /mod/dar_recompensa_tema
     defaults: { _controller: gray.moderacion.controller:dar_recompensa }
 
+gray_moderacion_dar_recompensa_mision:
+    path: /mod/dar_recompensa_mision
+    defaults: { _controller: gray.moderacion.controller:dar_recompensa_mision }
+
 gray_moderacion_dar_recompensa_combate:
     path: /mod/dar_recompensa_combate
     defaults: { _controller: gray.moderacion.controller:dar_recompensa_combate }
@@ -54,9 +58,13 @@ gray_moderacion_participantes:
     path: /moderacion/participantes
     defaults: { _controller: gray.moderacion.controller:get_participantes }
 
-gray_moderacion_recompensa_usuario:
-    path: /mod/recompensa_usuario/{rev_id}
-    defaults: { _controller: gray.moderacion.controller:get_vista_recompensa }
+gray_moderacion_recompensa_tema:
+    path: /mod/recompensa_tema/{rev_id}
+    defaults: { _controller: gray.moderacion.controller:get_vista_recompensa_tema }
+
+gray_moderacion_recompensa_mision:
+    path: /mod/recompensa_mision/{rev_id}
+    defaults: { _controller: gray.moderacion.controller:get_vista_recompensa_mision }
 
 gray_moderacion_recompensa_combate:
     path: /mod/recompensa_combate/{rev_id}

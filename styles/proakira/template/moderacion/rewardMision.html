@@ -1,0 +1,254 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/ficha.css?v=1.0.3" type="text/css">
+ <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+<!--  -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="/styles/proakira/theme/w3.css?v=1.0.3" type="text/css"> -->
+<link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.93" type="text/css">
+
+<div class="container card" id="otorgar_recompensa">
+    <h3>Otorgar recompensa</h3>
+    <div class="card-body">
+      <form method="POST" action="/mod/dar_recompensa_mision">
+        <input type="hidden" id="id_participante" name="id_participante" value="{id_participante}">
+        <input type="hidden" id="id_revision" name="id_revision" value="{id_revision}">
+        <h3>Opciones de Cuenta</h3><br>
+        <div class="form-group row">
+          <label for="gamemaster" class="col-5 col-form-label text-md-left">¿Es Game Master? (No cuenta GM participante)</label> 
+          <div class="col-5">
+            <select id="gamemaster" name="gamemaster" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_alternativo" class="col-5 col-form-label text-md-left">¿La experiencia es para otra cuenta? Coloca el Perfil</label> 
+          <div class="col-5">
+            <input type="text" id="id_alternativo" name="id_alternativo" class="form-control">
+          </div>
+        </div>
+        <h3>Opciones de Bono</h3><br>
+        <div class="form-group row">
+          <label for="tipo_tema" class="col-5 col-form-label text-md-left">Tipo de Tema</label> 
+          <div class="col-5">
+            <select id="tipo_tema" name="tipo_tema" required="required" class="custom-select">
+              <option value='Mision D'>Mision D</option>
+              <option value='Mision C'>Mision C</option>
+              <option value='Mision B'>Mision B</option>
+              <option value='Mision A'>Mision A</option>
+              <option value='Mision S'>Mision S</option>
+              <option value='Encargo D'>Encargo D</option>
+              <option value='Encargo C'>Encargo C</option>
+              <option value='Encargo B'>Encargo B</option>
+              <option value='Encargo A'>Encargo A</option>
+              <option value='Encargo S'>Encargo S</option>
+              <option value='Trama C'>Trama C</option>
+              <option value='Trama B'>Trama B</option>
+              <option value='Trama A'>Trama A</option>
+              <option value='Trama S'>Trama S</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_mision" class="col-5 col-form-label text-md-left">Bono de misión</label> 
+          <div class="col-5">
+            <input type="text" id="bono_mision" name="bono_mision" required="required" class="form-control" value='0'>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="ryos_mision" class="col-5 col-form-label text-md-left">Ryos de misión</label> 
+          <div class="col-5">
+            <input type="text" id="ryos_mision" name="ryos_mision" required="required" class="form-control" value="750">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_por_compa" class="col-5 col-form-label text-md-left">Porcentaje Compañero</label> 
+          <div class="col-5">
+            <select id="bono_por_compa" name="bono_por_compa" required="required" class="custom-select">
+              <option value="0" selected>0%</option>
+              <option value="10">10%</option>
+              <option value="15">15%</option>
+              <option value="20">20%</option>
+              <option value="25">25%</option>
+              <option value="30">30%</option>
+            </select>
+          </div>
+        </div>
+        <h3>Criterios de Rol</h3><br>
+        <div class="form-group row">
+          <label for="entorno" class="col-5 col-form-label text-md-left">¿Narra bien el entorno?</label> 
+          <div class="col-5">
+            <select id="entorno" name="entorno" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+            <label for="acciones" class="col-5 col-form-label text-md-left">¿Narra bien sus acciones?</label> 
+            <div class="col-5">
+              <select id="acciones" name="acciones" required="required" class="custom-select">
+                <option value="Si">Si</option>
+                <option value="A veces">A veces</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+        <div class="form-group row">
+          <label for="interesante" class="col-5 col-form-label text-md-left">¿Te ha parecido interesante?</label> 
+          <div class="col-5">
+            <select id="interesante" name="interesante" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="longitud" class="col-5 col-form-label text-md-left">¿La cantidad de texto en sus posts suele superar el largo del perfil del usuario?</label> 
+          <div class="col-5">
+            <select id="longitud" name="longitud" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="A veces">A veces</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <h3>Criterios de Bono</h3><br>
+        <div class="form-group row">
+          <label for="bono_utilidad" class="col-5 col-form-label text-md-left">¿Ha sido útil en la misión?</label> 
+          <div class="col-5">
+            <select id="bono_utilidad" name="bono_utilidad" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_coherencia" class="col-5 col-form-label text-md-left">¿Ha sido coherente?</label> 
+          <div class="col-5">
+            <select id="bono_coherencia" name="bono_coherencia" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="bono_sobrevivir" class="col-5 col-form-label text-md-left">¿Ha sobrevivido?</label> 
+          <div class="col-5">
+            <select id="bono_sobrevivir" name="bono_sobrevivir" required="required" class="custom-select">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-4 col-5">
+            <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <!-- INCLUDE overall_footer.html -->
+
+<script>
+
+  $(document).off('change', '#tipo_tema')
+    .on('change', '#tipo_tema', function(){
+      switch ($("#tipo_tema option:selected").text()) {
+        case 'Mision D':
+           $('#bono_mision').val( '0');
+           $('#ryos_mision').val( '750');
+           $('#bono_por_compa').val( '0');
+          break;
+
+        case 'Mision C':
+          $('#bono_mision').val( '1.5');
+          $('#ryos_mision').val( '1500');
+          $('#bono_por_compa').val( '20');
+          break;
+
+        case 'Mision B':
+          $('#bono_mision').val( '4');
+          $('#ryos_mision').val( '3000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Mision A':
+          $('#bono_mision').val( '6');
+          $('#ryos_mision').val( '10000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Mision S':
+          $('#bono_mision').val( '8');
+          $('#ryos_mision').val( '30000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Encargo D':
+           $('#bono_mision').val( '0');
+           $('#ryos_mision').val( '750');
+           $('#bono_por_compa').val( '0');
+          break;
+
+        case 'Encargo C':
+          $('#bono_mision').val( '1.5');
+          $('#ryos_mision').val( '1500');
+          $('#bono_por_compa').val( '20');
+          break;
+
+        case 'Encargo B':
+          $('#bono_mision').val( '4');
+          $('#ryos_mision').val( '3000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Encargo A':
+          $('#bono_mision').val( '6');
+          $('#ryos_mision').val( '10000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Encargo S':
+          $('#bono_mision').val( '8');
+          $('#ryos_mision').val( '30000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Trama C':
+          $('#bono_mision').val( '3');
+          $('#ryos_mision').val( '3000');
+          $('#bono_por_compa').val( '20');
+        break;
+
+        case 'Trama B':
+          $('#bono_mision').val( '5');
+          $('#ryos_mision').val( '3000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Trama A':
+          $('#bono_mision').val( '7');
+          $('#ryos_mision').val( '10000');
+          $('#bono_por_compa').val( '30');
+          break;
+
+        case 'Trama S':
+          $('#bono_mision').val( '9');
+          $('#ryos_mision').val( '30000');
+          $('#bono_por_compa').val( '30');
+          break;
+      }
+    })
+</script>

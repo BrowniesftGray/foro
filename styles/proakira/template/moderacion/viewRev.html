@@ -9,6 +9,7 @@
 <input type="hidden" id="rev_id" name="rev_id" value="{rev_id}">
 <div class="container">
     <div id="tabla_vista"></div>
+    <span id="cambiar_revision" class="btn btn-primary">Cambiar estado a Revisando</span>
     <span id="cerrar_revision" class="btn btn-warning">Cerrar Revisión</span>
     <span id="rechazar_revision" class="btn btn-warning">Rechazar Revisión</span>
 </div>
@@ -61,6 +62,22 @@
             type : 'POST', 
             success: function(result){
               alert("Se ha rechazado correctamente la revisión.");
+            }
+          });
+        });
+
+        $(document).off('click', '#cambiar_revision')
+        .on('click', '#cambiar_revision', function(){
+          var estado = "revisando";
+          $.ajax({
+            data: {
+              'id_revision': rev_id,
+              'estado': estado,
+            }, 
+            url: "/mod/update_revision",  
+            type : 'POST', 
+            success: function(result){
+              alert("Se ha actualizado correctamente la revisión.");
             }
           });
         });

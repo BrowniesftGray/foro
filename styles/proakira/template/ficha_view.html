@@ -450,10 +450,13 @@
 										</form>
 										<hr />
 										<form action="{U_ACTION_UBI}" method="post">
-											<span for="ubicacion{categoria_item.items.ITEM_ID}">Ubicaci&oacute;n:</span>
+											<label for="ubicacion{categoria_item.items.ITEM_ID}"><b>Ubicaci&oacute;n:</b></label>
 											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
-											<input type="text" id="ubicacion{categoria_item.items.ITEM_ID}" class="item-place" name="ubicacion" value="{categoria_item.items.UBICACION}" maxlength="50" />
-											<input type="submit" name="submit" class="button1 sellItem" value="Guardar" />
+											<input type="text" id="ubicacion{categoria_item.items.ITEM_ID}" class="item-place" name="ubicacion" value="{categoria_item.items.UBICACION}" maxlength="50" tabindex="0" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Guardar" tabindex="2" />
+											<br/>
+											<label for="orden{categoria_item.items.ITEM_ID}"><b>Orden:</b></label>
+											<input type="number" id="orden{categoria_item.items.ITEM_ID}" style="width:40px" min="0" max="999" class="item-place" name="orden" value="{categoria_item.items.ORDEN}" maxlength="3"  tabindex="1" />
 										</form>
 										<!-- ENDIF -->
 									</div>

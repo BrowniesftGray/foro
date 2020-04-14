@@ -1192,7 +1192,7 @@ function quitar_tecnica($user_id, $pj_id, $tec_id, $coste, &$msg_error) {
 	return true;
 }
 
-function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
+function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, $orden, &$msg_error) {
 	global $db, $user;
 	$b_ubicacion_items = false;
 
@@ -1222,7 +1222,11 @@ function actualizar_item($user_id, $pj_id, $item_id, $ubicacion, &$msg_error) {
 	}
 	$db->sql_freeresult($query);
 
-	$sql_array = array('ubicacion'	=> $ubicacion);
+	$sql_array = array(
+		'ubicacion'	=> $ubicacion,
+		'orden'		=> $orden,
+	);
+	
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . ' SET ' .
 					$db->sql_build_array('UPDATE', $sql_array) .
 					" WHERE pj_id = '$pj_id'

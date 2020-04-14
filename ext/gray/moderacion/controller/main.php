@@ -114,7 +114,7 @@ class main
 
     }
 
-    public function get_vista_recompensa($rev_id){
+    public function get_vista_recompensa_tema($rev_id){
 
       $participante = request_var('id_participante', '0');
       if($this->vista_staff() != "user" || $participante == 0){
@@ -122,7 +122,27 @@ class main
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
         
-        return $this->helper->render('/moderacion/reward.html', 'Recompensas');
+        return $this->helper->render('/moderacion/rewardTema.html', 'Recompensas');
+      }else{
+        if ($participante == 0) {
+          trigger_error('Se ha perdido el id del usuario, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        }
+        else{
+          trigger_error('No tienes acceso a esta característica');
+        }
+      }
+
+    }
+
+    public function get_vista_recompensa_mision($rev_id){
+
+      $participante = request_var('id_participante', '0');
+      if($this->vista_staff() != "user" || $participante == 0){
+
+        $this->template->assign_var('id_revision', $rev_id);
+        $this->template->assign_var('id_participante', $participante);
+        
+        return $this->helper->render('/moderacion/rewardMision.html', 'Recompensas');
       }else{
         if ($participante == 0) {
           trigger_error('Se ha perdido el id del usuario, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
@@ -137,7 +157,7 @@ class main
     public function get_vista_recompensa_combate($rev_id){
 
       $participante = request_var('id_participante', '0');
-      if($this->vista_staff() != "user" || $participante == 0){
+      if($this->vista_staff() != "user" || $participante != 0){
 
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
@@ -266,6 +286,9 @@ class main
         if ($row['estado'] == "aceptada") {
           $options .= "<tr class='table-primary'>";
         }
+        if ($row['estado'] == "revisando") {
+          $options .= "<tr class='table-primary'>";
+        }
         if ($row['estado'] == "completada") {
           $options .= "<tr class='table-success'>";
         }
@@ -297,13 +320,16 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         if ($row['estado'] == "registrada") {
           $options .= "<tr class='table-active'>";
         }
         if ($row['estado'] == "aceptada") {
+          $options .= "<tr class='table-primary'>";
+        }
+        if ($row['estado'] == "revisando") {
           $options .= "<tr class='table-primary'>";
         }
         if ($row['estado'] == "completada") {
@@ -315,8 +341,8 @@ class main
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
         $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
-        $options .= "<td>" . $row['información'] . "</td>";
-        $options .= "<td>" . $row['participantes'] . "</td>";
+        // $options .= "<td>" . $row['información'] . "</td>";
+        // $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
@@ -348,8 +374,13 @@ class main
           $compis = true;
         }
         else if(strstr("Mision", $row['tipo_revision']) OR strstr("Encargo", $row['tipo_revision']) OR strstr("Trama", $row['tipo_revision'])){
-        $participantes = $this->get_participantes_option($tema);
-        $options .= '<form method="POST" action="/mod/recompensa_usuario/'.$rev_id.'" target="_blank">';
+          $participantes = $this->get_participantes_option($tema);
+          $options .= '<form method="POST" action="/mod/recompensa_mision/'.$rev_id.'" target="_blank">';
+          $compis = true;
+        }
+        else{
+          $participantes = $this->get_participantes_option($tema);
+          $options .= '<form method="POST" action="/mod/recompensa_tema/'.$rev_id.'" target="_blank">';
           $compis = true;
         }
         $options .= '<div class="card-body">
@@ -424,19 +455,17 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Información</th><th>Participantes</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th><th></th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['id_usuario'] . "</td>";
-        $options .= "<td>" . $row['información'] . "</td>";
-        $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td><form method='POST' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores' name='moderadores'>".$select."</select></td>";
-        $options .= "<td><button type='submit' class='btn btn-primary'>Asignar</button></td></form></tr>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
+        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
       }
 
       $response = new Response();
@@ -450,7 +479,36 @@ class main
       // prints the HTTP headers followed by the content
       return $response;
     }
-    
+
+    public function get_revisiones_asignadas(){
+
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 ORDER BY fecha_creacion');
+
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
+        $options .= "<td>" . $row['estado'] . "</td>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
+        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
     public function get_moderadores(){
       $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
 
@@ -474,11 +532,6 @@ class main
 
       switch ($tipo_revision) {
 
-        case 'activacion_ficha':
-          $sql_array['tipo_revision'] = 'Activacion Ficha';
-          $sql_array['informacion'] = request_var('activacion_asunto', '0');
-          break;
-
         case 'revision_ficha':
           $sql_array['tipo_revision'] = 'Revision Ficha';
           $sql_array['informacion'] = request_var('asunto_rev_ficha', '0');
@@ -493,25 +546,6 @@ class main
           foreach ($participantes as $key => $value) {
             $sql_array['participantes'] .= $value."#";
           }
-          break;
-          
-        case 'solicitud_encargo':
-          $sql_array['tipo_revision'] = 'Solicitud Encargo';
-          $nombre_encargo = request_var('solicitud_nombre', '0');
-          $info_encargo = request_var('solicitud_informacion', '0');
-          $sql_array['informacion'] = "Nombre: ".$nombre_encargo." \n ".$info_encargo;
-          break;
-
-        case 'moderacion_combate':
-          $sql_array['tipo_revision'] = 'Moderacion Combate';
-          $sql_array['informacion'] = request_var('mod_combate_asunto', '0');
-          $sql_array['enlace'] = request_var('mod_combate_enlace', '0');
-          break;
-
-        case 'patreon':
-          $sql_array['tipo_revision'] = 'Patreon';
-          $sql_array['informacion'] = request_var('patreon_asunto', '0');
-          $sql_array['enlace'] = request_var('patreon_enlace', '0');
           break;
 
         case 'revision_tema':
@@ -550,6 +584,7 @@ class main
       
       //Calculamos cosas para la experiencia y tal.
       $bono = $this->calcular_bono($tipo_tema);
+      $bono_temporada = "1";
       $total = $entorno+$acciones+$interes+$longitud;
       
       //Obtenemos el número de post del usuario.
@@ -559,25 +594,129 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-      $this->db->sql_query($sql);
+              // echo $sql;
+      $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
+      $experiencia = round(($numero_post * $total)*$bono_temporada);
+      // echo "experiencia =".$experiencia;
+      // echo "post =".$numero_post;
+      // echo "total =".$total;
+      if ($gamemaster == "Si") {
+        $puntos_apen = ceil($experiencia/15);
+      }else{
+        $puntos_apen = ceil($experiencia/20);
+      }
+
+      if($alt_id != ""){
+
+        $pj_id = get_pj_id($alt_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
+      }else{
+        $pj_id = get_pj_id($user_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
+      }
+      echo $check;
+      if($check != false){
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
+      else{
+          $array = array();
+          $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+          $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+          $array['ADD_RYOS'] = 0;
+          $array['PJ_ID'] = $pj_id;
+          $array['PUNTOS_APRENDIZAJE'] = 0;
+          $array['RAZON'] = "Revisión de tema";
+
+          registrar_moderacion($array, $user_id);
+
+          //Insert en la tabla revisiones_recompensas
+          $sql_array = array();
+          $sql_array['id_pj'] = $user_id;
+          $sql_array['id_revision'] = $revision;
+          $sql_array['experiencia'] = $experiencia;
+          $sql_array['pa'] = $puntos_apen;
+          $sql_array['ryos'] = 0;
+
+          //Insert en la tabla revisiones_recompensas
+          $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+          $this->db->sql_query($sql);
+
+          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+      }
+    }
+
+    public function dar_recompensa_mision(){
+      
+      $revision = request_var('id_revision', '0');
+      $user_id  = request_var('id_participante', '0');
+      $alt_id   = request_var('id_alternativo', '0');
+
+      //Campos criterios de rol
+      $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
+      $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
+      $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
+
+      //Campos bonos
+      $bono_tipo  = $this->asignar_puntuacion(request_var('tipo_tema', '0'));
+      $bono_rev  = $this->asignar_puntuacion(request_var('bono_mision', '0'));
+      $ryos_rev = $this->asignar_puntuacion(request_var('ryos_mision', '0'));
+      $compa_rev  = $this->asignar_puntuacion(request_var('bono_por_compa', '0'));
+
+      //Criterios bonos
+      $bono_base = 0.25;
+      $bono_utilidad  = request_var('bono_utilidad', 'No');
+      $bono_coherencia = request_var('bono_coherencia', 'No');
+      $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
+      
+      //Estas hay que obtenerlas de otra función.
+      $info_rev = $this->obtener_info_rev($revision);
+      $topic_id = $this->obtener_id_tema($info_rev['enlace']);
+      $tipo_tema = $info_rev['tipo_tema'];
+      $compas   = $info_rev['compas'];
+      
+      //Calculamos cosas para la experiencia y tal.
+      $bono = $this->calcular_bono($tipo_tema);
+      $total = $entorno+$acciones+$interes+$longitud;
+      
+      //Obtenemos el número de post del usuario.
+      $sql = "SELECT	p.poster_id as user_id,
+                COUNT(0) as cantidad
+              FROM phpbby1_posts p
+              WHERE p.topic_id = $topic_id
+                  AND p.poster_id = $user_id
+              GROUP BY p.poster_id";
+      $query = $this->db->sql_query($sql);
+      $row = $this->db->sql_fetchrow($query);
+      $numero_post = $row['cantidad'];
+
+      if($bono_utilidad == "Si"){ $bono_utilidad = 0.25;}else{$bono_utilidad = 0;}
+      if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}else{$bono_coherencia = 0;}
+      if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
+
+      $bono_total = $bono_base + $bono_utilidad + $bono_coherencia + $bono_sobrevivir;
+      $bono['experiencia'] = $bono_total * $bono_rev;
+
+      // echo $bono_base;
 
       if ($bono['experiencia'] == 0) {
         $experiencia = (($numero_post * $total)+20);
-        $ryos = 750;
+        $ryos = $ryos_rev;
         $puntos_apen = 2;
       }
       else{
-        $experiencia = ((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
-        if ($bono['experiencia'] == 3 || $bono['experiencia'] == 5 || $bono['experiencia'] == 7 || $bono['experiencia'] == 12) {
+        $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
+        if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
           if ($gamemaster == "Si") {
             $puntos_apen = ceil($experiencia/25);
             $ryos = 0;
           }else{
             $puntos_apen = ceil($experiencia/30);
-            $ryos = $bono['ryos'];
+            $ryos = $ryos_rev;
           }
         }else{
           if ($gamemaster == "Si") {
@@ -585,23 +724,24 @@ class main
             $ryos = 0;
           }else{
             $puntos_apen = ceil($experiencia/20);
-            $ryos = $bono['ryos'];
+            $ryos = $ryos_rev;
           }
         }
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
-
+      // echo $experiencia;
       if($alt_id != ""){
 
         $pj_id = get_pj_id($alt_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }
 
-      if(count($check) > 0){
+      echo $check;
+      if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
       else{
@@ -659,11 +799,11 @@ class main
               WHERE p.topic_id = $topic_id
                   AND p.poster_id = $user_id
               GROUP BY p.poster_id";
-      $this->db->sql_query($sql);
+      $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
-      $experiencia = (($numero_post * $total)+(($nivel*10)*$total_combate));
+      $experiencia = round((($numero_post * $total)+(($nivel*10)*$total_combate)));
       $puntos_apen = (4/$total_combate);
       $ryos = 0;
       
@@ -676,7 +816,7 @@ class main
         $check = comprobar_recompensa($revision, $pj_id);
       }
 
-      if(count($check) > 0){
+      if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
       else{
@@ -807,7 +947,7 @@ class main
            $bono['experiencia'] = 0;
            $bono['limite'] = 0;
            $bono['ryos'] = 0;
-           $bono['porcentaje'] = 0;
+           $bono['porcentaje'] = 1;
           break;
 
         case 'Mision C':
@@ -842,7 +982,7 @@ class main
           $bono['experiencia'] = 0;
           $bono['limite'] = 0;
           $bono['ryos'] = 0;
-          $bono['porcentaje'] = 0;
+          $bono['porcentaje'] = 1;
           break;
 
         case 'Encargo C':
@@ -901,7 +1041,8 @@ class main
           $bono['porcentaje'] = 30;
           break;
       }
-    }
+    return $bono;
+     }
 
     function update_revision(){
       
@@ -957,17 +1098,34 @@ class main
       trigger_error('Revisión modificada correctamente al estado '.$estado.'. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>.');
     }
 
+    function update_revision_mod($revision_id){
+      
+      $revision = $revision_id;
+      $moderadores  = request_var('moderadores', '0');
+
+      $sql = "  UPDATE revisiones
+                SET
+                  moderador_asignado = '".$moderadores."'
+                WHERE id_revision = $revision";
+
+      $query = $this->db->sql_query($sql);
+      
+      trigger_error('Revisión asignada correctamente al moderador/a: '.$moderadores.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
+    }
+
     function comprobar_recompensa($revision, $id_pj){
 
-      
-      $sql = "SELECT id_recompensa
-              FROM revisiones_recompensas
-              WHERE id_revision = $revision
-                AND id_pj = $id_pj";
-
-       $query = $this->db->sql_query($sql);
-       $row = $this->db->sql_fetchrow($query);
-       return $row;
+       $query = $this->db->sql_query("SELECT id_recompensa
+                FROM revisiones_recompensas
+                WHERE id_revision = $revision
+                  AND id_pj = $id_pj");
+        if ($row = $this->db->sql_fetchrow($query)) {
+          $this->db->sql_freeresult($query);
+          return $row;
+        }
+        else {
+          return false;
+        }
     }
 
     public function calcular_puntos_mod($tipo_tema){

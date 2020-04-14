@@ -745,6 +745,7 @@ class main
 	function saveItem($user_id) {
 		$item_id = (int) request_var('item_id', 0);
 		$ubicacion = utf8_normalize_nfc(request_var('ubicacion', '', true));
+		$orden = request_var('orden', 0, true);
 		$b_ubicacion_items = false;
 
 		if ($user_id != $this->user->data['user_id']) {
@@ -777,10 +778,10 @@ class main
 		$this->db->sql_freeresult($query);
 
 		if (confirm_box(true)) {
-			if (actualizar_item($user_id, $pj_id, $item_id, $ubicacion, $msg_error)) {
+			if (actualizar_item($user_id, $pj_id, $item_id, $ubicacion, $orden, $msg_error)) {
 				$moderacion = array(
 					'PJ_ID'	=> $pj_id,
-					'RAZON'	=> "Actualizado '$item_nombre' a la ubicación '$ubicacion'.",
+					'RAZON'	=> "Actualizado '$item_nombre' a la ubicación '$ubicacion' orden $orden.",
 				);
 				registrar_moderacion($moderacion);
 
@@ -793,7 +794,8 @@ class main
 			$s_hidden_fields = build_hidden_fields(array(
 				'submit' 	=> true,
 				'item_id'	=> $item_id,
-				'ubicacion'	=> $ubicacion
+				'ubicacion'	=> $ubicacion,
+				'orden'		=> $orden,
 			));
 
 			confirm_box(false, "¿Actualizar la ubicación de '$item_nombre'?", $s_hidden_fields);
