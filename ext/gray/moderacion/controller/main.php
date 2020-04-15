@@ -609,7 +609,7 @@ class main
         $puntos_apen = ceil($experiencia/20);
       }
 
-      if($alt_id != ""){
+      if($alt_id != 0){
 
         $pj_id = get_pj_id($alt_id);
         $check = $this->comprobar_recompensa($revision, $pj_id);
@@ -634,7 +634,7 @@ class main
 
           //Insert en la tabla revisiones_recompensas
           $sql_array = array();
-          $sql_array['id_pj'] = $user_id;
+          $sql_array['id_pj'] = $pj_id;
           $sql_array['id_revision'] = $revision;
           $sql_array['experiencia'] = $experiencia;
           $sql_array['pa'] = $puntos_apen;
@@ -731,7 +731,7 @@ class main
 
       }
       // echo $experiencia;
-      if($alt_id != ""){
+      if($alt_id != 0){
 
         $pj_id = get_pj_id($alt_id);
         $check = $this->comprobar_recompensa($revision, $pj_id);
@@ -757,7 +757,7 @@ class main
 
           //Insert en la tabla revisiones_recompensas
           $sql_array = array();
-          $sql_array['id_pj'] = $user_id;
+          $sql_array['id_pj'] = $pj_id;
           $sql_array['id_revision'] = $revision;
           $sql_array['experiencia'] = $experiencia;
           $sql_array['pa'] = $puntos_apen;
@@ -807,13 +807,13 @@ class main
       $puntos_apen = (4/$total_combate);
       $ryos = 0;
       
-      if($alt_id != ""){
+      if($alt_id != 0){
 
         $pj_id = get_pj_id($alt_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = comprobar_recompensa($revision, $pj_id);
+        $check = $this->comprobar_recompensa($revision, $pj_id);
       }
 
       if($check != false){
@@ -831,7 +831,7 @@ class main
         registrar_moderacion($array, $user_id);
         
         $sql_array = array();
-        $sql_array['id_pj'] = $user_id;
+        $sql_array['id_pj'] = $pj_id;
         $sql_array['id_revision'] = $revision;
         $sql_array['experiencia'] = $experiencia;
         $sql_array['pa'] = $puntos_apen;
