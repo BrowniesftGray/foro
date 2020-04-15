@@ -388,4 +388,4 @@ define('HUEVO_TIPO_3_IMG',				'/images/pascua/huevormal.png');
 define('HUEVO_TIPO_1_ITEM',				'139');
 define('HUEVO_TIPO_2_ITEM',				'138');
 define('HUEVO_TIPO_3_ITEM',				'137');
-define('HUEVO_MAX',						'12');
+define('HUEVO_MAX',						'14');
