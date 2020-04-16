@@ -992,7 +992,7 @@ function calcula_golpe($datos_pj) {
 
 function calcula_bloqueo($datos_pj) {
 	$vit = (int)$datos_pj['vitalidad'];
-	return floor($vit * 0.15);
+	return floor($vit * 0.20);
 }
 
 function registrar_moderacion(array $fields, $user_id = 0){
