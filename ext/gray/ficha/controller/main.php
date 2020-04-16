@@ -187,6 +187,10 @@ class main
 
     function view($user_id)
     {
+        if ($this->user->data['user_id'] == ANONYMOUS ) {
+            trigger_error('No puedes acceder aquí sin conectarte');
+        }
+		
 		$b_avatar_ficha = $b_ficha_premium = $b_ubicacion_items = false;
 
 		$pj_id = get_pj_id($user_id);

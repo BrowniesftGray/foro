@@ -1944,26 +1944,29 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		}
 	}
 	
-	// RPG forum
-	$forum_rol_data = get_forum_rol_data($forum_id, $row['topic_id']);
-	$is_rpg_forum = $forum_rol_data['onrol'];
-	$stats_changed = ((int)$row['diff_pv'] != 0 || (int)$row['diff_pc'] != 0 || (int)$row['diff_sta'] != 0);
-	
-	if ($is_rpg_forum && $stats_changed) {
-		$sql = 'SELECT pv, pc, sta
-					FROM '.PERSONAJES_POSTS_TABLE.'
-					WHERE topic_id = '.$row['topic_id'].'
-						AND user_id = '.$poster_id.'
-						AND post_id = '.$row['post_id'].'
-					ORDER BY post_id DESC
-					LIMIT 1';
-		$query = $db->sql_query($sql);
-		$row_stats = $db->sql_fetchrow($query);
-		$db->sql_freeresult($query);
+	if ($user->data['is_registered'])
+	{
+		// RPG forum
+		$forum_rol_data = get_forum_rol_data($forum_id, $row['topic_id']);
+		$is_rpg_forum = $forum_rol_data['onrol'];
+		$stats_changed = ((int)$row['diff_pv'] != 0 || (int)$row['diff_pc'] != 0 || (int)$row['diff_sta'] != 0);
 		
-		$row_stats['pv'] = (int)$row_stats['pv'] - (int)$row['diff_pv'];
-		$row_stats['pc'] = (int)$row_stats['pc'] - (int)$row['diff_pc'];
-		$row_stats['sta'] = (int)$row_stats['sta'] - (int)$row['diff_sta'];
+		if ($is_rpg_forum && $stats_changed) {
+			$sql = 'SELECT pv, pc, sta
+						FROM '.PERSONAJES_POSTS_TABLE.'
+						WHERE topic_id = '.$row['topic_id'].'
+							AND user_id = '.$poster_id.'
+							AND post_id = '.$row['post_id'].'
+						ORDER BY post_id DESC
+						LIMIT 1';
+			$query = $db->sql_query($sql);
+			$row_stats = $db->sql_fetchrow($query);
+			$db->sql_freeresult($query);
+			
+			$row_stats['pv'] = (int)$row_stats['pv'] - (int)$row['diff_pv'];
+			$row_stats['pc'] = (int)$row_stats['pc'] - (int)$row['diff_pc'];
+			$row_stats['sta'] = (int)$row_stats['sta'] - (int)$row['diff_sta'];
+		}
 	}
 	
 	//
@@ -2119,17 +2122,20 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		$post_row = array_merge($post_row, $cp_row['row']);
 	}
 	
-	// mgomez // 27-12-2018
-	$pj_data = false;
-	$pj_id = get_pj_id($poster_id);
-	if (!$pj_id) $pj_id = get_pj_id_from_post($row['post_id']);
-	if ($pj_id) $pj_data = get_pj_data($pj_id, ($is_rpg_forum ? $row['post_id'] : 0));
-	if ($pj_data) $post_row = array_merge($post_row, $pj_data);
-	
-	// EVENTO PASCUA
-	$pj_id_view = get_pj_id($user->data['user_id']);
-	$huevos_data = get_huevos_data($row['post_id'], $user->data['user_id']);
-	if ($huevos_data && $pj_id_view) $post_row = array_merge($post_row, $huevos_data);
+	if ($user->data['is_registered'])
+	{
+		// mgomez // 27-12-2018
+		$pj_data = false;
+		$pj_id = get_pj_id($poster_id);
+		if (!$pj_id) $pj_id = get_pj_id_from_post($row['post_id']);
+		if ($pj_id) $pj_data = get_pj_data($pj_id, ($is_rpg_forum ? $row['post_id'] : 0));
+		if ($pj_data) $post_row = array_merge($post_row, $pj_data);
+		
+		// EVENTO PASCUA
+		$pj_id_view = get_pj_id($user->data['user_id']);
+		$huevos_data = get_huevos_data($row['post_id'], $user->data['user_id']);
+		if ($huevos_data && $pj_id_view) $post_row = array_merge($post_row, $huevos_data);
+	}
 
 	// Dump vars into template
 	$template->assign_block_vars('postrow', $post_row);
@@ -2160,7 +2166,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		}
 	}
 	
-	if ($is_rpg_forum) 
+	if ($is_rpg_forum && $user->data['is_registered']) 
 	{
 		$items = get_pj_inventory($pj_id, $row['post_id']);
 		

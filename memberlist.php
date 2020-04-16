@@ -701,10 +701,13 @@ switch ($mode)
 		{
 			$member['posts_in_queue'] = 0;
 		}
+		
+		if ($user->data['is_registered'])
+			$ficha_exists = ficha_exists($user_id);
 
 		$template->assign_vars(array(
 
-			'U_FICHA_EXISTE'	=> ficha_exists($user_id),
+			'U_FICHA_EXISTE'	=> $ficha_exists,
 			'U_FICHA_USER'		=> append_sid("{$phpbb_root_path}ficha/$user_id"),
 			'L_POSTS_IN_QUEUE'	=> $user->lang('NUM_POSTS_IN_QUEUE', $member['posts_in_queue']),
 

@@ -4586,7 +4586,9 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 
 	// The following assigns all _common_ variables that may be used at any point in a template.
 	$user_id = $user->data['user_id'];
-	$ficha_exists = ficha_exists($user_id);
+	
+	if ($user->data['is_registered'])
+		$ficha_exists = ficha_exists($user_id);
 	
 	$template->assign_vars(array(
 		'SITENAME'						=> $config['sitename'],
