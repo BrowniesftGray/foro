@@ -338,9 +338,14 @@ class main
         if ($row['estado'] == "rechazada") {
           $options .= "<tr class='table-warning'>";
         }
+        if ($row['estado'] == "cerrada") {
+          $options .= "<tr class='table-warning'>";
+        }
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $row['moderador_asignado'] . "</td>";
-        $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
+        if ($row['estado'] != "cerrada" && $row['estado'] != "completada") {
+          $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
+        }
         // $options .= "<td>" . $row['información'] . "</td>";
         // $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
@@ -455,6 +460,34 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Ver Revisión</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $row['fecha_creacion'] . "</td>";
+        $options .= "<td>" . $row['estado'] . "</td>";
+        $options .= "<td> <a href='/mod/viewRevInfo/".$row['id_revision']."'>Ir a revisión</a></td></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
+    public function get_revisiones_asignadas(){
+
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 ORDER BY fecha_creacion');
+
       $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
@@ -480,9 +513,9 @@ class main
       return $response;
     }
 
-    public function get_revisiones_asignadas(){
+    public function get_revisiones_cerradas(){
 
-      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 ORDER BY fecha_creacion');
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE estado = "cerrada"');
 
       $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
@@ -1046,6 +1079,7 @@ class main
 
     function update_revision(){
       
+      global $user;
       $revision = request_var('id_revision', '0');
       $estado  = request_var('estado', '0');
 
@@ -1059,30 +1093,46 @@ class main
       if($estado == "cerrada"){
 
         $tema = $this->obtener_info_rev($revision);
-        $tema = $tema['tipo_tema'];
+        $tipo_tema = $tema['tipo_tema'];
+        $enlace = $tema['enlace'];
+        $topic_id = $this->obtener_id_tema($enlace);
+        // echo "topic id: ".$enlace;
 
         $sql = "SELECT COUNT(0) as cantidad
               FROM phpbby1_posts p
-              WHERE p.topic_id = $tema";
-
-        $this->db->sql_query($sql);
+              WHERE p.topic_id = $topic_id";
+        // echo $sql;
+        $query = $this->db->sql_query($sql);
         $row = $this->db->sql_fetchrow($query);
         $numero_post = $row['cantidad'];
         
-        $mod = $this->calcular_puntos_mod($tema);
+        $mod = $this->calcular_puntos_mod($tipo_tema);
         $puntos_totales = "";
-        
+        // print_r($row);
+
+        // echo $numero_post;
         if ($mod['post'] == 1) {
           $puntos_totales = $mod['puntos'] * $numero_post;
         }else if($mod['post'] == 0){
           $puntos_totales = $mod['puntos'];
         }
-
+        // echo $puntos_totales;
         $mod_id = $this->user->data['user_id'];
+        //Hacer un select antes
+
+        $user->get_profile_fields($mod_id);
+
+        if (!array_key_exists('pf_puntos_mod', $user->profile_fields)) {
+          $puntos_moderacion = 0;
+        }
+        else{
+          $puntos_moderacion = $user->profile_fields['pf_puntos_mod'];
+        }
+
 
         $this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
-										SET pf_puntos_mod = pf_puntos_mod + $puntos_totales
-                    WHERE user_id = '$mod_id'");
+										SET pf_puntos_mod = $puntos_moderacion + $puntos_totales
+                    WHERE user_id = $mod_id");
                     
                 
         $sql_array = array();
@@ -1172,5 +1222,7 @@ class main
            $bono['post'] = 1;
           break;
       }
+      
+      return $bono;
     }
 }
