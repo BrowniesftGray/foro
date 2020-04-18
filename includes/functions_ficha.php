@@ -936,7 +936,7 @@ function calcula_pv($datos_pj)
 	global $db;
 	$pv = $bono = 0;
 
-	$pv = 10 + floor((int)$datos_pj['fuerza'] * 1.5) + floor((int)$datos_pj['agilidad'] * 0.5) + (int)($datos_pj['vitalidad'] * 3);
+	$pv = 10 + floor((int)$datos_pj['fuerza'] * 1.5) + floor((int)$datos_pj['agilidad'] * 0.5) + ((int)$datos_pj['vitalidad'] * 3);
 
 	if((int)$datos_pj['arquetipo_id'] > 0) {
 		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
