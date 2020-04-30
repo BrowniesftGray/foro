@@ -355,9 +355,9 @@ define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');
 // Premio diario constants
 define('PREMIO_POST_BASE_MAX',					10);
 define('PREMIO_POST_BASE_EXP',					1);
-define('PREMIO_POST_BASE_PE',					1);
+define('PREMIO_POST_BASE_PE',					0);
 define('PREMIO_CADENA_BASE_EXP',				5);
-define('PREMIO_CADENA_BASE_PE',					2);
+define('PREMIO_CADENA_BASE_PE',					0);
 define('PREMIO_CADENA_COMPLETA_CANTIDAD',		7);
 define('PREMIO_CADENA_COMPLETA_EXP',			10);
 define('PREMIO_CADENA_COMPLETA_PA',				1);
