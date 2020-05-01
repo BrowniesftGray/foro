@@ -459,6 +459,14 @@
 											<input type="number" id="orden{categoria_item.items.ITEM_ID}" style="width:40px" min="0" max="999" class="item-place" name="orden" value="{categoria_item.items.ORDEN}" maxlength="3"  tabindex="1" />
 										</form>
 										<!-- ENDIF -->
+										<!-- IF PUEDE_MODERAR and not PERSONAJE_PROPIO -->
+										<hr />
+										<form action="{U_ACTION_ITEM_DEL}" method="post">
+											<input type="hidden" name="item_id" value="{categoria_item.items.ITEM_ID}" />
+											<input type="number" name="cantidad_delete" class="sell-item-qty" value="1" min="1" max="{categoria_item.items.CANTIDAD}" />
+											<input type="submit" name="submit" class="button1 sellItem" value="Quitar" />
+										</form>										
+										<!-- ENDIF -->
 									</div>
 								</div>
 							</li>
@@ -467,6 +475,30 @@
 						</ul>
 						<!-- ENDIF -->
 						<!-- END categoria_item -->
+						
+						<!-- IF PUEDE_MODERAR and not PERSONAJE_PROPIO -->
+						<h3>Agregar Item</h3>
+						<form method="POST" action="{U_ACTION_ITEM_ADD}">
+							<div class="form-group row">
+								<label for="item_nombre" class="col-3 col-form-label text-md-left">Nombre (minúsculas y sin tildes)</label>
+								<div class="col-6">
+									<input id="item_nombre" type="text" class="form-control" name="item_nombre" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="item_cantidad" class="col-3 col-form-label text-md-left">Cantidad</label>
+								<div class="col-1">
+									<input id="item_cantidad" type="number" class="form-control" name="item_cantidad">
+								</div>
+							</div>
+							<div class="form-group row mb-0">
+								<div class="col-4 offset-md-3">
+									<input type="submit" class="btn btn-success" value="Guardar Item">
+									</input>
+								</div>
+							</div>
+						</form>
+						<!-- ENDIF -->
 					  </div>
 					  <!-- ENDIF -->
 					  

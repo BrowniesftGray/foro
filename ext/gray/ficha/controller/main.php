@@ -808,6 +808,147 @@ class main
 		return $this->view($user_id);
 	}
 
+	function addItem($user_id) {
+		$item_nombre = utf8_normalize_nfc(request_var('item_nombre', '', true));
+		$item_cantidad = (int) request_var('item_cantidad', 1);
+		$item_id = false;
+
+		$grupo = $this->user->data['group_id'];
+
+        if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
+		}
+
+		if ($item_nombre == '' || $item_cantidad == 0)
+			trigger_error('No se ingresó el item o la cantidad.' . $this->get_return_link($user_id));
+
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
+		
+		$sql = "SELECT item_id, nombre FROM ".ITEMS_TABLE." WHERE nombre_busqueda = '$item_nombre'";
+		$result = $this->db->sql_query($sql);
+		if ($item_row = $this->db->sql_fetchrow($result)) {
+			$item_id = (int)$item_row['item_id'];
+			$item_nombre_full = $item_row['nombre'];
+		}
+		$this->db->sql_freeresult($result);
+		
+		if (!$item_id)
+			trigger_error("No se encontró ítem llamado '$item_nombre'. Recuerda no usar mayúsculas ni ningún caracter especial." . $this->get_return_link($user_id));
+
+		if (confirm_box(true)) {
+			$sql = "SELECT cantidad FROM ".PERSONAJE_ITEMS_TABLE." WHERE pj_id = $pj_id AND item_id = $item_id";
+			$result = $this->db->sql_query($sql);
+			if ($item_row = $this->db->sql_fetchrow($result)) {
+				$cantidad_old = (int) $item_row['cantidad'];
+			}
+			else {
+				$cantidad_old = 0;
+			}
+			$this->db->sql_freeresult($result);
+			
+			$cantidad_new = $cantidad_old + $item_cantidad;
+			if ($cantidad_new < 0) {
+				$cantidad_new = 0;
+			}
+			
+			$sql_ary = array(
+				'pj_id'		=> $pj_id,
+				'item_id'	=> $item_id,
+				'cantidad'	=> $cantidad_new,
+			);
+			
+			$sql = 'UPDATE ' . PERSONAJE_ITEMS_TABLE . '
+					SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) . "
+					WHERE pj_id = $pj_id AND item_id = $item_id";
+			$this->db->sql_query($sql);
+			
+			if(!$this->db->sql_affectedrows()) {
+				$sql = 'INSERT INTO ' . PERSONAJE_ITEMS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+				$this->db->sql_query($sql);
+			}
+			
+			$moderacion = array(
+				'PJ_ID'	=> $pj_id,
+				'RAZON'	=> "Agregar $item_cantidad x '$item_nombre_full'.",
+			);
+			registrar_moderacion($moderacion);
+
+			trigger_error("Item agregado exitosamente." . $this->get_return_link($user_id));
+		}
+		else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit' 	=> true,
+				'item_nombre'	=> $item_nombre,
+				'item_cantidad'	=> $item_cantidad
+			));
+
+			confirm_box(false, "¿Deseas agregar $item_cantidad x '$item_nombre_full' al inventario del personaje?", $s_hidden_fields);
+		}
+
+		return $this->view($user_id);
+	}
+
+	function delItem($user_id) {
+		$item_id = (int) request_var('item_id', 0);
+		$cantidad_delete = (int) request_var('cantidad_delete', 1);
+
+		$grupo = $this->user->data['group_id'];
+
+        if ($grupo != 5 && $grupo != 4 && $grupo != 18) {
+            trigger_error("No eres moderador o administrador." . $this->get_return_link($user_id));
+		}
+
+		$pj_id = get_pj_id($user_id);
+		if (!$pj_id) trigger_error('No se encontró el personaje.' . $this->get_return_link($user_id));
+
+		$sql = "SELECT i.nombre,
+					i.precio,
+					pi.cantidad
+				FROM " . ITEMS_TABLE . " i
+					INNER JOIN " . PERSONAJE_ITEMS_TABLE . " pi
+						ON pi.item_id = i.item_id
+				WHERE pi.pj_id = '$pj_id'
+					AND i.item_id = '$item_id'
+					AND pi.cantidad >= $cantidad_delete";
+
+		$query = $this->db->sql_query($sql);
+
+		if ($row = $this->db->sql_fetchrow($query)) {
+			$item_nombre = $row['nombre'];
+		}
+		else {
+			trigger_error("El personaje no posee el item en su inventario." . $this->get_return_link($user_id));
+		}
+		$this->db->sql_freeresult($query);
+
+		if (confirm_box(true)) {
+			if (vender_item($user_id, $pj_id, $item_id, $cantidad_delete, $msg_error, false)) {
+				$moderacion = array(
+					'PJ_ID'	=> $pj_id,
+					'RAZON'	=> "Quitar $cantidad_delete x '$item_nombre'.",
+				);
+				registrar_moderacion($moderacion);
+
+				trigger_error("Item eliminado exitosamente." . $this->get_return_link($user_id));
+			}
+			else {
+				trigger_error($msg_error . $this->get_return_link($user_id));
+			}
+		}
+		else {
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit' 	=> true,
+				'item_id'	=> $item_id,
+				'cantidad_delete'	=> $cantidad_delete
+			));
+
+			confirm_box(false, "¿Deseas <b>ELIMINAR</b> $cantidad_delete x '$item_nombre' del inventario del personaje?", $s_hidden_fields);
+		}
+
+		return $this->view($user_id);
+	}
+
 	public function buyTec($user_id)
 	{
 		if ($user_id != $this->user->data['user_id']) {
