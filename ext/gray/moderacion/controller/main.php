@@ -839,9 +839,14 @@ class main
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
       
+      // echo "metarol: ".$metarol;
+      // echo "<br>estrategia: ".$estrategia;
+      // echo "<br>longitud_combate: ".$longitud_combate;
+      // echo "<br>victoria: ".$victoria;
       //Calculamos cosas para la experiencia y tal.
       $total = $entorno+$acciones+$interes+$longitud;
       $total_combate = $metarol+$estrategia+$longitud_combate+$victoria;
+      // echo "<br>total_combate: ".$total_combate;
       
       //Obtenemos el número de post del usuario.
       $sql = "SELECT	p.poster_id as user_id,
@@ -855,7 +860,9 @@ class main
       $numero_post = $row['cantidad'];
 
       $experiencia = round((($numero_post * $total)+(($nivel*10)*$total_combate)));
-      $puntos_apen = (4/$total_combate);
+      // echo "<br>experiencia: ".$experiencia;
+      $puntos_apen = (4*$total_combate);
+      // echo "<br>puntos_apen: ".$puntos_apen;
       $ryos = 0;
       
       if($alt_id != 0){
