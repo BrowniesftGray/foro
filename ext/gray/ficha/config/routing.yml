@@ -38,6 +38,14 @@ gray_ficha_sellItem:
     path: /ficha/sellItem/{user_id}
     defaults: { _controller: gray.ficha.controller:sellItem }
     
+gray_ficha_addItem:
+    path: /ficha/addItem/{user_id}
+    defaults: { _controller: gray.ficha.controller:addItem }
+    
+gray_ficha_delItem:
+    path: /ficha/delItem/{user_id}
+    defaults: { _controller: gray.ficha.controller:delItem }
+    
 gray_ficha_saveItem:
     path: /ficha/saveItem/{user_id}
     defaults: { _controller: gray.ficha.controller:saveItem }

@@ -498,6 +498,8 @@ function get_ficha($user_id, $return = false, $ver = false)
 			'U_ACTION_LVL'			=> append_sid("/ficha/lvlup/" . $user_id),
 			'U_ACTION_SELL'			=> append_sid("/ficha/sellItem/" . $user_id),
 			'U_ACTION_UBI'			=> append_sid("/ficha/saveItem/" . $user_id),
+			'U_ACTION_ITEM_ADD'		=> append_sid("/ficha/addItem/" . $user_id),
+			'U_ACTION_ITEM_DEL'		=> append_sid("/ficha/delItem/" . $user_id),
 			'FICHA_NEXT_LVL'		=> append_sid("/ficha/nextlvl/" . $user_id),
 			'EDAD_CALC'				=> calcular_edad_personaje($pj_id),
 			'ACTIVO'				=> (bool) $row['activo'],
@@ -1112,7 +1114,7 @@ function comprar_habilidad($user_id, $hab_id, $nombre, $coste, &$msg_error)
 	return true;
 }
 
-function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
+function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error, $vender = true) {
 	global $db, $user;
 	$msg_error = 'Error desconocido. Contactar a la administración.'; // Mensaje por defecto
 
@@ -1133,7 +1135,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		$precio_venta = round((int)$row['precio'] / 2) * $cantidad_venta;
 	}
 	else {
-		$msg_error = "No posees el item en tu inventario.";
+		$msg_error = "El personaje no posee el item en su inventario.";
 		return false;
 	}
 	$db->sql_freeresult($query);
@@ -1145,7 +1147,7 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 	else{
 		$pf_ryos = $user->profile_fields['pf_ryos'];
 	}
-
+	
 	$pf_ryos = $pf_ryos + $precio_venta;
 
 	$db->sql_query('UPDATE ' . PERSONAJE_ITEMS_TABLE . "
@@ -1158,12 +1160,15 @@ function vender_item($user_id, $pj_id, $item_id, $cantidad_venta, &$msg_error) {
 		return false;
 	}
 
-	$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
-					SET pf_ryos = '$pf_ryos'
-					WHERE user_id = '$user_id'");
-	if ((int) $db->sql_affectedrows() < 1) {
-		$msg_error = 'Hubo un error actualizando tus Ryos.';
-		return false;
+	if ($vender)
+	{
+		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
+						SET pf_ryos = '$pf_ryos'
+						WHERE user_id = '$user_id'");
+		if ((int) $db->sql_affectedrows() < 1) {
+			$msg_error = 'Hubo un error actualizando tus Ryos.';
+			return false;
+		}
 	}
 
 	return true;
