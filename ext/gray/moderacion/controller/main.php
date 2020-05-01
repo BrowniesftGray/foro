@@ -392,7 +392,7 @@ class main
         $options .= '<form method="POST" action="/mod/recompensa_combate/'.$rev_id.'" target="_blank">';
           $compis = true;
         }
-        else if(strstr("Mision", $row['tipo_revision']) OR strstr("Encargo", $row['tipo_revision']) OR strstr("Trama", $row['tipo_revision'])){
+        else if(preg_match('/\bMision\b/', $row['tipo_revision']) OR preg_match('/\bEncargo\b/', $row['tipo_revision']) OR preg_match('/\bTrama\b/', $row['tipo_revision'])){
           $participantes = $this->get_participantes_option($tema);
           $options .= '<form method="POST" action="/mod/recompensa_mision/'.$rev_id.'" target="_blank">';
           $compis = true;
@@ -748,7 +748,11 @@ class main
       $bono_total = $bono_base + $bono_utilidad + $bono_coherencia + $bono_sobrevivir;
       $bono['experiencia'] = $bono_total * $bono_rev;
 
-      // echo $bono_base;
+      // echo "numero post: ".$numero_post;
+      // echo "bono total: ".$bono_total;
+      // echo "bono experiencia: ".$bono['experiencia'];
+      // echo "bono porcentaje: ".$bono['porcentaje'];
+      // echo "total: ".$total;
 
       if ($bono['experiencia'] == 0) {
         $experiencia = (($numero_post * $total)+20);
@@ -777,7 +781,7 @@ class main
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
-      // echo $experiencia;
+      // echo "experiencia: ".$experiencia;
       if($alt_id != 0){
 
         $pj_id = get_pj_id($alt_id);
@@ -1001,28 +1005,28 @@ class main
           $bono['experiencia'] = 1.5;
           $bono['limite'] = 4;
           $bono['ryos'] = 1500;
-          $bono['porcentaje'] = 20;
+          $bono['porcentaje'] = 0.20;
           break;
 
         case 'Mision B':
           $bono['experiencia'] = 4;
           $bono['limite'] = 10;
           $bono['ryos'] = 3000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Mision A':
           $bono['experiencia'] = 6;
           $bono['limite'] = 15;
           $bono['ryos'] = 10000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Mision S':
           $bono['experiencia'] = 8;
           $bono['limite'] = 25;
           $bono['ryos'] = 30000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Encargo D':
@@ -1036,56 +1040,56 @@ class main
           $bono['experiencia'] = 1.5;
           $bono['limite'] = 4;
           $bono['ryos'] = 1500;
-          $bono['porcentaje'] = 20;
+          $bono['porcentaje'] = 0.20;
           break;
 
         case 'Encargo B':
           $bono['experiencia'] = 4;
           $bono['limite'] = 10;
           $bono['ryos'] = 3000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Encargo A':
           $bono['experiencia'] = 6;
           $bono['limite'] = 15;
           $bono['ryos'] = 10000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Encargo S':
           $bono['experiencia'] = 8;
           $bono['limite'] = 25;
           $bono['ryos'] = 30000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama C':
           $bono['experiencia'] = 3;
           $bono['limite'] = 8;
           $bono['ryos'] = 3000;
-          $bono['porcentaje'] = 20;
+          $bono['porcentaje'] = 0.20;
         break;
 
         case 'Trama B':
           $bono['experiencia'] = 5;
           $bono['limite'] = 30;
           $bono['ryos'] = 3000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama A':
           $bono['experiencia'] = 7;
           $bono['limite'] = 45;
           $bono['ryos'] = 10000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama S':
           $bono['experiencia'] = 9;
           $bono['limite'] = 75;
           $bono['ryos'] = 30000;
-          $bono['porcentaje'] = 30;
+          $bono['porcentaje'] = 0.30;
           break;
       }
     return $bono;
