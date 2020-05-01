@@ -56,6 +56,20 @@ class main
 		  return $this->helper->render('moderacion/home.html', 'Revisiones');
     }
 
+    public function home()
+    {
+      $this->validate_access();
+      
+      $user_id = $this->user->data['user_id'];
+      $vista_rev = "/mod/view/".$user_id;
+      $vista_mod = "/mod/viewMod/".$user_id;
+
+      $this->template->assign_var('vista_rev', $vista_rev);
+      $this->template->assign_var('vista_mod', $vista_mod);
+
+		  return $this->helper->render('moderacion/index.html', 'Revisiones');
+    }
+
     public function validate_access(){
         $grupo = $this->user->data['group_id'];
         if ($grupo != 5 AND $grupo != 4 AND $grupo != 18) {
@@ -469,7 +483,7 @@ class main
         $options .= "<td>" . $row['id_usuario'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td> <a href='/mod/viewRevInfo/".$row['id_revision']."'>Ir a revisión</a></td></tr>";
+        $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td></tr>";
       }
 
       $response = new Response();
@@ -652,7 +666,7 @@ class main
       }
       echo $check;
       if($check != false){
-        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
       else{
           $array = array();

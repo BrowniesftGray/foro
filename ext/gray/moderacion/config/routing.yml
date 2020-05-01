@@ -1,5 +1,9 @@
 gray_moderacion_home:
-    path: /mod
+    path: /mod/home
+    defaults: { _controller: gray.moderacion.controller:home }
+
+gray_moderacion_create:
+    path: /mod/create
     defaults: { _controller: gray.moderacion.controller:handle }
 
 gray_moderacion_store:
