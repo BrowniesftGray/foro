@@ -474,7 +474,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Ver Revisión</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -483,7 +483,8 @@ class main
         $options .= "<td>" . $row['id_usuario'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td></tr>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
+        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
       }
 
       $response = new Response();
@@ -619,7 +620,7 @@ class main
       $alt_id   = request_var('id_alternativo', '0');
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
-      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
       $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
 
@@ -647,13 +648,22 @@ class main
       $numero_post = $row['cantidad'];
 
       $experiencia = round(($numero_post * $total)*$bono_temporada);
+      // echo "entorno =".$entorno;
+      // echo "acciones =".$acciones;
+      // echo "interes =".$interes;
+      // echo "longitud =".$longitud;
       // echo "experiencia =".$experiencia;
       // echo "post =".$numero_post;
       // echo "total =".$total;
+      // exit();
       if ($gamemaster == "Si") {
         $puntos_apen = ceil($experiencia/15);
-      }else{
+      }else if($tipo_tema == "Social"){
+        $puntos_apen = ceil($experiencia/25);
+      }
+      else{
         $puntos_apen = ceil($experiencia/20);
+
       }
 
       if($alt_id != 0){
@@ -704,7 +714,7 @@ class main
       //Campos criterios de rol
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
-      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
       $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
 
@@ -834,7 +844,7 @@ class main
       $victoria = $this->asignar_puntuacion_combate(request_var('victoria', 'No'));
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
-      $interes  = $this->asignar_puntuacion(request_var('interes', 'No'));
+      $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
