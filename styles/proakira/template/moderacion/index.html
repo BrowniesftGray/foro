@@ -7,15 +7,19 @@
 <link rel="stylesheet" href="/styles/proakira/theme/cambiosficha.css?v=1.0.93" type="text/css">
 
 <link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.2.0" type="text/css" />
-
 <div class="sladmin">
 	<h2>App Revisiones</h2>
 	<h3>Opciones</h3>
 	<ul class="menu">
         <li><a target="_blank" href="/mod/create">Crear Petición</a></li>
         <li><a target="_blank" href="{vista_rev}">Ver Peticiones creadas</a></li>
-        <li><a target="_blank" href="{vista_mod}">Ver peticiones asignadas</a></li>
-        <li><a target="_blank" href="/mod/viewAdmin">Ver peticiones sin asignar</a></li>
+        <!-- IF ES_MOD -->
+                <li><a target="_blank" href="{vista_mod}">Ver peticiones asignadas</a></li>
+        <!-- ENDIF -->
+        <!-- IF ES_ADMIN -->
+                <li><a target="_blank" href="{vista_mod}">Ver peticiones asignadas</a></li>
+                <li><a target="_blank" href="/mod/viewAdmin">Ver peticiones sin asignar</a></li>
+        <!-- ENDIF -->
 	</ul>
 </div>
 
@@ -26,5 +30,5 @@
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
- 
+
   <!-- INCLUDE overall_footer.html -->

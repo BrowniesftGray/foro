@@ -61,9 +61,15 @@ class main
       $this->validate_access();
       
       $user_id = $this->user->data['user_id'];
+      $grupo = $this->vista_staff();
       $vista_rev = "/mod/view/".$user_id;
       $vista_mod = "/mod/viewMod/".$user_id;
-
+      if ($grupo == "admin") {
+        $this->template->assign_var('ES_ADMIN', -1, true);
+      }
+      if ($grupo == "mod") {
+        $this->template->assign_var('ES_MOD', -1, true);
+      }
       $this->template->assign_var('vista_rev', $vista_rev);
       $this->template->assign_var('vista_mod', $vista_mod);
 
@@ -657,12 +663,16 @@ class main
       // echo "total =".$total;
       // exit();
       if ($gamemaster == "Si") {
-        $puntos_apen = ceil($experiencia/15);
+        $puntos_apen = round($experiencia/15);
       }else if($tipo_tema == "Social"){
-        $puntos_apen = ceil($experiencia/25);
+        $puntos_apen = round($experiencia/25);
+        $aporte_personaje = $this->asignar_puntuacion(request_var('aporto_personajes', 'No'));
+        if ($aporte_personaje == "Si") {
+          $experiencia = $experiencia*1.5;
+        }
       }
       else{
-        $puntos_apen = ceil($experiencia/20);
+        $puntos_apen = round($experiencia/20);
 
       }
 
@@ -773,18 +783,18 @@ class main
         $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
         if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
           if ($gamemaster == "Si") {
-            $puntos_apen = ceil($experiencia/25);
+            $puntos_apen = round($experiencia/25);
             $ryos = 0;
           }else{
-            $puntos_apen = ceil($experiencia/30);
+            $puntos_apen = round($experiencia/30);
             $ryos = $ryos_rev;
           }
         }else{
           if ($gamemaster == "Si") {
-            $puntos_apen = ceil($experiencia/15);
+            $puntos_apen = round($experiencia/15);
             $ryos = 0;
           }else{
-            $puntos_apen = ceil($experiencia/20);
+            $puntos_apen = round($experiencia/20);
             $ryos = $ryos_rev;
           }
         }
