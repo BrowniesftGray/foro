@@ -711,6 +711,23 @@ class main
           $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
           $this->db->sql_query($sql);
 
+
+          //Metemos en una tabla las puntuaciones que hizo el mod.
+          $mod_id = $this->user->data['user_id'];
+          $sql_puntuaciones_revisiones = array();
+          $sql_puntuaciones_revisiones['id_pj'] = $pj_id;
+          $sql_puntuaciones_revisiones['moderador'] = $mod_id;
+          $sql_puntuaciones_revisiones['id_revision'] = $revision;
+          $sql_puntuaciones_revisiones['gamemaster'] = $gamemaster;
+          $sql_puntuaciones_revisiones['entorno'] = $entorno;
+          $sql_puntuaciones_revisiones['acciones'] = $acciones;
+          $sql_puntuaciones_revisiones['interesante'] = $interes;
+          $sql_puntuaciones_revisiones['longitud'] = $longitud;
+
+          //Insert en la tabla revisiones_recompensas
+          $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
+          $this->db->sql_query($sql);
+
           trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
     }
@@ -729,22 +746,28 @@ class main
       $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
 
       //Campos bonos
-      $bono_tipo  = $this->asignar_puntuacion(request_var('tipo_tema', '0'));
-      $bono_rev  = $this->asignar_puntuacion(request_var('bono_mision', '0'));
-      $ryos_rev = $this->asignar_puntuacion(request_var('ryos_mision', '0'));
-      $compa_rev  = $this->asignar_puntuacion(request_var('bono_por_compa', '0'));
+      $bono_tipo  = request_var('tipo_tema', '0');
+      $bono_rev  = request_var('bono_mision', '0');
+      $ryos_rev = request_var('ryos_mision', '0');
+      $compa_rev  = request_var('bono_por_compa', '0');
 
+      echo "bono_tipo ".$bono_tipo;
+      echo "<br>bono_rev ".$bono_rev;
+      echo "<br>ryos_rev ".$ryos_rev;
+      echo "<br>compa_rev ".$compa_rev;
       //Criterios bonos
       $bono_base = 0.25;
       $bono_utilidad  = request_var('bono_utilidad', 'No');
       $bono_coherencia = request_var('bono_coherencia', 'No');
-      $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
+      // $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
       
       //Estas hay que obtenerlas de otra función.
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
       $tipo_tema = $info_rev['tipo_tema'];
       $compas   = $info_rev['compas'];
+      $compas = substr_count($compas, '#');
+      $compas = $compas-1;
       
       //Calculamos cosas para la experiencia y tal.
       $bono = $this->calcular_bono($tipo_tema);
@@ -761,18 +784,30 @@ class main
       $row = $this->db->sql_fetchrow($query);
       $numero_post = $row['cantidad'];
 
-      if($bono_utilidad == "Si"){ $bono_utilidad = 0.25;}else{$bono_utilidad = 0;}
+      if($bono_utilidad == "Si"){ $bono_utilidad = 0.50;}else{$bono_utilidad = 0;}
       if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}else{$bono_coherencia = 0;}
-      if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
+      // if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
 
-      $bono_total = $bono_base + $bono_utilidad + $bono_coherencia + $bono_sobrevivir;
+      $bono_total = $bono_base + $bono_utilidad + $bono_coherencia;
       $bono['experiencia'] = $bono_total * $bono_rev;
+      $bono['porcentaje'] = $compa_rev;
+      
+      if ($compas == 0 || ($compas == 1 && ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C')) ) {
+        $bono['porcentaje'] = 1;
+      } else{
+        if ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C') {
+          $compas = $compas-1;
+          $bono['porcentaje'] = "1.".$compas * $bono['porcentaje'];
+        }else{
+          $bono['porcentaje'] = "1.".$compas * $bono['porcentaje'];
+        }
+      }
 
-      // echo "numero post: ".$numero_post;
-      // echo "bono total: ".$bono_total;
-      // echo "bono experiencia: ".$bono['experiencia'];
-      // echo "bono porcentaje: ".$bono['porcentaje'];
-      // echo "total: ".$total;
+      echo "<br>numero post: ".$numero_post;
+      echo "<br>bono total: ".$bono_total;
+      echo "<br>bono experiencia: ".$bono['experiencia'];
+      echo "<br>bono porcentaje: ".$bono['porcentaje'];
+      echo "<br>total: ".$total;
 
       if ($bono['experiencia'] == 0) {
         $experiencia = (($numero_post * $total)+20);
@@ -781,6 +816,7 @@ class main
       }
       else{
         $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
+        echo "<br>experiencia :".$experiencia;
         if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
           if ($gamemaster == "Si") {
             $puntos_apen = round($experiencia/25);
@@ -838,6 +874,27 @@ class main
           $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
           $this->db->sql_query($sql);
 
+          //Metemos en una tabla las puntuaciones que hizo el mod.
+          $mod_id = $this->user->data['user_id'];
+          $sql_puntuaciones_revisiones = array();
+          $sql_puntuaciones_revisiones['id_pj'] = $pj_id;
+          $sql_puntuaciones_revisiones['moderador'] = $mod_id;
+          $sql_puntuaciones_revisiones['id_revision'] = $revision;
+          $sql_puntuaciones_revisiones['bono_mision'] = $bono_rev;
+          $sql_puntuaciones_revisiones['ryos_mision'] = $ryos_rev;
+          $sql_puntuaciones_revisiones['bono_por_compa'] = $compa_rev;
+          $sql_puntuaciones_revisiones['gamemaster'] = $gamemaster;
+          $sql_puntuaciones_revisiones['utilidad'] = $bono_utilidad;
+          $sql_puntuaciones_revisiones['coherencia'] = $bono_coherencia;
+          $sql_puntuaciones_revisiones['entorno'] = $entorno;
+          $sql_puntuaciones_revisiones['acciones'] = $acciones;
+          $sql_puntuaciones_revisiones['interesante'] = $interes;
+          $sql_puntuaciones_revisiones['longitud'] = $longitud;
+
+        //Insert en la tabla revisiones_recompensas
+        $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
+        $this->db->sql_query($sql);
+
           trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }
     }
@@ -850,7 +907,7 @@ class main
       $alt_id   = request_var('id_alternativo', '0');
       $metarol  = $this->asignar_puntuacion_combate(request_var('metarol', 'No'));
       $estrategia = $this->asignar_puntuacion_combate(request_var('estrategia', 'No'));
-      $longitud_combate  = $this->asignar_puntuacion_combate(request_var('longitud', 'No'));
+      $longitud_combate  = $this->asignar_puntuacion_combate(request_var('longitud_combate', 'No'));
       $victoria = $this->asignar_puntuacion_combate(request_var('victoria', 'No'));
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
@@ -918,6 +975,26 @@ class main
         //Insert en la tabla revisiones_recompensas
         $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
+
+        //Metemos en una tabla las puntuaciones que hizo el mod.
+        $mod_id = $this->user->data['user_id'];
+        $sql_puntuaciones_revisiones = array();
+        $sql_puntuaciones_revisiones['id_pj'] = $pj_id;
+        $sql_puntuaciones_revisiones['moderador'] = $mod_id;
+        $sql_puntuaciones_revisiones['id_revision'] = $revision;
+        $sql_puntuaciones_revisiones['metarol'] = $metarol;
+        $sql_puntuaciones_revisiones['estrategia'] = $estrategia;
+        $sql_puntuaciones_revisiones['longitud_combate'] = $longitud_combate;
+        $sql_puntuaciones_revisiones['victoria'] = $victoria;
+        $sql_puntuaciones_revisiones['entorno'] = $entorno;
+        $sql_puntuaciones_revisiones['acciones'] = $acciones;
+        $sql_puntuaciones_revisiones['interesante'] = $interes;
+        $sql_puntuaciones_revisiones['longitud'] = $longitud;
+
+        //Insert en la tabla revisiones_recompensas
+        $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
+        $this->db->sql_query($sql);
+
         
         trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
       }

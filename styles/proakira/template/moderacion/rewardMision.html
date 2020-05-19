@@ -135,7 +135,7 @@
             </select>
           </div>
         </div>
-        <div class="form-group row">
+        <!-- <div class="form-group row">
           <label for="bono_sobrevivir" class="col-5 col-form-label text-md-left">¿Ha sobrevivido?</label> 
           <div class="col-5">
             <select id="bono_sobrevivir" name="bono_sobrevivir" required="required" class="custom-select">
@@ -143,7 +143,7 @@
               <option value="No">No</option>
             </select>
           </div>
-        </div>
+        </div> -->
         <div class="form-group row">
           <div class="offset-4 col-5">
             <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
@@ -167,20 +167,20 @@
     .on('change', '#tipo_tema', function(){
       switch ($("#tipo_tema option:selected").text()) {
         case 'Mision D':
-           $('#bono_mision').val( '0');
-           $('#ryos_mision').val( '750');
+           $('#bono_mision').val( '1');
+           $('#ryos_mision').val( '500');
            $('#bono_por_compa').val( '0');
           break;
 
         case 'Mision C':
           $('#bono_mision').val( '1.5');
-          $('#ryos_mision').val( '1500');
+          $('#ryos_mision').val( '2000');
           $('#bono_por_compa').val( '20');
           break;
 
         case 'Mision B':
           $('#bono_mision').val( '4');
-          $('#ryos_mision').val( '3000');
+          $('#ryos_mision').val( '5000');
           $('#bono_por_compa').val( '30');
           break;
 
@@ -197,20 +197,20 @@
           break;
 
         case 'Encargo D':
-           $('#bono_mision').val( '0');
-           $('#ryos_mision').val( '750');
+           $('#bono_mision').val( '1');
+           $('#ryos_mision').val( '500');
            $('#bono_por_compa').val( '0');
           break;
 
         case 'Encargo C':
           $('#bono_mision').val( '1.5');
-          $('#ryos_mision').val( '1500');
+          $('#ryos_mision').val( '2000');
           $('#bono_por_compa').val( '20');
           break;
 
         case 'Encargo B':
           $('#bono_mision').val( '4');
-          $('#ryos_mision').val( '3000');
+          $('#ryos_mision').val( '5000');
           $('#bono_por_compa').val( '30');
           break;
 
@@ -228,13 +228,13 @@
 
         case 'Trama C':
           $('#bono_mision').val( '3');
-          $('#ryos_mision').val( '3000');
+          $('#ryos_mision').val( '2000');
           $('#bono_por_compa').val( '20');
         break;
 
         case 'Trama B':
           $('#bono_mision').val( '5');
-          $('#ryos_mision').val( '3000');
+          $('#ryos_mision').val( '5000');
           $('#bono_por_compa').val( '30');
           break;
 
