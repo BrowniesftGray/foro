@@ -68,6 +68,8 @@ class main
       $grupo = $this->vista_staff();
       $vista_rev = "/mod/view/".$user_id;
       $vista_mod = "/mod/viewMod/".$user_id;
+      $num_mod = $this->get_rev_mod($user_id);
+      $num_sin = $this->get_rev_sin();
       if ($grupo == "admin") {
         $this->template->assign_var('ES_ADMIN', -1, true);
       }
@@ -76,6 +78,8 @@ class main
       }
       $this->template->assign_var('vista_rev', $vista_rev);
       $this->template->assign_var('vista_mod', $vista_mod);
+      $this->template->assign_var('num_mod', $num_mod[0]);
+      $this->template->assign_var('num_sin', $num_sin[0]);
 
 		  return $this->helper->render('moderacion/index.html', 'Revisiones');
     }
@@ -254,6 +258,33 @@ class main
     }
 
     
+    function get_rev_mod($pj_id)
+    {
+      global $db;
+      $query = $db->sql_query("SELECT count(id_revision) FROM revisiones WHERE moderador_asignado=$pj_id AND estado != 'cerrada' AND estado != 'rechazada'");
+      if ($row = $db->sql_fetchrow($query)) {
+        // echo $row;
+        $rev = $row['count(id_revision)'];
+      } else {
+        $rev = false;
+      }
+      $db->sql_freeresult($query);
+      return $rev;
+    }
+
+    function get_rev_sin()
+    {
+      global $db;
+      $query = $db->sql_query("SELECT count(id_revision) FROM revisiones WHERE moderador_asignado=''");
+      if ($row = $db->sql_fetchrow($query)) {
+        // print_r($row);
+        $rev = $row['count(id_revision)'];
+      } else {
+        $rev = false;
+      }
+      $db->sql_freeresult($query);
+      return $rev;
+    }
 
 
     public function vista_staff(){
@@ -284,7 +315,7 @@ class main
 
     public function get_return_link()
     {
-      return "<br /><a href='/mod'>Volver</a>.";
+      return "<br /><a href='/mod/home'>Volver</a>.";
     }
 
     public function obtener_mod_asignado($revision, $mod){
@@ -972,7 +1003,7 @@ class main
 
       echo $check;
       if($check != false){
-        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
       else{
           $array = array();
@@ -1018,7 +1049,7 @@ class main
         $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
         $this->db->sql_query($sql);
 
-          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
     }
 
@@ -1075,7 +1106,7 @@ class main
       }
 
       if($check != false){
-        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
       else{
         $array = array();
@@ -1119,7 +1150,7 @@ class main
         $this->db->sql_query($sql);
 
         
-        trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+        trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
     }
 
