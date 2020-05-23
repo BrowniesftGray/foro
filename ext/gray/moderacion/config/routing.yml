@@ -26,6 +26,14 @@ gray_moderacion_view_admin:
     path: /mod/viewAdmin
     defaults: { _controller: gray.moderacion.controller:view_admin }
 
+gray_moderacion_view_admin_all:
+    path: /mod/viewAdminAll
+    defaults: { _controller: gray.moderacion.controller:view_admin_all }
+
+gray_moderacion_view_puntuaciones_all:
+    path: /mod/viewPuntuacionesAll
+    defaults: { _controller: gray.moderacion.controller:view_puntuaciones_all }
+
 gray_moderacion_dar_recompensa_tema:
     path: /mod/dar_recompensa_tema
     defaults: { _controller: gray.moderacion.controller:dar_recompensa }
@@ -57,6 +65,14 @@ gray_moderacion_revision_vista:
 gray_moderacion_get_moderadores:
     path: /moderaciones/moderadores
     defaults: { _controller: gray.moderacion.controller:get_revisiones_no_asignadas }
+
+gray_moderacion_get_moderadores_all:
+    path: /moderaciones/moderadores_all
+    defaults: { _controller: gray.moderacion.controller:get_revisiones_asignadas }
+
+gray_moderacion_get_puntuaciones_all:
+    path: /moderaciones/puntuaciones_all
+    defaults: { _controller: gray.moderacion.controller:get_puntuaciones_mod }
 
 gray_moderacion_participantes:
     path: /moderacion/participantes

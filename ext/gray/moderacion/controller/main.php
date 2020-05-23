@@ -51,14 +51,18 @@ class main
      */
     public function handle()
     {
-      // $this->validate_access();
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
 
 		  return $this->helper->render('moderacion/home.html', 'Revisiones');
     }
 
     public function home()
     {
-      // $this->validate_access();
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
       
       $user_id = $this->user->data['user_id'];
       $grupo = $this->vista_staff();
@@ -85,6 +89,9 @@ class main
 
     public function view_user($user_id){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
       $this->template->assign_var('user_id', $user_id);
       
       return $this->helper->render('/moderacion/view.html', 'Vista Revisiones');
@@ -93,6 +100,9 @@ class main
 
     public function view_mod($user_id){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
       if($this->vista_staff() != "user"){
 
         $this->template->assign_var('user_id', $user_id);
@@ -106,6 +116,9 @@ class main
 
     public function view_rev($rev_id){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
       if($this->vista_staff() != "user"){
 
         $user_id = $this->user->data['user_id'];
@@ -125,6 +138,10 @@ class main
 
     public function view_admin(){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+
       $vista = $this->vista_staff(); 
       if($vista == "admin"){   
         return $this->helper->render('/moderacion/viewAdmin.html', 'Vista Revisiones');
@@ -134,7 +151,41 @@ class main
 
     }
 
+    public function view_admin_all(){
+
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+
+      $vista = $this->vista_staff(); 
+      if($vista == "admin"){   
+        return $this->helper->render('/moderacion/viewAdminAll.html', 'Vista Revisiones');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
+
+    }
+
+    public function view_puntuaciones_all(){
+
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+
+      $vista = $this->vista_staff(); 
+      if($vista == "admin"){   
+        return $this->helper->render('/moderacion/viewPuntuacionesAll.html', 'Vista Revisiones');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
+
+    }
+
     public function get_vista_recompensa_tema($rev_id){
+
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
 
       $participante = request_var('id_participante', '0');
       if($this->vista_staff() != "user" || $participante == 0){
@@ -156,6 +207,10 @@ class main
 
     public function get_vista_recompensa_mision($rev_id){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+
       $participante = request_var('id_participante', '0');
       if($this->vista_staff() != "user" || $participante == 0){
 
@@ -176,6 +231,10 @@ class main
 
     public function get_vista_recompensa_combate($rev_id){
 
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+    
       $participante = request_var('id_participante', '0');
       if($this->vista_staff() != "user" || $participante != 0){
 
@@ -300,6 +359,9 @@ class main
       $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Moderador Asignado</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
+        $usuario = $this->get_nombre_user($row['id_usuario']);
+        $mod = $this->get_nombre_user($row['moderador_asignado']);
+
         if ($row['estado'] == "registrada") {
           $options .= "<tr class='table-active'>";
         }
@@ -316,7 +378,7 @@ class main
           $options .= "<tr class='table-warning'>";
         }
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td>" . $row['moderador_asignado'] . "</td>";
+        $options .= "<td>" . $mod . "</td>";
         $options .= "<td> <a href='" . $row['enlace'] . "'>Enlace</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
@@ -343,6 +405,9 @@ class main
       $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
+        $usuario = $this->get_nombre_user($row['id_usuario']);
+        $mod = $this->get_nombre_user($row['moderador_asignado']);
+
         if ($row['estado'] == "registrada") {
           $options .= "<tr class='table-active'>";
         }
@@ -362,7 +427,7 @@ class main
           $options .= "<tr class='table-warning'>";
         }
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td>" . $row['moderador_asignado'] . "</td>";
+        $options .= "<td>" . $mod . "</td>";
         if ($row['estado'] != "cerrada" && $row['estado'] != "completada") {
           $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
         }
@@ -485,8 +550,10 @@ class main
       $select = $this->get_moderadores();
 
       while ($row = $this->db->sql_fetchrow($query)) {
+        $usuario = $this->get_nombre_user($row['id_usuario']);
+
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $usuario . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
@@ -507,17 +574,20 @@ class main
 
     public function get_revisiones_asignadas(){
 
-      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 ORDER BY fecha_creacion');
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" ORDER BY fecha_creacion');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
       while ($row = $this->db->sql_fetchrow($query)) {
+        $usuario = $this->get_nombre_user($row['id_usuario']);
+        $mod = $this->get_nombre_user($row['moderador_asignado']);
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td>" . $row['id_usuario'] . "</td>";
+        $options .= "<td>" . $usuario . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
+        $options .= "<td>" . $mod . "</td>";
         $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
         $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
       }
@@ -563,6 +633,48 @@ class main
       return $response;
     }
 
+    public function get_puntuaciones_mod(){
+
+      $query = $this->db->sql_query('SELECT * FROM puntuaciones_revisiones');
+
+      $options = "<table class='table table-striped'><thead><tr><th>Moderador</th><th>Usuario</th><th>Entorno</th><th>Acciones</th><th>Interesante</th><th>Longitud</th><th>Gamemaster</th><th>Bono Mision</th><th>Ryos Mision</th><th>Bono por Compa</th><th>Utilidad</th><th>Coherencia</th><th>Betarol</th><th>Estrategia</th><th>Longitud Combate</th><th>Victoria</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $mod = $this->get_nombre_user($row['moderador']);
+        $user = get_user_id($row['id_pj']);
+        $usuario = $this->get_nombre_user($user);
+        $options .= "<tr><td>" . $mod . "</td>";
+        $options .= "<td>" . $usuario . "</td>";
+        $options .="<td>".$row['entorno']."</td>";
+        $options .="<td>".$row['acciones']."</td>";
+        $options .="<td>".$row['interesante']."</td>";
+        $options .="<td>".$row['longitud']."</td>";
+        $options .="<td>".$row['gamemaster']."</td>";
+        $options .="<td>".$row['bono_mision']."</td>";
+        $options .="<td>".$row['ryos_mision']."</td>";
+        $options .="<td>".$row['bono_por_compa']."</td>";
+        $options .="<td>".$row['utilidad']."</td>";
+        $options .="<td>".$row['coherencia']."</td>";
+        $options .="<td>".$row['metarol']."</td>";
+        $options .="<td>".$row['estrategia']."</td>";
+        $options .="<td>".$row['longitud_combate']."</td>";
+        $options .="<td>".$row['victoria']."</td></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
     public function get_moderadores(){
       $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
 
@@ -571,6 +683,15 @@ class main
       }
 
       return $options;
+    }
+
+    public function get_nombre_user($user_id){
+      $query = $this->db->sql_query('SELECT username FROM phpbby1_users WHERE user_id = '.$user_id.'');
+
+      $row = $this->db->sql_fetchrow($query);
+      $usuario = $row['username'];
+
+      return $usuario;
     }
 
     public function insert_revision($tipo_revision){
