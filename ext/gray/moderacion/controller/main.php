@@ -51,14 +51,14 @@ class main
      */
     public function handle()
     {
-      $this->validate_access();
+      // $this->validate_access();
 
 		  return $this->helper->render('moderacion/home.html', 'Revisiones');
     }
 
     public function home()
     {
-      $this->validate_access();
+      // $this->validate_access();
       
       $user_id = $this->user->data['user_id'];
       $grupo = $this->vista_staff();
