@@ -122,7 +122,7 @@ class main
       if($this->vista_staff() != "user"){
 
         $user_id = $this->user->data['user_id'];
-        if (($this->obtener_mod_asignado($rev_id, $user_id)) == false || $this->vista_staff() == "admin") {
+        if (($this->obtener_mod_asignado($rev_id, $user_id)) == true || $this->vista_staff() == "admin") {
 
           $this->template->assign_var('rev_id', $rev_id);
           return $this->helper->render('/moderacion/viewRev.html', 'Recompensas');
@@ -402,7 +402,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $usuario = $this->get_nombre_user($row['id_usuario']);
@@ -545,7 +545,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>enlace</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -554,6 +554,7 @@ class main
 
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $usuario . "</td>";
+        $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
@@ -576,7 +577,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" ORDER BY fecha_creacion');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -585,6 +586,7 @@ class main
         $mod = $this->get_nombre_user($row['moderador_asignado']);
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $usuario . "</td>";
+        $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
@@ -608,7 +610,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE estado = "cerrada"');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -637,7 +639,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM puntuaciones_revisiones');
 
-      $options = "<table class='table table-striped'><thead><tr><th>Moderador</th><th>Usuario</th><th>Entorno</th><th>Acciones</th><th>Interesante</th><th>Longitud</th><th>Gamemaster</th><th>Bono Mision</th><th>Ryos Mision</th><th>Bono por Compa</th><th>Utilidad</th><th>Coherencia</th><th>Betarol</th><th>Estrategia</th><th>Longitud Combate</th><th>Victoria</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Moderador</th><th>Usuario</th><th>Entorno</th><th>Acciones</th><th>Interesante</th><th>Longitud</th><th>Gamemaster</th><th>Bono Mision</th><th>Ryos Mision</th><th>Bono por Compa</th><th>Utilidad</th><th>Coherencia</th><th>Betarol</th><th>Estrategia</th><th>Longitud Combate</th><th>Victoria</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
