@@ -185,6 +185,22 @@ class main
 
     }
 
+    public function view_recompensa_rev($rev_id){
+
+      if ($this->user->data['user_id'] == ANONYMOUS ) {
+        trigger_error('No puedes acceder aquí sin conectarte');
+    }
+
+      $vista = $this->vista_staff(); 
+      if($vista == "admin" OR $vista == "mod"){   
+          $this->template->assign_var('rev_id', $rev_id);
+          return $this->helper->render('/moderacion/viewRecompensaRev.html', 'Vista Revisiones');
+      }else{
+        trigger_error('No tienes acceso a esta característica.');
+      }
+
+    }
+
     public function get_vista_recompensa_tema($rev_id){
 
       if ($this->user->data['user_id'] == ANONYMOUS ) {
@@ -433,7 +449,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = '.$user_id);
 
-      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Moderador Asignado</th><th>Revisarla</th><th>Recompensas</th><th>Fecha Creación</th><th>Estado</th></tr></thead><tbody>";
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $usuario = $this->get_nombre_user($row['id_usuario']);
@@ -457,12 +473,14 @@ class main
         if ($row['estado'] == "cerrada") {
           $options .= "<tr class='table-warning'>";
         }
+        //viewRecompensaRev
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
         if ($row['estado'] != "cerrada" && $row['estado'] != "completada") {
           $options .= "<td> <a href='/mod/viewRev/".$row['id_revision']."'>Ir a revisión</a></td>";
         }
-        // $options .= "<td>" . $row['información'] . "</td>";
+        $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."'>Ver Recompensas</a></td>";
+          // $options .= "<td>" . $row['información'] . "</td>";
         // $options .= "<td>" . $row['participantes'] . "</td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
@@ -608,7 +626,7 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" ORDER BY fecha_creacion');
 
-      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Enlace</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Enlace</th><th>Recompensas</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
 
@@ -618,6 +636,7 @@ class main
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $usuario . "</td>";
         $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
+        $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."'>Ver Recompensas</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
@@ -708,6 +727,37 @@ class main
       return $response;
     }
 
+    public function get_recompensas_rev(){
+
+      $rev_id = request_var('rev_id', '0');
+
+      $query = $this->db->sql_query('SELECT * FROM revisiones_recompensas WHERE id_revision = '.$rev_id.''  );
+
+      $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Usuario</th><th>Experiencia</th><th>Puntos de Aprendizaje</th><th>Ryos</th></tr></thead><tbody>";
+
+      $select = $this->get_moderadores();
+
+      while ($row = $this->db->sql_fetchrow($query)) {
+        $user = get_user_id($row['id_pj']);
+        $usuario = $this->get_nombre_user($user);
+        $options .= "<tr><td>" . $usuario . "</td>";
+        $options .="<td>".$row['experiencia']."</td>";
+        $options .="<td>".$row['pa']."</td>";
+        $options .="<td>".$row['ryos']."</td></tr>";
+      }
+
+      $response = new Response();
+      
+      $response->setContent($options);
+      $response->setStatusCode(Response::HTTP_OK);
+      
+      // sets a HTTP response header
+      $response->headers->set('Content-Type', 'text/html');
+      
+      // prints the HTTP headers followed by the content
+      return $response;
+    }
+
     public function get_moderadores(){
       $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
 
@@ -782,7 +832,7 @@ class main
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
-      $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
+      $gamemaster = $this->request_var('gamemaster', 'No');
 
       //Estas hay que obtenerlas de otra función.
       $info_rev = $this->obtener_info_rev($revision);
@@ -897,7 +947,7 @@ class main
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
-      $gamemaster = $this->asignar_puntuacion(request_var('gamemaster', 'No'));
+      $gamemaster = $this->request_var('gamemaster', 'No');
 
       //Campos bonos
       $bono_tipo  = request_var('tipo_tema', '0');

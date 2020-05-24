@@ -34,6 +34,10 @@ gray_moderacion_view_puntuaciones_all:
     path: /mod/viewPuntuacionesAll
     defaults: { _controller: gray.moderacion.controller:view_puntuaciones_all }
 
+gray_moderacion_view_recompensas_rev:
+    path: /mod/viewRecompensaRev/{rev_id}
+    defaults: { _controller: gray.moderacion.controller:view_recompensa_rev }
+
 gray_moderacion_dar_recompensa_tema:
     path: /mod/dar_recompensa_tema
     defaults: { _controller: gray.moderacion.controller:dar_recompensa }
@@ -73,6 +77,10 @@ gray_moderacion_get_moderadores_all:
 gray_moderacion_get_puntuaciones_all:
     path: /moderaciones/puntuaciones_all
     defaults: { _controller: gray.moderacion.controller:get_puntuaciones_mod }
+
+gray_moderacion_get_recompensa_rev:
+    path: /moderaciones/recompensa_rev
+    defaults: { _controller: gray.moderacion.controller:get_recompensas_rev }
 
 gray_moderacion_participantes:
     path: /moderacion/participantes
