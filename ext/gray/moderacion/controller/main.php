@@ -832,7 +832,7 @@ class main
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
-      $gamemaster = $this->request_var('gamemaster', 'No');
+      $gamemaster = request_var('gamemaster', 'No');
 
       //Estas hay que obtenerlas de otra función.
       $info_rev = $this->obtener_info_rev($revision);
@@ -947,7 +947,7 @@ class main
       $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
       $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
-      $gamemaster = $this->request_var('gamemaster', 'No');
+      $gamemaster = request_var('gamemaster', 'No');
 
       //Campos bonos
       $bono_tipo  = request_var('tipo_tema', '0');
