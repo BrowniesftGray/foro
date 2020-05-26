@@ -870,6 +870,9 @@ class main
         $puntos_apen = round($experiencia/15);
       }else if($tipo_tema == "Social"){
         $puntos_apen = round($experiencia/25);
+        if ($puntos_apen > 2) {
+          $puntos_apen = 2;
+        }
         $aporte_personaje = $this->asignar_puntuacion(request_var('aporto_personajes', 'No'));
         if ($aporte_personaje == "Si") {
           $experiencia = $experiencia*1.5;
