@@ -33,12 +33,14 @@
           <label for="tipo_tema" class="col-5 col-form-label text-md-left">Tipo de Tema</label> 
           <div class="col-5">
             <select id="tipo_tema" name="tipo_tema" required="required" class="custom-select">
-              <option value='Mision D'>Mision D</option>
+              <option value="Mision D Solitaria">Misión D Solitaria</option>
+              <option value="Mision D Grupal">Misión D Grupal</option>
               <option value='Mision C'>Mision C</option>
               <option value='Mision B'>Mision B</option>
               <option value='Mision A'>Mision A</option>
               <option value='Mision S'>Mision S</option>
-              <option value='Encargo D'>Encargo D</option>
+              <option value="Encargo D Solitaria">Encargo D Solitaria</option>
+              <option value="Encargo D Grupal">Encargo D Grupal</option>
               <option value='Encargo C'>Encargo C</option>
               <option value='Encargo B'>Encargo B</option>
               <option value='Encargo A'>Encargo A</option>
@@ -166,7 +168,13 @@
   $(document).off('change', '#tipo_tema')
     .on('change', '#tipo_tema', function(){
       switch ($("#tipo_tema option:selected").text()) {
-        case 'Mision D':
+        case 'Mision D Solitaria':
+           $('#bono_mision').val( '1');
+           $('#ryos_mision').val( '500');
+           $('#bono_por_compa').val( '0');
+          break;
+        
+        case 'Mision D Grupal':
            $('#bono_mision').val( '1');
            $('#ryos_mision').val( '500');
            $('#bono_por_compa').val( '0');
@@ -196,12 +204,18 @@
           $('#bono_por_compa').val( '30');
           break;
 
-        case 'Encargo D':
+        case 'Encargo D Solitaria':
            $('#bono_mision').val( '1');
            $('#ryos_mision').val( '500');
            $('#bono_por_compa').val( '0');
           break;
 
+        case 'Encargo D Grupal':
+           $('#bono_mision').val( '1');
+           $('#ryos_mision').val( '500');
+           $('#bono_por_compa').val( '0');
+          break;
+          
         case 'Encargo C':
           $('#bono_mision').val( '1.5');
           $('#ryos_mision').val( '2000');

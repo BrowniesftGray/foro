@@ -820,7 +820,7 @@ class main
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
 
-      trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión.</a>.');
+      trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión</a>.');
     }
 
     public function dar_recompensa(){
@@ -873,7 +873,8 @@ class main
         if ($puntos_apen > 2) {
           $puntos_apen = 2;
         }
-        $aporte_personaje = $this->asignar_puntuacion(request_var('aporto_personajes', 'No'));
+        $aporte_personaje = request_var('aporto_personajes', 'No');
+        // echo "aporte personaje: ".$aporte_personaje;
         if ($aporte_personaje == "Si") {
           $experiencia = $experiencia*1.5;
         }
@@ -935,7 +936,7 @@ class main
           $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
           $this->db->sql_query($sql);
 
-          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>. ');
+          trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia y '.$puntos_apen.' puntos de aprendizaje. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision</a>. ');
       }
     }
 
@@ -957,11 +958,14 @@ class main
       $bono_rev  = request_var('bono_mision', '0');
       $ryos_rev = request_var('ryos_mision', '0');
       $compa_rev  = request_var('bono_por_compa', '0');
+      if ($gamemaster == 'Si') {
+        $compa_rev = 30;
+      }
 
-      echo "bono_tipo ".$bono_tipo;
-      echo "<br>bono_rev ".$bono_rev;
-      echo "<br>ryos_rev ".$ryos_rev;
-      echo "<br>compa_rev ".$compa_rev;
+      // echo "bono_tipo ".$bono_tipo;
+      // echo "<br>bono_rev ".$bono_rev;
+      // echo "<br>ryos_rev ".$ryos_rev;
+      // echo "<br>compa_rev ".$compa_rev;
       //Criterios bonos
       $bono_base = 0.25;
       $bono_utilidad  = request_var('bono_utilidad', 'No');
@@ -1010,20 +1014,26 @@ class main
         }
       }
 
-      echo "<br>numero post: ".$numero_post;
-      echo "<br>bono total: ".$bono_total;
-      echo "<br>bono experiencia: ".$bono['experiencia'];
-      echo "<br>bono porcentaje: ".$bono['porcentaje'];
-      echo "<br>total: ".$total;
+      // echo "<br>numero post: ".$numero_post;
+      // echo "<br>bono tipo: ".$bono_tipo;
+      // echo "<br>bono total: ".$bono_total;
+      // echo "<br>bono experiencia: ".$bono['experiencia'];
+      // echo "<br>bono porcentaje: ".$bono['porcentaje'];
+      // echo "<br>total: ".$total;
 
-      if ($bono['experiencia'] == 0) {
-        $experiencia = (($numero_post * $total)+20);
+      if ($bono_tipo == 'Mision D Solitaria' || $bono_tipo == 'Encargo D Solitaria') {
+        $experiencia = 20;
         $ryos = $ryos_rev;
         $puntos_apen = 2;
-      }
-      else{
+      }else if($bono_tipo == 'Mision D Grupal' || $bono_tipo == 'Encargo D Grupal'){
+        $experiencia = ($numero_post * $total)+20;
+      // echo "<br>experiencia grupal: ".$experiencia;
+        
+        $ryos = $ryos_rev;
+        $puntos_apen = 2; 
+      } else{
         $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
-        echo "<br>experiencia :".$experiencia;
+        // echo "<br>experiencia :".$experiencia;
         if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
           if ($gamemaster == "Si") {
             $puntos_apen = round($experiencia/25);
@@ -1054,7 +1064,7 @@ class main
         $check = $this->comprobar_recompensa($revision, $pj_id);
       }
 
-      echo $check;
+      // echo $check;
       if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
@@ -1102,7 +1112,7 @@ class main
         $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
         $this->db->sql_query($sql);
 
-          trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
+          trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia y '.$puntos_apen.' puntos de aprendizaje. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
       }
     }
 
@@ -1203,7 +1213,7 @@ class main
         $this->db->sql_query($sql);
 
         
-        trigger_error('Se ha insertado la recompensa correctamente, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
+        trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia,'.$puntos_apen.' puntos de aprendizaje y '.$ryos.' ryos. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
       }
     }
 
@@ -1241,10 +1251,10 @@ class main
       $es_post = false;
 
       if ($topic_id == 0) {
-        $topic_id = str_replace("#", "-", $topic_id);
+        $topic_id = str_replace("#", "|", $topic_id);
 
         //Comprobaciones, tema o post
-        $comprobacion = explode("-p", $topic_id);
+        $comprobacion = explode("|p", $topic_id);
         if (count($comprobacion) > 1) {
           $es_post = true;
         }else{
@@ -1252,7 +1262,7 @@ class main
         }
 
         if ($es_post == true) {
-          $topic_id = explode("-p", $topic_id);
+          $topic_id = explode("|p", $topic_id);
           $cuenta_topic = count($topic_id)-1;
           $tema = $topic_id[$cuenta_topic];
         }
