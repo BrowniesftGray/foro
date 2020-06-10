@@ -1007,6 +1007,8 @@ class main
       $compas   = $info_rev['compas'];
       $compas = substr_count($compas, '#');
       $compas = $compas-1;
+	  
+	  if ($compas < 0) $compas = 0;
       
       //Calculamos cosas para la experiencia y tal.
       $bono = $this->calcular_bono($tipo_tema);
@@ -1042,8 +1044,8 @@ class main
         }
       }
 
-      if ($compas*$compa_rev > 1) {
-        $bono['porcentaje'] = floatval($compas)*floatval("0.".$compa_rev);
+      if ($compas*$compa_rev >= 100) {
+        $bono['porcentaje'] = 2;
       }
       // echo "<br>numero post: ".$numero_post;
       // echo "<br>bono tipo: ".$bono_tipo;
