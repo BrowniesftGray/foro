@@ -624,11 +624,12 @@ class main
 
     public function get_revisiones_asignadas(){
 
-      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" ORDER BY fecha_creacion');
+      $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" AND estado != "rechazada" ORDER BY fecha_creacion');
 
       $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Enlace</th><th>Recompensas</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
       $select = $this->get_moderadores();
+      // $select_revisiones = $this->get_tipo_revisiones();
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $usuario = $this->get_nombre_user($row['id_usuario']);
@@ -767,6 +768,31 @@ class main
 
       return $options;
     }
+
+    public function get_tipo_revisiones(){
+      $options = '<option value="Combate">Combate</option>
+      <option value="Social">Social</option>
+      <option value="Generico">Generico</option>
+      <option value="Mision D Solitaria">Misión D Solitaria</option>
+      <option value="Mision D Grupal">Misión D Grupal</option>
+      <option value="Mision C">Misión C</option>
+      <option value="Mision B">Misión B</option>
+      <option value="Mision A">Misión A</option>
+      <option value="Mision S">Misión S</option>
+      <option value="Encargo D Solitaria">Encargo D Solitaria</option>
+      <option value="Encargo D Grupal">Encargo D Grupal</option>
+      <option value="Encargo C">Encargo C</option>
+      <option value="Encargo B">Encargo B</option>
+      <option value="Encargo A">Encargo A</option>
+      <option value="Encargo S">Encargo S</option>
+      <option value="Trama C">Trama C</option>
+      <option value="Trama B">Trama B</option>
+      <option value="Trama A">Trama A</option>
+      <option value="Trama S">Trama S</option>';
+
+      return $options;
+    }
+
 
     public function get_nombre_user($user_id){
       $query = $this->db->sql_query('SELECT username FROM phpbby1_users WHERE user_id = '.$user_id.'');
@@ -944,7 +970,12 @@ class main
       
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
-      $alt_id   = request_var('id_alternativo', '0');
+      $alt_id   = request_var('id_alternativo', '');
+
+      if ($alt_id != '') {
+        $alt_id = explode("=",$alt_id);
+        $id_redireccion = $alt_id[2];
+      }
 
       //Campos criterios de rol
       $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
@@ -1054,11 +1085,9 @@ class main
         ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
       }
-      // echo "experiencia: ".$experiencia;
-      if($alt_id != 0){
-
-        $pj_id = get_pj_id($alt_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
+      if($alt_id != ''){
+        $pj_id = get_pj_id($id_redireccion);
+        // $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
         $check = $this->comprobar_recompensa($revision, $pj_id);
