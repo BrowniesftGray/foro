@@ -989,9 +989,6 @@ class main
       $bono_rev  = request_var('bono_mision', '0');
       $ryos_rev = request_var('ryos_mision', '0');
       $compa_rev  = request_var('bono_por_compa', '0');
-      if ($gamemaster == 'Si') {
-        $compa_rev = 30;
-      }
 
       // echo "bono_tipo ".$bono_tipo;
       // echo "<br>bono_rev ".$bono_rev;
@@ -1038,13 +1035,16 @@ class main
         $bono['porcentaje'] = 1;
       } else{
         if ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C') {
-          $compas = $compas-1;
-          $bono['porcentaje'] = "1.".$compas * $bono['porcentaje'];
+          $compas = floatval($compas)-floatval(1);
+          $bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
         }else{
-          $bono['porcentaje'] = "1.".$compas * $bono['porcentaje'];
+          $bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
         }
       }
 
+      if ($compas*$compa_rev > 1) {
+        $bono['porcentaje'] = floatval($compas)*floatval("0.".$compa_rev);
+      }
       // echo "<br>numero post: ".$numero_post;
       // echo "<br>bono tipo: ".$bono_tipo;
       // echo "<br>bono total: ".$bono_total;
@@ -1087,6 +1087,7 @@ class main
       }
       if($alt_id != ''){
         $pj_id = get_pj_id($id_redireccion);
+        $user_id = $id_redireccion;
         // $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
