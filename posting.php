@@ -1853,6 +1853,7 @@ $puede_asociar = in_array($user->data['group_id'], array(4, 5, 13, 18));	//NPC, 
 $linked_pjs_options = $tipos_tema_options = $rangos_options = '';
 
 if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
+	/*
 	$sql_pjs = 'SELECT p.user_id, p.nombre
 				FROM phpbby1_flerex_linkedaccounts L
 					INNER JOIN '.PERSONAJES_TABLE.' p
@@ -1868,6 +1869,13 @@ if ($puede_asociar && ($mode == 'post' || $mode == 'reply')) {
 						AND L.linked_user_id = '.$post_data['poster_id'].'
 				UNION
 				SELECT p.user_id, p.nombre
+					FROM '.PERSONAJES_TABLE.' p
+					WHERE p.activo = 1
+						AND p.user_id = '.$post_data['poster_id'].'
+				ORDER BY nombre';
+				*/
+				
+	$sql_pjs = 'SELECT p.user_id, p.nombre
 					FROM '.PERSONAJES_TABLE.' p
 					WHERE p.activo = 1
 						AND p.user_id = '.$post_data['poster_id'].'
