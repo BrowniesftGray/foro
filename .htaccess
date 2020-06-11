@@ -123,3 +123,23 @@ RewriteRule ^(.*)$ app.php [QSA,L]
 		</Files>
 	</IfModule>
 </IfModule>
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 36.96.0.0/11
+deny from 36.128.0.0/10
+deny from 36.192.0.0/11
+deny from 59.192.0.0/10
+deny from 60.0.0.0/11
+deny from 110.240.0.0/12
+deny from 111.0.0.0/10
+deny from 183.0.0.0/10
+deny from 183.64.0.0/13
+deny from 183.184.0.0/13
+deny from 183.192.0.0/10
+deny from 47.254.0.0/16
+deny from 47.89.0.0/16
+deny from 47.88.0.0/16
