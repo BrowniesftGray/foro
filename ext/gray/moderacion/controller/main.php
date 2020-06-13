@@ -1023,6 +1023,7 @@ class main
               GROUP BY p.poster_id";
       $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
+	  $this->db->sql_freeresult($query);
       $numero_post = $row['cantidad'];
 
       if($bono_utilidad == "Si"){ $bono_utilidad = 0.50;}else{$bono_utilidad = 0;}
@@ -1143,6 +1144,19 @@ class main
         //Insert en la tabla revisiones_recompensas
         $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
         $this->db->sql_query($sql);
+		  
+		  
+		  //Agregar ryos a facción		  
+		  if ((int) $ryos > 0)
+		  {
+			  $sql = "UPDATE ".ALDEAS_TABLE." a
+							INNER JOIN ".PERSONAJES_TABLE." p
+								ON p.aldea_id = a.aldea_id
+						SET a.ryos = COALESCE(a.ryos, 0) + $ryos
+						WHERE p.user_id = $user_id";
+			  $this->db->sql_query($sql);
+		  }
+		  
 
           trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia y '.$puntos_apen.' puntos de aprendizaje. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
       }
