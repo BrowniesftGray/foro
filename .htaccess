@@ -1,7 +1,7 @@
 <IfModule mod_rewrite.c>
 
 # Use PHP 7.0
-AddHandler application/x-httpd-php70 .php .php5 .php4 .php3
+AddHandler application/x-httpd-php71 .php .php5 .php4 .php3
 
 
 RewriteEngine On
@@ -76,6 +76,13 @@ RewriteRule ^(.*)$ app.php [QSA,L]
 #Options +FollowSymLinks
 </IfModule>
 
+# Apache content negotation tries to interpret non-existent paths as files if
+# MultiViews is enabled. This will however cause issues with paths containg
+# dots, e.g. for the cron tasks
+<IfModule mod_negotiation.c>
+	Options -MultiViews
+</IfModule>
+
 # With Apache 2.4 the "Order, Deny" syntax has been deprecated and moved from
 # module mod_authz_host to a new module called mod_access_compat (which may be
 # disabled) and a new "Require" syntax has been introduced to mod_authz_host.
@@ -140,6 +147,3 @@ deny from 183.0.0.0/10
 deny from 183.64.0.0/13
 deny from 183.184.0.0/13
 deny from 183.192.0.0/10
-deny from 47.254.0.0/16
-deny from 47.89.0.0/16
-deny from 47.88.0.0/16
