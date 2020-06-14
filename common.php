@@ -84,6 +84,13 @@ if (!defined('PHPBB_INSTALLED'))
 	exit;
 }
 
+if (isset($_COOKIE['shinobi_legacy1_sid']) && isset($_COOKIE['shinobi_legacy2_sid']))
+{
+	setcookie("shinobi_legacy1_sid", "", time() - 3600, "/", ".shinobilegacy.com");
+	setcookie("shinobi_legacy1_u", "", time() - 3600, "/", ".shinobilegacy.com");
+	setcookie("shinobi_legacy1_k", "", time() - 3600, "/", ".shinobilegacy.com");
+}
+
 // In case $phpbb_adm_relative_path is not set (in case of an update), use the default.
 $phpbb_adm_relative_path = (isset($phpbb_adm_relative_path)) ? $phpbb_adm_relative_path : 'adm/';
 $phpbb_admin_path = (defined('PHPBB_ADMIN_PATH')) ? PHPBB_ADMIN_PATH : $phpbb_root_path . $phpbb_adm_relative_path;
