@@ -89,6 +89,8 @@ class factory implements \phpbb\textformatter\cache_interface
 				author={TEXT1;optional}
 				post_id={UINT;optional}
 				post_url={URL;optional;postFilter=#false}
+				msg_id={UINT;optional}
+				msg_url={URL;optional;postFilter=#false}
 				profile_url={URL;optional;postFilter=#false}
 				time={UINT;optional}
 				url={URL;optional}
@@ -110,7 +112,7 @@ class factory implements \phpbb\textformatter\cache_interface
 		'i'     => '<span style="font-style: italic"><xsl:apply-templates/></span>',
 		'u'     => '<span style="text-decoration: underline"><xsl:apply-templates/></span>',
 		'img'   => '<img src="{IMAGEURL}" class="postimage" alt="{L_IMAGE}"/>',
-		'size'  => '<span style="font-size: {FONTSIZE}%; line-height: normal"><xsl:apply-templates/></span>',
+		'size'	=> '<span><xsl:attribute name="style"><xsl:text>font-size: </xsl:text><xsl:value-of select="substring(@size, 1, 4)"/><xsl:text>%; line-height: normal</xsl:text></xsl:attribute><xsl:apply-templates/></span>',
 		'color' => '<span style="color: {COLOR}"><xsl:apply-templates/></span>',
 		'email' => '<a>
 			<xsl:attribute name="href">
@@ -132,6 +134,11 @@ class factory implements \phpbb\textformatter\cache_interface
 	protected $dispatcher;
 
 	/**
+	* @var \phpbb\log\log_interface
+	*/
+	protected $log;
+
+	/**
 	* Constructor
 	*
 	* @param \phpbb\textformatter\data_access $data_access
@@ -139,11 +146,12 @@ class factory implements \phpbb\textformatter\cache_interface
 	* @param \phpbb\event\dispatcher_interface $dispatcher
 	* @param \phpbb\config\config $config
 	* @param \phpbb\textformatter\s9e\link_helper $link_helper
+	* @param \phpbb\log\log_interface $log
 	* @param string $cache_dir          Path to the cache dir
 	* @param string $cache_key_parser   Cache key used for the parser
 	* @param string $cache_key_renderer Cache key used for the renderer
 	*/
-	public function __construct(\phpbb\textformatter\data_access $data_access, \phpbb\cache\driver\driver_interface $cache, \phpbb\event\dispatcher_interface $dispatcher, \phpbb\config\config $config, \phpbb\textformatter\s9e\link_helper $link_helper, $cache_dir, $cache_key_parser, $cache_key_renderer)
+	public function __construct(\phpbb\textformatter\data_access $data_access, \phpbb\cache\driver\driver_interface $cache, \phpbb\event\dispatcher_interface $dispatcher, \phpbb\config\config $config, \phpbb\textformatter\s9e\link_helper $link_helper, \phpbb\log\log_interface $log, $cache_dir, $cache_key_parser, $cache_key_renderer)
 	{
 		$this->link_helper = $link_helper;
 		$this->cache = $cache;
@@ -153,6 +161,7 @@ class factory implements \phpbb\textformatter\cache_interface
 		$this->config = $config;
 		$this->data_access = $data_access;
 		$this->dispatcher = $dispatcher;
+		$this->log = $log;
 	}
 
 	/**
@@ -272,7 +281,7 @@ class factory implements \phpbb\textformatter\cache_interface
 		// Add default BBCodes
 		foreach ($this->get_default_bbcodes($configurator) as $bbcode)
 		{
-			$configurator->BBCodes->addCustom($bbcode['usage'], new UnsafeTemplate($bbcode['template']));
+			$this->add_bbcode($configurator, $bbcode['usage'], $bbcode['template']);
 		}
 		if (isset($configurator->tags['QUOTE']))
 		{
@@ -299,17 +308,7 @@ class factory implements \phpbb\textformatter\cache_interface
 				},
 				$row['bbcode_tpl']
 			);
-
-			try
-			{
-				$configurator->BBCodes->addCustom($row['bbcode_match'], new UnsafeTemplate($tpl));
-			}
-			catch (\Exception $e)
-			{
-				/**
-				* @todo log an error?
-				*/
-			}
+			$this->add_bbcode($configurator, $row['bbcode_match'], $tpl);
 		}
 
 		// Load smilies
@@ -357,6 +356,14 @@ class factory implements \phpbb\textformatter\cache_interface
 
 		// Load the Emoji plugin and modify its tag's template to obey viewsmilies
 		$tag = $configurator->Emoji->getTag();
+		$tag->template = '<xsl:choose>
+			<xsl:when test="@tseq">
+				<img alt="{.}" class="emoji" draggable="false" src="//twemoji.maxcdn.com/2/svg/{@tseq}.svg"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<img alt="{.}" class="emoji" draggable="false" src="https://cdn.jsdelivr.net/gh/s9e/emoji-assets-twemoji@11.2/dist/svgz/{@seq}.svgz"/>
+			</xsl:otherwise>
+		</xsl:choose>';
 		$tag->template = '<xsl:choose><xsl:when test="$S_VIEWSMILIES">' . str_replace('class="emoji"', 'class="emoji smilies"', $tag->template) . '</xsl:when><xsl:otherwise><xsl:value-of select="."/></xsl:otherwise></xsl:choose>';
 
 		/**
@@ -416,6 +423,26 @@ class factory implements \phpbb\textformatter\cache_interface
 		$this->cache->put($this->cache_key_renderer, $renderer_data);
 
 		return array('parser' => $parser, 'renderer' => $renderer);
+	}
+
+	/**
+	* Add a BBCode to given configurator
+	*
+	* @param  Configurator $configurator
+	* @param  string       $usage
+	* @param  string       $template
+	* @return void
+	*/
+	protected function add_bbcode(Configurator $configurator, $usage, $template)
+	{
+		try
+		{
+			$configurator->BBCodes->addCustom($usage, new UnsafeTemplate($template));
+		}
+		catch (\Exception $e)
+		{
+			$this->log->add('critical', null, null, 'LOG_BBCODE_CONFIGURATION_ERROR', false, [$usage, $e->getMessage()]);
+		}
 	}
 
 	/**
