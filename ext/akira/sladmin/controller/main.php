@@ -1121,7 +1121,7 @@ class main
 		trigger_error('Invocación agregada exitosamente.' . $this->get_return_link('invocaciones'));
 	}
 	
-	function invocaciones_upd($shop_id) {
+	function invocaciones_upd($invocacion_id) {
 		$this->validate_access();
 		
 		$sql_array = array(
@@ -1141,7 +1141,7 @@ class main
 		trigger_error('Invocación actualizada exitosamente.' . $this->get_return_link('invocaciones'));
 	}
 	
-	function invocaciones_del($shop_id) {
+	function invocaciones_del($invocacion_id) {
 		$this->validate_access();
 		
 		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJES_TABLE . " WHERE activo = 1 AND invocacion_id = $invocacion_id");

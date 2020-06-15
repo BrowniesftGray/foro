@@ -825,6 +825,7 @@ class main
         case 'revision_mision':
           $sql_array['tipo_revision'] = request_var('rev_mision_tipo', '0');
           $sql_array['enlace'] = request_var('rev_mision_enlace', '0');
+		  $sql_array['topic_id'] = $this->obtener_id_tema($sql_array['enlace']);
           $participantes = request_var('rev_mision_participantes', array(0));
           $sql_array['participantes'] = "";
           foreach ($participantes as $key => $value) {
@@ -835,6 +836,7 @@ class main
         case 'revision_tema':
           $sql_array['tipo_revision'] = request_var('rev_tema_tipo', '0');
           $sql_array['enlace'] = request_var('rev_tema_enlace', '0');
+		  $sql_array['topic_id'] = $this->obtener_id_tema($sql_array['enlace']);
           $participantes = request_var('rev_tema_participantes', array(0));
           $sql_array['participantes'] = "";
           foreach ($participantes as $key => $value) {
@@ -842,11 +844,19 @@ class main
           }
           break;
       }
+	  
+	  $sql = "SELECT COUNT(0) AS cantidad FROM revisiones WHERE estado <> 'rechazada' AND topic_id = " . $sql_array['topic_id'];
+	  $query = $this->db->sql_query($sql);
+	  if ((int)$this->db->sql_fetchfield('cantidad') > 0)
+	  {
+		trigger_error('Ya existe una petición de moderación pendiente o cerrada para ese tema.<br><a href="/mod/create">Volver a crear una petición de revisión</a>.');
+	  }
+	  $this->db->sql_freeresult($query);
 
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
 
-      trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión</a>.');
+      trigger_error('Petición de revision creada correctamente.<br><a href="/mod/create">Volver a crear una petición de revisión</a>.');
     }
 
     public function dar_recompensa(){
