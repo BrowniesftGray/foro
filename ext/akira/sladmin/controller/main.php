@@ -2,6 +2,7 @@
 
 namespace akira\sladmin\controller;
 require_once('/home/shinobil/public_html/includes/functions_user.php');
+require_once('/home/shinobil/public_html/includes/functions_ficha.php');
 
 class main
 {
@@ -429,14 +430,6 @@ class main
 				'PJ_ID_INVENCION'	=> (int) $row['pj_id_invencion'],
 				'ETIQUETA'	=> $row['etiqueta'],
 				'COSTE'	=> (int) $row['coste'],
-				'ATTR_FIS'	=> (int) $row['attr_fis'],
-				'ATTR_ESP'	=> (int) $row['attr_esp'],
-				'FUERZA'	=> (int) $row['fuerza'],
-				'AGILIDAD'	=> (int) $row['agilidad'],
-				'VITALIDAD'	=> (int) $row['vitalidad'],
-				'CCK'	=> (int) $row['cck'],
-				'CONCENTRACION'	=> (int) $row['concentracion'],
-				'VOLUNTAD'	=> (int) $row['voluntad'],
 				'U_ACTION_UPD'	=> "/sladmin/tecnicas/upd/" . $row['tecnica_id'],
 				'U_ACTION_DEL'	=> "/sladmin/tecnicas/del/" . $row['tecnica_id'],
 			);
@@ -466,15 +459,7 @@ class main
 			'rama_id'	=> (int) request_var('rama_id', 0),
 			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
 			'etiqueta'	=> utf8_normalize_nfc(request_var('etiqueta', '', true)),
-			'coste'	=> (int) request_var('coste', 0),
-			'attr_fis'	=> (int) request_var('attr_fis', 0),
-			'attr_esp'	=> (int) request_var('attr_esp', 0),
-			'fuerza'	=> (int) request_var('fuerza', 0),
-			'agilidad'	=> (int) request_var('agilidad', 0),
-			'vitalidad'	=> (int) request_var('vitalidad', 0),
-			'cck'	=> (int) request_var('cck', 0),
-			'concentracion'	=> (int) request_var('concentracion', 0),
-			'voluntad'	=> (int) request_var('voluntad', 0),
+			'coste'		=> (int) request_var('coste', 0),
 		);
 		
 		$rama_id = $sql_array['rama_id'];
@@ -496,15 +481,7 @@ class main
 			'rama_id'	=> (int) request_var('rama_id', 0),
 			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
 			'etiqueta'	=> utf8_normalize_nfc(request_var('etiqueta', '', true)),
-			'coste'	=> (int) request_var('coste', 0),
-			'attr_fis'	=> (int) request_var('attr_fis', 0),
-			'attr_esp'	=> (int) request_var('attr_esp', 0),
-			'fuerza'	=> (int) request_var('fuerza', 0),
-			'agilidad'	=> (int) request_var('agilidad', 0),
-			'vitalidad'	=> (int) request_var('vitalidad', 0),
-			'cck'	=> (int) request_var('cck', 0),
-			'concentracion'	=> (int) request_var('concentracion', 0),
-			'voluntad'	=> (int) request_var('voluntad', 0),
+			'coste'		=> (int) request_var('coste', 0),
 		);
 		
 		$rama_id = $sql_array['rama_id'];
@@ -524,23 +501,31 @@ class main
 		$this->validate_access();
 		
 		$rama_id = (int) request_var('rama_id', 0);
-		
-		$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
-		if ($row = $this->db->sql_fetchrow($val_query)) {
-			$pjs = (int) $row['cantidad'];
-			if ($pjs > 0)
-				trigger_error("No se puede eliminar la técnica porque existen $pjs personajes que la poseen.");
-		}
-		$this->db->sql_freeresult($val_query);
-		
-		$query = $this->db->sql_query("SELECT nombre FROM " . TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
-		if ($row = $this->db->sql_fetchrow($query)) {
-			$nombre = $row['nombre'];
-		}
-		$this->db->sql_freeresult($query);
+		$nombre = (int) utf8_normalize_nfc(request_var('nombre', '', true));
+		$coste = (int) request_var('coste', 0);
 		
 		if (confirm_box(true))
 		{
+			$query = $this->db->sql_query("SELECT pj_id FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+			while($row = $this->db->sql_fetchrow($query))
+			{
+				if (quitar_tecnica($this->user->data['user_id'], $row['pj_id'], $tecnica_id, $coste, $msg_error)) {
+					$moderacion = array(
+						'PJ_ID'	=> $row['pj_id'],
+						'RAZON'	=> "Quitar '$nombre' y devolver $coste PA",
+					);
+					registrar_moderacion($moderacion);
+				}
+			}
+			$this->db->sql_freeresult($query);
+			
+			$val_query = $this->db->sql_query("SELECT COUNT(0) AS cantidad FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+			$pjs = (int) $this->db->sql_fetchfield('cantidad');
+			$this->db->sql_freeresult($val_query);
+			
+			if ($pjs > 0)
+				trigger_error("No se puede eliminar la técnica porque restan $pjs personajes que la poseen.");
+			
 			$this->db->sql_query("DELETE FROM " . TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
 		
 			if ((int) $this->db->sql_affectedrows() < 1) {
@@ -552,7 +537,7 @@ class main
 		else
 		{
 			$s_hidden_fields = build_hidden_fields(array('submit' => true));
-			confirm_box(false, "¿Desea borrar la técnica '$nombre'?", $s_hidden_fields);
+			confirm_box(false, "¿Desea borrar la técnica '$nombre' y reembolsar a todos sus usuarios?", $s_hidden_fields);
 		}
 		
 		trigger_error('Acción cancelada.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
