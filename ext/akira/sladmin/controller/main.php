@@ -503,10 +503,10 @@ class main
 		$rama_id = (int) request_var('rama_id', 0);
 		$nombre = utf8_normalize_nfc(request_var('nombre', '', true));
 		$coste = (int) request_var('coste', 0);
-				
-		if (confirm_box(true))
+		$submit = (bool) request_var('submit', false);
+						
+		if ($submit)
 		{
-			/*
 			$query = $this->db->sql_query("SELECT pj_id FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
 			while($row = $this->db->sql_fetchrow($query))
 			{
@@ -534,12 +534,16 @@ class main
 			}
 		
 			trigger_error('Técnica eliminada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
-			*/
-			trigger_error("Entró al IF");
 		}
 		else
 		{
-			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit'	=> true,
+				'rama_id'	=> $rama_id,
+				'nombre'	=> $nombre,
+				'coste'	=> $coste,
+			));
+			
 			confirm_box(false, "¿Desea borrar la técnica '$nombre' y reembolsar a todos sus usuarios?", $s_hidden_fields);
 		}
 		
