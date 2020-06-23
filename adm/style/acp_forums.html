@@ -4,7 +4,7 @@
 
 <!-- IF S_EDIT_FORUM -->
 
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		/**
 		* Handle displaying/hiding several options based on the forum type
@@ -90,7 +90,7 @@
 			<!-- ENDIF -->
 
 			<!-- IF S_FORUM_LINK -->
-				phpbb.toggleDisplay('forum_rules_options', -1);
+			phpbb.toggleDisplay('forum_rules_options', -1);
 				phpbb.toggleDisplay('forum_rol_options', -1);
 			<!-- ENDIF -->
 		}
@@ -228,6 +228,11 @@
 			<dt><label for="display_subforum_list">{L_LIST_SUBFORUMS}{L_COLON}</label><br /><span>{L_LIST_SUBFORUMS_EXPLAIN}</span></dt>
 			<dd><label><input type="radio" class="radio" name="display_subforum_list" value="1"<!-- IF S_DISPLAY_SUBFORUM_LIST --> id="display_subforum_list" checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="display_subforum_list" value="0"<!-- IF not S_DISPLAY_SUBFORUM_LIST --> id="display_subforum_list" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
+		</dl>
+		<dl>
+			<dt><label for="display_subforum_limit">{L_LIMIT_SUBFORUMS}{L_COLON}</label><br /><span>{L_LIMIT_SUBFORUMS_EXPLAIN}</span></dt>
+			<dd><label><input type="radio" class="radio" name="display_subforum_limit" value="1"<!-- IF S_DISPLAY_SUBFORUM_LIMIT --> id="display_subforum_limit" checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="display_subforum_limit" value="0"<!-- IF not S_DISPLAY_SUBFORUM_LIMIT --> id="display_subforum_limit" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
 		</dl>
 		<dl>
 			<dt><label for="display_on_index">{L_LIST_INDEX}{L_COLON}</label><br /><span>{L_LIST_INDEX_EXPLAIN}</span></dt>
@@ -424,7 +429,7 @@
 
 <!-- ELSEIF S_CONTINUE_SYNC -->
 
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		var close_waitscreen = 0;
 		// no scrollbars...
@@ -440,7 +445,7 @@
 
 <!-- ELSE -->
 
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 		/**
 		* Popup search progress bar
@@ -466,7 +471,7 @@
 	<!-- ENDIF -->
 
 	<!-- IF S_RESYNCED -->
-		<script type="text/javascript">
+		<script>
 		// <![CDATA[
 			var close_waitscreen = 1;
 		// ]]>

@@ -29,14 +29,6 @@
 			<th>ID PJ</th>
 			<th>Bbcode</th>
 			<th>Coste</th>
-			<th>Atr. FIS</th>
-			<th>Atr. ESP</th>
-			<th>FUE</th>
-			<th>AGI</th>
-			<th>VIT</th>
-			<th>CCK</th>
-			<th>CON</th>
-			<th>VIT</th>
 			<th>Guardar</th>
 			<th>Eliminar</th>
 		</tr>
@@ -73,30 +65,6 @@
 				<input type="number" name="coste" min="0" value="{tecnicas.COSTE}" />
 			</td>
 			<td>
-				<input type="number" name="attr_fis" min="0" value="{tecnicas.ATTR_FIS}" />
-			</td>
-			<td>
-				<input type="number" name="attr_esp" min="0" value="{tecnicas.ATTR_ESP}" />
-			</td>
-			<td>
-				<input type="number" name="fuerza" min="0" value="{tecnicas.FUERZA}" />
-			</td>
-			<td>
-				<input type="number" name="agilidad" min="0" value="{tecnicas.AGILIDAD}" />
-			</td>
-			<td>
-				<input type="number" name="vitalidad" min="0" value="{tecnicas.VITALIDAD}" />
-			</td>
-			<td>
-				<input type="number" name="cck" size="10" min="0" value="{tecnicas.CCK}" />
-			</td>
-			<td>
-				<input type="number" name="concentracion" min="0" value="{tecnicas.CONCENTRACION}" />
-			</td>
-			<td>
-				<input type="number" name="voluntad" min="0" value="{tecnicas.VOLUNTAD}" />
-			</td>
-			<td>
 				<input type="submit" class="btn-upd" value="Guardar" />
 			</td>
 			</form>
@@ -104,6 +72,8 @@
 				<form action="{tecnicas.U_ACTION_DEL}" method="post">
 					<input type="hidden" name="rama_id" value="{tecnicas.RAMA_ID}" />
 					<input type="hidden" name="tecnica_id" value="{tecnicas.TECNICA_ID}" />
+					<input type="hidden" name="nombre" value="{tecnicas.NOMBRE}" />
+					<input type="hidden" name="coste" value="{tecnicas.COSTE}" />
 					<input type="submit" class="btn-del" value="Eliminar" />
 				</form>
 			</td>
@@ -131,30 +101,6 @@
 			</td>
 			<td>
 				<input type="number" name="coste" title="Coste en PA" min="0" />
-			</td>
-			<td>
-				<input type="number" name="attr_fis" title="Atributos Físicos requeridos" min="0" />
-			</td>
-			<td>
-				<input type="number" name="attr_esp" title="Atributos Espirituales requeridos" min="0" />
-			</td>
-			<td>
-				<input type="number" name="fuerza" title="Fuerza requerida" min="0" />
-			</td>
-			<td>
-				<input type="number" name="agilidad" title="Agilidad requerida" min="0" />
-			</td>
-			<td>
-				<input type="number" name="vitalidad" title="Vitalidad requerida" min="0" />
-			</td>
-			<td>
-				<input type="number" name="cck" title="Control de chakra requerido" min="0" />
-			</td>
-			<td>
-				<input type="number" name="concentracion" title="Concentración requerida" min="0" />
-			</td>
-			<td>
-				<input type="number" name="voluntad" title="Voluntad requerida" min="0" />
 			</td>
 			<td>
 				<input type="submit" class="btn-ins" value="Crear" />

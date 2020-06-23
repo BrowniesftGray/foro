@@ -825,6 +825,7 @@ class main
         case 'revision_mision':
           $sql_array['tipo_revision'] = request_var('rev_mision_tipo', '0');
           $sql_array['enlace'] = request_var('rev_mision_enlace', '0');
+		  $sql_array['topic_id'] = $this->obtener_id_tema($sql_array['enlace']);
           $participantes = request_var('rev_mision_participantes', array(0));
           $sql_array['participantes'] = "";
           foreach ($participantes as $key => $value) {
@@ -835,6 +836,7 @@ class main
         case 'revision_tema':
           $sql_array['tipo_revision'] = request_var('rev_tema_tipo', '0');
           $sql_array['enlace'] = request_var('rev_tema_enlace', '0');
+		  $sql_array['topic_id'] = $this->obtener_id_tema($sql_array['enlace']);
           $participantes = request_var('rev_tema_participantes', array(0));
           $sql_array['participantes'] = "";
           foreach ($participantes as $key => $value) {
@@ -842,10 +844,17 @@ class main
           }
           break;
       }
+	  
+	  $sql = "SELECT COUNT(0) AS cantidad FROM revisiones WHERE estado <> 'rechazada' AND topic_id = " . $sql_array['topic_id'];
+	  $query = $this->db->sql_query($sql);
+	  if ((int)$this->db->sql_fetchfield('cantidad') > 0)
+	  {
+		trigger_error('Ya existe una petición de moderación pendiente o cerrada para ese tema.<br><a href="/mod/create">Volver a crear una petición de revisión</a>.');
+	  }
+	  $this->db->sql_freeresult($query);
 
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
-
       trigger_error('Petición de revision creada correctamente.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
     }
 
@@ -1023,6 +1032,7 @@ class main
               GROUP BY p.poster_id";
       $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
+	  $this->db->sql_freeresult($query);
       $numero_post = $row['cantidad'];
 
       if($bono_utilidad == "Si"){ $bono_utilidad = 0.50;}else{$bono_utilidad = 0;}
@@ -1143,6 +1153,19 @@ class main
         //Insert en la tabla revisiones_recompensas
         $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
         $this->db->sql_query($sql);
+		  
+		  
+		  //Agregar ryos a facción		  
+		  if ((int) $ryos > 0)
+		  {
+			  $sql = "UPDATE ".ALDEAS_TABLE." a
+							INNER JOIN ".PERSONAJES_TABLE." p
+								ON p.aldea_id = a.aldea_id
+						SET a.ryos = COALESCE(a.ryos, 0) + $ryos
+						WHERE p.user_id = $user_id";
+			  $this->db->sql_query($sql);
+		  }
+		  
 
           trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia y '.$puntos_apen.' puntos de aprendizaje. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
       }
@@ -1175,17 +1198,32 @@ class main
       // echo "<br>total_combate: ".$total_combate;
       
       //Obtenemos el número de post del usuario.
-      $sql = "SELECT	p.poster_id as user_id,
-                COUNT(0) as cantidad
+      $sql = "SELECT COUNT(0) as cantidad
               FROM phpbby1_posts p
               WHERE p.topic_id = $topic_id
-                  AND p.poster_id = $user_id
-              GROUP BY p.poster_id";
+                  AND p.poster_id = $user_id";
       $query = $this->db->sql_query($sql);
-      $row = $this->db->sql_fetchrow($query);
-      $numero_post = $row['cantidad'];
+      $numero_post = (int) $this->db->sql_fetchfield('cantidad');
+	  $this->db->sql_freeresult($query);
+      
+      //Obtenemos el nivel del usuario en el tema.
+      $sql = "SELECT nivel
+              FROM ".PERSONAJES_POSTS_TABLE." p
+              WHERE p.topic_id = $topic_id
+                  AND p.user_id = $user_id
+				  AND p.primero = 1";
+      $query = $this->db->sql_query($sql);
+      $nivel_pj = (int) $this->db->sql_fetchfield('nivel');
+	  $this->db->sql_freeresult($query);
 
-      $experiencia = round((($numero_post * $total)+(($nivel*10)*$total_combate)));
+	  // calculamos bono máximo por nivel
+	  $exp_por_nivel = $nivel * 10;
+	  
+	  // si el bono por nivel ajeno supera el nivel propio x12, se ajusta
+	  if ($exp_por_nivel > ($nivel_pj * 12))
+		  $exp_por_nivel = ($nivel_pj * 12);	  
+	  
+      $experiencia = round((($numero_post * $total)+($exp_por_nivel*$total_combate)));
       // echo "<br>experiencia: ".$experiencia;
       $puntos_apen = (4*$total_combate);
       // echo "<br>puntos_apen: ".$puntos_apen;
@@ -1356,28 +1394,28 @@ class main
 
         case 'Mision C':
           $bono['experiencia'] = 1.5;
-          $bono['limite'] = 4;
+          $bono['limite'] = 6;
           $bono['ryos'] = 1500;
           $bono['porcentaje'] = 0.20;
           break;
 
         case 'Mision B':
           $bono['experiencia'] = 4;
-          $bono['limite'] = 10;
+          $bono['limite'] = 12;
           $bono['ryos'] = 3000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Mision A':
           $bono['experiencia'] = 6;
-          $bono['limite'] = 15;
+          $bono['limite'] = 20;
           $bono['ryos'] = 10000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Mision S':
           $bono['experiencia'] = 8;
-          $bono['limite'] = 25;
+          $bono['limite'] = 40;
           $bono['ryos'] = 30000;
           $bono['porcentaje'] = 0.30;
           break;
@@ -1391,56 +1429,56 @@ class main
 
         case 'Encargo C':
           $bono['experiencia'] = 1.5;
-          $bono['limite'] = 4;
+          $bono['limite'] = 6;
           $bono['ryos'] = 1500;
           $bono['porcentaje'] = 0.20;
           break;
 
         case 'Encargo B':
           $bono['experiencia'] = 4;
-          $bono['limite'] = 10;
+          $bono['limite'] = 12;
           $bono['ryos'] = 3000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Encargo A':
           $bono['experiencia'] = 6;
-          $bono['limite'] = 15;
+          $bono['limite'] = 20;
           $bono['ryos'] = 10000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Encargo S':
           $bono['experiencia'] = 8;
-          $bono['limite'] = 25;
+          $bono['limite'] = 40;
           $bono['ryos'] = 30000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama C':
           $bono['experiencia'] = 3;
-          $bono['limite'] = 8;
+          $bono['limite'] = 18;
           $bono['ryos'] = 3000;
           $bono['porcentaje'] = 0.20;
         break;
 
         case 'Trama B':
           $bono['experiencia'] = 5;
-          $bono['limite'] = 30;
+          $bono['limite'] = 36;
           $bono['ryos'] = 3000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama A':
           $bono['experiencia'] = 7;
-          $bono['limite'] = 45;
+          $bono['limite'] = 60;
           $bono['ryos'] = 10000;
           $bono['porcentaje'] = 0.30;
           break;
 
         case 'Trama S':
           $bono['experiencia'] = 9;
-          $bono['limite'] = 75;
+          $bono['limite'] = 120;
           $bono['ryos'] = 30000;
           $bono['porcentaje'] = 0.30;
           break;

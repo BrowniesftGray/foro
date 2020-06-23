@@ -98,7 +98,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 					p.rama_id_pri,
 					p.nombre,
 					m.nombre as clan,
-					CONCAT(a.nombre_es, ' (', a.nombre_jp, ') ') as arquetipo
+					CONCAT(a.nombre_jp, ' (', a.nombre_es, ') ') as arquetipo
 				FROM ".PERSONAJES_POSTS_TABLE." pj
 					INNER JOIN ".PERSONAJES_HISTORICO_TABLE." p
 						ON p.pj_id = pj.pj_id
@@ -162,6 +162,33 @@ function get_pj_data($pj_id, $post_id = 0) {
 				$exp_avance = floor($exp_avance * 100 / $exp_req);
 			}
 		}
+		
+		// Si es el primer post del tema, obtener sus arquetipos pasados para calcular bonos
+		if ($post_id == 0)
+		{
+			$queryCamino = $db->sql_query("
+				SELECT DISTINCT a.arquetipo_id
+					FROM ".PERSONAJES_HISTORICO_TABLE." ph
+						INNER JOIN ".ARQUETIPOS_TABLE." a
+							ON a.arquetipo_id = ph.arquetipo_id
+					WHERE ph.pj_id = '$pj_id'
+				UNION
+				SELECT	a.arquetipo_id
+					FROM ".PERSONAJES_TABLE." p
+						INNER JOIN ".ARQUETIPOS_TABLE." a
+							ON a.arquetipo_id = p.arquetipo_id
+					WHERE p.pj_id = '$pj_id'");
+
+			while ($row2 = $db->sql_fetchrow($queryCamino))
+			{				
+				if ($str_arquetipos) $str_arquetipos .= ',';
+				$str_arquetipos .= $row2['arquetipo_id'];
+			}
+			$db->sql_freeresult($queryCamino);
+		}
+		
+		if ($str_arquetipos)
+			$row['arquetipos'] = $str_arquetipos;
 
 		$pv_total = calcula_pv($row);
 		$pc_total = calcula_pc($row);
@@ -182,6 +209,7 @@ function get_pj_data($pj_id, $post_id = 0) {
 			'PJ_EXPERIENCIA_SIG'	=> (int)$row['experiencia_sig'],
 			'PJ_EXPERIENCIA_PORC'	=> ($exp_avance > 100 ? 100 : $exp_avance),
 			'PJ_ARQUETIPO_ID'		=> (int)$row['arquetipo_id'],
+			'PJ_ARQUETIPOS_TOT'		=> $row['arquetipos'],
 			'PJ_ARQUETIPO'			=> $row['arquetipo'],
 			'PJ_RANGO'				=> $row['rango'],
 			'PJ_FUE'				=> (int)$row['fuerza'],
@@ -237,13 +265,16 @@ function get_ficha($user_id, $return = false, $ver = false)
 
 		// obtener camino ninja
 		$queryCamino = $db->sql_query("
-			SELECT DISTINCT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
+			SELECT DISTINCT 
+					a.arquetipo_id,
+					CONCAT(a.nombre_jp, ' (', a.nombre_es, ')') AS arquetipo
 				FROM ".PERSONAJES_HISTORICO_TABLE." ph
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = ph.arquetipo_id
 				WHERE ph.pj_id = '$pj_id'
 			UNION
-			SELECT CONCAT(a.nombre_es, ' (', a.nombre_jp, ')') AS arquetipo
+			SELECT	a.arquetipo_id,
+					CONCAT(a.nombre_jp, ' (', a.nombre_es, ')') AS arquetipo
 				FROM ".PERSONAJES_TABLE." p
 					INNER JOIN ".ARQUETIPOS_TABLE." a
 						ON a.arquetipo_id = p.arquetipo_id
@@ -253,8 +284,14 @@ function get_ficha($user_id, $return = false, $ver = false)
 		{
 			if ($str_camino) $str_camino .= ' &raquo; ';
 			$str_camino .= $row2['arquetipo'];
+			
+			if ($str_arquetipos) $str_arquetipos .= ',';
+			$str_arquetipos .= $row2['arquetipo_id'];
 		}
 		$db->sql_freeresult($queryCamino);
+		
+		if ($str_arquetipos)
+			$row['arquetipos'] = $str_arquetipos;
 
 		// obtener moderaciones
 		$queryModeraciones = $db->sql_query("SELECT * FROM ".MODERACIONES_TABLE." WHERE pj_moderado='$pj_id'");
@@ -922,17 +959,14 @@ function calcula_pc($datos_pj)
 	$pc = $bono = 0;
 
 	$pc = floor((int)$datos_pj['cck'] * 1.5) + (int)$datos_pj['concentracion'] + (int)$datos_pj['voluntad'];
+	
+	if(!isset($datos_pj['arquetipos']))
+		$datos_pj['arquetipos'] = $datos_pj['arquetipo_id'];
 
-	if((int)$datos_pj['arquetipo_id'] > 0) {
-		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
-		$row = $db->sql_fetchrow($query);
+	if($datos_pj['arquetipos'] != '0') {
+		$query = $db->sql_query("SELECT SUM(bono_pc) AS bono_pc FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id IN(".$datos_pj['arquetipos'].")");
+		$bono = (int) $db->sql_fetchfield('bono_pc');
 		$db->sql_freeresult($query);
-
-		if((bool)$row['bono_es_porcentaje']) {
-			$bono = round((int)$row['bono_pc'] * $pc / 100);
-		} else {
-			$bono = (int)$row['bono_pc'];
-		}
 	}
 
 	$pc = $pc + $bono;
@@ -952,17 +986,14 @@ function calcula_pv($datos_pj)
 	$pv = $bono = 0;
 
 	$pv = 10 + floor((int)$datos_pj['fuerza'] * 1.5) + floor((int)$datos_pj['agilidad'] * 0.5) + ((int)$datos_pj['vitalidad'] * 3);
+	
+	if(!isset($datos_pj['arquetipos']))
+		$datos_pj['arquetipos'] = $datos_pj['arquetipo_id'];
 
-	if((int)$datos_pj['arquetipo_id'] > 0) {
-		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".$datos_pj['arquetipo_id']."");
-		$row = $db->sql_fetchrow($query);
+	if($datos_pj['arquetipos'] != '0') {
+		$query = $db->sql_query("SELECT SUM(bono_pv) AS bono_pv FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id IN(".$datos_pj['arquetipos'].")");
+		$bono = (int) $db->sql_fetchfield('bono_pv');
 		$db->sql_freeresult($query);
-
-		if((bool)$row['bono_es_porcentaje']) {
-			$bono = round((int)$row['bono_pv'] * $pv / 100);
-		} else {
-			$bono = (int)$row['bono_pv'];
-		}
 	}
 
 	$pv = $pv + $bono;
@@ -978,18 +1009,15 @@ function calcula_sta($datos_pj)
 	global $db;
 	$sta = $bono = 0;
 
-	$sta = (int)$datos_pj['fuerza'] + (int)$datos_pj['agilidad'] + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
+	$sta = (int)$datos_pj['fuerza'] + floor((int)$datos_pj['agilidad'] * 1.5) + (int)$datos_pj['vitalidad'] + (int)$datos_pj['voluntad'];
+	
+	if(!isset($datos_pj['arquetipos']))
+		$datos_pj['arquetipos'] = $datos_pj['arquetipo_id'];
 
-	if((int)$datos_pj['arquetipo_id'] > 0) {
-		$query = $db->sql_query("SELECT * FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id=".(int)$datos_pj['arquetipo_id']."");
-		$row = $db->sql_fetchrow($query);
+	if($datos_pj['arquetipos'] != '0') {
+		$query = $db->sql_query("SELECT SUM(bono_sta) AS bono_sta FROM ".ARQUETIPOS_TABLE." WHERE arquetipo_id IN(".$datos_pj['arquetipos'].")");
+		$bono = (int) $db->sql_fetchfield('bono_sta');
 		$db->sql_freeresult($query);
-
-		if((bool)$row['bono_es_porcentaje']) {
-			$bono = round((int)$row['bono_sta'] * $sta / 100);
-		} else {
-			$bono = (int)$row['bono_sta'];
-		}
 	}
 
 	$sta = $sta + $bono;
@@ -1002,12 +1030,12 @@ function calcula_sta($datos_pj)
 
 function calcula_golpe($datos_pj) {
 	$fue = (int)$datos_pj['fuerza'];
-	return floor($fue * 0.20);
+	return floor($fue * 0.25);
 }
 
 function calcula_bloqueo($datos_pj) {
 	$vit = (int)$datos_pj['vitalidad'];
-	return floor($vit * 0.20);
+	return floor($vit * 0.25);
 }
 
 function registrar_moderacion(array $fields, $user_id = 0){

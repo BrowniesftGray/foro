@@ -1,0 +1,125 @@
+<IfModule mod_rewrite.c>
+
+# Use PHP 7.0
+AddHandler application/x-httpd-php70 .php .php5 .php4 .php3
+
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#
+# Uncomment the statement below if URL rewriting doesn't
+# work properly. If you installed phpBB in a subdirectory
+# of your site, properly set the argument for the statement.
+# e.g.: if your domain is test.com and you installed phpBB
+# in http://www.test.com/phpBB/index.php you have to set
+# the statement RewriteBase /phpBB/
+#
+#RewriteBase /
+
+#
+# Uncomment the statement below if you want to make use of
+# HTTP authentication and it does not already work.
+# This could be required if you are for example using PHP via Apache CGI.
+#
+#RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+
+# Tienda
+RewriteRule ^tienda\/[\w\-]+\-c(\d+)(.*)$ shop.php?mode=ver&shop_id=$1&$2
+# Foro y Tema paginado
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-t(\d+)\/(\d+)\??(.*)$ viewtopic.php?f=$1&t=$2&start=$3&$4
+# Foro y Tema sin leer
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-t(\d+)\/view-(\w+)(.*)$ viewtopic.php?f=$1&t=$2&view=$3#$4
+# Foro y Tema
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-t(\d+)\??(.*)$ viewtopic.php?f=$1&t=$2&$3
+# Foro y Post paginado
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-p(\d+)\/(\d+)\??(.*)$ viewtopic.php?f=$1&p=$2&start=$3&$4
+# Foro y Post sin leer
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-p(\d+)\/view-(\w+)(.*)$ viewtopic.php?f=$1&p=$2&view=$3#$4
+# Foro y Post
+RewriteRule ^[\w\-]+\-f(\d+)\/[\w\-]+\-p(\d+)\??(.*)$ viewtopic.php?f=$1&p=$2&$3
+# Tema solo
+RewriteRule ^[\w\-]+\-t(\d+)\??(.*)$ viewtopic.php?t=$1&$2
+# Tema solo paginado
+RewriteRule ^[\w\-]+\-t(\d+)\/(\d+)\??(.*)$ viewtopic.php?t=$1&start=$2&$3
+# Tema solo sin leer
+RewriteRule ^[\w\-]+\-t(\d+)\/view-(\w+)(.*)$$ viewtopic.php?t=$1&view=$2#$3
+# Post solo
+RewriteRule ^[\w\-]+\-p(\d+)\??(.*)$ viewtopic.php?p=$1&$2
+# Post solo paginado
+RewriteRule ^[\w\-]+\-p(\d+)\/(\d+)\??(.*)$ viewtopic.php?p=$1&start=$2&$3
+# Post solo sin leer
+RewriteRule ^[\w\-]+\-p(\d+)\/view-(\w+)(.*)$$ viewtopic.php?p=$1&view=$2#$3
+# Foro paginado
+RewriteRule ^[\w\-]+\-f(\d+)\/(\d+)\??(.*)$ viewforum.php?f=$1&start=$2&$3
+# Foro
+RewriteRule ^[\w\-]+\-f(\d+)\??(.*)$ viewforum.php?f=$1&$2
+
+#
+# The following 3 lines will rewrite URLs passed through the front controller
+# to not require app.php in the actual URL. In other words, a controller is
+# by default accessed at /app.php/my/controller, but can also be accessed at
+# /my/controller
+#
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule ^(.*)$ app.php [QSA,L]
+
+#
+# If symbolic links are not already being followed,
+# uncomment the line below.
+# http://anothersysadmin.wordpress.com/2008/06/10/mod_rewrite-forbidden-403-with-apache-228/
+#
+#Options +FollowSymLinks
+</IfModule>
+
+# With Apache 2.4 the "Order, Deny" syntax has been deprecated and moved from
+# module mod_authz_host to a new module called mod_access_compat (which may be
+# disabled) and a new "Require" syntax has been introduced to mod_authz_host.
+# We could just conditionally provide both versions, but unfortunately Apache
+# does not explicitly tell us its version if the module mod_version is not
+# available. In this case, we check for the availability of module
+# mod_authz_core (which should be on 2.4 or higher only) as a best guess.
+<IfModule mod_version.c>
+	<IfVersion < 2.4>
+		<Files "config.php">
+			Order Allow,Deny
+			Deny from All
+		</Files>
+		<Files "common.php">
+			Order Allow,Deny
+			Deny from All
+		</Files>
+	</IfVersion>
+	<IfVersion >= 2.4>
+		<Files "config.php">
+			Require all denied
+		</Files>
+		<Files "common.php">
+			Require all denied
+		</Files>
+	</IfVersion>
+</IfModule>
+<IfModule !mod_version.c>
+	<IfModule !mod_authz_core.c>
+		<Files "config.php">
+			Order Allow,Deny
+			Deny from All
+		</Files>
+		<Files "common.php">
+			Order Allow,Deny
+			Deny from All
+		</Files>
+	</IfModule>
+	<IfModule mod_authz_core.c>
+		<Files "config.php">
+			Require all denied
+		</Files>
+		<Files "common.php">
+			Require all denied
+		</Files>
+	</IfModule>
+</IfModule>

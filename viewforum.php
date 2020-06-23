@@ -222,7 +222,7 @@ if ($mark_read == 'topics')
 		$data = array(
 			'NO_UNREAD_POSTS'	=> $user->lang['NO_UNREAD_POSTS'],
 			'UNREAD_POSTS'		=> $user->lang['UNREAD_POSTS'],
-			'U_MARK_TOPICS'		=> ($user->data['is_registered'] || $config['load_anon_lastread']) ? append_sid("{$phpbb_root_path}viewforum.$phpEx", 'hash=' . generate_link_hash('global') . "&f=$forum_id&mark=topics&mark_time=" . time()) : '',
+			'U_MARK_TOPICS'		=> ($user->data['is_registered'] || $config['load_anon_lastread']) ? append_sid("{$phpbb_root_path}viewforum.$phpEx", 'hash=' . generate_link_hash('global') . "&f=$forum_id&mark=topics&mark_time=" . time(), false) : '',
 			'MESSAGE_TITLE'		=> $user->lang['INFORMATION'],
 			'MESSAGE_TEXT'		=> $user->lang['TOPICS_MARKED']
 		);
@@ -290,6 +290,20 @@ if((bool)$forum_data['forum_order_subject']) {
 	$sort_key = 's'; 
 	$sort_dir = 'a';
 }
+
+/**
+ * Modify the topic ordering if needed
+ *
+ * @event core.viewforum_modify_topic_ordering
+ * @var array	sort_by_text	Topic ordering options
+ * @var array	sort_by_sql		Topic orderings options SQL equivalent
+ * @since 3.2.5-RC1
+ */
+$vars = array(
+	'sort_by_text',
+	'sort_by_sql',
+);
+extract($phpbb_dispatcher->trigger_event('core.viewforum_modify_topic_ordering', compact($vars)));
 
 $s_limit_days = $s_sort_key = $s_sort_dir = $u_sort_param = '';
 gen_sort_selects($limit_days, $sort_by_text, $sort_days, $sort_key, $sort_dir, $s_limit_days, $s_sort_key, $s_sort_dir, $u_sort_param, $default_sort_days, $default_sort_key, $default_sort_dir);
@@ -512,7 +526,7 @@ if ($forum_data['forum_type'] == FORUM_POST)
 
 		'WHERE'		=> '(t.forum_id = ' . $forum_id . '
 				AND t.topic_type = ' . POST_ANNOUNCE . ') OR
-			(' . $db->sql_in_set('t.forum_id', $g_forum_ary) . '
+			(' . $db->sql_in_set('t.forum_id', $g_forum_ary, false, true) . '
 				AND t.topic_type = ' . POST_GLOBAL . ')',
 
 		'ORDER_BY'	=> 't.topic_time DESC',
@@ -603,6 +617,18 @@ else
 	$direction = (($sort_dir == 'd') ? 'DESC' : 'ASC');
 	$sql_start = $start;
 }
+
+/**
+ * Modify the topics sort ordering if needed
+ *
+ * @event core.viewforum_modify_sort_direction
+ * @var string	direction	Topics sort order
+ * @since 3.2.5-RC1
+ */
+$vars = array(
+	'direction',
+);
+extract($phpbb_dispatcher->trigger_event('core.viewforum_modify_sort_direction', compact($vars)));
 
 if (is_array($sort_by_sql[$sort_key]))
 {
@@ -879,6 +905,11 @@ if (count($topic_list))
 
 		// Replies
 		$replies = $phpbb_content_visibility->get_count('topic_posts', $row, $topic_forum_id) - 1;
+		// Correction for case of unapproved topic visible to poster
+		if ($replies < 0)
+		{
+			$replies = 0;
+		}
 
 		if ($row['topic_status'] == ITEM_MOVED)
 		{
@@ -917,7 +948,7 @@ if (count($topic_list))
 		$query_tipo = $db->sql_query($sql_tipo);
 		$row_tipo = $db->sql_fetchrow($query_tipo);
 		$db->sql_freeresult($query_tipo);
-		
+
 		// Send vars to template
 		$topic_row = array(
 			'FORUM_ID'					=> $row['forum_id'],
@@ -926,9 +957,12 @@ if (count($topic_list))
 			'TOPIC_AUTHOR_COLOUR'		=> get_username_string('colour', $row['topic_poster'], $row['topic_first_poster_name'], $row['topic_first_poster_colour']),
 			'TOPIC_AUTHOR_FULL'			=> get_username_string('full', $row['topic_poster'], $row['topic_first_poster_name'], $row['topic_first_poster_colour']),
 			'FIRST_POST_TIME'			=> $user->format_date($row['topic_time']),
+			'FIRST_POST_TIME_RFC3339'	=> gmdate(DATE_RFC3339, $row['topic_time']),
 			'LAST_POST_SUBJECT'			=> censor_text($row['topic_last_post_subject']),
 			'LAST_POST_TIME'			=> $user->format_date($row['topic_last_post_time']),
+			'LAST_POST_TIME_RFC3339'	=> gmdate(DATE_RFC3339, $row['topic_last_post_time']),
 			'LAST_VIEW_TIME'			=> $user->format_date($row['topic_last_view_time']),
+			'LAST_VIEW_TIME_RFC3339'	=> gmdate(DATE_RFC3339, $row['topic_last_view_time']),
 			'LAST_POST_AUTHOR'			=> get_username_string('username', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),
 			'LAST_POST_AUTHOR_COLOUR'	=> get_username_string('colour', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),
 			'LAST_POST_AUTHOR_FULL'		=> get_username_string('full', $row['topic_last_poster_id'], $row['topic_last_poster_name'], $row['topic_last_poster_colour']),

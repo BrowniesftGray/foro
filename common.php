@@ -12,7 +12,7 @@
 */
 
 /**
-* Minimum Requirement: PHP 5.4.0
+* Minimum Requirement: PHP 7.1.3
 */
 
 if (!defined('IN_PHPBB'))
@@ -84,6 +84,13 @@ if (!defined('PHPBB_INSTALLED'))
 	exit;
 }
 
+if (isset($_COOKIE['shinobi_legacy1_sid']) && isset($_COOKIE['shinobi_legacy2_sid']))
+{
+	setcookie("shinobi_legacy1_sid", "", time() - 3600, "/", ".shinobilegacy.com");
+	setcookie("shinobi_legacy1_u", "", time() - 3600, "/", ".shinobilegacy.com");
+	setcookie("shinobi_legacy1_k", "", time() - 3600, "/", ".shinobilegacy.com");
+}
+
 // In case $phpbb_adm_relative_path is not set (in case of an update), use the default.
 $phpbb_adm_relative_path = (isset($phpbb_adm_relative_path)) ? $phpbb_adm_relative_path : 'adm/';
 $phpbb_admin_path = (defined('PHPBB_ADMIN_PATH')) ? PHPBB_ADMIN_PATH : $phpbb_root_path . $phpbb_adm_relative_path;
@@ -132,6 +139,8 @@ catch (InvalidArgumentException $e)
 $phpbb_class_loader->set_cache($phpbb_container->get('cache.driver'));
 $phpbb_class_loader_ext->set_cache($phpbb_container->get('cache.driver'));
 
+$phpbb_container->get('dbal.conn')->set_debug_sql_explain($phpbb_container->getParameter('debug.sql_explain'));
+$phpbb_container->get('dbal.conn')->set_debug_load_time($phpbb_container->getParameter('debug.load_time'));
 require($phpbb_root_path . 'includes/compatibility_globals.' . $phpEx);
 
 register_compatibility_globals();

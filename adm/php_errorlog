@@ -1,0 +1,172 @@
+[12-Aug-2018 17:56:40 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:44:33 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:45:26 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:45:44 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:45:47 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:46:06 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:47:23 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:47:33 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:48:38 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:49:13 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:49:14 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[13-Aug-2018 23:49:16 CST6CDT] PHP Fatal error:  Uncaught phpbb\language\exception\language_file_not_found: Language file ./../language/en/language/es_x_tu/acp/permissions_phpbb.php couldn't be opened. in /home/shinobil/public_html/phpbb/language/language_file_loader.php:185
+Stack trace:
+#0 /home/shinobil/public_html/phpbb/language/language_file_loader.php(143): phpbb\language\language_file_loader->get_language_file_path('./../language/', 'language/es_x_t...', Array)
+#1 /home/shinobil/public_html/phpbb/language/language_file_loader.php(77): phpbb\language\language_file_loader->load_file('./../language/', 'language/es_x_t...', Array, Array)
+#2 /home/shinobil/public_html/phpbb/language/language.php(625): phpbb\language\language_file_loader->load('language/spanis...', Array, Array)
+#3 /home/shinobil/public_html/phpbb/language/language.php(184): phpbb\language\language->load_core_file('language/spanis...')
+#4 /home/shinobil/public_html/phpbb/user.php(537): phpbb\language\language->add_lang('language/spanis...', NULL)
+#5 /home/shinobil/public_html/phpbb/user.php in /home/shinobil/public_html/phpbb/language/language_file_loader.php on line 185
+[30-Nov-2018 17:16:10 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'Zend\Stdlib\ArrayObject' not found in /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/ValueGenerator.php:89
+Stack trace:
+#0 /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/PropertyGenerator.php(174): Zend\Code\Generator\ValueGenerator->__construct(Array, 'auto', 'multipleLine')
+#1 /home/shinobil/public_html/vendor/ocramius/proxy-manager/src/ProxyManager/ProxyGenerator/PropertyGenerator/PublicPropertiesMap.php(50): Zend\Code\Generator\PropertyGenerator->setDefaultValue(Array)
+#2 /home/shinobil/public_html/vendor/ocramius/proxy-manager/src/ProxyManager/ProxyGenerator/LazyLoadingValueHolderGenerator.php(65): ProxyManager\ProxyGenerator\PropertyGenerator\PublicPropertiesMap->__construct(Object(ReflectionClass))
+#3 /home/shinobil/public_html/vendor/symfony/proxy-manager-bridge/LazyProxy/PhpDumper/LazyLoadingValueHolderGenerator.php(27): ProxyManager\ProxyGenerator\LazyLoadingValueHolderGenerator->generate(Object(ReflectionClass), Object(ProxyMa in /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/ValueGenerator.php on line 89
+[30-Nov-2018 17:19:05 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'Zend\Stdlib\ArrayObject' not found in /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/ValueGenerator.php:89
+Stack trace:
+#0 /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/PropertyGenerator.php(174): Zend\Code\Generator\ValueGenerator->__construct(Array, 'auto', 'multipleLine')
+#1 /home/shinobil/public_html/vendor/ocramius/proxy-manager/src/ProxyManager/ProxyGenerator/PropertyGenerator/PublicPropertiesMap.php(50): Zend\Code\Generator\PropertyGenerator->setDefaultValue(Array)
+#2 /home/shinobil/public_html/vendor/ocramius/proxy-manager/src/ProxyManager/ProxyGenerator/LazyLoadingValueHolderGenerator.php(65): ProxyManager\ProxyGenerator\PropertyGenerator\PublicPropertiesMap->__construct(Object(ReflectionClass))
+#3 /home/shinobil/public_html/vendor/symfony/proxy-manager-bridge/LazyProxy/PhpDumper/LazyLoadingValueHolderGenerator.php(27): ProxyManager\ProxyGenerator\LazyLoadingValueHolderGenerator->generate(Object(ReflectionClass), Object(ProxyMa in /home/shinobil/public_html/vendor/zendframework/zend-code/src/Generator/ValueGenerator.php on line 89
+[04-Dec-2018 09:17:16 CST6CDT] PHP Parse error:  syntax error, unexpected ')' in /home/shinobil/public_html/includes/functions_shop.php on line 83
+[07-Dec-2018 20:39:24 CST6CDT] PHP Parse error:  syntax error, unexpected ''fecha'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/shinobil/public_html/includes/functions_ficha.php on line 420
+[07-Dec-2018 20:42:39 CST6CDT] PHP Parse error:  syntax error, unexpected ''EXPERIENCIA'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/shinobil/public_html/includes/functions_ficha.php on line 202
+[07-Dec-2018 20:42:42 CST6CDT] PHP Parse error:  syntax error, unexpected ''EXPERIENCIA'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/shinobil/public_html/includes/functions_ficha.php on line 202
+[07-Dec-2018 20:42:44 CST6CDT] PHP Parse error:  syntax error, unexpected ''EXPERIENCIA'' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/shinobil/public_html/includes/functions_ficha.php on line 202
+[28-Jan-2019 06:05:16 CST6CDT] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/shinobil/public_html/includes/functions_ficha.php on line 610
+[28-Jan-2019 06:05:18 CST6CDT] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/shinobil/public_html/includes/functions_ficha.php on line 610
+[28-Jan-2019 06:05:55 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:06:08 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:06:09 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:06:26 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:06:28 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:01 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:22 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:38 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:39 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:41 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:53 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:54 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[28-Jan-2019 06:07:58 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/functions_ficha.php on line 612
+[19-Jul-2019 19:03:02 CST6CDT] PHP Parse error:  syntax error, unexpected '$beneficio' (T_VARIABLE) in /home/shinobil/public_html/includes/acp/acp_users.php on line 1504
+[19-Jul-2019 19:03:58 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function sql_fetchrow() in /home/shinobil/public_html/includes/functions_beneficios.php:10
+Stack trace:
+#0 /home/shinobil/public_html/includes/acp/acp_users.php(1463): get_tiers()
+#1 /home/shinobil/public_html/includes/functions_module.php(676): acp_users->main('users', 'profile')
+#2 /home/shinobil/public_html/adm/index.php(82): p_master->load_active()
+#3 {main}
+  thrown in /home/shinobil/public_html/includes/functions_beneficios.php on line 10
+[19-Jul-2019 19:22:58 CST6CDT] PHP Fatal error:  Uncaught Error: Class 'date' not found in /home/shinobil/public_html/includes/acp/acp_users.php:1498
+Stack trace:
+#0 /home/shinobil/public_html/includes/functions_module.php(676): acp_users->main('users', 'profile')
+#1 /home/shinobil/public_html/adm/index.php(82): p_master->load_active()
+#2 {main}
+  thrown in /home/shinobil/public_html/includes/acp/acp_users.php on line 1498
+[19-Jul-2019 21:23:29 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/shinobil/public_html/includes/acp/acp_users.php on line 1699
+[23-Jul-2019 16:18:38 CST6CDT] PHP Fatal error:  Uncaught TypeError: Argument 1 passed to iterator_to_array() must implement interface Traversable, boolean given in /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php:4510
+Stack trace:
+#0 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4510): iterator_to_array(false)
+#1 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4477): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->xpath('//text()[. = " ...')
+#2 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4457): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->getNodes()
+#3 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(7167): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->normalize(Object(DOMElement))
+#4 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(2713): s9e\TextFormatter\Configurator\TemplateNormalizer->normalizeTemplate('< in /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php on line 4510
+[23-Jul-2019 16:18:53 CST6CDT] PHP Fatal error:  Uncaught TypeError: Argument 1 passed to iterator_to_array() must implement interface Traversable, boolean given in /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php:4510
+Stack trace:
+#0 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4510): iterator_to_array(false)
+#1 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4477): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->xpath('//text()[. = " ...')
+#2 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(4457): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->getNodes()
+#3 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(7167): s9e\TextFormatter\Configurator\TemplateNormalizations\AbstractNormalization->normalize(Object(DOMElement))
+#4 /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php(2713): s9e\TextFormatter\Configurator\TemplateNormalizer->normalizeTemplate('< in /home/shinobil/public_html/vendor/s9e/text-formatter/src/Configurator.php on line 4510
+[16-Feb-2020 13:56:29 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function get_forum_rol_data() in /home/shinobil/public_html/includes/acp/acp_forums.php:624
+Stack trace:
+#0 /home/shinobil/public_html/includes/functions_module.php(676): acp_forums->main('forums', 'manage')
+#1 /home/shinobil/public_html/adm/index.php(82): p_master->load_active()
+#2 {main}
+  thrown in /home/shinobil/public_html/includes/acp/acp_forums.php on line 624
+[13-Jun-2020 12:33:30 CST6CDT] PHP Fatal error:  Uncaught Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException: You have requested a non-existent service "pico.reputation.acp.controller". in /home/shinobil/public_html/vendor/symfony/dependency-injection/ContainerBuilder.php:1060
+Stack trace:
+#0 /home/shinobil/public_html/vendor/symfony/dependency-injection/ContainerBuilder.php(620): Symfony\Component\DependencyInjection\ContainerBuilder->getDefinition('pico.reputation...')
+#1 /home/shinobil/public_html/vendor/symfony/dependency-injection/ContainerBuilder.php(588): Symfony\Component\DependencyInjection\ContainerBuilder->doGet('pico.reputation...', 1)
+#2 /home/shinobil/public_html/ext/pico/reputation/acp/reputation_module.php(25): Symfony\Component\DependencyInjection\ContainerBuilder->get('pico.reputation...')
+#3 /home/shinobil/public_html/includes/functions_module.php(676): pico\reputation\acp\reputation_module->main('\\pico\\reputatio...', 'overview')
+#4 /home/shinobil/public_html/adm/index.php(81): p_master->load_active()
+#5 {main}
+  t in /home/shinobil/public_html/vendor/symfony/dependency-injection/ContainerBuilder.php on line 1060
