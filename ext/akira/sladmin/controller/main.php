@@ -503,14 +503,19 @@ class main
 		$rama_id = (int) request_var('rama_id', 0);
 		$nombre = utf8_normalize_nfc(request_var('nombre', '', true));
 		$coste = (int) request_var('coste', 0);
+		$etiqueta = utf8_normalize_nfc(request_var('etiqueta', '', true));
 		$submit = (bool) request_var('submit', false);
 						
 		if ($submit)
 		{
-			$query = $this->db->sql_query("SELECT pj_id FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
+			$query = $this->db->sql_query("SELECT p.pj_id, p.user_id 
+											FROM " . PERSONAJE_TECNICAS_TABLE . " pt
+												INNER JOIN " . PERSONAJES_TABLE . " p
+													ON p.pj_id = pt.pj_id
+											WHERE pt.tecnica_id = $tecnica_id");
 			while($row = $this->db->sql_fetchrow($query))
 			{
-				if (quitar_tecnica($this->user->data['user_id'], $row['pj_id'], $tecnica_id, $coste, $msg_error)) {
+				if (quitar_tecnica($row['user_id'], $row['pj_id'], $tecnica_id, $coste, $msg_error)) {
 					$moderacion = array(
 						'PJ_ID'	=> $row['pj_id'],
 						'RAZON'	=> "Quitar '$nombre' y devolver $coste PA",
@@ -532,6 +537,12 @@ class main
 			if ((int) $this->db->sql_affectedrows() < 1) {
 				trigger_error('Hubo un error eliminando la técnica.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
 			}
+			
+			$this->db->sql_query("DELETE FROM " . BBCODES_TABLE . " WHERE bbcode_tag = '$etiqueta'");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando el bbcode.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+			}
 		
 			trigger_error('Técnica eliminada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
 		}
@@ -541,7 +552,8 @@ class main
 				'submit'	=> true,
 				'rama_id'	=> $rama_id,
 				'nombre'	=> $nombre,
-				'coste'	=> $coste,
+				'coste'		=> $coste,
+				'etiqueta'	=> $etiqueta,
 			));
 			
 			confirm_box(false, "¿Desea borrar la técnica '$nombre' y reembolsar a todos sus usuarios?", $s_hidden_fields);
