@@ -80,7 +80,7 @@
           </div> 
           <div class="form-group row">
             <div class="offset-4 col-5">
-              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+              <button name="submit" id="bt_enviar_tema" type="submit" class="btn btn-primary">Enviar</button>
             </div>
           </div>
         </form>
@@ -128,7 +128,7 @@
           </div> 
           <div class="form-group row">
             <div class="offset-4 col-5">
-              <button name="submit" type="submit" class="btn btn-primary">Enviar</button>
+              <button name="submit" id="bt_enviar_mision" type="submit" class="btn btn-primary">Enviar</button>
             </div>
           </div>
         </form>
@@ -146,8 +146,6 @@
 
   <script>
   $( document ).ready(function(){
-    $('#rev_mision_participantes').select2();
-    $('#rev_tema_participantes').select2();
     
     $( "#rev_mision_enlace" ).change(function() {
       var topic = $( "#rev_mision_enlace" ).val();
@@ -160,7 +158,17 @@
         success: function(result){
           $("#rev_mision_participantes").html("");
           $("#rev_mision_participantes").html(result);
-        }});
+          $('#rev_mision_participantes').select2();
+          $('#bt_enviar_mision').prop('disabled', false);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          if(xhr.status == 503){
+            alert('Inserte otro enlace, ese no funciona correctamente.');
+            $('#rev_mision_enlace').val('');
+            $('#bt_enviar_mision').prop('disabled', true);
+          }
+        }
+      });
       });
 
     $( "#rev_tema_enlace" ).change(function() {
@@ -172,10 +180,20 @@
         url: "/moderacion/participantes",  
         type : 'POST', 
         success: function(result){
-          $("#rev_mision_participantes").html("");
+          $("#rev_tema_participantes").html("");
           $("#rev_tema_participantes").html(result);
-        }});
+          $('#rev_tema_participantes').select2();
+          $('#bt_enviar_tema').prop('disabled', false);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          if(xhr.status == 503){
+            alert('Inserte otro enlace, ese no funciona correctamente.');
+            $('#rev_tema_enlace').val('');
+            $('#bt_enviar_tema').prop('disabled', true);
+          }
+        }
       });
-    });
+      });
+  });
   </script>
   <!-- INCLUDE overall_footer.html -->

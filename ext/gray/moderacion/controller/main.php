@@ -846,7 +846,7 @@ class main
       $sql = "INSERT INTO revisiones " . $this->db->sql_build_array('INSERT', $sql_array);
       $this->db->sql_query($sql);
 
-      trigger_error('Petición de revision creada correctamente.<br><a href="/mod">Volver a crear una petición de revisión</a>.');
+      trigger_error('Petición de revision creada correctamente.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
     }
 
     public function dar_recompensa(){
@@ -1281,12 +1281,12 @@ class main
     public function obtener_id_tema($topic_id){
 
       $es_post = false;
-
       if ($topic_id == 0) {
         $topic_id = str_replace("#", "|", $topic_id);
-
+        $topic_id = str_replace("-", "|", $topic_id);
         //Comprobaciones, tema o post
         $comprobacion = explode("|p", $topic_id);
+
         if (count($comprobacion) > 1) {
           $es_post = true;
         }else{
