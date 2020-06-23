@@ -501,11 +501,12 @@ class main
 		$this->validate_access();
 		
 		$rama_id = (int) request_var('rama_id', 0);
-		$nombre = (int) utf8_normalize_nfc(request_var('nombre', '', true));
+		$nombre = utf8_normalize_nfc(request_var('nombre', '', true));
 		$coste = (int) request_var('coste', 0);
-		
+				
 		if (confirm_box(true))
 		{
+			/*
 			$query = $this->db->sql_query("SELECT pj_id FROM " . PERSONAJE_TECNICAS_TABLE . " WHERE tecnica_id = $tecnica_id");
 			while($row = $this->db->sql_fetchrow($query))
 			{
@@ -533,6 +534,8 @@ class main
 			}
 		
 			trigger_error('Técnica eliminada exitosamente.' . $this->get_return_link("tecnicas?rama_filtro=$rama_id"));
+			*/
+			trigger_error("Entró al IF");
 		}
 		else
 		{
