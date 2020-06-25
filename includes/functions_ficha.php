@@ -576,7 +576,9 @@ function get_ficha($user_id, $return = false, $ver = false)
 				'RAMAS_SECUNDARIAS2'	=> get_ramas_select(0, (int)$row['rama_id2'], $exluir_ramas, $moderador),
 				'RAMAS_SECUNDARIAS3'	=> get_ramas_select(0, (int)$row['rama_id3'], $exluir_ramas, $moderador),
 				'RAMAS_SECUNDARIAS4'	=> get_ramas_select(0, (int)$row['rama_id4'], $exluir_ramas, $moderador),
-				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas, $moderador),
+				'RAMAS_SECUNDARIAS5'	=> get_ramas_select(0, (int)$row['rama_id5'], $exluir_ramas, $moderador),
+				// usar esta línea en vez de la anterior para obligar el segundo elemento en KG de elemento combinado
+				//'RAMAS_SECUNDARIAS5'	=> get_ramas_select(($ver ? 3 : 0), (int)$row['rama_id5'], $exluir_ramas, $moderador),
 			));
 		}
 
