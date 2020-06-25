@@ -1,12 +1,12 @@
 <?php
 /**
-*
-* Linked Accounts extension for phpBB 3.2
-*
-* @copyright (c) 2018 Flerex
-* @license GNU General Public License, version 2 (GPL-2.0)
-*
-*/
+ *
+ * Linked Accounts extension for phpBB 3.2
+ *
+ * @copyright (c) 2018 Flerex
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace flerex\linkedaccounts\migrations;
 
@@ -35,15 +35,17 @@ class release_0_2_0_data extends \phpbb\db\migration\migration
 				'ADM_LINKED_ACCOUNTS',
 				array(
 					'module_basename' => '\flerex\linkedaccounts\acp\main_module',
-					'modes' => array('overview', 'management'),
+					'modes'           => array('overview', 'management'),
 				),
 			)),
 
 			// Create a new “can manage user's linked accounts” permission
 			array('permission.add', array('a_link_accounts')),
-			// set it to yes in the Stantard Admin role and Administrators group
+			// set it to yes in the Stantard Admin role and Administrators groups
 			array('permission.permission_set', array('ADMINISTRATORS', 'a_link_accounts', 'group')),
 			array('permission.permission_set', array('ROLE_ADMIN_STANDARD', 'a_link_accounts')),
+			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_link_accounts')),
+			array('permission.permission_set', array('ROLE_ADMIN_USERGROUP', 'a_link_accounts')),
 		);
 	}
 }
