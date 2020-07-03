@@ -1166,71 +1166,81 @@ class main
 						SET a.ryos = COALESCE(a.ryos, 0) + $ryos
 						WHERE p.user_id = $user_id";
 				$this->db->sql_query($sql);
+			}
 		  
-				// Definir el rango del cofre ganado
-				switch ($bono_tipo) {
-					case 'Mision D Grupal':	
-					case 'Encargo D Grupal':
-						$rango_cofre = 'D';
-						break;
-					case 'Mision C':
-					case 'Encargo C':
-						$rango_cofre = 'C'; 
-						break;
-					case 'Mision B':
-					case 'Encargo B':
-						$rango_cofre = 'B'; 
-						break;
-					case 'Mision A':
-					case 'Encargo A':
-						$rango_cofre = 'A'; 
-						break;
-					case 'Mision S':
-					case 'Encargo S':
-						$rango_cofre = 'S'; 
-						break;
-				}
+			// Definir el rango del cofre ganado
+			switch ($bono_tipo) {
+				case 'Mision D Grupal':	
+				case 'Encargo D Grupal':
+					$rango_cofre = 'D';
+					break;
+				case 'Mision C':
+				case 'Encargo C':
+				case 'Trama C':
+					$rango_cofre = 'C'; 
+					break;
+				case 'Mision B':
+				case 'Encargo B':
+				case 'Trama B'
+					$rango_cofre = 'B'; 
+					break;
+				case 'Mision A':
+				case 'Encargo A':
+				case 'Trama A'
+					$rango_cofre = 'A'; 
+					break;
+				case 'Mision S':
+				case 'Encargo S':
+				case 'Trama S':
+					$rango_cofre = 'S'; 
+					break;
+			}
 
-				// Si aplica cofre...
-				if ($rango_cofre) {
-					$items_extra = 0;
-					
-					// Obtener beneficios del usuario
-					$beneficios = get_beneficios($user_id);
-					if ($beneficios) {
-						// Se recorren los beneficios buscando items extra para cofres
-						foreach ($beneficios as $key => $val) {
-							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 1)) {
-								$item_extra_1 = true;
-							}
-							
-							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 2)) {
-								$item_extra_2 = true;
-							}
-							
-							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 3)) {
-								$item_extra_3 = true;
-							}
+			// Si aplica cofre...
+			if ($rango_cofre) {
+				$items_extra = 0;
+				
+				// Obtener beneficios del usuario
+				$beneficios = get_beneficios($user_id);
+				if ($beneficios) {
+					// Se recorren los beneficios buscando items extra para cofres
+					foreach ($beneficios as $key => $val) {
+						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 1)) {
+							$item_extra_1 = true;
 						}
 						
-						// Se define la cantidad de items extra
-						if ($item_extra_1) $items_extra = 1;
-						if ($item_extra_2) $items_extra = 2;
-						if ($item_extra_3) $items_extra = 3;
+						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 2)) {
+							$item_extra_2 = true;
+						}
+						
+						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 3)) {
+							$item_extra_3 = true;
+						}
 					}
-				
-					$sql_array = array(
-						'rango'				=> $rango_cofre,
-						'pj_id'				=> $pj_id,
-						'topic_id'			=> $topic_id,
-						'items_extra'		=> $items_extra,
-						'estado'			=> 'Recibido',
-						'fecha_recibido'	=> date('Y-m-d h:i:s'),
-					);
 					
-					$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
-					$this->db->sql_query($sql);
+					// Se define la cantidad de items extra
+					if ($item_extra_1) $items_extra = 1;
+					if ($item_extra_2) $items_extra = 2;
+					if ($item_extra_3) $items_extra = 3;
 				}
+				
+				// Si el tipo de tema es una trama, se añade un item extra
+				if (strpos($bono_tipo, "Trama") !== false) {
+					$items_extra += 1;
+				}
+			
+				$sql_array = array(
+					'rango'				=> $rango_cofre,
+					'pj_id'				=> $pj_id,
+					'topic_id'			=> $topic_id,
+					'items_extra'		=> $items_extra,
+					'estado'			=> 'Recibido',
+					'fecha_recibido'	=> date('Y-m-d h:i:s'),
+				);
+				
+				// Insertar el cofre
+				$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
+				$this->db->sql_query($sql);
 			}
 
 			trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia, '.$puntos_apen.' puntos de aprendizaje, y '.$ryos.' ryos. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
