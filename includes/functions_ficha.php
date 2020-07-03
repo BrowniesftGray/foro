@@ -1508,12 +1508,13 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 {
 	global $db, $user;
 	$fecha_post = new DateTime('today');
+	$fecha_ahora = date('Y-m-d h:i:s');
 	
 	$premio_pa = 0;
 	$premio_exp = 0;
 	$premio_pe = 0;
 
-	//El pj_id para cosas futuras (?????)
+	//El pj_id para cosas futuras
 	$pj_id = get_pj_id($user_id);
 	if (!$pj_id) return false;
 
@@ -1578,6 +1579,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 		
 		// dependiendo de la cadena, se suma el premio diario
 		if ($cadena == PREMIO_CADENA_COMPLETA_CANTIDAD) {
+			$cadena_completa = true;
 			$premio_exp += PREMIO_CADENA_COMPLETA_EXP;
 			$premio_pa += PREMIO_CADENA_COMPLETA_PA;
 			$mensaje = "¡Premio extra por semana completa de rol! ¡Felicitaciones!";
@@ -1639,6 +1641,71 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 		$moderacion['ADD_PUNTOS_EVENTO'] = $premio_pe;
 		
 		registrar_moderacion($moderacion, $user_id);
+	}
+	
+	// Cofre por cadena de premio diario
+	$rango_cofre_cadena = COFRES_PREMIO_CADENA;
+	$rango_cofre_acumulado = COFRES_PREMIO_ACUMULADO_RANGO;
+	$items_extra = 0;
+	
+	// Si aplica algún cofre...
+	if (($cadena_completa && $rango_cofre_cadena) || (fmod($premios_totales, COFRES_PREMIO_ACUMULADO_DIAS) == 0 && $rango_cofre_acumulado)) {
+		// Obtener beneficios del usuario
+		$beneficios = get_beneficios($user_id);
+		
+		if ($beneficios) {
+			// Se recorren los beneficios buscando items extra para cofres
+			foreach ($beneficios as $key => $val) {
+				if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 1)) {
+					$item_extra_1 = true;
+				}
+				
+				if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 2)) {
+					$item_extra_2 = true;
+				}
+				
+				if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 3)) {
+					$item_extra_3 = true;
+				}
+			}
+		}
+		
+		// Se define la cantidad de items extra
+		if ($item_extra_1) $items_extra = 1;
+		if ($item_extra_2) $items_extra = 2;
+		if ($item_extra_3) $items_extra = 3;
+	}
+	
+	// Si completó cadena, se da el cofre correspondiente
+	if ($cadena_completa && $rango_cofre_cadena) {
+		$sql_array = array(
+			'rango'				=> $rango_cofre_cadena,
+			'pj_id'				=> $pj_id,
+			'items_extra'		=> $items_extra,
+			'estado'			=> 'Recibido',
+			'fecha_recibido'	=> $fecha_ahora,
+		);
+		
+		$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_array);
+		$db->sql_query($sql);
+		
+		$mensaje .= "<br/>¡Cofre Rango $rango_cofre_cadena" . ($items_extra > 0 ? " +$items_extra" : "") . " conseguido!";
+	}
+	
+	// Si alcanzó la cantidad de premios totales configurada, se da el cofre correspondiente
+	if (fmod($premios_totales, COFRES_PREMIO_ACUMULADO_DIAS) == 0 && $rango_cofre_acumulado) {
+		$sql_array = array(
+			'rango'				=> $rango_cofre_acumulado,
+			'pj_id'				=> $pj_id,
+			'items_extra'		=> $items_extra,
+			'estado'			=> 'Recibido',
+			'fecha_recibido'	=> $fecha_ahora,
+		);
+		
+		$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_array);
+		$db->sql_query($sql);
+		
+		$mensaje .= "<br/>¡Cofre Rango $rango_cofre_acumulado" . ($items_extra > 0 ? " +$items_extra" : "") . " conseguido!";
 	}
 }
 
@@ -1706,4 +1773,14 @@ function get_premio_diario_status($pj_id) {
 	);
 	
 	return $result;
+}
+
+function get_cofres_pendientes($pj_id) {
+	global $db;
+	
+	$query = $db->sql_query("SELECT COUNT(0) AS qty FROM " . COFRES_TABLE . " WHERE pj_id = '$pj_id' AND fecha_abierto IS NULL");
+	$cofres_pendientes = $db->sql_fetchfield('qty');
+	$db->sql_freeresult($query);
+	
+	return $cofres_pendientes;
 }

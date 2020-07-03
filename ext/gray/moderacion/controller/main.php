@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 require_once('/home/shinobil/public_html/includes/functions_user.php');
 require_once('/home/shinobil/public_html/includes/functions_ficha.php');
+require_once('/home/shinobil/public_html/includes/functions_beneficios.php');
 
 class main
 {
@@ -975,201 +976,266 @@ class main
       }
     }
 
-    public function dar_recompensa_mision(){
+	public function dar_recompensa_mision(){
       
-      $revision = request_var('id_revision', '0');
-      $user_id  = request_var('id_participante', '0');
-      $alt_id   = request_var('id_alternativo', '');
+		$revision = request_var('id_revision', '0');
+		$user_id  = request_var('id_participante', '0');
+		$alt_id   = request_var('id_alternativo', '');
 
-      if ($alt_id != '') {
-        $alt_id = explode("=",$alt_id);
-        $id_redireccion = $alt_id[2];
-      }
+		if ($alt_id != '') {
+			$alt_id = explode("=",$alt_id);
+			$id_redireccion = $alt_id[2];
+		}
 
-      //Campos criterios de rol
-      $entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
-      $acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
-      $interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
-      $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
-      $gamemaster = request_var('gamemaster', 'No');
+		//Campos criterios de rol
+		$entorno  = $this->asignar_puntuacion(request_var('entorno', 'No'));
+		$acciones = $this->asignar_puntuacion(request_var('acciones', 'No'));
+		$interes  = $this->asignar_puntuacion(request_var('interesante', 'No'));
+		$longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
+		$gamemaster = request_var('gamemaster', 'No');
 
-      //Campos bonos
-      $bono_tipo  = request_var('tipo_tema', '0');
-      $bono_rev  = request_var('bono_mision', '0');
-      $ryos_rev = request_var('ryos_mision', '0');
-      $compa_rev  = request_var('bono_por_compa', '0');
+		//Campos bonos
+		$bono_tipo  = request_var('tipo_tema', '0');
+		$bono_rev  = request_var('bono_mision', '0');
+		$ryos_rev = request_var('ryos_mision', '0');
+		$compa_rev  = request_var('bono_por_compa', '0');
 
-      // echo "bono_tipo ".$bono_tipo;
-      // echo "<br>bono_rev ".$bono_rev;
-      // echo "<br>ryos_rev ".$ryos_rev;
-      // echo "<br>compa_rev ".$compa_rev;
-      //Criterios bonos
-      $bono_base = 0.25;
-      $bono_utilidad  = request_var('bono_utilidad', 'No');
-      $bono_coherencia = request_var('bono_coherencia', 'No');
-      // $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
+		// echo "bono_tipo ".$bono_tipo;
+		// echo "<br>bono_rev ".$bono_rev;
+		// echo "<br>ryos_rev ".$ryos_rev;
+		// echo "<br>compa_rev ".$compa_rev;
+		//Criterios bonos
+		$bono_base = 0.25;
+		$bono_utilidad  = request_var('bono_utilidad', 'No');
+		$bono_coherencia = request_var('bono_coherencia', 'No');
+		// $bono_sobrevivir  = request_var('bono_sobrevivir', 'No');
+
+		//Estas hay que obtenerlas de otra función.
+		$info_rev = $this->obtener_info_rev($revision);
+		$topic_id = $this->obtener_id_tema($info_rev['enlace']);
+		$tipo_tema = $info_rev['tipo_tema'];
+		$compas   = $info_rev['compas'];
+		$compas = substr_count($compas, '#');
+		$compas = $compas-1;
+
+		if ($compas < 0) $compas = 0;
+
+		//Calculamos cosas para la experiencia y tal.
+		$bono = $this->calcular_bono($tipo_tema);
+		$total = $entorno+$acciones+$interes+$longitud;
+
+		//Obtenemos el número de post del usuario.
+		$sql = "SELECT	p.poster_id as user_id,
+						COUNT(0) as cantidad
+					FROM phpbby1_posts p
+					WHERE p.topic_id = $topic_id
+						AND p.poster_id = $user_id
+					GROUP BY p.poster_id";
+		$query = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($query);
+		$this->db->sql_freeresult($query);
+		$numero_post = $row['cantidad'];
+
+		if($bono_utilidad == "Si"){ $bono_utilidad = 0.50;}else{$bono_utilidad = 0;}
+		if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}else{$bono_coherencia = 0;}
+		// if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
+
+		$bono_total = $bono_base + $bono_utilidad + $bono_coherencia;
+		$bono['experiencia'] = $bono_total * $bono_rev;
+		$bono['porcentaje'] = $compa_rev;
       
-      //Estas hay que obtenerlas de otra función.
-      $info_rev = $this->obtener_info_rev($revision);
-      $topic_id = $this->obtener_id_tema($info_rev['enlace']);
-      $tipo_tema = $info_rev['tipo_tema'];
-      $compas   = $info_rev['compas'];
-      $compas = substr_count($compas, '#');
-      $compas = $compas-1;
-	  
-	  if ($compas < 0) $compas = 0;
-      
-      //Calculamos cosas para la experiencia y tal.
-      $bono = $this->calcular_bono($tipo_tema);
-      $total = $entorno+$acciones+$interes+$longitud;
-      
-      //Obtenemos el número de post del usuario.
-      $sql = "SELECT	p.poster_id as user_id,
-                COUNT(0) as cantidad
-              FROM phpbby1_posts p
-              WHERE p.topic_id = $topic_id
-                  AND p.poster_id = $user_id
-              GROUP BY p.poster_id";
-      $query = $this->db->sql_query($sql);
-      $row = $this->db->sql_fetchrow($query);
-	  $this->db->sql_freeresult($query);
-      $numero_post = $row['cantidad'];
+		if ($compas == 0 || ($compas == 1 && ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C')) ) {
+			$bono['porcentaje'] = 1;
+		} else{
+			if ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C') {
+				$compas = floatval($compas)-floatval(1);
+				$bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
+			}else{
+				$bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
+			}
+		}
 
-      if($bono_utilidad == "Si"){ $bono_utilidad = 0.50;}else{$bono_utilidad = 0;}
-      if($bono_coherencia == "Si"){ $bono_coherencia = 0.25;}else{$bono_coherencia = 0;}
-      // if($bono_sobrevivir == "Si"){ $bono_sobrevivir = 0.25;}else{$bono_sobrevivir = 0;}
+		if ($compas*$compa_rev >= 100) {
+			$bono['porcentaje'] = 2;
+		}
+		// echo "<br>numero post: ".$numero_post;
+		// echo "<br>bono tipo: ".$bono_tipo;
+		// echo "<br>bono total: ".$bono_total;
+		// echo "<br>bono experiencia: ".$bono['experiencia'];
+		// echo "<br>bono porcentaje: ".$bono['porcentaje'];
+		// echo "<br>total: ".$total;
 
-      $bono_total = $bono_base + $bono_utilidad + $bono_coherencia;
-      $bono['experiencia'] = $bono_total * $bono_rev;
-      $bono['porcentaje'] = $compa_rev;
-      
-      if ($compas == 0 || ($compas == 1 && ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C')) ) {
-        $bono['porcentaje'] = 1;
-      } else{
-        if ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C') {
-          $compas = floatval($compas)-floatval(1);
-          $bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
-        }else{
-          $bono['porcentaje'] = "1.".floatval($compas) * floatval($bono['porcentaje']);
-        }
-      }
-
-      if ($compas*$compa_rev >= 100) {
-        $bono['porcentaje'] = 2;
-      }
-      // echo "<br>numero post: ".$numero_post;
-      // echo "<br>bono tipo: ".$bono_tipo;
-      // echo "<br>bono total: ".$bono_total;
-      // echo "<br>bono experiencia: ".$bono['experiencia'];
-      // echo "<br>bono porcentaje: ".$bono['porcentaje'];
-      // echo "<br>total: ".$total;
-
-      if ($bono_tipo == 'Mision D Solitaria' || $bono_tipo == 'Encargo D Solitaria') {
-        $experiencia = 20;
-        $ryos = $ryos_rev;
-        $puntos_apen = 2;
-      }else if($bono_tipo == 'Mision D Grupal' || $bono_tipo == 'Encargo D Grupal'){
-        $experiencia = ($numero_post * $total)+20;
-      // echo "<br>experiencia grupal: ".$experiencia;
+		if ($bono_tipo == 'Mision D Solitaria' || $bono_tipo == 'Encargo D Solitaria') {
+			$experiencia = 20;
+			$ryos = $ryos_rev;
+			$puntos_apen = 2;
+		}else if($bono_tipo == 'Mision D Grupal' || $bono_tipo == 'Encargo D Grupal'){
+			$experiencia = ($numero_post * $total)+20;
+			// echo "<br>experiencia grupal: ".$experiencia;
         
-        $ryos = $ryos_rev;
-        $puntos_apen = 2; 
-      } else{
-        $experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
-        // echo "<br>experiencia :".$experiencia;
-        if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
-          if ($gamemaster == "Si") {
-            $puntos_apen = round($experiencia/25);
-            $ryos = 0;
-          }else{
-            $puntos_apen = round($experiencia/30);
-            $ryos = $ryos_rev;
-          }
-        }else{
-          if ($gamemaster == "Si") {
-            $puntos_apen = round($experiencia/15);
-            $ryos = 0;
-          }else{
-            $puntos_apen = round($experiencia/20);
-            $ryos = $ryos_rev;
-          }
-        }
-        ($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
+			$ryos = $ryos_rev;
+			$puntos_apen = 2; 
+		} else{
+			$experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
+			// echo "<br>experiencia :".$experiencia;
+			if ($bono_tipo == 'Trama C' || $bono_tipo == 'Trama B' || $bono_tipo == 'Trama A' || $bono_tipo == 'Trama S') {
+				if ($gamemaster == "Si") {
+					$puntos_apen = round($experiencia/25);
+					$ryos = 0;
+				} else {
+					$puntos_apen = round($experiencia/30);
+					$ryos = $ryos_rev;
+				}
+			} else {
+				if ($gamemaster == "Si") {
+					$puntos_apen = round($experiencia/15);
+					$ryos = 0;
+				} else {
+					$puntos_apen = round($experiencia/20);
+					$ryos = $ryos_rev;
+				}
+			}
+			
+			($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
-      }
-      if($alt_id != ''){
-        $pj_id = get_pj_id($id_redireccion);
-        $user_id = $id_redireccion;
-        // $check = $this->comprobar_recompensa($revision, $pj_id);
-      }else{
-        $pj_id = get_pj_id($user_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
-      }
+		}
+		
+		if($alt_id != ''){
+			$pj_id = get_pj_id($id_redireccion);
+			$user_id = $id_redireccion;
+			// $check = $this->comprobar_recompensa($revision, $pj_id);
+		}else{
+			$pj_id = get_pj_id($user_id);
+			$check = $this->comprobar_recompensa($revision, $pj_id);
+		}
 
-      // echo $check;
-      if($check != false){
-        trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
-      }
-      else{
-          $array = array();
-          $array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
-          $array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
-          $array['ADD_RYOS'] = $ryos;
-          $array['PJ_ID'] = $pj_id;
-          $array['PUNTOS_APRENDIZAJE'] = 0;
-          $array['RAZON'] = "Revisión de tema";
+		// echo $check;
+		if($check != false){
+			trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
+		}
+		else {
+			$array = array();
+			$array['ADD_PUNTOS_EXPERIENCIA'] = $experiencia;
+			$array['ADD_PUNTOS_APRENDIZAJE'] = $puntos_apen;
+			$array['ADD_RYOS'] = $ryos;
+			$array['PJ_ID'] = $pj_id;
+			$array['PUNTOS_APRENDIZAJE'] = 0;
+			$array['RAZON'] = "Revisión de tema [t$topic_id]";
 
-          registrar_moderacion($array, $user_id);
+			registrar_moderacion($array, $user_id);
 
-          //Insert en la tabla revisiones_recompensas
-          $sql_array = array();
-          $sql_array['id_pj'] = $pj_id;
-          $sql_array['id_revision'] = $revision;
-          $sql_array['experiencia'] = $experiencia;
-          $sql_array['pa'] = $puntos_apen;
-          $sql_array['ryos'] = $ryos;
+			//Insert en la tabla revisiones_recompensas
+			$sql_array = array();
+			$sql_array['id_pj'] = $pj_id;
+			$sql_array['id_revision'] = $revision;
+			$sql_array['experiencia'] = $experiencia;
+			$sql_array['pa'] = $puntos_apen;
+			$sql_array['ryos'] = $ryos;
 
-          //Insert en la tabla revisiones_recompensas
-          $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
-          $this->db->sql_query($sql);
+			//Insert en la tabla revisiones_recompensas
+			$sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
+			$this->db->sql_query($sql);
 
-          //Metemos en una tabla las puntuaciones que hizo el mod.
-          $mod_id = $this->user->data['user_id'];
-          $sql_puntuaciones_revisiones = array();
-          $sql_puntuaciones_revisiones['id_pj'] = $pj_id;
-          $sql_puntuaciones_revisiones['moderador'] = $mod_id;
-          $sql_puntuaciones_revisiones['id_revision'] = $revision;
-          $sql_puntuaciones_revisiones['bono_mision'] = $bono_rev;
-          $sql_puntuaciones_revisiones['ryos_mision'] = $ryos_rev;
-          $sql_puntuaciones_revisiones['bono_por_compa'] = $compa_rev;
-          $sql_puntuaciones_revisiones['gamemaster'] = $gamemaster;
-          $sql_puntuaciones_revisiones['utilidad'] = $bono_utilidad;
-          $sql_puntuaciones_revisiones['coherencia'] = $bono_coherencia;
-          $sql_puntuaciones_revisiones['entorno'] = $entorno;
-          $sql_puntuaciones_revisiones['acciones'] = $acciones;
-          $sql_puntuaciones_revisiones['interesante'] = $interes;
-          $sql_puntuaciones_revisiones['longitud'] = $longitud;
+			//Metemos en una tabla las puntuaciones que hizo el mod.
+			$mod_id = $this->user->data['user_id'];
+			$sql_puntuaciones_revisiones = array();
+			$sql_puntuaciones_revisiones['id_pj'] = $pj_id;
+			$sql_puntuaciones_revisiones['moderador'] = $mod_id;
+			$sql_puntuaciones_revisiones['id_revision'] = $revision;
+			$sql_puntuaciones_revisiones['bono_mision'] = $bono_rev;
+			$sql_puntuaciones_revisiones['ryos_mision'] = $ryos_rev;
+			$sql_puntuaciones_revisiones['bono_por_compa'] = $compa_rev;
+			$sql_puntuaciones_revisiones['gamemaster'] = $gamemaster;
+			$sql_puntuaciones_revisiones['utilidad'] = $bono_utilidad;
+			$sql_puntuaciones_revisiones['coherencia'] = $bono_coherencia;
+			$sql_puntuaciones_revisiones['entorno'] = $entorno;
+			$sql_puntuaciones_revisiones['acciones'] = $acciones;
+			$sql_puntuaciones_revisiones['interesante'] = $interes;
+			$sql_puntuaciones_revisiones['longitud'] = $longitud;
 
-        //Insert en la tabla revisiones_recompensas
-        $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
-        $this->db->sql_query($sql);
+			//Insert en la tabla revisiones_recompensas
+			$sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
+			$this->db->sql_query($sql);
 		  
-		  
-		  //Agregar ryos a facción		  
-		  if ((int) $ryos > 0)
-		  {
-			  $sql = "UPDATE ".ALDEAS_TABLE." a
+			// Si se ganaron ryos...
+			if ((int) $ryos > 0) {
+				//Agregar ryos a facción	
+				$sql = "UPDATE ".ALDEAS_TABLE." a
 							INNER JOIN ".PERSONAJES_TABLE." p
 								ON p.aldea_id = a.aldea_id
 						SET a.ryos = COALESCE(a.ryos, 0) + $ryos
 						WHERE p.user_id = $user_id";
-			  $this->db->sql_query($sql);
-		  }
+				$this->db->sql_query($sql);
 		  
+				// Definir el rango del cofre ganado
+				switch ($bono_tipo) {
+					case 'Mision D Grupal':	
+					case 'Encargo D Grupal':
+						$rango_cofre = 'D';
+						break;
+					case 'Mision C':
+					case 'Encargo C':
+						$rango_cofre = 'C'; 
+						break;
+					case 'Mision B':
+					case 'Encargo B':
+						$rango_cofre = 'B'; 
+						break;
+					case 'Mision A':
+					case 'Encargo A':
+						$rango_cofre = 'A'; 
+						break;
+					case 'Mision S':
+					case 'Encargo S':
+						$rango_cofre = 'S'; 
+						break;
+				}
 
-          trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia y '.$puntos_apen.' puntos de aprendizaje. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
-      }
-    }
+				// Si aplica cofre...
+				if ($rango_cofre) {
+					$items_extra = 0;
+					
+					// Obtener beneficios del usuario
+					$beneficios = get_beneficios($user_id);
+					if ($beneficios) {
+						// Se recorren los beneficios buscando items extra para cofres
+						foreach ($beneficios as $key => $val) {
+							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 1)) {
+								$item_extra_1 = true;
+							}
+							
+							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 2)) {
+								$item_extra_2 = true;
+							}
+							
+							if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 3)) {
+								$item_extra_3 = true;
+							}
+						}
+						
+						// Se define la cantidad de items extra
+						if ($item_extra_1) $items_extra = 1;
+						if ($item_extra_2) $items_extra = 2;
+						if ($item_extra_3) $items_extra = 3;
+					}
+				
+					$sql_array = array(
+						'rango'				=> $rango_cofre,
+						'pj_id'				=> $pj_id,
+						'topic_id'			=> $topic_id,
+						'items_extra'		=> $items_extra,
+						'estado'			=> 'Recibido',
+						'fecha_recibido'	=> date('Y-m-d h:i:s'),
+					);
+					
+					$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
+					$this->db->sql_query($sql);
+				}
+			}
+
+			trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia, '.$puntos_apen.' puntos de aprendizaje, y '.$ryos.' ryos. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
+		}
+	}
 
     public function dar_recompensa_combate(){
       

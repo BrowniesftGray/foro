@@ -350,6 +350,7 @@ define('PATREON_BENEFICIO_ACTION_NO_ACTION',	'-1');
 define('BENEFICIO_AVATAR_FICHA',				'avatar_ficha');
 define('BENEFICIO_BANNER_FICHA',				'banner_ficha');
 define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');
+define('BENEFICIO_COFRE_ITEMS_EXTRA',			'cofre_item_extra_%d');
 
 // Premio diario constants
 define('PREMIO_POST_BASE_MAX',					10);

@@ -20,6 +20,7 @@ if (!defined('IN_PHPBB'))
 }
 
 require_once('functions_ficha.php');
+require_once('functions_beneficios.php');
 
 /**
 * Fill smiley templates (or just the variables) with smilies, either in a window or inline

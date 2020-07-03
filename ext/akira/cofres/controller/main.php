@@ -98,9 +98,10 @@ class main
 			$this->template->assign_block_vars_array('cofres', $cofres);
 		
 		$this->template->assign_vars(array(
-			'COFRES_PREMIO_CADENA'			=> COFRES_PREMIO_CADENA,
-			'COFRES_PREMIO_ACUMULADO_RANGO'	=> COFRES_PREMIO_ACUMULADO_RANGO,
-			'COFRES_PREMIO_ACUMULADO_DIAS'	=> COFRES_PREMIO_ACUMULADO_DIAS,
+			'COFRES_PREMIO_CADENA'				=> COFRES_PREMIO_CADENA,
+			'COFRES_PREMIO_ACUMULADO_RANGO'		=> COFRES_PREMIO_ACUMULADO_RANGO,
+			'COFRES_PREMIO_ACUMULADO_DIAS'		=> COFRES_PREMIO_ACUMULADO_DIAS,
+			'PREMIO_CADENA_COMPLETA_CANTIDAD'	=> PREMIO_CADENA_COMPLETA_CANTIDAD,
 		));
 		
 		return $this->helper->render('cofres/home.html', 'Cofres de Tesoro');
@@ -287,7 +288,7 @@ class main
 			'IMG_ABIERTO_URL'	=> strtolower(sprintf(COFRES_ABIERTO_IMG, $rango)),
 		));
 		
-		return $this->helper->render('cofres/abrir.html', 'Abrir Cofre');
+		return $this->helper->render('cofres/abrir.html', 'Abrir Cofre de Tesoro');
 	}
 	
 	public function fusion() 
@@ -315,7 +316,67 @@ class main
 	
 	public function info() 
 	{
-		return $this->helper->render('cofres/info.html', 'Cofres de Tesoro');
+		// Obtener Rangos de misiones
+		$query_rango = $this->db->sql_query("SELECT letra FROM " . RANGOS_TABLE . " WHERE misiones = 1 ORDER BY rango_id");
+		while ($row_rango = $this->db->sql_fetchrow($query_rango)) {
+			// Agregar rango al template
+			$this->template->assign_block_vars('cofres', array(
+				'RANGO' 		=> $row_rango['letra'],
+				'URL_IMAGEN'	=> strtolower(sprintf(COFRES_CERRADO_IMG, $row_rango['letra'])),
+			));
+			
+			// Obtener los premios posibles
+			$query_premios = $this->db->sql_query("SELECT i.nombre, i.url_imagen, cr.chance
+													FROM " . COFRES_RECOMPENSAS_TABLE . " cr
+														INNER JOIN " . ITEMS_TABLE . " i
+															ON i.item_id = cr.item_id
+													WHERE rango = '".$row_rango['letra']."'
+													ORDER BY cr.chance ASC");
+													
+			while ($row_premio = $this->db->sql_fetchrow($query_premios)) {
+				// Definir rareza según chance				
+				$color = COFRES_COLOR_NORMAL;
+				$tipo = 'Normal';
+				$tag = 'generico';
+				
+				if ((int) $row_premio['chance'] <= COFRES_CHANCE_RARO) {
+					$color = COFRES_COLOR_RARO;
+					$tipo = 'Raro';
+					$tag = 'fuin';
+				}
+				
+				if ((int) $row_premio['chance'] <= COFRES_CHANCE_EPICO) {
+					$color = COFRES_COLOR_EPICO;
+					$tipo = 'Épico';
+					$tag = 'gen';
+				}
+				
+				if ((int) $row_premio['chance'] <= COFRES_CHANCE_LEGENDARIO) {
+					$color = COFRES_COLOR_LEGENDARIO;
+					$tipo = 'Legendario';
+					$tag = 'tai';
+				}
+				
+				$this->template->assign_block_vars('cofres.premios', array(
+					'NOMBRE' 		=> $row_premio['nombre'],
+					'URL_IMAGEN'	=> '/images/shop_icons/' . $row_premio['url_imagen'],
+					'COLOR'			=> $color,
+					'TIPO'			=> $tipo,
+					'TAG'			=> $tag,
+				));
+			}
+			$this->db->sql_freeresult($query_premios);
+		}
+		$this->db->sql_freeresult($query_rango);
+		
+		$this->template->assign_vars(array(
+			'COFRES_PREMIO_CADENA'				=> COFRES_PREMIO_CADENA,
+			'COFRES_PREMIO_ACUMULADO_RANGO'		=> COFRES_PREMIO_ACUMULADO_RANGO,
+			'COFRES_PREMIO_ACUMULADO_DIAS'		=> COFRES_PREMIO_ACUMULADO_DIAS,
+			'PREMIO_CADENA_COMPLETA_CANTIDAD'	=> PREMIO_CADENA_COMPLETA_CANTIDAD,
+		));
+		
+		return $this->helper->render('cofres/info.html', 'Cofres de Tesoro - Información');
 	}
 	
 	function inicializar(&$pj_id)

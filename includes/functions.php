@@ -4527,6 +4527,9 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		
 		$premio_status = get_premio_diario_status($pj_id);
 		if ($premio_status) $template->assign_vars($premio_status);
+		
+		$cofres_pendientes = (int) get_cofres_pendientes($pj_id);
+		$template->assign_vars(array('COFRES_PENDIENTES' => $cofres_pendientes));
 	}
 
 	$http_headers = array();

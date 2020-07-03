@@ -88,3 +88,37 @@
 	font-weight: bold;
 	text-align: center;
 }
+
+.cofres-help {
+    font-size: 20px;
+    float: right;
+    margin-top: 10px;
+}
+
+.cofres-help:hover {
+	text-decoration: none;
+}
+
+.cofre-help-container .cofre-rango-title {
+	font-size: 25px;
+}
+
+.cofre-help-content {
+	background: #e3e3e3;
+	border-radius: 10px 5px 5px 10px;
+}
+
+.cofre-help-imagen {
+	float: left;
+	margin-right: 5px;
+}
+
+.cofre-loot {
+	clear: left;
+}
+
+.cofre-help-imagen img{
+	border-radius: 10px;
+    width: 50px;
+    height: 50px;
+}
