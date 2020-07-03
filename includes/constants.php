@@ -338,6 +338,9 @@ define('FORUMS_ROL_TABLE',				'forums_rol');
 define('TIPOS_TEMA_TABLE',				'tipos_tema');
 define('RANGOS_TABLE',					'rangos');
 define('POSTS_HUEVOS_TABLE',			'posts_huevos');
+define('COFRES_TABLE',					'cofres');
+define('COFRES_RECOMPENSAS_TABLE',		'cofres_recompensas');
+define('COFRES_ITEMS_TABLE',			'cofres_items');
 
 // Patreon constants
 define('PATREON_TIER_ACTION_NO_ACTION',			'-1');
@@ -385,3 +388,19 @@ define('HUEVO_TIPO_1_ITEM',				'139');
 define('HUEVO_TIPO_2_ITEM',				'138');
 define('HUEVO_TIPO_3_ITEM',				'137');
 define('HUEVO_MAX',						'18');
+
+// Cofres constants
+define('COFRES_CANTIDAD_FUSION',		'5');
+define('COFRES_CANTIDAD_ITEMS',			'5');
+define('COFRES_CHANCE_RARO',			'10');
+define('COFRES_CHANCE_EPICO',			'5');
+define('COFRES_CHANCE_LEGENDARIO',		'1');
+define('COFRES_COLOR_NORMAL',			'bfbfbf');
+define('COFRES_COLOR_RARO',				'4472c4');
+define('COFRES_COLOR_EPICO',			'7030a0');
+define('COFRES_COLOR_LEGENDARIO',		'ed7d31');
+define('COFRES_CERRADO_IMG',			'/images/cofres/cofre_%s_cerrado.png');
+define('COFRES_ABIERTO_IMG',			'/images/cofres/cofre_%s_abierto.png');
+define('COFRES_PREMIO_CADENA',			'D');
+define('COFRES_PREMIO_ACUMULADO_RANGO',	'B');
+define('COFRES_PREMIO_ACUMULADO_DIAS',	'100');

@@ -694,6 +694,7 @@ class main
 				'PRECIO'			=> (int) $row['precio'],
 				'CANTIDAD_MAX'		=> (int) $row['cantidad_max'],
 				'COMPRABLE'			=> (bool) $row['comprable'],
+				'VISIBLE'			=> (bool) $row['visible'],
 				'PJ_ID_INVENCION'	=> (int) $row['pj_id_invencion'],
 				'ORDEN'				=> (int) $row['orden'],
 				'U_ACTION_UPD'		=> "/sladmin/items/upd/" . $row['item_id'],
@@ -731,6 +732,7 @@ class main
 			'precio'			=> (int) request_var('precio', 0),
 			'cantidad_max'		=> (int) request_var('cantidad_max', 0),
 			'comprable'			=> (bool) request_var('comprable', false),
+			'visible'			=> (bool) request_var('visible', false),
 			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
 			'orden'				=> (int) request_var('orden', 0),
 		);
@@ -742,7 +744,7 @@ class main
 			trigger_error('Hubo un error agregando el item.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
 		}
 		
-		trigger_error('Técnica agregada exitosamente.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
+		trigger_error('Item agregado exitosamente.' . $this->get_return_link("items?tienda_filtro=$shop_id"));
 	}
 	
 	function items_upd($item_id) {
@@ -760,6 +762,7 @@ class main
 			'precio'			=> (int) request_var('precio', 0),
 			'cantidad_max'		=> (int) request_var('cantidad_max', 0),
 			'comprable'			=> (bool) request_var('comprable', false),
+			'visible'			=> (bool) request_var('visible', false),
 			'pj_id_invencion'	=> (int) request_var('pj_id_invencion', 0),
 			'orden'				=> (int) request_var('orden', 0),
 		);
@@ -1181,6 +1184,156 @@ class main
 		trigger_error('Acción cancelada.' . $this->get_return_link('invocaciones'));
 	}
 	
+	/*------------------------
+	--        COFRES        --
+	--------------------------*/
+	
+	function cofres_view() {		
+		$this->validate_access();
+		
+		$rango = utf8_normalize_nfc(request_var('rango_filtro', '', true));
+		$rangos_options = $this->get_rangos_options($rango);
+		
+		if ($rango)
+		{
+			$query = $this->db->sql_query("SELECT r.*, i.nombre as item_nombre 
+											FROM ". COFRES_RECOMPENSAS_TABLE . " r
+												INNER JOIN " . ITEMS_TABLE . " i
+													ON i.item_id = r.item_id
+											WHERE rango = '$rango'");
+											
+			while ($row = $this->db->sql_fetchrow($query)) {
+				$color = COFRES_COLOR_NORMAL;
+				$tipo = 'Normal';
+				
+				if ((int) $row['chance'] <= COFRES_CHANCE_RARO) {
+					$color = COFRES_COLOR_RARO;
+					$tipo = 'Raro';
+				}
+				
+				if ((int) $row['chance'] <= COFRES_CHANCE_EPICO) {
+					$color = COFRES_COLOR_EPICO;
+					$tipo = 'Épico';
+				}
+				
+				if ((int) $row['chance'] <= COFRES_CHANCE_LEGENDARIO) {
+					$color = COFRES_COLOR_LEGENDARIO;
+					$tipo = 'Legendario';
+				}
+				
+				$recompensas[] = array(
+					'RECOMPENSA_ID'	=> (int) $row['recompensa_id'],
+					'RANGO'			=> $row['rango'],
+					'ITEM_ID'		=> (int) $row['item_id'],
+					'ITEM_NOMBRE'	=> $row['item_nombre'],
+					'CHANCE'		=> (int) $row['chance'],
+					'TIPO'			=> $tipo,
+					'COLOR'			=> $color,
+					'U_ACTION_UPD'	=> "/sladmin/cofres/upd/" . $row['recompensa_id'],
+					'U_ACTION_DEL'	=> "/sladmin/cofres/del/" . $row['recompensa_id'],
+				);
+			}
+			$this->db->sql_freeresult($query);
+		
+			if (isset($recompensas))
+				$this->template->assign_block_vars_array('recompensas', $recompensas);
+		}
+	
+		$this->template->assign_vars(array(
+			'RANGO'				=> $rango,
+			'RANGOS_OPTIONS'	=> $rangos_options,
+			'U_ACTION_INS'		=> "/sladmin/cofres/ins",
+			'U_ACTION_SEL'		=> "/sladmin/cofres",
+		));
+		
+		return $this->helper->render('sladmin/cofres.html', 'Administrador de SL - Cofres');
+	}
+	
+	function cofres_ins() {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'rango'		=> utf8_normalize_nfc(request_var('rango', '', true)),
+			'item_id'	=> (int) request_var('item_id', 0),
+			'chance'	=> (int) request_var('chance', 0),
+		);
+		
+		$rango = $sql_array['rango'];
+		
+		$query_exists = $this->db->sql_query('SELECT COUNT(0) as qty FROM ' . ITEMS_TABLE . ' WHERE item_id = ' . $sql_array['item_id']);
+		$existe = $this->db->sql_fetchfield('qty');
+		$this->db->sql_freeresult($query_exists);
+		
+		if (!$existe)
+			trigger_error('No se ha encontrado el ID de item ingresado.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+		
+		$this->db->sql_query('INSERT INTO ' . COFRES_RECOMPENSAS_TABLE . $this->db->sql_build_array('INSERT', $sql_array));
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error agregando la recompensa.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+		}
+		
+		trigger_error('Recompensa agregada al cofre exitosamente.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+	}
+	
+	function cofres_upd($recompensa_id) {
+		$this->validate_access();
+		
+		$sql_array = array(
+			'rango'		=> utf8_normalize_nfc(request_var('rango', '', true)),
+			'item_id'	=> (int) request_var('item_id', 0),
+			'chance'	=> (int) request_var('chance', 0),
+		);
+		
+		$rango = $sql_array['rango'];
+		
+		$query_exists = $this->db->sql_query('SELECT COUNT(0) as qty FROM ' . ITEMS_TABLE . ' WHERE item_id = ' . $sql_array['item_id']);
+		$existe = $this->db->sql_fetchfield('qty');
+		$this->db->sql_freeresult($query_exists);
+		
+		if (!$existe)
+			trigger_error('No se ha encontrado el ID de item ingresado.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+		
+		$this->db->sql_query('UPDATE ' . COFRES_RECOMPENSAS_TABLE . ' SET ' .
+					$this->db->sql_build_array('UPDATE', $sql_array) .
+					" WHERE recompensa_id = '$recompensa_id'");
+					
+		if ((int) $this->db->sql_affectedrows() < 1) {
+			trigger_error('Hubo un error modificando la recompensa.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+		}
+		
+		trigger_error('Recompensa actualizada exitosamente.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+	}
+	
+	function cofres_del($recompensa_id) {
+		$this->validate_access();
+		
+		$rango = utf8_normalize_nfc(request_var('rango', '', true));
+		$item_id = (int) request_var('item_id', 0);
+		
+		if (confirm_box(true))
+		{
+			$this->db->sql_query("DELETE FROM " . COFRES_RECOMPENSAS_TABLE . " WHERE recompensa_id = '$recompensa_id'");
+		
+			if ((int) $this->db->sql_affectedrows() < 1) {
+				trigger_error('Hubo un error eliminando la recompensa.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+			}
+		
+			trigger_error('Recompensa quitada del cofre exitosamente.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+		}
+		else
+		{
+			$query = $this->db->sql_query("SELECT nombre FROM " . ITEMS_TABLE . " WHERE item_id = $item_id");
+			if ($row = $this->db->sql_fetchrow($query)) {
+				$nombre = $row['nombre'];
+			}
+			$this->db->sql_freeresult($query);
+			
+			$s_hidden_fields = build_hidden_fields(array('submit' => true));
+			confirm_box(false, "¿Desea quitar la recompensa '$nombre' del cofre Rango $rango?", $s_hidden_fields);
+		}
+		
+		trigger_error('Acción cancelada.' . $this->get_return_link("cofres?rango_filtro=$rango"));
+	}
 	
 	/*------------------------
 	--      FUNCIONES       --
@@ -1293,6 +1446,22 @@ class main
 		
 		while ($row = $this->db->sql_fetchrow($query)){
 			$options .= "<option value='" . $row['shop_id'] . "'>" . $row['nombre'] . "</option>";
+		}
+		$this->db->sql_freeresult($query);
+		
+		return $options;
+	}
+	
+	function get_rangos_options($rango = '')
+	{
+		$options = "";
+		
+		$query = $this->db->sql_query("SELECT letra, nombre FROM " . RANGOS_TABLE . 
+						" WHERE misiones = 1 " .
+						" ORDER BY rango_id");
+		
+		while ($row = $this->db->sql_fetchrow($query)){
+			$options .= "<option value='" . $row['letra'] . "' " . ($row['letra'] == $rango ? "selected" : "") . ">" . $row['nombre'] . "</option>";
 		}
 		$this->db->sql_freeresult($query);
 		

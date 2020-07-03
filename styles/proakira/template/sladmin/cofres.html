@@ -1,0 +1,103 @@
+<!-- INCLUDE overall_header.html -->
+<link rel="stylesheet" href="/styles/proakira/theme/sladmin.css?v=0.2.5" type="text/css" />
+
+<div class="sladmin">
+	<h2><a href="/sladmin/home">SL Admin</a></h2>
+	<h3>Recompensas de Cofres</h3>
+	<div>
+		<form action="{U_ACTION_SEL}" method="get">
+			<label for="rango_filtro">Rango del Cofre:</label>
+			<select name="rango_filtro" id="rango_filtro">
+				<!-- IF not RANGO -->
+				<option selected="selected" value="">-- Seleccionar --</option>
+				<!-- ENDIF -->
+				{RANGOS_OPTIONS}
+			<select>
+			<input type="submit" class="btn-filter" value="Buscar" />
+		</form>
+	</div>
+	<br />
+	<!-- IF RANGO -->
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Rango</th>
+			<th>Item</th>
+			<th>% Chance</th>
+			<th>Tipo</th>
+			<th>Guardar</th>
+			<th>Eliminar</th>
+		</tr>
+		<!-- BEGIN recompensas -->
+		<tr>
+			<form action="{recompensas.U_ACTION_UPD}" method="post">
+			<td>
+				<input type="hidden" name="recompensa_id" value="{recompensas.RECOMPENSA_ID}" />
+				{recompensas.RECOMPENSA_ID}
+			</td>
+			<td>
+				<input type="hidden" name="rango" value="{recompensas.RANGO}" />
+				Rango {recompensas.RANGO}
+			</td>
+			<td>
+				<input type="number" name="item_id" value="{recompensas.ITEM_ID}" placeholder="ID Item" />
+				&nbsp;{recompensas.ITEM_NOMBRE}
+			</td>
+			<td>
+				<input type="number" name="chance" class="chance" onchange="calcular_chance();" value="{recompensas.CHANCE}" max-value="100" min-value="0" />
+			</td>
+			<td>
+				<span style="font-weight: bold; color: #{recompensas.COLOR}; text-shadow: 0 0 0 rgba(0, 0, 0, 0.2);">{recompensas.TIPO}</span>
+			</td>
+			<td>
+				<input type="submit" class="btn-upd" value="Guardar" />
+			</td>
+			</form>
+			<td>
+				<form action="{recompensas.U_ACTION_DEL}" method="post">
+					<input type="hidden" name="rango" value="{recompensas.RANGO}" />
+					<input type="hidden" name="item_id" value="{recompensas.ITEM_ID}" />
+					<input type="submit" class="btn-del" value="Eliminar" />
+				</form>
+			</td>
+		</tr>
+		<!-- END recompensas -->
+		<tr>
+			<form action="{U_ACTION_INS}" method="post">
+			<td></td>
+			<td>
+				<input type="hidden" name="rango" value="{RANGO}" />
+				Rango {RANGO}
+			</td>
+			<td>
+				<input type="number" name="item_id"  placeholder="ID Item" value="" />
+			</td>
+			<td>
+				<input type="number" name="chance" class="chance" onchange="calcular_chance();" placeholder="del 0 al 100" value="0" max-value="100" min-value="0" />
+			</td>
+			<td></td>
+			<td>
+				<input type="submit" class="btn-ins" value="Agregar" />
+			</td>
+			</form>
+			<td></td>
+		</tr>
+	</table>
+	<br/>
+	<b>Chance Total:</b> <span id="total"></span>
+	<!-- ENDIF -->
+</div>
+
+<script type="text/javascript">
+	function calcular_chance() {
+		var total = 0;
+		
+		$('.chance').each(function(){
+			total += parseInt($(this).val());
+		});
+		
+		$('#total').text(total);
+	}
+</script>
+
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,31 @@
+{
+    "name": "akira/cofres",
+    "type": "phpbb-extension",
+    "description": "Cofres del Tesoro de Shinobi Legacy",
+    "homepage": "",
+    "version": "0.1.0",
+    "time": "2020-07-02",
+    "keywords": ["phpbb", "extension", "akira", "cofres", "lootbox"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "akira",
+            "email": "akira@localhost",
+            "homepage": "",
+            "role": "Lead Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpbb/epv": "dev-master"
+    },
+    "extra": {
+        "display-name": "SL Lootboxes",
+        "soft-require": {
+            "phpbb/phpbb": "~3.3"
+        }
+    }
+}

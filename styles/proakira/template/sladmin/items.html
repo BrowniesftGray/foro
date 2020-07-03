@@ -34,6 +34,7 @@
 			<th>Precio</th>
 			<th>Máx.</th>
 			<th>Comprable</th>
+			<th>Visible</th>
 			<th>ID PJ</th>
 			<th>Orden</th>
 			<th>Guardar</th>
@@ -85,6 +86,9 @@
 			</td>
 			<td>
 				<input type="checkbox" name="comprable" <!-- IF items.COMPRABLE -->checked="checked"<!-- ENDIF --> />
+			</td>
+			<td>
+				<input type="checkbox" name="visible" <!-- IF items.VISIBLE -->checked="checked"<!-- ENDIF --> />
 			</td>
 			<td>
 				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" value="{items.PJ_ID_INVENCION}" />
@@ -141,6 +145,9 @@
 			</td>
 			<td>
 				<input type="checkbox" name="comprable" />
+			</td>
+			<td>
+				<input type="checkbox" name="visible" />
 			</td>
 			<td>
 				<input type="number" name="pj_id_invencion" title="ID de personaje que inventa" />

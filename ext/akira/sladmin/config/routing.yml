@@ -153,3 +153,20 @@ akira_sladmin_invocaciones_upd:
 akira_sladmin_invocaciones_del:
     path: /sladmin/invocaciones/del/{invocacion_id}
     defaults: { _controller: akira.sladmin.controller:invocaciones_del }
+    
+    
+akira_sladmin_cofres:
+    path: /sladmin/cofres
+    defaults: { _controller: akira.sladmin.controller:cofres_view }
+    
+akira_sladmin_cofres_ins:
+    path: /sladmin/cofres/ins
+    defaults: { _controller: akira.sladmin.controller:cofres_ins }
+    
+akira_sladmin_cofres_upd:
+    path: /sladmin/cofres/upd/{recompensa_id}
+    defaults: { _controller: akira.sladmin.controller:cofres_upd }
+    
+akira_sladmin_cofres_del:
+    path: /sladmin/cofres/del/{recompensa_id}
+    defaults: { _controller: akira.sladmin.controller:cofres_del }

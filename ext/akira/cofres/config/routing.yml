@@ -1,0 +1,23 @@
+akira_cofres:
+    path: /cofres
+    defaults: { _controller: akira.cofres.controller:handle }
+    
+akira_cofres_abrir:
+    path: /cofres/abrir
+    defaults: { _controller: akira.cofres.controller:abrir }
+    
+akira_cofres_fusion:
+    path: /cofres/fusion
+    defaults: { _controller: akira.cofres.controller:fusion }
+    
+akira_cofres_historial:
+    path: /cofres/historial
+    defaults: { _controller: akira.cofres.controller:historial }
+    
+akira_cofres_historial_todos:
+    path: /cofres/historial/todos
+    defaults: { _controller: akira.cofres.controller:historial_todos }
+    
+akira_cofres_info:
+    path: /cofres/info
+    defaults: { _controller: akira.cofres.controller:info }

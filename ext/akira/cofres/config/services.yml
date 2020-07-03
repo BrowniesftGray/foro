@@ -1,0 +1,10 @@
+services:
+    akira.cofres.controller:
+        class: akira\cofres\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+            - '@dbal.conn'
+            - '@auth'

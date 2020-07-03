@@ -1,0 +1,90 @@
+.cofres {
+	background: #fff;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+	margin: 40px 20px;
+	border-radius: 5px;
+	padding: 0 10px;
+	font-size: 1.2em;
+}
+
+.cofres-title {
+	font-size: 2.5em;
+	color: #333;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+}
+
+.cofre-container {
+    background: #fff3c8;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.2);
+    float: left;
+	width: 290px;
+}
+
+.cofre-imagen-container {
+    position: relative;
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.cofre-imagen-cerrado {
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    border-radius: 5px;
+}
+
+.cofre-imagen-container form {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cofre-imagen-abierto {
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    display: none;
+    border-radius: 5px;
+}
+
+.cofre-imagen-container:hover .cofre-imagen-abierto {
+	display: inline-block; 
+}
+
+.cofre-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cofres-leyenda {
+    text-align: center;
+}
+
+.cofres-vacio {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cofres-imagen-grande {
+    padding: 10px;
+    text-align: center;
+}
+
+.cofres-imagen-grande img {
+    border-radius: 10px;
+}
+
+.cofres-volver {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+}

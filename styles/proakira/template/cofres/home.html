@@ -1,0 +1,42 @@
+<!-- INCLUDE overall_header.html -->
+
+<link rel="stylesheet" href="/styles/proakira/theme/cofres.css?v=1.0.4" type="text/css" />
+
+<div class="cofres">
+	<h1 class="cofres-title">Cofres de Tesoro</h1>
+	<hr />
+	<div class="cofres-leyenda">
+		Completa misiones o encargos para recibir cofres de su mismo Rango. Distintos cofres poseen distintos premios posibles, desde un pequeño Makibishi hasta el costoso Veneno Letal. También puedes obtener cofres mediante el Premio Diario, ganando un Cofre Rango {COFRES_PREMIO_CADENA} al lograr una cadena de 7 días, y un Cofre Rango {COFRES_PREMIO_ACUMULADO_RANGO} cada vez que acumulas {COFRES_PREMIO_ACUMULADO_DIAS} premios totales.<br />
+		<br />
+		Los cofren tienen en su interior 5 items, pero algunos miembros de <a href="/reglas-y-guias-f4/x-beneficios-de-patreon-t1310">Patreon</a> reciben items extra según su Tier. ¡Aporta tu grano de arena al foro para aprovechar este beneficio!
+	</div>
+	<hr />
+	<!-- BEGIN cofres -->
+	<div class="cofre-container">
+		<div class="cofre-imagen-container">
+			<div class="cofre-imagen-cerrado" style="background-image: url({cofres.IMG_CERRADO_URL})"></div>
+			<form method="post" action="/cofres/abrir">
+				<input type="hidden" name="cofre_id" value="{cofres.COFRE_ID}" />
+				<input class="cofre-imagen-abierto" type="image" src="{cofres.IMG_ABIERTO_URL}" alt="Abrir cofre" title="Abrir cofre">
+			</form>
+		</div>
+		<div class="cofre-content">
+			<div class="cofre-title">
+				Cofre Rango {cofres.RANGO} <!-- IF cofres.ITEMS_EXTRA --> +{cofres.ITEMS_EXTRA} <!-- ENDIF -->
+			</div>
+			<div class="cofre-info">
+				{cofres.ESTADO} en {cofres.TOPIC_TITLE} el {cofres.FECHA_RECIBIDO}.
+			</div>
+		</div>
+	</div>
+	<!-- END cofres -->
+	<!-- IF not cofres -->
+	<div class="cofres-vacio">
+		No tienes cofres por abrir.<br />
+		¡Ve a completar misiones!
+	</div>
+	<!-- ENDIF -->
+	<br style="clear: both" />
+</div>
+
+<!-- INCLUDE overall_footer.html -->

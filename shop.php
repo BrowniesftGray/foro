@@ -155,6 +155,7 @@ class phpbb_shop {
 											ON pi.item_id = i.item_id
 											AND pi.pj_id = $pj_id
 									WHERE shop_id = '$shop_id'
+										AND visible = 1
 									ORDER BY i.nombre");
 									
 		while ($row = $db->sql_fetchrow($result)) {

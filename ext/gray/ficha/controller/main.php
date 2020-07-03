@@ -57,7 +57,7 @@ class main
         if ($this->user->data['user_id'] == ANONYMOUS ) {
             trigger_error('No puedes acceder aquí sin conectarte');
         }
-
+		
         $this->template->assign_var('RAMAS_PRINCIPALES', get_ramas_select(1, false, null, false));
 		$this->template->assign_var('FICHA_ALDEAS', obtener_aldeas_select(false, false));
 
@@ -260,6 +260,7 @@ class main
 			}
 		}
 
+        $this->template->assign_var('USER_ID', $user_id);
         return $this->helper->render('ficha_view.html', 'Ficha de Personaje');
     }
 
