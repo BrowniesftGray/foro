@@ -303,7 +303,7 @@ class main
 	
 	public function historial($ver_todo = false)
 	{
-		if (!$this->inicializar($pj_id))
+		if (!$this->inicializar($pj_id) && !$ver_todo)
 			return $this->info();
 		
 		$last_cofre_id = 0;
