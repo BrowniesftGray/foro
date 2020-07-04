@@ -265,7 +265,7 @@ class main
 		}
 		
 		// Fecha y hora actual
-		$fecha = date('Y-m-d h:i:s');
+		$fecha = date('Y-m-d H:i:s');
 		
 		// Array para actualizar cofre
 		$sql_ary = array(

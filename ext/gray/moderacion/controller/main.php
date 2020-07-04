@@ -1235,7 +1235,7 @@ class main
 					'topic_id'			=> $topic_id,
 					'items_extra'		=> $items_extra,
 					'estado'			=> 'Recibido',
-					'fecha_recibido'	=> date('Y-m-d h:i:s'),
+					'fecha_recibido'	=> date('Y-m-d H:i:s'),
 				);
 				
 				// Insertar el cofre

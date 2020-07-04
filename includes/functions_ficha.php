@@ -1044,7 +1044,7 @@ function registrar_moderacion(array $fields, $user_id = 0){
 	global $db, $user;
 
 	$mod = $user->data['username'];
-	$fecha = date('Y-m-d h:i:s');
+	$fecha = date('Y-m-d H:i:s');
 
 	// if ($fields['PUNTOS_APRENDIZAJE'] > 0) {
 	// 	comprarTecnica($user_id, $fields['PUNTOS_APRENDIZAJE']);
@@ -1508,7 +1508,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 {
 	global $db, $user;
 	$fecha_post = new DateTime('today');
-	$fecha_ahora = date('Y-m-d h:i:s');
+	$fecha_ahora = date('Y-m-d H:i:s');
 	
 	$premio_pa = 0;
 	$premio_exp = 0;
