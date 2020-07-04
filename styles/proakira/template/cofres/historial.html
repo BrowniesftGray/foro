@@ -1,76 +1,55 @@
 <!-- INCLUDE overall_header.html -->
 
-<link rel="stylesheet" href="/styles/proakira/theme/habilidades.css?v=1.0.0" type="text/css" />
+<link rel="stylesheet" href="/styles/proakira/theme/cofres.css?v=1.2.4" type="text/css" />
 
-<div class="habilidades">
-	<h1 class="habilidades-title">Habilidades de Shinobi Legacy</h1>
-	<!-- BEGIN caminos -->
-	<div class="camino">
-		<h2 class="camino-nombre">{caminos.NOMBRE}</h2>
-		<div class="camino-nivel">
-			<label>Nivel requerido:</label>
-			<span>{caminos.NIVEL}</span>
-		</div>
-		<div class="camino-content">
-			<!-- BEGIN caminos.arquetipos -->
-			<div class="arquetipo">
-				<div class="arquetipo-marker" id="{caminos.arquetipos.NOMBRE_ES}"></div>
-				<h3 class="arquetipo-nombre"><a href="#{caminos.arquetipos.NOMBRE_ES}">{caminos.arquetipos.NOMBRE_JP} ({caminos.arquetipos.NOMBRE_ES})</a></h3>
-				<!-- IF caminos.arquetipos.PADRE1_NOMBRE_JP -->
-				<div class="arquetipo-reqs">
-					<label>Arquetipo requerido:</label>
-					<span>
-						{caminos.arquetipos.PADRE1_NOMBRE_JP} <!-- IF caminos.arquetipos.PADRE2_NOMBRE_JP --> o {caminos.arquetipos.PADRE2_NOMBRE_JP} <!-- ENDIF -->
-					</span>
+<div class="cofres">
+	<a class="fas fa-chevron-circle-left cofres-help" href="/cofres" title="Ir a abrir cofres"></a>
+	<h1 class="cofres-title">Historial de Cofres Abiertos</h1>
+	<!-- BEGIN cofres -->
+	<hr />
+	<div class="cofre-help-container">
+		<div class="cofre-help-content">
+			<div class="cofre-container cofre-history-container">
+				<div class="cofre-imagen-container">
+					<div class="cofre-imagen-cerrado" style="background-image: url({cofres.URL_IMAGEN})"></div>
 				</div>
-				<!-- ENDIF -->
-				<div class="arquetipo-bonos">
-					<label>Bonos:</label>
-					<span>
-						<!-- IF caminos.arquetipos.BONO_PV -->
-						<pv>+{caminos.arquetipos.BONO_PV}<!-- IF caminos.arquetipos.BONO_ES_PORCENTAJE -->%<!-- ENDIF --> PV</pv>
-						&nbsp;
-						<!-- ENDIF -->
-						<!-- IF caminos.arquetipos.BONO_PC -->
-						<pc>+{caminos.arquetipos.BONO_PC}<!-- IF caminos.arquetipos.BONO_ES_PORCENTAJE -->%<!-- ENDIF --> PC</pc>
-						&nbsp;
-						<!-- ENDIF -->
-						<!-- IF caminos.arquetipos.BONO_STA -->
-						<sta>+{caminos.arquetipos.BONO_STA}<!-- IF caminos.arquetipos.BONO_ES_PORCENTAJE -->%<!-- ENDIF --> STA</sta>
-						<!-- ENDIF -->
-					</span>
+				<div class="cofre-content">
+					<div class="cofre-title">
+						Cofre Rango {cofres.RANGO}<!-- IF cofres.ITEMS_EXTRA --> +{cofres.ITEMS_EXTRA}<!-- ENDIF --><!-- IF cofres.NOMBRE_PJ --> de {cofres.NOMBRE_PJ}<!-- ENDIF -->
+					</div>
+					<div class="cofre-info">
+						Recibido en {cofres.TOPIC_TITLE} el {cofres.FECHA_RECIBIDO}.<br />
+						{cofres.ESTADO} el {cofres.FECHA_ABIERTO}.
+					</div>
 				</div>
-				<!-- IF caminos.arquetipos.habilidades -->
-				<div class="arquetipo-habilidades">
-					<!-- BEGIN caminos.arquetipos.habilidades -->
-					<habilidad <!-- IF not caminos.arquetipos.habilidades.VISIBLE -->class="fuera-rotacion"<!-- ENDIF -->>
-						<nombre>{caminos.arquetipos.habilidades.NOMBRE}</nombre>
-						<!-- IF caminos.arquetipos.habilidades.requisitos -->
-						<requisitos>
-							<ul>
-								<!-- BEGIN caminos.arquetipos.habilidades.requisitos -->
-								<li>{caminos.arquetipos.habilidades.requisitos.REQUISITO}</li>
-								<!-- END caminos.arquetipos.habilidades.requisitos -->
-							</ul>
-						</requisitos>
-						<!-- ENDIF -->
-						<efecto>{caminos.arquetipos.habilidades.EFECTO}</efecto><br/>
-						<b>Coste:</b> {caminos.arquetipos.habilidades.COSTE} Puntos de Aprendizaje.
-						<!-- IF not caminos.arquetipos.habilidades.VISIBLE -->
-						<br />
-						<hr />
-						Fuera de Rotación
-						<!-- ENDIF -->
-					</habilidad>
-					<!-- END caminos.arquetipos.habilidades -->
-					<br class="clear" />
-				</div>
-				<!-- ENDIF -->
 			</div>
-			<!-- END caminos.arquetipos -->
+			<div class="cofre-loot">
+				<!-- BEGIN cofres.premios -->
+				<div class="cofre-container">
+					<div class="cofre-imagen-container" style="box-shadow: 0 0 4px 4px #{cofres.premios.COLOR}">
+						<img src="{cofres.premios.URL_IMAGEN}" border="0" />
+					</div>
+					<div class="cofre-content">
+						<div class="cofre-title">
+							{cofres.premios.NOMBRE}
+						</div>
+						<div class="cofre-info">
+							<tipo {cofres.premios.TAG}>{cofres.premios.TIPO}</tipo>
+						</div>
+					</div>
+				</div>
+				<!-- END cofres.premios -->
+			</div>
 		</div>
+		<br style="clear: both" />
 	</div>
-	<!-- END caminos -->
+	<!-- END cofres -->
+	<!-- IF not cofres -->
+	<div class="cofres-vacio">
+		No hay cofres en el historial.
+	</div>
+	<!-- ENDIF -->
+	<br style="clear: both" />
 </div>
 
 <!-- INCLUDE overall_footer.html -->

@@ -5,6 +5,7 @@
 	border-radius: 5px;
 	padding: 0 10px;
 	font-size: 1.2em;
+	position: relative;
 }
 
 .cofres-title {
@@ -23,6 +24,10 @@
     box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.2);
     float: left;
 	width: 290px;
+}
+
+.cofre-history-container {
+	width: calc(100% - 40px);
 }
 
 .cofre-imagen-container {
@@ -89,13 +94,17 @@
 	text-align: center;
 }
 
-.cofres-help {
+.cofres-help, .cofres-history {
     font-size: 20px;
     position: absolute;
     margin-top: 10px;
 }
 
-.cofres-help:hover {
+.cofres-history {
+    right: 10px;
+}
+
+.cofres-help:hover, .cofres-history:hover {
 	text-decoration: none;
 }
 

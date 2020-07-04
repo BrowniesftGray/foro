@@ -103,6 +103,7 @@ class main
 			'COFRES_PREMIO_ACUMULADO_DIAS'		=> COFRES_PREMIO_ACUMULADO_DIAS,
 			'PREMIO_CADENA_COMPLETA_CANTIDAD'	=> PREMIO_CADENA_COMPLETA_CANTIDAD,
 			'COFRES_CANTIDAD_ITEMS'				=> COFRES_CANTIDAD_ITEMS,
+			'COFRES_HISTORIAL'					=> ($pj_id == 765),
 		));
 		
 		return $this->helper->render('cofres/home.html', 'Cofres de Tesoro');
@@ -305,10 +306,88 @@ class main
 		if (!$this->inicializar($pj_id))
 			return $this->info();
 		
-		return $this->helper->render('cofres/historial.html', ' Historial de Cofres');
+		$last_cofre_id = 0;
+		
+		$query = $this->db->sql_query("SELECT	c.*,
+												COALESCE(cr.chance, 100) as chance,
+												i.nombre,
+												i.url_imagen,
+												tp.topic_title,
+												p.nombre as nombre_pj
+										FROM " . COFRES_TABLE . " c
+											INNER JOIN " . COFRES_ITEMS_TABLE . " ci
+												ON ci.cofre_id = c.cofre_id
+											INNER JOIN " . ITEMS_TABLE . " i
+												ON i.item_id = ci.item_id
+											LEFT JOIN " . PERSONAJES_TABLE . " p
+												ON p.pj_id = c.pj_id
+											LEFT JOIN " . COFRES_RECOMPENSAS_TABLE ." cr
+												ON cr.rango = c.rango
+												AND cr.item_id = i.item_id
+											LEFT JOIN " . TOPICS_TABLE . " tp
+												ON tp.topic_id = c.topic_id
+										WHERE c.fecha_abierto IS NOT NULL " .
+						($ver_todo ? "" : " AND c.pj_id = '$pj_id' ") . "
+										ORDER BY c.fecha_abierto DESC");
+		while ($row = $this->db->sql_fetchrow($query)) {
+			if ($row['cofre_id'] != $last_cofre_id) {
+				$last_cofre_id = $row['cofre_id'];
+				
+				// Obtener origen del cofre
+				if ((int) $row['topic_id'] > 0) {
+					$topic_title = "<i>'" . $row['topic_title'] . "'</i>";
+				} else {
+					$topic_title = 'Premio Diario';
+				}
+				
+				$this->template->assign_block_vars('cofres', array(
+					'RANGO'				=> $row['rango'],
+					'TOPIC_TITLE'		=> $topic_title,
+					'ITEMS_EXTRA'		=> $row['items_extra'],
+					'ESTADO'			=> $row['estado'],
+					'FECHA_RECIBIDO'	=> $row['fecha_recibido'],
+					'FECHA_ABIERTO'		=> $row['fecha_abierto'],
+					'NOMBRE_PJ'			=> ($ver_todo ? $row['nombre_pj'] : ""),
+					'URL_IMAGEN'		=> strtolower(sprintf(COFRES_ABIERTO_IMG, $row['rango'])),
+				));
+			}
+			
+			$color = COFRES_COLOR_NORMAL;
+			$tipo = 'Normal';
+			$tag = 'generico';
+			
+			if ((int) $row['chance'] <= COFRES_CHANCE_RARO) {
+				$color = COFRES_COLOR_RARO;
+				$tipo = 'Raro';
+				$tag = 'fuin';
+			}
+			
+			if ((int) $row['chance'] <= COFRES_CHANCE_EPICO) {
+				$color = COFRES_COLOR_EPICO;
+				$tipo = 'Épico';
+				$tag = 'gen';
+			}
+			
+			if ((int) $row['chance'] <= COFRES_CHANCE_LEGENDARIO) {
+				$color = COFRES_COLOR_LEGENDARIO;
+				$tipo = 'Legendario';
+				$tag = 'tai';
+			}
+			
+			$this->template->assign_block_vars('cofres.premios', array(
+				'NOMBRE' 		=> $row['nombre'],
+				'URL_IMAGEN'	=> '/images/shop_icons/' . $row['url_imagen'],
+				'COLOR'			=> $color,
+				'TIPO'			=> $tipo,
+				'TAG'			=> $tag,
+			));
+		}
+		$this->db->sql_freeresult($query);
+		
+		return $this->helper->render('cofres/historial.html', ' Historial de Cofres Abiertos');
 	}
 	
-	public function historial_todo() 
+	public function historial_todos() 
 	{
 		$this->validate_access();
 		

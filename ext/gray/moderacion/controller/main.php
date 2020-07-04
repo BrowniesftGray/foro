@@ -1181,12 +1181,12 @@ class main
 					break;
 				case 'Mision B':
 				case 'Encargo B':
-				case 'Trama B'
+				case 'Trama B':
 					$rango_cofre = 'B'; 
 					break;
 				case 'Mision A':
 				case 'Encargo A':
-				case 'Trama A'
+				case 'Trama A':
 					$rango_cofre = 'A'; 
 					break;
 				case 'Mision S':
