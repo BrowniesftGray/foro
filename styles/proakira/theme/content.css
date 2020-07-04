@@ -111,6 +111,11 @@ ul.topiclist dfn {
 	width: 990px;
 }
 
+ul.topiclist .unread .icon,
+ul.recent-topics-list .topic_unread .icon {
+	display: none;
+}
+
 .forum-image {
 	float: left;
 	padding-top: 5px;
