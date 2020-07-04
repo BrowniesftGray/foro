@@ -1397,7 +1397,7 @@ class main
       $es_post = false;
       if ($topic_id == 0) {
         $topic_id = str_replace("#", "|", $topic_id);
-        $topic_id = str_replace("-", "|", $topic_id);
+        // $topic_id = str_replace("-", "|", $topic_id);
         //Comprobaciones, tema o post
         $comprobacion = explode("|p", $topic_id);
 
