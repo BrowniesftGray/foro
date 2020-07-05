@@ -1157,8 +1157,8 @@ class main
 			$sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
 			$this->db->sql_query($sql);
 		  
-			// Si se ganaron ryos...
-			if ((int) $ryos > 0) {
+			// Si se ganaron ryos y no es Encargo...
+			if ((int) $ryos > 0 && strpos($bono_tipo, "Encargo") === false) {
 				//Agregar ryos a facción	
 				$sql = "UPDATE ".ALDEAS_TABLE." a
 							INNER JOIN ".PERSONAJES_TABLE." p
