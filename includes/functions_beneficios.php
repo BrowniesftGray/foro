@@ -46,7 +46,7 @@ function get_user_tier_string($user_tier) {
 	return $user_tier['nombre'] . ' :: desde ' . $user_tier['fecha_inicio'] . ' hasta ' . $user_tier['fecha_fin'];
 }
 
-function get_beneficios($user_id = false, $tier_id = false, $secundaria = false) {
+function get_beneficios($user_id = false, $tier_id = false, $secundaria = false, $nombre_php = false) {
 	global $db;
 	$beneficios = false;
 	
@@ -65,8 +65,9 @@ function get_beneficios($user_id = false, $tier_id = false, $secundaria = false)
 							ON b.beneficio_id = ub.beneficio_id
 						INNER JOIN ' . PATREON_TIERS_TABLE . ' t
 							ON t.tier_id = b.tier_id
-					WHERE ub.user_id = ' . $user_id . 
-		  ($tier_id ? ' AND t.orden <= ' . $tier_orden : ' ') . ' 
+					WHERE ub.user_id IN(' . $user_id . ') ' .
+		  ($tier_id ? ' AND t.orden <= ' . $tier_orden : ' ') . 
+	   ($nombre_php ? " AND b.nombre_php = '$nombre_php'" : ' ') . '
 						AND (ub.fecha_fin IS NULL
 							OR ub.fecha_fin >= NOW())
 					ORDER BY t.orden ASC, b.nombre ASC';

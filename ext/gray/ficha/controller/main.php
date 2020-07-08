@@ -196,7 +196,8 @@ class main
 		$pj_id = get_pj_id($user_id);
         get_ficha($user_id,$return = false, $ver = true);
 
-		$beneficios = get_beneficios($user_id);
+		$str_users = $user_id . ',' . $this->user->data['user_id'];
+		$beneficios = get_beneficios($str_users);
 		if ($beneficios) {
 			foreach ($beneficios as $key => $val) {
 				if ($val['nombre_php'] == BENEFICIO_AVATAR_FICHA) {
@@ -209,6 +210,10 @@ class main
 
 				if ($val['nombre_php'] == BENEFICIO_UBICACION_ITEMS) {
 					$b_ubicacion_items = true;
+				}
+				
+				if ($val['nombre_php'] == BENEFICIO_OCULTAR_PUBLICIDAD) {
+					$b_ocultar_publicidad = true;
 				}
 			}
 		}
@@ -225,6 +230,7 @@ class main
 			'AVATAR_FICHA'		=> $avatar,
 			'B_FICHA_PREMIUM'	=> $b_ficha_premium,
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
+			'S_SHOW_ADS'		=> !$b_ocultar_publicidad,
 		));
 
 		$categorias = get_full_shops(true);
