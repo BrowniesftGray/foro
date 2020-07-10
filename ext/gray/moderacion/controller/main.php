@@ -844,7 +844,13 @@ class main
             $sql_array['participantes'] .= $value."#";
           }
           break;
+		default:
+			trigger_error('Error al definir el tipo de petición.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
+			break;
       }
+	  
+	  if ($sql_array['topic_id'] == 0)
+		trigger_error('No se pudo encontrar el tema o ficha a revisar.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
 	  
 	  $sql = "SELECT COUNT(0) AS cantidad FROM revisiones WHERE estado <> 'rechazada' AND topic_id = " . $sql_array['topic_id'];
 	  $query = $this->db->sql_query($sql);

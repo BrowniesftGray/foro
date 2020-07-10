@@ -506,21 +506,6 @@ switch ($mode)
 			),
 			'WHERE'		=> (($username) ? "u.username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'" : "u.user_id = $user_id"),
 		);
-		
-		// Beneficios Patreon // akira 20200707
-		if (!function_exists('get_beneficios'))
-		{
-			include($phpbb_root_path . 'includes/functions_beneficios.' . $phpEx);
-		}
-		
-		$beneficios = get_beneficios($user->data['user_id']);
-		if ($beneficios) {
-			foreach ($beneficios as $key => $val) {
-				if ($val['nombre_php'] == BENEFICIO_OCULTAR_PUBLICIDAD) {
-					$b_ocultar_publicidad = true;
-				}
-			}
-		}
 
 		/**
 		 * Modify user data SQL before member profile row is created
@@ -831,8 +816,6 @@ switch ($mode)
 			'U_REMOVE_FOE'				=> ($foe && $foes_enabled) ? append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=zebra&amp;remove=1&amp;mode=foes&amp;usernames[]=' . $user_id) : '',
 
 			'U_CANONICAL'				=> generate_board_url() . '/' . append_sid("memberlist.$phpEx", 'mode=viewprofile&amp;u=' . $user_id, true, ''),
-			
-			'S_SHOW_ADS'				=> !$b_ocultar_publicidad,
 		);
 
 		/**

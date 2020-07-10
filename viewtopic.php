@@ -1752,10 +1752,7 @@ extract($phpbb_dispatcher->trigger_event('core.viewtopic_modify_post_data', comp
 
 // Datos del tema // akira 20200708
 if ($user->data['is_registered'])
-{
-	// Beneficios Patreon - Ocultar Publicidad
-	$b_ocultar_publicidad = get_beneficios($user->data['user_id'], false, false, BENEFICIO_OCULTAR_PUBLICIDAD) !== false;
-	
+{	
 	// RPG forum
 	$forum_rol_data = get_forum_rol_data($forum_id, $topic_id);
 	$is_rpg_forum = $forum_rol_data['onrol'];
@@ -2173,7 +2170,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'PJ_PC_NEW'			=> (isset($row_stats) ? (int)$row_stats['pc'] : 0) + (int)$row['diff_pc'],
 		'PJ_STA_NEW'		=> (isset($row_stats) ? (int)$row_stats['sta'] : 0) + (int)$row['diff_sta'],
 		'S_FIRST_POST'		=> ($topic_data['topic_first_post_id'] == $row['post_id']) ? true : false,
-		'S_SHOW_ADS'		=> (!$b_ocultar_publicidad && $i == 0),
+		'S_FIRST_PAGE_POST'	=> ($i == 0),
 
 		'S_IGNORE_POST'		=> ($row['foe']) ? true : false,
 		'L_IGNORE_POST'		=> ($row['foe']) ? sprintf($user->lang['POST_BY_FOE'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username'])) : '',
