@@ -20,6 +20,7 @@ if (!defined('IN_PHPBB'))
 }
 require_once('functions_ficha.php');
 require_once('functions_shop.php');
+require_once('functions_beneficios.php');
 // Common global functions
 /**
 * Load the autoloaders added by the extensions.
@@ -4553,6 +4554,10 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	
 	// Load visible shops // mgomez // 2018-11-23
 	$template->assign_block_vars_array('shops', get_full_shops());
+	
+	// Beneficio ocultar publicidad // akira 2020-07-09
+	$b_ocultar_publicidad = get_beneficios($user_id, false, false, BENEFICIO_OCULTAR_PUBLICIDAD) !== false;
+	$template->assign_var('S_HIDE_ADS', $b_ocultar_publicidad);
 
 	/**
 	* Execute code and/or overwrite _common_ template variables after they have been assigned.

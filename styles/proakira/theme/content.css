@@ -111,8 +111,8 @@ ul.topiclist dfn {
 	width: 990px;
 }
 
-ul.topiclist .unread .icon,
-ul.recent-topics-list .topic_unread .icon {
+ul.topiclist .unread .icon.fa-file,
+ul.recent-topics-list .icon.fa-file {
 	display: none;
 }
 

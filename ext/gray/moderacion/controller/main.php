@@ -844,7 +844,13 @@ class main
             $sql_array['participantes'] .= $value."#";
           }
           break;
+		default:
+			trigger_error('Error al definir el tipo de petición.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
+			break;
       }
+	  
+	  if ($sql_array['topic_id'] == 0)
+		trigger_error('No se pudo encontrar el tema o ficha a revisar.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
 	  
 	  $sql = "SELECT COUNT(0) AS cantidad FROM revisiones WHERE estado <> 'rechazada' AND topic_id = " . $sql_array['topic_id'];
 	  $query = $this->db->sql_query($sql);
@@ -1176,8 +1182,8 @@ class main
 			$sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
 			$this->db->sql_query($sql);
 		  
-			// Si se ganaron ryos...
-			if ((int) $ryos > 0) {
+			// Si se ganaron ryos y no es Encargo...
+			if ((int) $ryos > 0 && strpos($bono_tipo, "Encargo") === false) {
 				//Agregar ryos a facción	
 				$sql = "UPDATE ".ALDEAS_TABLE." a
 							INNER JOIN ".PERSONAJES_TABLE." p
@@ -1254,7 +1260,7 @@ class main
 					'topic_id'			=> $topic_id,
 					'items_extra'		=> $items_extra,
 					'estado'			=> 'Recibido',
-					'fecha_recibido'	=> date('Y-m-d h:i:s'),
+					'fecha_recibido'	=> date('Y-m-d H:i:s'),
 				);
 				
 				// Insertar el cofre

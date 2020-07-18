@@ -351,6 +351,7 @@ define('BENEFICIO_AVATAR_FICHA',				'avatar_ficha');
 define('BENEFICIO_BANNER_FICHA',				'banner_ficha');
 define('BENEFICIO_UBICACION_ITEMS',				'ubicacion_items');
 define('BENEFICIO_COFRE_ITEMS_EXTRA',			'cofre_item_extra_%d');
+define('BENEFICIO_OCULTAR_PUBLICIDAD',			'hide_ads');
 
 // Premio diario constants
 define('PREMIO_POST_BASE_MAX',					10);
