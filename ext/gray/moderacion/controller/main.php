@@ -1066,15 +1066,30 @@ class main
 		// echo "<br>total: ".$total;
 
 		if ($bono_tipo == 'Mision D Solitaria' || $bono_tipo == 'Encargo D Solitaria') {
-			$experiencia = 20;
-			$ryos = $ryos_rev;
-			$puntos_apen = 2;
+      if ($gamemaster == 'No') {
+
+        $experiencia = 20;
+        $ryos = $ryos_rev;
+        $puntos_apen = 2;
+      }else{
+
+        $experiencia = ($numero_post * $total)+20;
+        $ryos = 0;
+        $puntos_apen = round($experiencia/15);
+      }
 		}else if($bono_tipo == 'Mision D Grupal' || $bono_tipo == 'Encargo D Grupal'){
-			$experiencia = ($numero_post * $total)+20;
-			// echo "<br>experiencia grupal: ".$experiencia;
-        
-			$ryos = $ryos_rev;
-			$puntos_apen = 2; 
+		
+      if ($gamemaster == 'No') {
+
+        $experiencia = ($numero_post * $total)+20;
+        $ryos = $ryos_rev;
+        $puntos_apen = 2; 
+      }else{
+
+        $experiencia = ($numero_post * $total)+20;
+        $ryos = 0;
+        $puntos_apen = round($experiencia/15);
+      }
 		} else{
 			$experiencia = round((($numero_post * $total)*$bono['experiencia'])*$bono['porcentaje']);
 			// echo "<br>experiencia :".$experiencia;
@@ -1105,8 +1120,12 @@ class main
 			$user_id = $id_redireccion;
 			// $check = $this->comprobar_recompensa($revision, $pj_id);
 		}else{
-			$pj_id = get_pj_id($user_id);
-			$check = $this->comprobar_recompensa($revision, $pj_id);
+      $pj_id = get_pj_id($user_id);
+      if ($gamemaster == 'Si') {
+        $check = false;
+      }else{
+        $check = $this->comprobar_recompensa($revision, $pj_id);
+      }
 		}
 
 		// echo $check;
@@ -1397,7 +1416,7 @@ class main
       $es_post = false;
       if ($topic_id == 0) {
         $topic_id = str_replace("#", "|", $topic_id);
-        $topic_id = str_replace("-", "|", $topic_id);
+        // $topic_id = str_replace("-", "|", $topic_id);
         //Comprobaciones, tema o post
         $comprobacion = explode("|p", $topic_id);
 
