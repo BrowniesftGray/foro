@@ -876,6 +876,11 @@ class main
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
       $gamemaster = request_var('gamemaster', 'No');
 
+      if ($alt_id != '') {
+        $alt_id = explode("=",$alt_id);
+        $id_redireccion = $alt_id[2];
+      }
+
       //Estas hay que obtenerlas de otra función.
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
@@ -926,15 +931,19 @@ class main
 
       }
 
-      if($alt_id != 0){
-
-        $pj_id = get_pj_id($alt_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
+      if(is_array($alt_id)){
+        $pj_id = get_pj_id($id_redireccion);
+        $user_id = $id_redireccion;
+        // $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
+        if ($gamemaster == 'Si') {
+          $check = false;
+        }else{
+          $check = $this->comprobar_recompensa($revision, $pj_id);
+        }
       }
-      echo $check;
+
       if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
       }
@@ -1120,8 +1129,9 @@ class main
 			($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
 		}
-		
-		if($alt_id != ''){
+
+
+		if(is_array($alt_id)){
 			$pj_id = get_pj_id($id_redireccion);
 			$user_id = $id_redireccion;
 			// $check = $this->comprobar_recompensa($revision, $pj_id);
@@ -1289,6 +1299,11 @@ class main
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
       
+      if ($alt_id != '') {
+        $alt_id = explode("=",$alt_id);
+        $id_redireccion = $alt_id[2];
+      }
+      
       // echo "metarol: ".$metarol;
       // echo "<br>estrategia: ".$estrategia;
       // echo "<br>longitud_combate: ".$longitud_combate;
@@ -1330,13 +1345,17 @@ class main
       // echo "<br>puntos_apen: ".$puntos_apen;
       $ryos = 0;
       
-      if($alt_id != 0){
-
-        $pj_id = get_pj_id($alt_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
+      if(is_array($alt_id)){
+        $pj_id = get_pj_id($id_redireccion);
+        $user_id = $id_redireccion;
+        // $check = $this->comprobar_recompensa($revision, $pj_id);
       }else{
         $pj_id = get_pj_id($user_id);
-        $check = $this->comprobar_recompensa($revision, $pj_id);
+        if ($gamemaster == 'Si') {
+          $check = false;
+        }else{
+          $check = $this->comprobar_recompensa($revision, $pj_id);
+        }
       }
 
       if($check != false){
