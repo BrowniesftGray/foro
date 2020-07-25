@@ -101,3 +101,7 @@ gray_moderacion_recompensa_combate:
 gray_moderacion_asignar:
     path: /admin/asignar/{revision_id}
     defaults: { _controller: gray.moderacion.controller:update_revision_mod }
+
+gray_moderacion_cambiar_tipo:
+    path: /admin/cambiar_tipo/{revision_id}
+    defaults: { _controller: gray.moderacion.controller:update_revision_tipo }

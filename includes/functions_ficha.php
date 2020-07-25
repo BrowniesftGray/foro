@@ -31,14 +31,19 @@ function get_pj_id($user_id)
 function get_user_id($pj_id)
 {
 	global $db;
-	$query = $db->sql_query("SELECT user_id FROM personajes WHERE pj_id=$pj_id");
-	if ($row = $db->sql_fetchrow($query)) {
-		$pj_id = $row['user_id'];
-	} else {
-		$pj_id = false;
+	if ($pj_id != '') {
+		# code...
+		$query = $db->sql_query("SELECT user_id FROM personajes WHERE pj_id=$pj_id");
+		if ($row = $db->sql_fetchrow($query)) {
+			$pj_id = $row['user_id'];
+		} else {
+			$pj_id = false;
+		}
+		$db->sql_freeresult($query);
+		return $pj_id;
+	}else{
+		return "";
 	}
-	$db->sql_freeresult($query);
-	return $pj_id;
 }
 
 function get_pj_id_from_post($post_id)

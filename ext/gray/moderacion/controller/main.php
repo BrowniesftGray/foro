@@ -595,14 +595,16 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado = 0');
 
-      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>enlace</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Cambiar Tipo</th><th>Usuario</th><th>enlace</th><th>Fecha Creación</th><th>Estado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
+      $selectRevisiones = $this->get_tipo_revisiones();
       $select = $this->get_moderadores();
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $usuario = $this->get_nombre_user($row['id_usuario']);
 
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'> <select class='tipo_revision form-control col-7' name='tipo_revision'>".$selectRevisiones."</select><button type='submit' class='col-5 btn btn-primary'>Cambiar</button></form>";
         $options .= "<td>" . $usuario . "</td>";
         $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
@@ -627,8 +629,9 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM revisiones WHERE moderador_asignado <> 0 AND estado != "cerrada" AND estado != "rechazada" ORDER BY fecha_creacion');
 
-      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Usuario</th><th>Enlace</th><th>Recompensas</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
+      $options = "<table class='table table-striped'><thead class='thead-dark'><tr><th>Tipo</th><th>Cambiar Tipo</th><th>Usuario</th><th>Enlace</th><th>Recompensas</th><th>Fecha Creación</th><th>Estado</th><th>Moderador Asignado</th><th>Asignar moderador</th></tr></thead><tbody>";
 
+      $selectRevisiones = $this->get_tipo_revisiones();
       $select = $this->get_moderadores();
       // $select_revisiones = $this->get_tipo_revisiones();
 
@@ -636,6 +639,7 @@ class main
         $usuario = $this->get_nombre_user($row['id_usuario']);
         $mod = $this->get_nombre_user($row['moderador_asignado']);
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
+        $options .= "<td><form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'> <select class='tipo_revision form-control col-7' name='tipo_revision'>".$selectRevisiones."</select><button type='submit' class='col-5 btn btn-primary'>Cambiar</button></form>";
         $options .= "<td>" . $usuario . "</td>";
         $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."'>Ver Recompensas</a></td>";
@@ -690,11 +694,10 @@ class main
     public function get_puntuaciones_mod(){
 
       $query = $this->db->sql_query('SELECT * FROM puntuaciones_revisiones');
-
       $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Moderador</th><th>Usuario</th><th>Entorno</th><th>Acciones</th><th>Interesante</th><th>Longitud</th><th>Gamemaster</th><th>Bono Mision</th><th>Ryos Mision</th><th>Bono por Compa</th><th>Utilidad</th><th>Coherencia</th><th>Betarol</th><th>Estrategia</th><th>Longitud Combate</th><th>Victoria</th></tr></thead><tbody>";
-
+      
       $select = $this->get_moderadores();
-
+      
       while ($row = $this->db->sql_fetchrow($query)) {
         $mod = $this->get_nombre_user($row['moderador']);
         $user = get_user_id($row['id_pj']);
@@ -732,7 +735,7 @@ class main
     public function get_recompensas_rev(){
 
       $rev_id = request_var('rev_id', '0');
-
+      
       $query = $this->db->sql_query('SELECT * FROM revisiones_recompensas WHERE id_revision = '.$rev_id.''  );
 
       $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Usuario</th><th>Experiencia</th><th>Puntos de Aprendizaje</th><th>Ryos</th></tr></thead><tbody>";
@@ -761,7 +764,7 @@ class main
     }
 
     public function get_moderadores(){
-      $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id');
+      $query = $this->db->sql_query('SELECT user_id, username FROM phpbby1_users WHERE group_id IN (4, 5, 18) ORDER BY group_id, username ASC');
 
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<option value='".$row['user_id']."'>" . $row['username'] . "</option>";
@@ -796,12 +799,16 @@ class main
 
 
     public function get_nombre_user($user_id){
-      $query = $this->db->sql_query('SELECT username FROM phpbby1_users WHERE user_id = '.$user_id.'');
-
-      $row = $this->db->sql_fetchrow($query);
-      $usuario = $row['username'];
-
-      return $usuario;
+      if ($user_id != '') {
+        $query = $this->db->sql_query('SELECT username FROM phpbby1_users WHERE user_id = '.$user_id.'');
+        
+        $row = $this->db->sql_fetchrow($query);
+        $usuario = $row['username'];
+        
+        return $usuario;
+      }else{
+        return "Sin usuario";
+      }
     }
 
     public function insert_revision($tipo_revision){
@@ -1345,18 +1352,14 @@ class main
       // echo "<br>puntos_apen: ".$puntos_apen;
       $ryos = 0;
       
-      if(is_array($alt_id)){
-        $pj_id = get_pj_id($id_redireccion);
-        $user_id = $id_redireccion;
-        // $check = $this->comprobar_recompensa($revision, $pj_id);
-      }else{
-        $pj_id = get_pj_id($user_id);
-        if ($gamemaster == 'Si') {
-          $check = false;
-        }else{
-          $check = $this->comprobar_recompensa($revision, $pj_id);
-        }
-      }
+      // if(is_array($alt_id)){
+      //   $pj_id = get_pj_id($id_redireccion);
+      //   $user_id = $id_redireccion;
+      //   // $check = $this->comprobar_recompensa($revision, $pj_id);
+      // }else{
+      $pj_id = get_pj_id($user_id);
+      $check = $this->comprobar_recompensa($revision, $pj_id);
+      // }
 
       if($check != false){
         trigger_error('Este usuario ya ha recibido su recompensa, <a href="/mod/viewRev/'.$revision.'">Volver a la revision.</a>. ');
@@ -1690,6 +1693,21 @@ class main
       $query = $this->db->sql_query($sql);
       
       trigger_error('Revisión asignada correctamente al moderador/a: '.$moderadores.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
+    }
+
+    function update_revision_tipo($revision_id){
+      
+      $revision = $revision_id;
+      $tipo_revision  = request_var('tipo_revision', '0');
+
+      $sql = "  UPDATE revisiones
+                SET
+                  tipo_revision = '".$tipo_revision."'
+                WHERE id_revision = $revision";
+
+      $query = $this->db->sql_query($sql);
+      
+      trigger_error('Revisión cambiada correctamente a: '.$tipo_revision.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
     }
 
     function comprobar_recompensa($revision, $id_pj){
