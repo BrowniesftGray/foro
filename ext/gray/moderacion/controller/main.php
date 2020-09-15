@@ -851,6 +851,7 @@ class main
             $sql_array['participantes'] .= $value."#";
           }
           break;
+		
 		default:
 			trigger_error('Error al definir el tipo de petición.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
 			break;
@@ -897,7 +898,7 @@ class main
       //Calculamos cosas para la experiencia y tal.
       $bono = $this->calcular_bono($tipo_tema);
       $bono_temporada = "1";
-      $total = $entorno+$acciones+$interes+$longitud;
+      $total = 1+$entorno+$acciones+$interes+$longitud;
       
       //Obtenemos el número de post del usuario.
       $sql = "SELECT	p.poster_id as user_id,
@@ -1045,6 +1046,10 @@ class main
 		//Calculamos cosas para la experiencia y tal.
 		$bono = $this->calcular_bono($tipo_tema);
 		$total = $entorno+$acciones+$interes+$longitud;
+
+    if (strpos($bono_tipo, "Trama") !== false) {
+          $total += 1;
+    }
 
 		//Obtenemos el número de post del usuario.
 		$sql = "SELECT	p.poster_id as user_id,
@@ -1316,7 +1321,7 @@ class main
       // echo "<br>longitud_combate: ".$longitud_combate;
       // echo "<br>victoria: ".$victoria;
       //Calculamos cosas para la experiencia y tal.
-      $total = $entorno+$acciones+$interes+$longitud;
+      $total = 1+$entorno+$acciones+$interes+$longitud;
       $total_combate = $metarol+$estrategia+$longitud_combate+$victoria;
       // echo "<br>total_combate: ".$total_combate;
       
