@@ -230,7 +230,7 @@ class main
 			'AVATAR_FICHA'		=> $avatar,
 			'B_FICHA_PREMIUM'	=> $b_ficha_premium,
 			'B_UBICACION_ITEMS'	=> $b_ubicacion_items,
-			'S_HIDE_ADS'		=> $b_ocultar_publicidad,
+			'S_HIDE_ADS'		=> ($b_ocultar_publicidad || HIDE_ADS),
 		));
 
 		$categorias = get_full_shops(true);

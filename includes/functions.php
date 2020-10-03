@@ -4557,7 +4557,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 	
 	// Beneficio ocultar publicidad // akira 2020-07-09
 	$b_ocultar_publicidad = get_beneficios($user_id, false, false, BENEFICIO_OCULTAR_PUBLICIDAD) !== false;
-	$template->assign_var('S_HIDE_ADS', $b_ocultar_publicidad);
+	$template->assign_var('S_HIDE_ADS', ($b_ocultar_publicidad || HIDE_ADS));
 
 	/**
 	* Execute code and/or overwrite _common_ template variables after they have been assigned.
