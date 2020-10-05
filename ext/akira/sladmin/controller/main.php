@@ -1385,7 +1385,8 @@ class main
 		
 		$query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE . 
 										" WHERE principal = " . ($principal ? "1" : "0" ) .
-							($rama_id ? " AND rama_id <> $rama_id" : ""));
+							($rama_id ? " AND rama_id <> $rama_id" : "") .
+										" ORDER BY nombre");
 		
 		while ($row = $this->db->sql_fetchrow($query)){
 			$options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";

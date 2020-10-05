@@ -263,7 +263,7 @@ class main
     {
         $options = "";
 
-        $query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE);
+        $query = $this->db->sql_query("SELECT rama_id, nombre FROM " . RAMAS_TABLE . " ORDER BY principal DESC, nombre ASC");
 
         while ($row = $this->db->sql_fetchrow($query)) {
             $options .= "<option value='" . $row['rama_id'] . "'>" . $row['nombre'] . "</option>";
