@@ -64,7 +64,7 @@ class main
       if ($this->user->data['user_id'] == ANONYMOUS ) {
         trigger_error('No puedes acceder aquí sin conectarte');
     }
-      
+
       $user_id = $this->user->data['user_id'];
       $grupo = $this->vista_staff();
       $vista_rev = "/mod/view/".$user_id;
@@ -98,7 +98,7 @@ class main
         trigger_error('No puedes acceder aquí sin conectarte');
     }
       $this->template->assign_var('user_id', $user_id);
-      
+
       return $this->helper->render('/moderacion/view.html', 'Vista Revisiones');
 
     }
@@ -111,7 +111,7 @@ class main
       if($this->vista_staff() != "user"){
 
         $this->template->assign_var('user_id', $user_id);
-        
+
         return $this->helper->render('/moderacion/viewMod.html', 'Vista Revisiones');
       }else{
         trigger_error('No tienes acceso a esta característica.');
@@ -147,8 +147,8 @@ class main
         trigger_error('No puedes acceder aquí sin conectarte');
     }
 
-      $vista = $this->vista_staff(); 
-      if($vista == "admin"){   
+      $vista = $this->vista_staff();
+      if($vista == "admin"){
         return $this->helper->render('/moderacion/viewAdmin.html', 'Vista Revisiones');
       }else{
         trigger_error('No tienes acceso a esta característica.');
@@ -162,8 +162,8 @@ class main
         trigger_error('No puedes acceder aquí sin conectarte');
     }
 
-      $vista = $this->vista_staff(); 
-      if($vista == "admin"){   
+      $vista = $this->vista_staff();
+      if($vista == "admin"){
         return $this->helper->render('/moderacion/viewAdminAll.html', 'Vista Revisiones');
       }else{
         trigger_error('No tienes acceso a esta característica.');
@@ -177,8 +177,8 @@ class main
         trigger_error('No puedes acceder aquí sin conectarte');
     }
 
-      $vista = $this->vista_staff(); 
-      if($vista == "admin"){   
+      $vista = $this->vista_staff();
+      if($vista == "admin"){
         return $this->helper->render('/moderacion/viewPuntuacionesAll.html', 'Vista Revisiones');
       }else{
         trigger_error('No tienes acceso a esta característica.');
@@ -192,8 +192,8 @@ class main
         trigger_error('No puedes acceder aquí sin conectarte');
     }
 
-      $vista = $this->vista_staff(); 
-      if($vista == "admin" OR $vista == "mod"){   
+      $vista = $this->vista_staff();
+      if($vista == "admin" OR $vista == "mod"){
           $this->template->assign_var('rev_id', $rev_id);
           return $this->helper->render('/moderacion/viewRecompensaRev.html', 'Vista Revisiones');
       }else{
@@ -213,7 +213,7 @@ class main
 
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
-        
+
         return $this->helper->render('/moderacion/rewardTema.html', 'Recompensas');
       }else{
         if ($participante == 0) {
@@ -237,7 +237,7 @@ class main
 
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
-        
+
         return $this->helper->render('/moderacion/rewardMision.html', 'Recompensas');
       }else{
         if ($participante == 0) {
@@ -255,13 +255,13 @@ class main
       if ($this->user->data['user_id'] == ANONYMOUS ) {
         trigger_error('No puedes acceder aquí sin conectarte');
     }
-    
+
       $participante = request_var('id_participante', '0');
       if($this->vista_staff() != "user" || $participante != 0){
 
         $this->template->assign_var('id_revision', $rev_id);
         $this->template->assign_var('id_participante', $participante);
-        
+
         return $this->helper->render('/moderacion/rewardCombate.html', 'Recompensas');
       }else{
         if ($participante == 0) {
@@ -274,7 +274,7 @@ class main
 
     }
 
-    
+
     function get_rev_mod($pj_id)
     {
       global $db;
@@ -350,11 +350,11 @@ class main
     }
 
     public function get_participantes($topic_id = 0){
-      
+
       $topic_id = request_var('topic_id', '0');
 
       $tema = $this->obtener_id_tema($topic_id);
-      
+
       $sql = "SELECT DISTINCT
               u.user_id,
               u.username
@@ -369,13 +369,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
 
@@ -395,7 +395,7 @@ class main
       while ($row = $this->db->sql_fetchrow($query)) {
         $options .= "<option value='" . $row['user_id'] . "'>" . $row['username'] . "</option>";
       }
-      
+
       return $options;
     }
 
@@ -434,13 +434,13 @@ class main
       $options .= "</tbody></table>";
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -488,13 +488,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -525,29 +525,29 @@ class main
         }
         $options .= '<div class="card-body">
           <div class="form-group row">
-            <label for="longitud" class="col-3 col-form-label text-md-left">Moderador Asignado:</label> 
+            <label for="longitud" class="col-3 col-form-label text-md-left">Moderador Asignado:</label>
             <div class="col-6">
-              '.$row['moderador_asignado'].' 
+              '.$row['moderador_asignado'].'
             </div>
           </div>
           <div class="form-group row">
-            <label for="longitud" class="col-3 col-form-label text-md-left">Tipo de Tema:</label> 
+            <label for="longitud" class="col-3 col-form-label text-md-left">Tipo de Tema:</label>
             <div class="col-6">
-              '.$row['tipo_revision'].' 
+              '.$row['tipo_revision'].'
             </div>
           </div>
           <div class="form-group row">
-            <label for="longitud" class="col-3 col-form-label text-md-left">Enlace al Tema:</label> 
+            <label for="longitud" class="col-3 col-form-label text-md-left">Enlace al Tema:</label>
             <div class="col-6">
-             <a target="_blank" href="'.$row['enlace'].'">Ir al tema</a> 
+             <a target="_blank" href="'.$row['enlace'].'">Ir al tema</a>
             </div>
           </div>
           ';
           if($row['informacion'] != ""){
             $options .=  '<div class="form-group row">
-              <label for="longitud" class="col-3 col-form-label text-md-left">Información:</label> 
+              <label for="longitud" class="col-3 col-form-label text-md-left">Información:</label>
               <div class="col-6">
-              '.$row['informacion'].' 
+              '.$row['informacion'].'
               </div>
               </div>';
           }
@@ -580,13 +580,13 @@ class main
             }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -614,13 +614,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -651,13 +651,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -680,13 +680,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -695,9 +695,9 @@ class main
 
       $query = $this->db->sql_query('SELECT * FROM puntuaciones_revisiones');
       $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Moderador</th><th>Usuario</th><th>Entorno</th><th>Acciones</th><th>Interesante</th><th>Longitud</th><th>Gamemaster</th><th>Bono Mision</th><th>Ryos Mision</th><th>Bono por Compa</th><th>Utilidad</th><th>Coherencia</th><th>Betarol</th><th>Estrategia</th><th>Longitud Combate</th><th>Victoria</th></tr></thead><tbody>";
-      
+
       $select = $this->get_moderadores();
-      
+
       while ($row = $this->db->sql_fetchrow($query)) {
         $mod = $this->get_nombre_user($row['moderador']);
         $user = get_user_id($row['id_pj']);
@@ -721,13 +721,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -735,7 +735,7 @@ class main
     public function get_recompensas_rev(){
 
       $rev_id = request_var('rev_id', '0');
-      
+
       $query = $this->db->sql_query('SELECT * FROM revisiones_recompensas WHERE id_revision = '.$rev_id.''  );
 
       $options = "<table class='table table-striped ' id='tabla'><thead class='thead-dark'><tr><th>Usuario</th><th>Experiencia</th><th>Puntos de Aprendizaje</th><th>Ryos</th></tr></thead><tbody>";
@@ -752,13 +752,13 @@ class main
       }
 
       $response = new Response();
-      
+
       $response->setContent($options);
       $response->setStatusCode(Response::HTTP_OK);
-      
+
       // sets a HTTP response header
       $response->headers->set('Content-Type', 'text/html');
-      
+
       // prints the HTTP headers followed by the content
       return $response;
     }
@@ -801,10 +801,10 @@ class main
     public function get_nombre_user($user_id){
       if ($user_id != '') {
         $query = $this->db->sql_query('SELECT username FROM phpbby1_users WHERE user_id = '.$user_id.'');
-        
+
         $row = $this->db->sql_fetchrow($query);
         $usuario = $row['username'];
-        
+
         return $usuario;
       }else{
         return "Sin usuario";
@@ -829,7 +829,7 @@ class main
           $sql_array['informacion'] = request_var('asunto_rev_ficha', '0');
           $sql_array['enlace'] = request_var('enlace_rev_ficha', '0');
           break;
-          
+
         case 'revision_mision':
           $sql_array['tipo_revision'] = request_var('rev_mision_tipo', '0');
           $sql_array['enlace'] = request_var('rev_mision_enlace', '0');
@@ -851,15 +851,15 @@ class main
             $sql_array['participantes'] .= $value."#";
           }
           break;
-		
+
 		default:
 			trigger_error('Error al definir el tipo de petición.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
 			break;
       }
-	  
+
 	  if ($sql_array['topic_id'] == 0)
 		trigger_error('No se pudo encontrar el tema o ficha a revisar.<br><a href="/mod/home">Volver a crear una petición de revisión</a>.');
-	  
+
 	  $sql = "SELECT COUNT(0) AS cantidad FROM revisiones WHERE estado <> 'rechazada' AND topic_id = " . $sql_array['topic_id'];
 	  $query = $this->db->sql_query($sql);
 	  if ((int)$this->db->sql_fetchfield('cantidad') > 0)
@@ -874,7 +874,7 @@ class main
     }
 
     public function dar_recompensa(){
-      
+
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
       $alt_id   = request_var('id_alternativo', '0');
@@ -894,12 +894,12 @@ class main
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
       $tipo_tema = $info_rev['tipo_tema'];
       $compas   = $info_rev['compas'];
-      
+
       //Calculamos cosas para la experiencia y tal.
       $bono = $this->calcular_bono($tipo_tema);
       $bono_temporada = "1";
       $total = 1+$entorno+$acciones+$interes+$longitud;
-      
+
       //Obtenemos el número de post del usuario.
       $sql = "SELECT	p.poster_id as user_id,
                 COUNT(0) as cantidad
@@ -1000,7 +1000,7 @@ class main
     }
 
 	public function dar_recompensa_mision(){
-      
+
 		$revision = request_var('id_revision', '0');
 		$user_id  = request_var('id_participante', '0');
 		$alt_id   = request_var('id_alternativo', '');
@@ -1047,8 +1047,8 @@ class main
 		$bono = $this->calcular_bono($tipo_tema);
 		$total = $entorno+$acciones+$interes+$longitud;
 
-    if (strpos($bono_tipo, "Trama") !== false) {
-          $total += 1;
+    if ($bono_tipo != 'Trama C' || $bono_tipo != 'Trama B' || $bono_tipo != 'Trama A' || $bono_tipo != 'Trama S') {
+      $total += 1;
     }
 
 		//Obtenemos el número de post del usuario.
@@ -1070,7 +1070,7 @@ class main
 		$bono_total = $bono_base + $bono_utilidad + $bono_coherencia;
 		$bono['experiencia'] = $bono_total * $bono_rev;
 		$bono['porcentaje'] = $compa_rev;
-      
+
 		if ($compas == 0 || ($compas == 1 && ($bono_tipo == 'Trama C' || $bono_tipo == 'Mision C' || $bono_tipo == 'Encargo C')) ) {
 			$bono['porcentaje'] = 1;
 		} else{
@@ -1105,12 +1105,12 @@ class main
         $puntos_apen = round($experiencia/15);
       }
 		}else if($bono_tipo == 'Mision D Grupal' || $bono_tipo == 'Encargo D Grupal'){
-		
+
       if ($gamemaster == 'No') {
 
         $experiencia = ($numero_post * $total)+20;
         $ryos = $ryos_rev;
-        $puntos_apen = 2; 
+        $puntos_apen = 2;
       }else{
 
         $experiencia = ($numero_post * $total)+20;
@@ -1137,7 +1137,7 @@ class main
 					$ryos = $ryos_rev;
 				}
 			}
-			
+
 			($puntos_apen > $bono['limite']) ? $puntos_apen = $bono['limite'] : $puntos_apen = $puntos_apen;
 
 		}
@@ -1203,10 +1203,10 @@ class main
 			//Insert en la tabla revisiones_recompensas
 			$sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
 			$this->db->sql_query($sql);
-		  
+
 			// Si se ganaron ryos y no es Encargo...
 			if ((int) $ryos > 0 && strpos($bono_tipo, "Encargo") === false) {
-				//Agregar ryos a facción	
+				//Agregar ryos a facción
 				$sql = "UPDATE ".ALDEAS_TABLE." a
 							INNER JOIN ".PERSONAJES_TABLE." p
 								ON p.aldea_id = a.aldea_id
@@ -1214,39 +1214,39 @@ class main
 						WHERE p.user_id = $user_id";
 				$this->db->sql_query($sql);
 			}
-		  
+
 			// Definir el rango del cofre ganado
 			switch ($bono_tipo) {
-				case 'Mision D Grupal':	
+				case 'Mision D Grupal':
 				case 'Encargo D Grupal':
 					$rango_cofre = 'D';
 					break;
 				case 'Mision C':
 				case 'Encargo C':
 				case 'Trama C':
-					$rango_cofre = 'C'; 
+					$rango_cofre = 'C';
 					break;
 				case 'Mision B':
 				case 'Encargo B':
 				case 'Trama B':
-					$rango_cofre = 'B'; 
+					$rango_cofre = 'B';
 					break;
 				case 'Mision A':
 				case 'Encargo A':
 				case 'Trama A':
-					$rango_cofre = 'A'; 
+					$rango_cofre = 'A';
 					break;
 				case 'Mision S':
 				case 'Encargo S':
 				case 'Trama S':
-					$rango_cofre = 'S'; 
+					$rango_cofre = 'S';
 					break;
 			}
 
 			// Si aplica cofre...
 			if ($rango_cofre) {
 				$items_extra = 0;
-				
+
 				// Obtener beneficios del usuario
 				$beneficios = get_beneficios($user_id);
 				if ($beneficios) {
@@ -1255,27 +1255,27 @@ class main
 						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 1)) {
 							$item_extra_1 = true;
 						}
-						
+
 						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 2)) {
 							$item_extra_2 = true;
 						}
-						
+
 						if ($val['nombre_php'] == sprintf(BENEFICIO_COFRE_ITEMS_EXTRA, 3)) {
 							$item_extra_3 = true;
 						}
 					}
-					
+
 					// Se define la cantidad de items extra
 					if ($item_extra_1) $items_extra = 1;
 					if ($item_extra_2) $items_extra = 2;
 					if ($item_extra_3) $items_extra = 3;
 				}
-				
+
 				// Si el tipo de tema es una trama, se añade un item extra
 				if (strpos($bono_tipo, "Trama") !== false) {
 					$items_extra += 1;
 				}
-			
+
 				$sql_array = array(
 					'rango'				=> $rango_cofre,
 					'pj_id'				=> $pj_id,
@@ -1284,7 +1284,7 @@ class main
 					'estado'			=> 'Recibido',
 					'fecha_recibido'	=> date('Y-m-d H:i:s'),
 				);
-				
+
 				// Insertar el cofre
 				$sql = "INSERT INTO " . COFRES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 				$this->db->sql_query($sql);
@@ -1295,7 +1295,7 @@ class main
 	}
 
     public function dar_recompensa_combate(){
-      
+
       $revision = request_var('id_revision', '0');
       $user_id  = request_var('id_participante', '0');
       $nivel = request_var('nivel_adversario', '1');
@@ -1310,12 +1310,12 @@ class main
       $longitud = $this->asignar_puntuacion(request_var('longitud', 'No'));
       $info_rev = $this->obtener_info_rev($revision);
       $topic_id = $this->obtener_id_tema($info_rev['enlace']);
-      
+
       if ($alt_id != '') {
         $alt_id = explode("=",$alt_id);
         $id_redireccion = $alt_id[2];
       }
-      
+
       // echo "metarol: ".$metarol;
       // echo "<br>estrategia: ".$estrategia;
       // echo "<br>longitud_combate: ".$longitud_combate;
@@ -1324,7 +1324,7 @@ class main
       $total = 1+$entorno+$acciones+$interes+$longitud;
       $total_combate = $metarol+$estrategia+$longitud_combate+$victoria;
       // echo "<br>total_combate: ".$total_combate;
-      
+
       //Obtenemos el número de post del usuario.
       $sql = "SELECT COUNT(0) as cantidad
               FROM phpbby1_posts p
@@ -1333,7 +1333,7 @@ class main
       $query = $this->db->sql_query($sql);
       $numero_post = (int) $this->db->sql_fetchfield('cantidad');
 	  $this->db->sql_freeresult($query);
-      
+
       //Obtenemos el nivel del usuario en el tema.
       $sql = "SELECT nivel
               FROM ".PERSONAJES_POSTS_TABLE." p
@@ -1346,17 +1346,17 @@ class main
 
 	  // calculamos bono máximo por nivel
 	  $exp_por_nivel = $nivel * 10;
-	  
+
 	  // si el bono por nivel ajeno supera el nivel propio x12, se ajusta
 	  if ($exp_por_nivel > ($nivel_pj * 12))
-		  $exp_por_nivel = ($nivel_pj * 12);	  
-	  
+		  $exp_por_nivel = ($nivel_pj * 12);
+
       $experiencia = round((($numero_post * $total)+($exp_por_nivel*$total_combate)));
       // echo "<br>experiencia: ".$experiencia;
       $puntos_apen = (4*$total_combate);
       // echo "<br>puntos_apen: ".$puntos_apen;
       $ryos = 0;
-      
+
       // if(is_array($alt_id)){
       //   $pj_id = get_pj_id($id_redireccion);
       //   $user_id = $id_redireccion;
@@ -1379,14 +1379,14 @@ class main
         $array['RAZON'] = "Revisión de combate";
 
         registrar_moderacion($array, $user_id);
-        
+
         $sql_array = array();
         $sql_array['id_pj'] = $pj_id;
         $sql_array['id_revision'] = $revision;
         $sql_array['experiencia'] = $experiencia;
         $sql_array['pa'] = $puntos_apen;
         $sql_array['ryos'] = $ryos;
-        
+
         //Insert en la tabla revisiones_recompensas
         $sql = "INSERT INTO revisiones_recompensas " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
@@ -1410,7 +1410,7 @@ class main
         $sql = "INSERT INTO puntuaciones_revisiones " . $this->db->sql_build_array('INSERT', $sql_puntuaciones_revisiones);
         $this->db->sql_query($sql);
 
-        
+
         trigger_error('Se ha insertado la recompensa correctamente, recibió '.$experiencia.' puntos de experiencia,'.$puntos_apen.' puntos de aprendizaje y '.$ryos.' ryos. <a href="/mod/viewRev/'.$revision.'">Volver a la revision</a>. ');
       }
     }
@@ -1426,7 +1426,7 @@ class main
           break;
         case 'No':
             $criterio = 0.15;
-          break;        
+          break;
       }
       return $criterio;
     }
@@ -1439,7 +1439,7 @@ class main
           break;
         case 'No':
             $criterio = 0;
-          break;        
+          break;
       }
       return $criterio;
     }
@@ -1478,14 +1478,14 @@ class main
 
       // echo "post id:".$tema."<br>";
       if ($es_post == true) {
-        $sql = "SELECT topic_id 
+        $sql = "SELECT topic_id
                 FROM phpbby1_posts
                 WHERE post_id = $tema
                 LIMIT 1";
 
         $query = $this->db->sql_query($sql);
         $row = $this->db->sql_fetchrow($query);
-        $tema = $row['topic_id']; 
+        $tema = $row['topic_id'];
       }
 
       return $tema;
@@ -1493,12 +1493,12 @@ class main
 
     public function obtener_info_rev($revision){
 
-      $sql = "SELECT enlace, 
-                tipo_revision AS tipo_tema, 
-                participantes AS compas 
+      $sql = "SELECT enlace,
+                tipo_revision AS tipo_tema,
+                participantes AS compas
               FROM revisiones
               WHERE id_revision = $revision";
-        
+
       $query = $this->db->sql_query($sql);
       $row = $this->db->sql_fetchrow($query);
       return $row;
@@ -1615,7 +1615,7 @@ class main
      }
 
     function update_revision(){
-      
+
       global $user;
       $revision = request_var('id_revision', '0');
       $estado  = request_var('estado', '0');
@@ -1642,7 +1642,7 @@ class main
         $query = $this->db->sql_query($sql);
         $row = $this->db->sql_fetchrow($query);
         $numero_post = $row['cantidad'];
-        
+
         $mod = $this->calcular_puntos_mod($tipo_tema);
         $puntos_totales = "";
         // print_r($row);
@@ -1670,23 +1670,23 @@ class main
         $this->db->sql_query('UPDATE '.PROFILE_FIELDS_DATA_TABLE."
 										SET pf_puntos_mod = $puntos_moderacion + $puntos_totales
                     WHERE user_id = $mod_id");
-                    
-                
+
+
         $sql_array = array();
         $sql_array['mod_id'] = $mod_id;
         $sql_array['puntos_mod'] = $puntos_totales;
         $sql_array['rev_id'] = $revision;
-        
+
         //Insert en la tabla revisiones_recompensas
         $sql = "INSERT INTO revisiones_puntos_mod " . $this->db->sql_build_array('INSERT', $sql_array);
         $this->db->sql_query($sql);
       }
-      
+
       trigger_error('Revisión modificada correctamente al estado '.$estado.'. <a href="/mod/viewRev/'.$rev_id.'">Volver a la revision.</a>.');
     }
 
     function update_revision_mod($revision_id){
-      
+
       $revision = $revision_id;
       $moderadores  = request_var('moderadores', '0');
 
@@ -1696,12 +1696,12 @@ class main
                 WHERE id_revision = $revision";
 
       $query = $this->db->sql_query($sql);
-      
+
       trigger_error('Revisión asignada correctamente al moderador/a: '.$moderadores.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
     }
 
     function update_revision_tipo($revision_id){
-      
+
       $revision = $revision_id;
       $tipo_revision  = request_var('tipo_revision', '0');
 
@@ -1711,7 +1711,7 @@ class main
                 WHERE id_revision = $revision";
 
       $query = $this->db->sql_query($sql);
-      
+
       trigger_error('Revisión cambiada correctamente a: '.$tipo_revision.'. <a href="/mod/viewAdmin">Volver a la vista</a>.');
     }
 
@@ -1743,38 +1743,38 @@ class main
           $bono['puntos'] = 6;
           $bono['post'] = 0;
         break;
-        
+
         case 'Activacion Ficha':
           $bono['puntos'] = 6;
           $bono['post'] = 0;
         break;
-        
+
         case 'Revision Ficha':
           $bono['puntos'] = 3;
           $bono['post'] = 0;
         break;
-        
+
         case 'Solicitud Encargo':
           $bono['puntos'] = 2;
           $bono['post'] = 0;
         break;
-        
+
         case 'Moderacion Combate':
           $bono['puntos'] = 30;
           $bono['post'] = 0;
         break;
-        
+
         case 'Patreon':
           $bono['puntos'] = 5;
           $bono['post'] = 0;
         break;
-        
+
         default:
            $bono['puntos'] = 1;
            $bono['post'] = 1;
           break;
       }
-      
+
       return $bono;
     }
 }
