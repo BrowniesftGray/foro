@@ -427,7 +427,7 @@ class main
         }
         $options .= "<td>" . $row['tipo_revision'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
-        $options .= "<td> <a href='" . $row['enlace'] . "'>Enlace</a></td>";
+        $options .= "<td> <a href='" . $row['enlace'] . "' target='_blank'>Enlace</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td></tr>";
       }
@@ -615,7 +615,7 @@ class main
                       </form>
                     </td>";
         $options .= "<td>" . $usuario . "</td>";
-        $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
+        $options .= "<td><a href='" . $row['enlace'] . "' target='_blank'>Enlace al tema</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td>
@@ -668,8 +668,8 @@ class main
                       </form>
                     </td>";
         $options .= "<td>" . $usuario . "</td>";
-        $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
-        $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."'>Ver Recompensas</a></td>";
+        $options .= "<td><a href='" . $row['enlace'] . "' target='_blank'>Enlace al tema</a></td>";
+        $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."' target='_blank'>Ver Recompensas</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
