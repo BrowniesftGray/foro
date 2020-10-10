@@ -604,13 +604,31 @@ class main
         $usuario = $this->get_nombre_user($row['id_usuario']);
 
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td><form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'> <select class='tipo_revision form-control col-7' name='tipo_revision'>".$selectRevisiones."</select><button type='submit' class='col-5 btn btn-primary'>Cambiar</button></form>";
+        $options .= "<td>
+                      <form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'>
+                        <select id='tipo_revision_" . $row['id_revision'] . "' class='form-control col-7' name='tipo_revision_" . $row['id_revision'] . "'>
+                          " . $selectRevisiones . "
+                        </select>
+                        <button class='col-5 btn btn-primary btn_cambiar_tipo' data_rev='" . $row['id_revision'] . "' data_select='tipo_revision_" . $row['id_revision'] . "'>
+                          Cambiar
+                        </button>
+                      </form>
+                    </td>";
         $options .= "<td>" . $usuario . "</td>";
         $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
-        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
-        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
+        $options .= "<td>
+                      <form method='POST' class='form-inline' action='/admin/asignar/" . $row['id_revision'] . "'>
+                        <select id='moderadores_" . $row['id_revision'] . "' class=' form-control col-7' name='moderadores_" . $row['id_revision'] . "'>
+                          " . $select . "
+                        </select>
+                        <button class='col-5 btn btn-primary btn_cambiar_moderador' data_rev='". $row['id_revision'] ."' data_select='moderadores_". $row['id_revision'] ."'>
+                          Cambiar
+                        </button>
+                      </form>
+                    </td>
+                    </tr>";
       }
 
       $response = new Response();
@@ -639,15 +657,33 @@ class main
         $usuario = $this->get_nombre_user($row['id_usuario']);
         $mod = $this->get_nombre_user($row['moderador_asignado']);
         $options .= "<tr><td>" . $row['tipo_revision'] . "</td>";
-        $options .= "<td><form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'> <select class='tipo_revision form-control col-7' name='tipo_revision'>".$selectRevisiones."</select><button type='submit' class='col-5 btn btn-primary'>Cambiar</button></form>";
+        $options .= "<td>
+                      <form method='POST' class='form-inline' action='/admin/cambiar_tipo/".$row['id_revision']."'>
+                        <select id='tipo_revision_" . $row['id_revision'] . "' class='form-control col-7' name='tipo_revision_" . $row['id_revision'] . "'>
+                          " . $selectRevisiones . "
+                        </select>
+                        <button class='col-5 btn btn-primary btn_cambiar_tipo' data_rev='" . $row['id_revision'] . "' data_select='tipo_revision_" . $row['id_revision'] . "'>
+                          Cambiar
+                        </button>
+                      </form>
+                    </td>";
         $options .= "<td>" . $usuario . "</td>";
         $options .= "<td><a href='" . $row['enlace'] . "'>Enlace al tema</a></td>";
         $options .= "<td> <a href='/mod/viewRecompensaRev/".$row['id_revision']."'>Ver Recompensas</a></td>";
         $options .= "<td>" . $row['fecha_creacion'] . "</td>";
         $options .= "<td>" . $row['estado'] . "</td>";
         $options .= "<td>" . $mod . "</td>";
-        $options .= "<td><form method='POST' class='form-inline' action='/admin/asignar/".$row['id_revision']."'> <select class='moderadores form-control col-7' name='moderadores'>".$select."</select>";
-        $options .= "<button type='submit' class='col-5 btn btn-primary'>Asignar</button></td></form></tr>";
+        $options .= "<td>
+                      <form method='POST' class='form-inline' action='/admin/asignar/" . $row['id_revision'] . "'>
+                        <select id='moderadores_" . $row['id_revision'] . "' class=' form-control col-7' name='moderadores_" . $row['id_revision'] . "'>
+                          " . $select . "
+                        </select>
+                        <button class='col-5 btn btn-primary btn_cambiar_moderador' data_rev='". $row['id_revision'] ."' data_select='moderadores_". $row['id_revision'] ."'>
+                          Cambiar
+                        </button>
+                      </form>
+                    </td>
+                    </tr>";
       }
 
       $response = new Response();
@@ -1688,12 +1724,13 @@ class main
     function update_revision_mod($revision_id){
 
       $revision = $revision_id;
-      $moderadores  = request_var('moderadores', '0');
+      $moderadores = 'moderadores_'.$revision;
+      $moderador  = request_var($moderadores, '0');
 
       $sql = "  UPDATE revisiones
                 SET
-                  moderador_asignado = '".$moderadores."'
-                WHERE id_revision = $revision";
+                  moderador_asignado = '".$moderador."'
+                WHERE id_revision = ".$revision."";
 
       $query = $this->db->sql_query($sql);
 
@@ -1703,12 +1740,13 @@ class main
     function update_revision_tipo($revision_id){
 
       $revision = $revision_id;
-      $tipo_revision  = request_var('tipo_revision', '0');
+      $tipo = 'tipo_revision_'.$revision;
+      $tipo_revision  = request_var($tipo, '0');
 
       $sql = "  UPDATE revisiones
                 SET
                   tipo_revision = '".$tipo_revision."'
-                WHERE id_revision = $revision";
+                WHERE id_revision = ".$revision."";
 
       $query = $this->db->sql_query($sql);
 
