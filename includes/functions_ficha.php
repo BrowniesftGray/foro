@@ -1684,7 +1684,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 	}
 	
 	// Si completó cadena, se da el cofre correspondiente
-	if ($cadena_completa && $rango_cofre_cadena) {
+	if ($posts_diarios == 1 && $cadena_completa && $rango_cofre_cadena) {
 		$sql_array = array(
 			'rango'				=> $rango_cofre_cadena,
 			'pj_id'				=> $pj_id,
@@ -1700,7 +1700,7 @@ function registrar_premio_diario($user_id, $post_id, &$mensaje = false)
 	}
 	
 	// Si alcanzó la cantidad de premios totales configurada, se da el cofre correspondiente
-	if (fmod($premios_totales, COFRES_PREMIO_ACUMULADO_DIAS) == 0 && $rango_cofre_acumulado) {
+	if ($posts_diarios == 1 && fmod($premios_totales, COFRES_PREMIO_ACUMULADO_DIAS) == 0 && $rango_cofre_acumulado) {
 		$sql_array = array(
 			'rango'				=> $rango_cofre_acumulado,
 			'pj_id'				=> $pj_id,
