@@ -1311,7 +1311,6 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 		$msg_error = 'No tienes suficientes Puntos de Aprendizaje.';
 		return false;
 	}
-	$ptos_aprendizaje_restantes = $ptos_aprendizaje - $coste;
 
 	$pj_id = get_pj_id($user_id);
 	if ($pj_id) {
@@ -1346,7 +1345,7 @@ function comprar_tecnica($user_id, $tec_id, $nombre, $coste, &$msg_error)
 		}
 
 		$db->sql_query('UPDATE ' . PROFILE_FIELDS_DATA_TABLE . "
-							SET pf_puntos_apren = '$ptos_aprendizaje_restantes'
+							SET pf_puntos_apren = pf_puntos_apren - $coste
 							WHERE user_id = '$user_id'");
 
 		$moderacion = array(

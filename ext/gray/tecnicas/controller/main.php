@@ -161,11 +161,13 @@ class main
         $efectos = str_replace("/!","</pv>", $efectos);
         $efectos = str_replace("/@","</pc>", $efectos);
         $efectos = str_replace("/|","</sta>", $efectos);
+        $efectos = str_replace("/¬","</b>", $efectos);
         $efectos = str_replace("#","<ul>", $efectos);
         $efectos = str_replace("$","<li>", $efectos);
         $efectos = str_replace("!","<pv>", $efectos);
         $efectos = str_replace("@","<pc>", $efectos);
         $efectos = str_replace("|","<sta>", $efectos);
+        $efectos = str_replace("¬","<b>", $efectos);
 
         $texto_tecnica = "<jutsu>";
         $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos." </br>";
