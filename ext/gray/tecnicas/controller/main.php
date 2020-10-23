@@ -143,8 +143,8 @@ class main
         $coste = str_replace("[pv]","<pv>", $coste);
         $coste = str_replace("[pc]","<pc>", $coste);
         $coste = str_replace("[sta]","<sta>", $coste);
-        $damage = str_replace("[b]","<b>", $coste);
-        $damage = str_replace("[b]","</b>", $coste);
+        $coste = str_replace("[b]","<b>", $coste);
+        $coste = str_replace("[b]","</b>", $coste);
 
 
         //Requisitos
@@ -159,8 +159,8 @@ class main
         $requisitos = str_replace("[pv]","<pv>", $requisitos);
         $requisitos = str_replace("[pc]","<pc>", $requisitos);
         $requisitos = str_replace("[sta]","<sta>", $requisitos);
-        $damage = str_replace("[b]","<b>", $requisitos);
-        $damage = str_replace("[b]","</b>", $requisitos);
+        $requisitos = str_replace("[b]","<b>", $requisitos);
+        $requisitos = str_replace("[b]","</b>", $requisitos);
 
 
         //Efectos
