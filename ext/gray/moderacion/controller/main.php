@@ -1083,7 +1083,7 @@ class main
 		$bono = $this->calcular_bono($tipo_tema);
 		$total = $entorno+$acciones+$interes+$longitud;
 
-    if ($bono_tipo != 'Trama C' || $bono_tipo != 'Trama B' || $bono_tipo != 'Trama A' || $bono_tipo != 'Trama S') {
+    if ($bono_tipo != 'Trama C' && $bono_tipo != 'Trama B' && $bono_tipo != 'Trama A' && $bono_tipo != 'Trama S') {
       $total += 1;
     }
 

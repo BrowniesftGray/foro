@@ -8,7 +8,7 @@
 
 	// Define the bbCode tags
 	var bbcode = new Array();
-	var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]'<!-- BEGIN custom_tags -->, {custom_tags.BBCODE_NAME}<!-- END custom_tags -->);
+	var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]','[size=]','[/size]','[#]','[/#]','[$]','[/$]','[!]','[/!]','[@]','[/@]','[|]','[/|]'<!-- BEGIN custom_tags -->, {custom_tags.BBCODE_NAME}<!-- END custom_tags -->);
 	var imageTag = false;
 
 	// Helpline messages
@@ -116,6 +116,11 @@
 			<!-- ENDIF -->
 		<!-- ENDIF -->
 	</select>
+	<!-- IF U_USER_ADMIN --> 
+	<button type="button" class="button button-icon-only" accesskey="p" name="addbbcode22" value=" # " onclick="bbstyle(22)" title="{L_BBCODE_P_HELP}">
+		<i class="icon fa-image fa-fw" aria-hidden="true"></i>
+	</button>
+	<!-- ENDIF -->
 
 	<!-- EVENT posting_editor_buttons_custom_tags_before -->
 

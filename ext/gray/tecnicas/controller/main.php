@@ -125,47 +125,59 @@ class main
 
         //Damage
         $damage = $tecnica['DAMAGE'];
-        $damage = str_replace("/!","</pv>", $damage);
-        $damage = str_replace("/@","</pc>", $damage);
-        $damage = str_replace("/|","</sta>", $damage);
-        $damage = str_replace("!","<pv>", $damage);
-        $damage = str_replace("@","<pc>", $damage);
-        $damage = str_replace("|","<sta>", $damage);
+        $damage = str_replace("[/pv]","</pv>", $damage);
+        $damage = str_replace("[/pc]","</pc>", $damage);
+        $damage = str_replace("[/sta]","</sta>", $damage);
+        $damage = str_replace("[pv]","<pv>", $damage);
+        $damage = str_replace("[pc]","<pc>", $damage);
+        $damage = str_replace("[sta]","<sta>", $damage);
+        $damage = str_replace("[b]","<b>", $damage);
+        $damage = str_replace("[b]","</b>", $damage);
+
 
         //Coste
         $coste = $tecnica['COSTE'];
-        $coste = str_replace("/!","</pv>", $coste);
-        $coste = str_replace("/@","</pc>", $coste);
-        $coste = str_replace("/|","</sta>", $coste);
-        $coste = str_replace("!","<pv>", $coste);
-        $coste = str_replace("@","<pc>", $coste);
-        $coste = str_replace("|","<sta>", $coste);
+        $coste = str_replace("[/pv]","</pv>", $coste);
+        $coste = str_replace("[/pc]","</pc>", $coste);
+        $coste = str_replace("[/sta]","</sta>", $coste);
+        $coste = str_replace("[pv]","<pv>", $coste);
+        $coste = str_replace("[pc]","<pc>", $coste);
+        $coste = str_replace("[sta]","<sta>", $coste);
+        $damage = str_replace("[b]","<b>", $coste);
+        $damage = str_replace("[b]","</b>", $coste);
+
 
         //Requisitos
         $requisitos = $tecnica['REQUISITOS'];
-        $requisitos = str_replace("/#", "</ul>", $requisitos);
-        $requisitos = str_replace("/$","</li>", $requisitos);
-        $requisitos = str_replace("/!","</pv>", $requisitos);
-        $requisitos = str_replace("/@","</pc>", $requisitos);
-        $requisitos = str_replace("/|","</sta>", $requisitos);
-        $requisitos = str_replace("#","<ul>", $requisitos);
-        $requisitos = str_replace("$","<li>", $requisitos);
-        $requisitos = str_replace("!","<pv>", $requisitos);
-        $requisitos = str_replace("@","<pc>", $requisitos);
-        $requisitos = str_replace("|","<sta>", $requisitos);
+        $requisitos = str_replace("[/#]", "</ul>", $requisitos);
+        $requisitos = str_replace("[/$]","</li>", $requisitos);
+        $requisitos = str_replace("[/pv]","</pv>", $requisitos);
+        $requisitos = str_replace("[/pc]","</pc>", $requisitos);
+        $requisitos = str_replace("[/sta]","</sta>", $requisitos);
+        $requisitos = str_replace("[#]","<ul>", $requisitos);
+        $requisitos = str_replace("[$]","<li>", $requisitos);
+        $requisitos = str_replace("[pv]","<pv>", $requisitos);
+        $requisitos = str_replace("[pc]","<pc>", $requisitos);
+        $requisitos = str_replace("[sta]","<sta>", $requisitos);
+        $damage = str_replace("[b]","<b>", $requisitos);
+        $damage = str_replace("[b]","</b>", $requisitos);
+
 
         //Efectos
         $efectos = $tecnica['EFECTOS'];
-        $efectos = str_replace("/#", "</ul>", $efectos);
-        $efectos = str_replace("/$","</li>", $efectos);
-        $efectos = str_replace("/!","</pv>", $efectos);
-        $efectos = str_replace("/@","</pc>", $efectos);
-        $efectos = str_replace("/|","</sta>", $efectos);
-        $efectos = str_replace("#","<ul>", $efectos);
-        $efectos = str_replace("$","<li>", $efectos);
-        $efectos = str_replace("!","<pv>", $efectos);
-        $efectos = str_replace("@","<pc>", $efectos);
-        $efectos = str_replace("|","<sta>", $efectos);
+        $efectos = str_replace("[/#]", "</ul>", $efectos);
+        $efectos = str_replace("[/$]","</li>", $efectos);
+        $efectos = str_replace("[/pv]","</pv>", $efectos);
+        $efectos = str_replace("[/pc]","</pc>", $efectos);
+        $efectos = str_replace("[/sta]","</sta>", $efectos);
+        $efectos = str_replace("[#]","<ul>", $efectos);
+        $efectos = str_replace("[$]","<li>", $efectos);
+        $efectos = str_replace("[pv]","<pv>", $efectos);
+        $efectos = str_replace("[pc]","<pc>", $efectos);
+        $efectos = str_replace("[sta]","<sta>", $efectos);
+        $damage = str_replace("[b]","<b>", $efectos);
+        $damage = str_replace("[b]","</b>", $efectos);
+
 
         $texto_tecnica = "<jutsu>";
         $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos." </br>";

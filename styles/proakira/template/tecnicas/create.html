@@ -60,32 +60,19 @@
             <div class="form-group row">
               <label for="requisitos" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li><input type="button" onclick="insertAtCaret('requisitos', '#/#');return false;" value='UL/UL'></input> 
-                    <input type="button" onclick="insertAtCaret('requisitos', '#');return false;" value='UL'></input> 
-                    <input type="button" onclick="insertAtCaret('requisitos', '/#');return false;" value='/UL'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('requisitos', '$/$');return false;" value='LI/LI'></input>
-                    <input type="button" onclick="insertAtCaret('requisitos', '$');return false;" value='LI'></input>
-                    <input type="button" onclick="insertAtCaret('requisitos', '/$');return false;" value='/LI'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('requisitos', '!/!');return false;" value='PV/PV'></input>
-                    <input type="button" onclick="insertAtCaret('requisitos', '!');return false;" value='PV'></input> 
-                    <input type="button" onclick="insertAtCaret('requisitos', '/!');return false;" value='/PV'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('requisitos', '@/@');return false;" value='PC/PC'></input>
-                    <input type="button" onclick="insertAtCaret('requisitos', '@');return false;" value='PC'></input> 
-                    <input type="button" onclick="insertAtCaret('requisitos', '/@');return false;" value='/PC'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('requisitos', '|/|');return false;" value='STA/STA'></input>
-                    <input type="button" onclick="insertAtCaret('requisitos', '|');return false;" value='STA'></input> 
-                    <input type="button" onclick="insertAtCaret('requisitos', '/|');return false;" value='/STA'></input> </li>
-                    <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
-                    <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
-                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='#'   value='UL'></input> 
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='$'   value='LI'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='b'   value='B'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='pv'  value='PV'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='pc'  value='PC'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='requisitos'  data-tag='sta' value='STA'></input>
                 </ul>
               </label>
               <div class="col-6">
-                <!-- <div contenteditable="true" class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></div> -->
-                  <textarea class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></textarea>
-              </div>
+                <!-- <div contenteditable="true" class="form-control " class="form-control" name="requisitos" id="requisitos" required="required" style="height:200px"></div> -->
+                  <div contenteditable="true" class="form-control div_editable" id="requisitos" data-input='requisitos_input' required="required" style="height:200px"></div>
+                  <input type="hidden" name="requisitos" id="requisitos_input"/>
+                </div>
             </div>
             <div class="form-group row">
               <label for="sellos" class="col-3 col-form-label text-md-left">Sellos <br><small>Usar →</small></label>
@@ -97,76 +84,48 @@
             <div class="form-group row">
               <label for="efectos" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li><input type="button" onclick="insertAtCaret('efectos', '#/#');return false;" value='UL/UL'></input> 
-                  <input type="button" onclick="insertAtCaret('efectos', '#');return false;" value='UL'></input> 
-                  <input type="button" onclick="insertAtCaret('efectos', '/#');return false;" value='/UL'></input> </li>
-                  <li><input type="button" onclick="insertAtCaret('efectos', '$/$');return false;" value='LI/LI'></input>
-                  <input type="button" onclick="insertAtCaret('efectos', '$');return false;" value='LI'></input>
-                  <input type="button" onclick="insertAtCaret('efectos', '/$');return false;" value='/LI'></input> </li>
-                  <li><input type="button" onclick="insertAtCaret('efectos', '!/!');return false;" value='PV/PV'></input>
-                  <input type="button" onclick="insertAtCaret('efectos', '!');return false;" value='PV'></input> 
-                  <input type="button" onclick="insertAtCaret('efectos', '/!');return false;" value='/PV'></input> </li>
-                  <li><input type="button" onclick="insertAtCaret('efectos', '@/@');return false;" value='PC/PC'></input>
-                  <input type="button" onclick="insertAtCaret('efectos', '@');return false;" value='PC'></input> 
-                  <input type="button" onclick="insertAtCaret('efectos', '/@');return false;" value='/PC'></input> </li>
-                  <li><input type="button" onclick="insertAtCaret('efectos', '|/|');return false;" value='STA/STA'></input>
-                  <input type="button" onclick="insertAtCaret('efectos', '|');return false;" value='STA'></input> 
-                  <input type="button" onclick="insertAtCaret('efectos', '/|');return false;" value='/STA'></input> </li>
-                  <li>Para abrir y cerrar UL: <b>#</b> y <b>/#</b></li>
-                  <li>Para abrir y cerrar LI: <b>$</b> y <b>/$</b></li>
-                  <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                  <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                  <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='#'   value='UL'></input> 
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='$'   value='LI'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='b'   value='B'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='pv'  value='PV'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='pc'  value='PC'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='efectos' data-tag='sta' value='STA'></input>
                 </ul>
               </label>
               <div class="col-6">
-                  <textarea class="form-control" name="efectos" id="efectos" required="required" style="height:200px"></textarea>
+                  <div contenteditable="true" class="form-control div_editable" id="efectos" data-input='efectos_input' required="required" style="height:200px"></div>
+                  <input type="hidden" name="efectos" id="efectos_input"/>
               </div>
             </div>
             <h3>Daño</h3><br>
             <div class="form-group row">
               <label for="damage" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li><input type="button" onclick="insertAtCaret('damage', '!/!');return false;" value='PV/PV'></input>
-                    <input type="button" onclick="insertAtCaret('damage', '!');return false;" value='PV'></input> 
-                    <input type="button" onclick="insertAtCaret('damage', '/!');return false;" value='/PV'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('damage', '@/@');return false;" value='PC/PC'></input>
-                    <input type="button" onclick="insertAtCaret('damage', '@');return false;" value='PC'></input> 
-                    <input type="button" onclick="insertAtCaret('damage', '/@');return false;" value='/PC'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('damage', '|/|');return false;" value='STA/STA'></input>
-                    <input type="button" onclick="insertAtCaret('damage', '|');return false;" value='STA'></input> 
-                    <input type="button" onclick="insertAtCaret('damage', '/|');return false;" value='/STA'></input> </li>
-                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
-                  </ul>
+                  <li><input type="button" class="btn-etiqueta" data-div='damage' data-tag='b'    value='B'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='damage' data-tag='pv'   value='PV'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='damage' data-tag='pc'   value='PC'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='damage' data-tag='sta'  value='STA'></input>
                 </ul>
               </label>
               <div class="col-6">
-                  <textarea class="form-control" name="damage" id="damage" style="height:50px"></textarea>
-              </div>
+                  <div contenteditable="true" class="form-control div_editable" id="damage" data-input='damage_input' style="height:50px"></div>
+                  <input type="hidden" name="damage" id="damage_input"/>
+                </div>
             </div>
             <h3>Coste</h3><br>
             <div class="form-group row">
               <label for="coste" class="col-3 col-form-label text-md-left">
                 <ul style="list-style-type:none;">
-                  <li><input type="button" onclick="insertAtCaret('coste', '!/!');return false;" value='PV/PV'></input>
-                    <input type="button" onclick="insertAtCaret('coste', '!');return false;" value='PV'></input> 
-                    <input type="button" onclick="insertAtCaret('coste', '/!');return false;" value='/PV'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('coste', '@/@');return false;" value='PC/PC'></input>
-                    <input type="button" onclick="insertAtCaret('coste', '@');return false;" value='PC'></input> 
-                    <input type="button" onclick="insertAtCaret('coste', '/@');return false;" value='/PC'></input> </li>
-                    <li><input type="button" onclick="insertAtCaret('coste', '|/|');return false;" value='STA/STA'></input>
-                    <input type="button" onclick="insertAtCaret('coste', '|');return false;" value='STA'></input>
-                    <input type="button" onclick="insertAtCaret('coste', '/|');return false;" value='/STA'></input> </li>
-                    <li>Para abrir y cerrar PV: <b>!</b> y <b>/!</b></li>
-                    <li>Para abrir y cerrar PC: <b>@</b> y <b>/@</b></li>
-                    <li>Para abrir y cerrar STA: <b>|</b> y <b>/|</b></li>
+                  <li><input type="button" class="btn-etiqueta" data-div='coste' data-tag='b'   value='B'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='coste' data-tag='pv'  value='PV'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='coste' data-tag='pc'  value='PC'></input>
+                  <li><input type="button" class="btn-etiqueta" data-div='coste' data-tag='sta' value='STA'></input>
                 </ul>
               </label>
               <div class="col-6">
-                  <textarea class="form-control" name="coste" id="coste" style="height:50px"></textarea>
-              </div>
+                  <div contenteditable="true" class="form-control div_editable" id="coste" data-input='coste_input' style="height:50px"></div>
+                  <input type="hidden" name="coste" id="coste_input"/>
+                </div>
             </div>
             <h3>Descripción</h3><br>
             <div class="form-group row">
@@ -189,43 +148,61 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script>
-function insertAtCaret(areaId, text) {
-  var txtarea = document.getElementById(areaId);
-  if (!txtarea) {
-    return;
-  }
 
-  var scrollPos = txtarea.scrollTop;
-  var strPos = 0;
-  var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
-    "ff" : (document.selection ? "ie" : false));
-  if (br == "ie") {
-    txtarea.focus();
-    var range = document.selection.createRange();
-    range.moveStart('character', -txtarea.value.length);
-    strPos = range.text.length;
-  } else if (br == "ff") {
-    strPos = txtarea.selectionStart;
-  }
 
-  var front = (txtarea.value).substring(0, strPos);
-  var back = (txtarea.value).substring(strPos, txtarea.value.length);
-  txtarea.value = front + text + back;
-  strPos = strPos + text.length;
-  if (br == "ie") {
-    txtarea.focus();
-    var ieRange = document.selection.createRange();
-    ieRange.moveStart('character', -txtarea.value.length);
-    ieRange.moveStart('character', strPos);
-    ieRange.moveEnd('character', 0);
-    ieRange.select();
-  } else if (br == "ff") {
-    txtarea.selectionStart = strPos;
-    txtarea.selectionEnd = strPos;
-    txtarea.focus();
-  }
-
-  txtarea.scrollTop = scrollPos;
+function surroundSelection(textBefore, textAfter) {
+  
+    if (window.getSelection) {
+        var sel = window.getSelection();
+        
+        if (sel.rangeCount > 0) {
+          
+            var range = sel.getRangeAt(0);
+            var startNode = range.startContainer, startOffset = range.startOffset;
+            var boundaryRange = range.cloneRange();
+            var startTextNode = document.createTextNode(textBefore);
+            var endTextNode = document.createTextNode(textAfter);
+            boundaryRange.collapse(false);
+            boundaryRange.insertNode(endTextNode);
+            boundaryRange.setStart(startNode, startOffset);
+            boundaryRange.collapse(true);
+            boundaryRange.insertNode(startTextNode);
+            
+            // Reselect the original text
+            range.setStartAfter(startTextNode);
+            range.setEndBefore(endTextNode);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
 }
+
+function surroundSelectionInBbcode(tagName) {
+  
+    surroundSelection("[" + tagName + "]", "[/" + tagName + "]");
+}
+
+$(document).on('click', '.btn-etiqueta', function() {
+  
+    var div = $(this).attr('data-div');
+    var tag = $(this).attr('data-tag');   
+    $('#'+div).focus();
+    surroundSelectionInBbcode(tag);
+    return false;
+});
+
+//focusout
+$(document).on('keyup', '.div_editable', function() {
+  var input = $(this).attr('data-input');
+  var text = $(this).text();
+  $('#'+input).val(text);
+});
+
+$(document).on('focusout', '.div_editable', function() {
+  var input = $(this).attr('data-input');
+  var text = $(this).text();
+  $('#'+input).val(text);
+});
+
 </script>
 <!-- INCLUDE overall_footer.html -->
