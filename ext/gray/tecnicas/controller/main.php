@@ -165,19 +165,6 @@ class main
 
         //Efectos
         $efectos = $tecnica['EFECTOS'];
-        $efectos = str_replace("[/#]", "</ul>", $efectos);
-        $efectos = str_replace("[/$]","</li>", $efectos);
-        $efectos = str_replace("[/pv]","</pv>", $efectos);
-        $efectos = str_replace("[/pc]","</pc>", $efectos);
-        $efectos = str_replace("[/sta]","</sta>", $efectos);
-        $efectos = str_replace("[#]","<ul>", $efectos);
-        $efectos = str_replace("[$]","<li>", $efectos);
-        $efectos = str_replace("[pv]","<pv>", $efectos);
-        $efectos = str_replace("[pc]","<pc>", $efectos);
-        $efectos = str_replace("[sta]","<sta>", $efectos);
-        $damage = str_replace("[b]","<b>", $efectos);
-        $damage = str_replace("[b]","</b>", $efectos);
-
 
         $texto_tecnica = "<jutsu>";
         $texto_tecnica .= $nombre.$tipos_texto.$rango."<datos><b>Requisitos:</b>".$requisitos." </br>";
