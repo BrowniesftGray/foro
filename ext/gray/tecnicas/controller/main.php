@@ -134,7 +134,6 @@ class main
         $damage = str_replace("[b]","<b>", $damage);
         $damage = str_replace("[b]","</b>", $damage);
 
-
         //Coste
         $coste = $tecnica['COSTE'];
         $coste = str_replace("[/pv]","</pv>", $coste);
