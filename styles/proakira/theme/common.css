@@ -1,5 +1,6 @@
 /* General Markup Styles
 ---------------------------------------- */
+
 html {
 	font-size: 100%;
 	/* Always show a scrollbar for short pages - stops the jump when the scrollbar appears. non-IE browsers */
@@ -19,7 +20,7 @@ body {
 
 h1 {
 	/* Forum name */
-	font-family: Anton, Arial, Helvetica, sans-serif;
+	font-family: Oswald, Arial, Helvetica, sans-serif;
 	margin-right: 200px;
 	margin-top: 15px;
 	font-weight: bold;

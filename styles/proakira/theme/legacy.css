@@ -287,7 +287,7 @@ li.row.pais .fondo .nombre {
 	position: absolute;
 	bottom: 0;
 	right: 5px;
-	font-family: Anton;
+	font-family: Oswald;
 	font-size: 3em;
 	text-shadow: 2px 1px 1px #111;
 	transition-duration: .2s;
@@ -345,7 +345,7 @@ li.row.pais .info .links a:focus{
 li.row.pais .info .links .nombre {
 	text-transform: uppercase;
 	color: #fff;
-	font-family: Anton;
+	font-family: Oswald;
 	font-size: 2em;
 	text-shadow: 2px 1px 1px #111;
 	display: block;
@@ -567,7 +567,7 @@ li.row.pais.unread::after {
 
 /* Contenido del Tema */
 h2.topic-title, h2.forum-title, h2.posting-title {
-	font-family: Anton;
+	font-family: Oswald;
     text-transform: uppercase;
     text-align: center;
     font-size: 3em;
@@ -1511,7 +1511,7 @@ div#premio-diario-msg {
     display: block;
     content: "Estadísticas / Usuarios en Línea";
     text-transform: uppercase;
-    font-family: Anton;
+    font-family: Oswald;
     text-align: center;
     font-size: 14px;
     color: #fff;
@@ -1544,7 +1544,7 @@ div#premio-diario-msg {
     display: block;
     content: "Afiliados Elite";
     text-transform: uppercase;
-    font-family: Anton;
+    font-family: Oswald;
     text-align: center;
     font-size: 22px;
     color: #111;
