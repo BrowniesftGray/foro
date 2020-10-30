@@ -132,7 +132,7 @@ class main
         $damage = str_replace("[pc]","<pc>", $damage);
         $damage = str_replace("[sta]","<sta>", $damage);
         $damage = str_replace("[b]","<b>", $damage);
-        $damage = str_replace("[b]","</b>", $damage);
+        $damage = str_replace("[/b]","</b>", $damage);
 
 
         //Coste
@@ -144,7 +144,7 @@ class main
         $coste = str_replace("[pc]","<pc>", $coste);
         $coste = str_replace("[sta]","<sta>", $coste);
         $coste = str_replace("[b]","<b>", $coste);
-        $coste = str_replace("[b]","</b>", $coste);
+        $coste = str_replace("[/b]","</b>", $coste);
 
 
         //Requisitos
@@ -160,7 +160,7 @@ class main
         $requisitos = str_replace("[pc]","<pc>", $requisitos);
         $requisitos = str_replace("[sta]","<sta>", $requisitos);
         $requisitos = str_replace("[b]","<b>", $requisitos);
-        $requisitos = str_replace("[b]","</b>", $requisitos);
+        $requisitos = str_replace("[/b]","</b>", $requisitos);
 
 
         //Efectos
@@ -176,7 +176,7 @@ class main
         $efectos = str_replace("[pc]","<pc>", $efectos);
         $efectos = str_replace("[sta]","<sta>", $efectos);
         $efectos = str_replace("[b]","<b>", $efectos);
-        $efectos = str_replace("[b]","</b>", $efectos);
+        $efectos = str_replace("[/b]","</b>", $efectos);
 
 
         $texto_tecnica = "<jutsu>";
@@ -188,7 +188,10 @@ class main
         if ($damage != "") {
             $texto_tecnica .= " <b>Daño:</b>&nbsp;".$damage."<br/>";
         }
-        $texto_tecnica .= "<b>Coste:</b>&nbsp;".$coste."</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
+		if ($coste != "") {
+			$texto_tecnica .= " <b>Coste:</b>&nbsp;".$coste;
+		}
+        $texto_tecnica .= "</datos><desc>".$descripcion."</desc><hr/><c><b onclick='selectCode(this)'>Código:</b><code>".$etiqueta."</code></c>";
         $texto_tecnica .= "</jutsu>";
 
         $this->crearBbcode($texto_tecnica, $etiqueta_envio, $tecnica, $rama);
